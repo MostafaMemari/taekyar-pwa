@@ -10,9 +10,15 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # taekyar-pwa
 
-Single-route Next.js 16.4.2 App Router app (React 19.3, Tailwind v4, Biome). Despite the name, there is **no PWA scaffolding yet** — no web manifest, no service worker, no offline support. Adding PWA capability is net-new work, not a fix to existing code.
+Single-route Next.js 16.4.2 App Router app (React 19.3, Tailwind v4, shadcn/ui on Base UI, Biome). Despite the name, there is **no PWA scaffolding yet** — no web manifest, no service worker, no offline support. Adding PWA capability is net-new work, not a fix to existing code.
 
 Everything below the managed block is project-specific; `next dev` preserves it.
+
+## Product structure & roles
+
+- TaekYar has two roles: coach (`مربی`) and student (`هنرجو`). Their authentication flows, permissions, and role-specific features may differ — never assume one flow serves both. Inspect the existing backend contract before implementing either.
+- No auth, session, or role-gating code exists in this repo yet; treat all of it as new work, not an established convention.
+- Reuse shared UI components, form controls, validation patterns, and utilities where they fit. Keep role-specific behavior and authentication logic separate: don't duplicate shared UI, and don't push unrelated role logic into one component to avoid a second file.
 
 ## Commands & validation
 
@@ -51,40 +57,48 @@ npx next typegen                 # generate route types without a full build
 - `params`, `searchParams`, `cookies()`, `headers()`, `draftMode()` are async — await them. Middleware lives in `proxy.ts`, not `middleware.ts`.
 - When an API is unfamiliar, read `node_modules/next/dist/docs/` — it matches the installed 16.4.2. Prefer it over recall or web search.
 
+## Persian & RTL
+
+- The UI is Persian-first and RTL. Preserve directionality in layout, forms, navigation, alignment, and directional icons (chevrons, arrows, back/next).
+- Prefer logical utilities — `ms-*`/`me-*`, `ps-*`/`pe-*`, `start-*`/`end-*`, `text-start`/`text-end` — over physical `left`/`right` equivalents, and logical CSS (`margin-inline`, `padding-inline`) in hand-written CSS.
+- Use the existing typography and font stack; don't introduce a second one.
+- `src/app/layout.tsx` is still the create-next-app scaffold (`lang="en"`, Geist/Latin, placeholder metadata), so RTL wiring there is pending, not established.
+
 ## UI
 
-- `shadcn/ui` is the target standard, **not installed**: there is no `components.json`, no `cn()` helper, and no component dependencies. Do not run `shadcn init`/`add`, install packages, or change Tailwind configuration without separate approval.
-- Until then, build UI from plain elements and the existing tokens, and check for an existing component before writing a new one.
-- VibeFarsi is an optional, selective option for genuine Persian/RTL requirements — never assume it is installed or reach for it by default.
-- Style from the tokens declared in `globals.css`; don't hardcode a color that duplicates an existing variable.
+- shadcn/ui is initialized with the **Base UI** library and the **Nova** preset (`components.json`: `"style": "base-nova"`). Add components with the CLI instead of hand-writing primitives; don't reinitialize, change `style`/`base`, or replace the component library without approval.
+- Composition uses Base UI's `render` prop, not Radix's `asChild`.
+- Prefer existing variants and semantic tokens (`bg-primary`, `text-muted-foreground`) over custom styles; `cn` is re-exported from `src/lib/utils.ts`.
+- VibeFarsi is optional for genuine Persian/RTL needs — not installed, so don't assume it or add it casually.
 
 ## Biome
 
 - `biome.json` is the contract: 2-space indent, double quotes, width 140, auto-organized imports, `next` + `react` domains at `recommended`.
 - Never weaken a rule, add an ignore, or edit the config to make a check pass. Fix the code instead.
-- Format only the files you touched. A repo-wide `--write` rewrites four scaffold files and adds diff noise unrelated to the task.
+- Format only the files you touched. A repo-wide `--write` rewrites scaffold files and adds diff noise unrelated to the task.
 
 ## Skills
 
-Installed under `.agents/skills/`, which is **gitignored** — skills may be missing in a fresh clone or another environment. Don't depend on them being present, and don't cite their internals in code.
+Installed under `.agents/skills/`, which is **gitignored** — they may be missing in a fresh clone or another environment. Don't depend on them being present or cite their internals in code. Read the skill that covers the task at hand; don't apply one to unrelated work.
 
-- `shadcn` — only for shadcn-related UI work. It expects a `components.json`, which this project does not have yet.
-- `vercel-react-best-practices` — consult the rules relevant to the React/Next.js work at hand; don't apply every performance optimization blindly.
-- `web-design-guidelines` — for UI/accessibility reviews when asked; not a mandatory check on every change.
-- `migrate-radix-to-base` — not applicable; the project uses neither Radix nor Base UI.
+- `shadcn` — shadcn/ui and component work.
+- `vercel-react-best-practices` — React/Next.js implementation and review; apply the rules that fit, not all of them.
+- `web-design-guidelines` — UI/accessibility reviews when asked; not a mandatory check on every change.
+- `migrate-radix-to-base` — only if a Radix migration arises. The project already uses Base UI, so it does not apply today.
 
 ## Gotchas
 
 **Typecheck needs generated route types.** `LayoutProps<"/">` / `PageProps<"/path">` come from `.next/types/routes.d.ts` (referenced by `tsconfig.json`, never imported). On a clean clone `npx tsc --noEmit` fails with `Cannot find name 'LayoutProps'` until `npx next typegen` runs. Don't inline `{ children: React.ReactNode }` to work around it — typed routes are on by default in Next 16.
 
-**`npm run lint` already fails on a clean checkout.** Four scaffold files (`package.json`, `tsconfig.json`, `src/app/layout.tsx`, `src/app/page.tsx`) carry formatting-only diffs at width 140. Confirm a failure is pre-existing before debugging your change.
+**`npm run lint` already fails on a clean checkout.** Five files carry formatting-only diffs at width 140: `src/app/globals.css`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/lib/utils.ts`, `tsconfig.json`. Confirm a failure is pre-existing before debugging your change.
 
 **Tailwind is NOT wired through PostCSS.** It runs as a Turbopack loader rule in `next.config.ts` (`@tailwindcss/turbopack`); there is no `postcss.config.*` and none should be added. The bundled docs (`01-app/01-getting-started/11-css.md`) recommend `@tailwindcss/postcss` — ignore that section here; it would conflict with the working pipeline.
 
-**No `tailwind.config.js`.** Tokens live in the `@theme inline` block in `src/app/globals.css`. Add colors, fonts, and spacing there.
+**No `tailwind.config.js`.** Theme tokens are shadcn's semantic set in `src/app/globals.css` (`@theme inline` plus `:root` / `.dark`), with `@import "shadcn/tailwind.css"` and `tw-animate-css`. Add or override tokens there.
 
 ## Layout
 
 - `src/app/` — App Router. `layout.tsx` (fonts, metadata, `<html>` shell), `page.tsx` (the only route), `globals.css`.
+- `src/components/ui/` — shadcn components (`button.tsx` so far). `src/lib/utils.ts` — `cn` re-export.
 - `@/*` resolves to `src/*` (see `tsconfig.json` `paths`).
 - `README.md` is untouched create-next-app boilerplate and is **wrong** about paths (it says `app/page.tsx`; the real file is `src/app/page.tsx`). Don't treat it as a spec.
