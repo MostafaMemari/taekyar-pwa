@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — کد تایید</title>
+    
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="auth-shell app-frame">
+      <!-- form pane -->
+      <section class="flex flex-col px-5 pb-8 pt-7">
+        <header class="flex items-center gap-3">
+          <button type="button" class="icon-btn" data-back aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="auth-brand flex-1">
+            <span class="logo-mark"><i data-lucide="sparkle" class="size-6"></i></span>
+            <span class="min-w-0">
+              <b class="auth-wordmark block">تک‌یار</b>
+              <span class="auth-word-sub">تایید شماره موبایل</span>
+            </span>
+          </div>
+          <span class="belt-motif !w-16" aria-hidden="true"></span>
+        </header>
+
+        <section class="mt-9 flex flex-1 flex-col">
+          <h1 class="auth-title">کد تایید را وارد کنید</h1>
+          <p class="auth-lead">
+            کد ۵ رقمی ارسال‌شده به شماره <b dir="ltr" class="inline-block font-extrabold text-gray-900">۰۹۱۲ ۱۲۳ ۴۵۶۷</b> را وارد کنید.
+          </p>
+
+          <div class="mt-7">
+            <div class="otp-row">
+              <input class="otp-box" type="tel" inputmode="numeric" maxlength="1" aria-label="رقم اول" />
+              <input class="otp-box" type="tel" inputmode="numeric" maxlength="1" aria-label="رقم دوم" />
+              <input class="otp-box" type="tel" inputmode="numeric" maxlength="1" aria-label="رقم سوم" />
+              <input class="otp-box" type="tel" inputmode="numeric" maxlength="1" aria-label="رقم چهارم" />
+              <input class="otp-box" type="tel" inputmode="numeric" maxlength="1" aria-label="رقم پنجم" />
+            </div>
+
+            <a href="../student/STU-001-dashboard.html" class="btn btn-primary mt-5 w-full !rounded-xl">
+              <span>تایید و ادامه</span>
+              <i data-lucide="chevron-left" class="size-4"></i>
+            </a>
+            <a href="../coach/COA-009-clubs-list.html" class="btn btn-outline mt-2.5 w-full !rounded-xl !py-3 text-[12.5px]">
+              <i data-lucide="clipboard-check" class="size-4"></i>
+              <span>ورود به‌عنوان مربی — انتخاب باشگاه</span>
+            </a>
+          </div>
+
+          <!-- resend -->
+          <div class="mt-5 text-center">
+            <p data-countdown="120" class="text-[12px] font-semibold text-gray-400"></p>
+          </div>
+
+          <p class="mt-auto rounded-xl bg-gray-50 px-3 py-2 text-center text-[10px] font-semibold text-gray-300">نمونه رابط کاربری — بدون اعتبارسنجی</p>
+        </section>
+      </section>
+    </main>
+
+    
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

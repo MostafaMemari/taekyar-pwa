@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — سامانه مدیریت باشگاه تکواندو</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+    <style>
+      /* entry screen only — soft brand glow behind hero */
+      .welcome-hero { position: relative; overflow: clip; }
+      .welcome-hero::before {
+        content: "";
+        position: absolute;
+        inset: -18% -30% auto auto;
+        width: 440px;
+        height: 440px;
+        background: radial-gradient(closest-side, rgba(206, 0, 79, 0.10), transparent 70%);
+      }
+      .welcome-hero::after {
+        content: "";
+        position: absolute;
+        inset: auto auto -14% -28%;
+        width: 360px;
+        height: 360px;
+        background: radial-gradient(closest-side, rgba(206, 0, 79, 0.07), transparent 70%);
+      }
+    </style>
+  </head>
+  <body class="overflow-x-clip">
+    <!-- Splash (silent token check) -->
+    <div id="splash" class="fixed inset-0 z-[100] grid place-items-center bg-canvas">
+      <span class="grid size-14 animate-pulse place-items-center rounded-2xl bg-brand-600 text-white shadow-brand-xl">
+        <svg viewBox="0 0 24 24" class="size-7" fill="currentColor"><path d="M12 2a3.2 3.2 0 1 1 0 6.4A3.2 3.2 0 0 1 12 2Zm-4.2 7.6c.4-.5 1-.6 1.6-.4l2.6 1 2.6-1c.6-.2 1.2 0 1.6.4l3.4 4a1 1 0 0 1-1.5 1.4l-2.6-2.9-.7 2.9 2.3 6.2a1 1 0 0 1-1.9.7l-2.2-6h-2l-2.2 6a1 1 0 0 1-1.9-.7l2.3-6.2-.7-2.9-2.6 2.9a1 1 0 0 1-1.5-1.4l3.4-4Z"/></svg>
+      </span>
+    </div>
+
+    <main class="app-frame mx-auto flex min-h-dvh w-full max-w-[430px] flex-col">
+
+      <!-- Hero -->
+      <section class="welcome-hero relative flex flex-1 flex-col px-5 pb-5 pt-[max(2.75rem,env(safe-area-inset-top))] text-center">
+        <span class="hero-chip mx-auto" style="background:var(--surface);color:var(--ak-ink);border-color:var(--ak-tint-line)">
+          <span class="relative flex size-1.5">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-75"></span>
+            <span class="relative inline-flex size-1.5 rounded-full bg-brand-600"></span>
+          </span>
+          سامانه مدیریت باشگاه تکواندو
+        </span>
+
+        <!-- brand row -->
+        <div class="relative mt-5 flex items-center justify-center gap-3">
+          <span class="logo-mark !size-12 !rounded-2xl">
+            <svg viewBox="0 0 24 24" class="size-7" fill="currentColor" aria-hidden="true"><path d="M12 2a3.2 3.2 0 1 1 0 6.4A3.2 3.2 0 0 1 12 2Zm-4.2 7.6c.4-.5 1-.6 1.6-.4l2.6 1 2.6-1c.6-.2 1.2 0 1.6.4l3.4 4a1 1 0 0 1-1.5 1.4l-2.6-2.9-.7 2.9 2.3 6.2a1 1 0 0 1-1.9.7l-2.2-6h-2l-2.2 6a1 1 0 0 1-1.9-.7l2.3-6.2-.7-2.9-2.6 2.9a1 1 0 0 1-1.5-1.4l3.4-4Z"/></svg>
+          </span>
+          <h1 class="text-[34px] font-extrabold leading-none tracking-tight text-gray-900">تک‌یار</h1>
+        </div>
+        <p class="relative mx-auto mt-3 max-w-[330px] text-[12.5px] leading-6 text-gray-500">
+          همراهِ مربیان و هنرجویان تکواندو — از ثبت‌نام و حضور و غیاب تا پایش کمربندها و آموزش پومسه.
+        </p>
+
+        <!-- hero photo -->
+        <figure class="relative mx-auto mt-5 w-full max-w-[360px] overflow-hidden rounded-[26px] border border-[var(--card-line)] shadow-[0_26px_50px_-24px_rgba(206,0,79,0.45)]">
+          <img src="../../assets/images/hero-welcome.jpg" alt="هنرجوی تکواندو در حال اجرای ضربهٔ پا" width="760" height="1420" decoding="async" class="h-[290px] w-full object-cover object-[50%_24%]" />
+          <span class="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/20 to-transparent" aria-hidden="true"></span>
+          <figcaption class="meta-glass absolute start-3 top-3 !py-1.5">
+            <svg viewBox="0 0 88 26" class="w-7 shrink-0" aria-hidden="true"><rect x="1" y="5" width="87" height="9" rx="3" fill="#1F2937"/><rect x="7.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="13.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="69.5" y="13" width="4.6" height="11.5" rx="2.2" fill="#111827" transform="rotate(12 71.8 13)"/><rect x="64" y="2.5" width="12" height="12" rx="3" fill="#111827"/></svg>
+            از کمربند سفید تا دان ۴
+          </figcaption>
+        </figure>
+      </section>
+
+      <!-- Role selection sheet -->
+      <section class="welcome-sheet mx-auto w-full max-w-[430px]">
+        <h2 class="text-[17px] font-extrabold text-gray-900">شروع کنید</h2>
+        <p class="mt-1 text-[11.5px] font-medium text-gray-400">نقش خود را انتخاب کنید تا ثبت‌نام از همان‌جا شروع شود.</p>
+
+        <div class="mt-4 space-y-3">
+          <!-- هنرجو — hero option -->
+          <a href="SHR-004-student-signup.html" class="role-card role-card-hero">
+            <span class="role-ico"><i data-lucide="user" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <b class="block text-[15px] font-extrabold text-white">هنرجو هستم</b>
+              <span class="role-sub">ثبت‌نام هنرجو — کمربند، بیمه و مشخصات</span>
+            </span>
+            <i data-lucide="chevron-left" class="size-5 shrink-0 text-white/70"></i>
+            <!-- watermark belt -->
+            <svg viewBox="0 0 96 44" class="pointer-events-none absolute -bottom-3 -start-3 w-24 -rotate-12 opacity-15" aria-hidden="true"><rect x="66" y="12" width="12" height="26" rx="4" fill="#fff"/><rect x="2" y="12" width="92" height="18" rx="9" fill="#fff"/><rect x="62" y="8" width="14" height="26" rx="5" fill="#fff"/></svg>
+          </a>
+
+          <!-- مربی -->
+          <a href="SHR-005-coach-signup.html" class="role-card">
+            <span class="role-ico role-ico-soft"><i data-lucide="graduation-cap" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <b class="block text-[14px] font-extrabold text-gray-900">مربی هستم</b>
+              <span class="role-sub">ثبت‌نام مربی و ساخت باشگاه</span>
+            </span>
+            <i data-lucide="chevron-left" class="size-5 shrink-0 text-gray-300"></i>
+          </a>
+
+          <!-- قبلاً ثبت‌نام کرده‌ام -->
+          <a href="SHR-002-login.html" class="role-card">
+            <span class="role-ico role-ico-soft !bg-gray-100 !text-gray-600"><i data-lucide="log-in" class="size-5"></i></span>
+            <span class="min-w-0 flex-1">
+              <b class="block text-[14px] font-extrabold text-gray-900">قبلاً ثبت‌نام کرده‌ام</b>
+              <span class="role-sub">ورود با شماره موبایل و کد تایید</span>
+            </span>
+            <i data-lucide="chevron-left" class="size-5 shrink-0 text-gray-300"></i>
+          </a>
+        </div>
+
+        <div class="mt-5 flex items-center justify-center gap-3 text-gray-300">
+          <span class="h-px w-10 bg-gray-100"></span>
+          <p class="text-[10.5px] font-semibold">نسخه وب‌اپلیکیشن — تک‌یار</p>
+          <span class="h-px w-10 bg-gray-100"></span>
+        </div>
+      </section>
+    </main>
+
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

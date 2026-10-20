@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — تکمیل پروفایل هنرجو</title>
+    
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap content-form !pb-40">
+        <header class="masthead mb-6 app-bar">
+          <button type="button" class="icon-btn" data-back aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">تکمیل پروفایل هنرجو</h1>
+          </div>
+        </header>
+
+        <form class="space-y-4">
+          <section class="card">
+            <div class="grid gap-4">
+              <div class="">
+                <label class="form-label" for="fullName">نام و نام خانوادگی</label>
+                <input id="fullName" class="input-field" autocomplete="name" value="سارا محمدی" />
+              </div>
+              <div class="">
+                <label class="form-label" for="nationalCode">کد ملی</label>
+                <input id="nationalCode" dir="ltr" inputmode="numeric" maxlength="10" class="input-field input-ltr text-center tracking-widest" value="۰۰۱۲۳۴۵۶۷۸" />
+                <p class="field-hint">اگر مربی شما پیش‌تر پروفایلی برای شما ساخته است، همان کد ملی را وارد کنید تا پروفایل به حساب شما متصل شود.</p>
+              </div>
+              <div>
+                <label class="form-label">جنسیت</label>
+                <div class="seg" data-seg>
+                  <button type="button" class="seg-item" data-value="FEMALE">زن</button>
+                  <button type="button" class="seg-item is-active" data-value="MALE">مرد</button>
+                </div>
+              </div>
+              <div>
+                <label class="form-label" for="birthDate">تاریخ تولد</label>
+                <input id="birthDate" class="input-field" placeholder="۱۳۹۰/۰۴/۱۵" />
+              </div>
+              <div>
+                <label class="form-label" for="fatherName">نام پدر</label>
+                <input id="fatherName" class="input-field" value="رضا" />
+              </div>
+              <div>
+                <label class="form-label" for="phoneNumber">شماره تماس</label>
+                <input id="phoneNumber" dir="ltr" inputmode="tel" class="input-field input-ltr" value="۰۹۱۲۱۲۳۴۵۶۷" />
+              </div>
+            </div>
+          </section>
+        </form>
+      </div>
+
+      <!-- sticky footer -->
+      <div class="save-bar flex items-center gap-3">
+        <a href="../student/STU-002-my-profile.html" class="btn btn-outline flex-1 !py-3">انصراف</a>
+        <button type="button" class="btn btn-primary flex-[2] !py-3" data-demo="اطلاعات نمونه ذخیره شد">
+          <span>ذخیره اطلاعات</span><i data-lucide="check" class="size-4"></i>
+        </button>
+      </div>
+    </main>
+
+    
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

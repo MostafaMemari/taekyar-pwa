@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — ورود</title>
+    
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="auth-shell app-frame">
+      <!-- form pane -->
+      <section class="flex flex-col px-5 pb-8 pt-7">
+        <header class="flex items-center gap-3">
+          <button type="button" class="icon-btn" data-back data-back-href="SHR-001-welcome.html" aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="auth-brand flex-1">
+            <span class="logo-mark"><i data-lucide="sparkle" class="size-6"></i></span>
+            <span class="min-w-0">
+              <b class="auth-wordmark block">تک‌یار</b>
+              <span class="auth-word-sub">سامانه مدیریت تکواندو</span>
+            </span>
+          </div>
+          <span class="belt-motif !w-16" aria-hidden="true"></span>
+        </header>
+
+        <div class="mt-9 flex flex-1 flex-col">
+          <h1 class="auth-title">ورود به حساب</h1>
+          <p class="auth-lead">شماره موبایل خود را وارد کنید تا کد تایید برای شما ارسال شود.</p>
+
+          <div class="mt-7">
+            <label class="form-label" for="mobile">شماره موبایل</label>
+            <div class="relative"><span class="field-ico"><i data-lucide="smartphone" class="size-[18px]"></i></span><input id="mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel" maxlength="13" dir="ltr"
+              class="input-field input-ltr !py-4 !ps-11 !pe-11 text-center text-[16px] font-bold tracking-widest" placeholder="۰۹۱۲۱۲۳۴۵۶۷" /></div>
+            <p class="field-hint">مثال: ۰۹۱۲۱۲۳۴۵۶۷</p>
+
+            <a href="SHR-003-otp-verification.html" class="btn btn-primary mt-5 w-full !rounded-xl">
+              <span>دریافت کد تایید</span>
+              <i data-lucide="chevron-left" class="size-4"></i>
+            </a>
+          </div>
+
+          <p class="mt-auto pt-10 text-center text-[12px] text-gray-400">
+            حساب کاربری ندارید؟
+            <a href="SHR-004-student-signup.html" class="font-bold text-brand-600">ثبت‌نام هنرجو</a>
+            <span class="mx-1 text-gray-200">|</span>
+            <a href="SHR-005-coach-signup.html" class="font-bold text-brand-600">ثبت‌نام مربی</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

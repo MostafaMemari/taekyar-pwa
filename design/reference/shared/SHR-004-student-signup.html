@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — ثبت‌نام هنرجو · اطلاعات پایه</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="auth-shell app-frame">
+      <section class="flex w-full flex-1 flex-col px-5 pb-8 pt-7">
+        <!-- stepper -->
+        <div class="stepper mt-3" aria-label="مراحل ثبت‌نام">
+          <div class="stp is-active">
+            <span class="stp-dot">۱</span>
+            <span class="stp-label">اطلاعات پایه</span>
+          </div>
+          <div class="stp">
+            <span class="stp-line"></span>
+            <span class="stp-dot">۲</span>
+            <span class="stp-label">کمربند</span>
+          </div>
+          <div class="stp">
+            <span class="stp-line"></span>
+            <span class="stp-dot">۳</span>
+            <span class="stp-label">مدارک</span>
+          </div>
+        </div>
+
+        <section class="mt-7 flex flex-1 flex-col">
+          <h1 class="auth-title !text-[22px]">اطلاعات پایه</h1>
+          <p class="auth-lead">این اطلاعات پایه پروفایل هنرجو را می‌سازد؛ <b class="font-extrabold text-gray-700">همه موارد این مرحله اجباری</b> است.</p>
+
+          <div class="mt-5">
+            <div class="grid gap-4">
+              <div>
+                <label class="form-label" for="fullName">نام و نام خانوادگی <span class="text-brand-600">*</span></label>
+                <div class="relative"><span class="field-ico"><i data-lucide="user-round" class="size-[18px]"></i></span><input id="fullName" class="input-field !ps-11" autocomplete="name" placeholder="مثلاً سارا محمدی" /></div>
+              </div>
+              <div>
+                <label class="form-label" for="nationalCode">کد ملی <span class="text-brand-600">*</span></label>
+                <div class="relative"><span class="field-ico"><i data-lucide="fingerprint" class="size-[18px]"></i></span><input id="nationalCode" dir="ltr" inputmode="numeric" maxlength="10" class="input-field !ps-11 !pe-11 input-ltr text-center tracking-widest" placeholder="۰۰۱۲۳۴۵۶۷۸"  data-digits /></div>
+                <p class="field-hint">کد ملی ۱۰ رقمی شناسنامه، بدون خط تیره</p>
+              </div>
+              <div>
+                <label class="form-label">جنسیت <span class="text-brand-600">*</span></label>
+                <div class="seg" data-seg>
+                  <button type="button" class="seg-item" data-value="FEMALE">زن</button>
+                  <button type="button" class="seg-item is-active" data-value="MALE">مرد</button>
+                </div>
+              </div>
+              <div>
+                <label class="form-label" for="birthDate">تاریخ تولد <span class="text-brand-600">*</span></label>
+                <div class="relative"><span class="field-ico"><i data-lucide="calendar" class="size-[18px]"></i></span><input id="birthDate" class="input-field !ps-11" placeholder="۱۳۹۰/۰۴/۱۵"  data-date /></div>
+                <p class="field-hint">رده سنی هنرجو بر همین اساس محاسبه می‌شود.</p>
+              </div>
+              <div>
+                <label class="form-label" for="province">استان <span class="text-brand-600">*</span></label>
+                <div class="select-wrap">
+                  <span class="field-ico"><i data-lucide="map-pin" class="size-[18px]"></i></span>
+                  <select id="province" class="!ps-11">
+                    <option>تهران</option>
+                    <option>البرز</option>
+                    <option>اصفهان</option>
+                    <option>فارس</option>
+                    <option>خراسان رضوی</option>
+                    <option>آذربایجان شرقی</option>
+                    <option>مازندران</option>
+                    <option>گیلان</option>
+                  </select>
+                  <span class="select-caret"><i data-lucide="chevron-down" class="size-4"></i></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="cta-dock mt-6 flex gap-3">
+              <a href="SHR-001-welcome.html" class="btn btn-outline !py-3.5">بازگشت</a>
+              <a href="SHR-022-student-belt.html" class="btn btn-primary flex-1 !py-3.5">
+                <span>مرحله بعد</span>
+                <i data-lucide="chevron-left" class="size-4"></i>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <p class="mt-auto pt-10 text-center text-[12px] text-gray-400">
+          قبلاً ثبت‌نام کرده‌اید؟
+          <a href="SHR-002-login.html" class="font-bold text-brand-600">ورود</a>
+        </p>
+      </section>
+    </main>
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

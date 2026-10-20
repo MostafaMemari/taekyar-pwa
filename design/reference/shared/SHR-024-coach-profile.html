@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — ثبت‌نام مربی · مشخصات حرفه‌ای</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="auth-shell app-frame">
+      <section class="flex w-full flex-1 flex-col px-5 pb-8 pt-7">
+        <!-- stepper -->
+        <div class="stepper mt-3" aria-label="مراحل ثبت‌نام مربی">
+          <div class="stp is-done">
+            <span class="stp-dot"><i data-lucide="check" class="size-3.5"></i></span>
+            <span class="stp-label">مشخصات پایه</span>
+          </div>
+          <div class="stp is-active">
+            <span class="stp-line"></span>
+            <span class="stp-dot">۲</span>
+            <span class="stp-label">حرفه‌ای · اختیاری</span>
+          </div>
+        </div>
+
+        <section class="mt-7 flex flex-1 flex-col">
+          <div class="flex items-center gap-2">
+            <h1 class="auth-title !text-[22px]">مشخصات حرفه‌ای</h1>
+            <span class="chip chip-amber shrink-0">اختیاری</span>
+          </div>
+          <p class="auth-lead">می‌توانید اکنون تکمیل کنید یا بعداً از پروفایل؛ هیچ‌کدام از موارد این مرحله اجباری نیست.</p>
+
+          <div class="mt-5">
+            <div class="grid gap-4">
+              <div>
+                <label class="form-label" for="birthDate">تاریخ تولد <span class="text-[9.5px] font-bold text-gray-400">(اختیاری)</span></label>
+                <div class="relative"><span class="field-ico"><i data-lucide="calendar" class="size-[18px]"></i></span><input id="birthDate" class="input-field !ps-11" placeholder="۱۳۶۵/۰۸/۱۲"  data-date /></div>
+              </div>
+
+              <!-- photo (optional) -->
+              <div>
+                <label class="form-label">تصویر پروفایل <span class="text-[9.5px] font-bold text-gray-400">(اختیاری)</span></label>
+                <div class="flex items-center gap-3.5">
+                  <button type="button" class="photo-up !size-16" data-demo="انتخاب عکس در نسخه نمایشی فعال نیست" aria-label="انتخاب تصویر پروفایل">
+                    <i data-lucide="camera" class="size-6"></i>
+                    <span class="absolute -bottom-0.5 -end-0.5 grid size-5 place-items-center rounded-full bg-brand-600 text-white ring-2 ring-white dark:ring-[var(--surface)]"><i data-lucide="plus" class="size-3"></i></span>
+                  </button>
+                  <span class="min-w-0 flex-1">
+                    <b class="block text-[12.5px] font-extrabold text-gray-900">افزودن تصویر</b>
+                    <span class="mt-0.5 block text-[10px] font-semibold text-gray-400">JPG یا PNG — حداکثر ۵ مگابایت</span>
+                  </span>
+                </div>
+              </div>
+
+              <!-- coach belts: dan 4-6 -->
+              <div>
+                <label class="form-label">کمربند مربی <span class="text-[9.5px] font-bold text-gray-400">(اختیاری)</span></label>
+                                                                                <div class="belt-grid mt-2.5" data-belt-picker>
+                  <button type="button" class="belt-card is-active" data-belt data-belt-name="کمربند مشکی — دان ۴" aria-label="کمربند مشکی — دان ۴">
+                    <span class="belt-check"><i data-lucide="check" class="size-3"></i></span>
+                    <svg viewBox="0 0 88 26" class="belt-strip" aria-hidden="true"><rect x="1" y="5" width="87" height="9" rx="3" fill="#1F2937"/><rect x="7.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="13.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="19.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="25.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="69.5" y="13" width="4.6" height="11.5" rx="2.2" fill="#111827" transform="rotate(12 71.8 13)"/><rect x="64" y="2.5" width="12" height="12" rx="3" fill="#111827"/></svg>
+                    <span class="belt-name">دان ۴</span>
+                  </button>
+                  <button type="button" class="belt-card" data-belt data-belt-name="کمربند مشکی — دان ۵" aria-label="کمربند مشکی — دان ۵">
+                    <span class="belt-check"><i data-lucide="check" class="size-3"></i></span>
+                    <svg viewBox="0 0 88 26" class="belt-strip" aria-hidden="true"><rect x="1" y="5" width="87" height="9" rx="3" fill="#1F2937"/><rect x="7.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="13.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="19.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="25.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="31.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="69.5" y="13" width="4.6" height="11.5" rx="2.2" fill="#111827" transform="rotate(12 71.8 13)"/><rect x="64" y="2.5" width="12" height="12" rx="3" fill="#111827"/></svg>
+                    <span class="belt-name">دان ۵</span>
+                  </button>
+                  <button type="button" class="belt-card col-span-2" data-belt data-belt-name="کمربند مشکی — دان ۶" aria-label="کمربند مشکی — دان ۶">
+                    <span class="belt-check"><i data-lucide="check" class="size-3"></i></span>
+                    <svg viewBox="0 0 88 26" class="belt-strip" aria-hidden="true"><rect x="1" y="5" width="87" height="9" rx="3" fill="#1F2937"/><rect x="7.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="13.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="19.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="25.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="31.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="37.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="69.5" y="13" width="4.6" height="11.5" rx="2.2" fill="#111827" transform="rotate(12 71.8 13)"/><rect x="64" y="2.5" width="12" height="12" rx="3" fill="#111827"/></svg>
+                    <span class="belt-name">دان ۶</span>
+                  </button>
+                </div>
+                <p class="field-hint mt-2">اگر کمربند دان ۴ به بالا ندارید، این بخش را خالی بگذارید.</p>
+              </div>
+            </div>
+
+            <div class="cta-dock mt-6 flex gap-3">
+              <a href="SHR-005-coach-signup.html" class="btn btn-outline !py-3.5">بازگشت</a>
+              <a href="SHR-002-login.html" class="btn btn-primary flex-1 !py-3.5">
+                <span>ثبت و دریافت کد تایید</span>
+                <i data-lucide="chevron-left" class="size-4"></i>
+              </a>
+            </div>
+            <a href="SHR-002-login.html" class="mt-3 block text-center text-[11.5px] font-bold text-gray-400">رد کردن — بعداً تکمیل می‌کنم</a>
+          </div>
+        </section>
+
+        <p class="mt-auto pt-10 text-center text-[12px] text-gray-400">
+          قبلاً ثبت‌نام کرده‌اید؟
+          <a href="SHR-002-login.html" class="font-bold text-brand-600">ورود</a>
+        </p>
+      </section>
+    </main>
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>
