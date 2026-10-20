@@ -1,69 +1,103 @@
+import { ChevronLeft, GraduationCap, LogIn, User } from "lucide-react";
+import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
+import { BeltGlyph, BeltWatermark, LogoMark } from "@/components/shared/taekyar-mark";
+import { ThemeSwitch } from "@/components/shared/theme-switch";
 
-export default function Home() {
+export const metadata: Metadata = { title: "خوش آمدید" };
+
+export default function WelcomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="app-frame mx-auto flex min-h-dvh w-full max-w-[430px] flex-col overflow-x-clip">
+      <section className="welcome-hero flex flex-1 flex-col px-5 pb-5 pt-[max(2.75rem,env(safe-area-inset-top))] text-center">
+        <div className="relative flex items-center justify-between gap-2">
+          <span className="hero-chip" style={{ background: "var(--surface)", color: "var(--ak-ink)", borderColor: "var(--ak-tint-line)" }}>
+            <span className="relative flex size-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-75" />
+              <span className="relative inline-flex size-1.5 rounded-full bg-brand-600" />
+            </span>
+            سامانه مدیریت باشگاه تکواندو
+          </span>
+          <ThemeSwitch />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="relative mt-5 flex items-center justify-center gap-3">
+          <LogoMark className="size-12 rounded-2xl" />
+          <h1 className="text-[34px] font-extrabold leading-none tracking-tight text-ink">تک یار</h1>
         </div>
-      </main>
-    </div>
+
+        <p className="relative mx-auto mt-3 max-w-[330px] text-[12.5px] leading-6 text-ink-muted">
+          همراهِ مربیان و هنرجویان تکواندو — از ثبت نام و حضور و غیاب تا پایش کمربندها و آموزش پومسه.
+        </p>
+
+        <figure className="relative mx-auto mt-5 w-full max-w-[360px] overflow-hidden rounded-[26px] border border-[var(--card-line)] shadow-[0_26px_50px_-24px_rgba(206,0,79,0.45)]">
+          <Image
+            src="/images/hero-welcome.jpg"
+            alt="هنرجوی تکواندو در حال اجرای ضربهٔ پا"
+            width={760}
+            height={1420}
+            priority
+            sizes="360px"
+            className="h-[290px] w-full object-cover object-[50%_24%]"
+          />
+          <span
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/20 to-transparent"
+            aria-hidden="true"
+          />
+          <figcaption className="meta-glass absolute start-3 top-3 py-1.5">
+            <BeltGlyph />
+            از کمربند سفید تا دان ۴
+          </figcaption>
+        </figure>
+      </section>
+
+      <section className="welcome-sheet mx-auto w-full max-w-[430px]">
+        <h2 className="text-[17px] font-extrabold text-ink">شروع کنید</h2>
+        <p className="mt-1 text-[11.5px] font-medium text-ink-subtle">نقش خود را انتخاب کنید تا ثبت نام از همان جا شروع شود.</p>
+
+        <div className="mt-4 flex flex-col gap-3">
+          <Link href="/signup/student" className="role-card role-card-hero">
+            <span className="role-ico">
+              <User className="size-6" aria-hidden="true" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <b className="block text-[15px] font-extrabold text-white">هنرجو هستم</b>
+              <span className="role-sub">ثبت نام هنرجو — کمربند، بیمه و مشخصات</span>
+            </span>
+            <ChevronLeft className="size-5 shrink-0 text-white/70" aria-hidden="true" />
+            <BeltWatermark />
+          </Link>
+
+          <Link href="/signup/coach" className="role-card">
+            <span className="role-ico role-ico-soft">
+              <GraduationCap className="size-6" aria-hidden="true" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <b className="block text-[14px] font-extrabold text-ink">مربی هستم</b>
+              <span className="role-sub">ثبت نام مربی و ساخت باشگاه</span>
+            </span>
+            <ChevronLeft className="size-5 shrink-0 text-ink-faint" aria-hidden="true" />
+          </Link>
+
+          <Link href="/login" className="role-card">
+            <span className="role-ico role-ico-soft bg-surface-sunken text-ink-body">
+              <LogIn className="size-5" aria-hidden="true" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <b className="block text-[14px] font-extrabold text-ink">قبلاً ثبت نام کرده ام</b>
+              <span className="role-sub">ورود با شماره موبایل و کد تایید</span>
+            </span>
+            <ChevronLeft className="size-5 shrink-0 text-ink-faint" aria-hidden="true" />
+          </Link>
+        </div>
+
+        <div className="mt-5 flex items-center justify-center gap-3 text-ink-faint">
+          <span className="h-px w-10 bg-surface-sunken" />
+          <p className="text-[10.5px] font-semibold">نسخه وب اپلیکیشن — تک یار</p>
+          <span className="h-px w-10 bg-surface-sunken" />
+        </div>
+      </section>
+    </main>
   );
 }
