@@ -98,6 +98,12 @@
   --color-surface-sunken: var(--surface-3);
   --color-accent-ink: var(--ak-ink);
   --color-field: var(--field-bg);
+  --color-success: var(--st-green);
+  --color-success-soft: var(--st-green-soft);
+  --color-warning: var(--st-amber);
+  --color-warning-soft: var(--st-amber-soft);
+  --color-danger: var(--st-red);
+  --color-danger-soft: var(--st-red-soft);
   --shadow-field: var(--field-shadow);
   --shadow-brand-xl: 0 20px 44px -16px color-mix(in srgb, var(--ak-600) 68%, transparent);
   --radius-sm: calc(var(--radius) * 0.6);
@@ -131,6 +137,9 @@
   --st-green: #059669;
   --st-amber: #b45309;
   --st-red: #dc2626;
+  --st-green-soft: color-mix(in srgb, var(--st-green) 11%, var(--surface));
+  --st-amber-soft: color-mix(in srgb, var(--st-amber) 13%, var(--surface));
+  --st-red-soft: color-mix(in srgb, var(--st-red) 10%, var(--surface));
   --field-bg: #ffffff;
   --field-line: #d7dce5;
   --field-line-hover: #b9c2d0;
@@ -199,6 +208,9 @@
   --st-green: #34d399;
   --st-amber: #fbbf24;
   --st-red: #f87171;
+  --st-green-soft: color-mix(in srgb, var(--st-green) 14%, var(--surface));
+  --st-amber-soft: color-mix(in srgb, var(--st-amber) 14%, var(--surface));
+  --st-red-soft: color-mix(in srgb, var(--st-red) 14%, var(--surface));
   --field-bg: #1a1e29;
   --field-line: #323a4d;
   --field-line-hover: #434e66;
@@ -635,5 +647,107 @@
 
   & > :first-child {
     padding-inline: 0.75rem;
+  }
+}
+
+@utility coach-band {
+  position: relative;
+  overflow: clip;
+  padding-block: max(1rem, env(safe-area-inset-top)) 2.75rem;
+  padding-inline: 1.25rem;
+  color: #ffffff;
+  background:
+    radial-gradient(110% 80% at 100% 0%, color-mix(in srgb, var(--ak-400) 58%, transparent), transparent 62%),
+    linear-gradient(150deg, var(--ak-500) 0%, var(--ak-600) 45%, var(--ak-800) 100%);
+}
+
+@utility coach-band-wm {
+  pointer-events: none;
+  position: absolute;
+  inset-block-start: -3.25rem;
+  inset-inline-start: -1.25rem;
+  font-size: 9rem;
+  font-weight: 800;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.07);
+  user-select: none;
+}
+
+@utility coach-sheet {
+  position: relative;
+  z-index: 1;
+  margin-top: -1.5rem;
+  border-start-start-radius: 28px;
+  border-start-end-radius: 28px;
+  background: var(--canvas);
+  padding-inline: 1rem;
+  padding-top: 1.25rem;
+  padding-bottom: calc(6.5rem + env(safe-area-inset-bottom));
+}
+
+@utility coach-tabbar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 40;
+  margin-inline: auto;
+  display: grid;
+  width: 100%;
+  max-width: 430px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border-top: 1px solid var(--line-3);
+  background: var(--glass);
+  padding: 0.4rem 0.5rem max(0.4rem, env(safe-area-inset-bottom));
+  backdrop-filter: blur(18px);
+}
+
+@utility coach-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  border-radius: 14px;
+  padding-block: 0.3rem;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--ink-6);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+
+  & .coach-tab-ico {
+    display: grid;
+    width: 2.6rem;
+    height: 1.75rem;
+    place-items: center;
+    border-radius: 9999px;
+    transition:
+      background-color 200ms ease,
+      transform 150ms ease;
+  }
+
+  & svg {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  &:active .coach-tab-ico {
+    transform: scale(0.88);
+  }
+
+  &.is-active {
+    color: var(--ak-ink);
+  }
+
+  &.is-active .coach-tab-ico {
+    background: var(--ak-soft);
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
