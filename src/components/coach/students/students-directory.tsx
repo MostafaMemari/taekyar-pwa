@@ -80,7 +80,7 @@ export function StudentsDirectory() {
 
       <StudentsList students={sorted} onClear={clearFilters} />
 
-      <div className="fixed inset-x-0 bottom-[calc(4.6rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-[var(--app-max-width)] px-4">
+      <div className="fixed inset-x-0 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-[var(--app-max-width)] px-4">
         <Button
           type="button"
           variant="field"

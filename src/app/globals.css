@@ -689,17 +689,20 @@
 @utility coach-tabbar {
   position: fixed;
   inset-inline: 0;
-  bottom: 0;
+  bottom: calc(0.875rem + env(safe-area-inset-bottom));
   z-index: 40;
   margin-inline: auto;
   display: grid;
-  width: 100%;
-  max-width: var(--app-max-width);
+  width: calc(100% - 1.75rem);
+  max-width: calc(var(--app-max-width) - 1.75rem);
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  border-top: 1px solid var(--line-3);
-  background: var(--glass);
-  padding: 0.4rem 0.5rem max(0.4rem, env(safe-area-inset-bottom));
-  backdrop-filter: blur(18px);
+  border: 1px solid var(--line-2);
+  border-radius: 28px;
+  background: var(--surface);
+  padding: 0.4rem;
+  box-shadow:
+    0 16px 34px -18px rgba(16, 18, 26, 0.35),
+    0 2px 6px rgba(16, 18, 26, 0.04);
 }
 
 @utility coach-tab {

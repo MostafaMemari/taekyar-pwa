@@ -167,7 +167,7 @@ export function SessionsDirectory() {
         </Empty>
       )}
 
-      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(4.6rem+env(safe-area-inset-bottom))] z-40 mx-auto flex max-w-[var(--app-max-width)] justify-end px-5">
+      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-40 mx-auto flex max-w-[var(--app-max-width)] justify-end px-5">
         <Button
           type="button"
           variant="brand"
