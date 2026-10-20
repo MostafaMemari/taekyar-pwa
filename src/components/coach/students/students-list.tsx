@@ -1,4 +1,5 @@
 import { ChevronLeft, Users } from "lucide-react";
+import Link from "next/link";
 import { BELT_META, type CoachStudent, INSURANCE_META, studentBeltLabel } from "@/components/coach/coach-data";
 import { PersonAvatar, StatusBadge } from "@/components/coach/coach-ui";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
@@ -24,31 +25,33 @@ function StudentCard({ student }: { student: CoachStudent }) {
   const belt = BELT_META[student.belt];
 
   return (
-    <Card className="flex-row items-center gap-3 rounded-2xl px-3 py-3 transition duration-150 active:scale-[0.995]">
-      <PersonAvatar name={student.name} />
+    <Link href={`/coach/students/${student.id}`} className="block transition duration-150 active:scale-[0.995]">
+      <Card className="flex-row items-center gap-3 rounded-2xl px-3 py-3">
+        <PersonAvatar name={student.name} />
 
-      <span className="min-w-0 flex-1">
-        <span className="flex items-center gap-1.5">
-          <b className="truncate text-[13.5px] font-extrabold text-ink">{student.name}</b>
-          <StatusBadge tone={student.hasAccount ? "brand" : "neutral"} className="shrink-0 px-1.5 py-0.5 text-[8.5px]">
-            {student.hasAccount ? "دارای حساب" : "بدون حساب"}
-          </StatusBadge>
-        </span>
-        <span className="mt-1.5 flex items-center gap-1.5">
-          <InsuranceBadge student={student} />
-          <span className="truncate text-[10.5px] text-ink-subtle">
-            {student.ageLabel} • {student.className}
+        <span className="min-w-0 flex-1">
+          <span className="flex items-center gap-1.5">
+            <b className="truncate text-[13.5px] font-extrabold text-ink">{student.name}</b>
+            <StatusBadge tone={student.hasAccount ? "brand" : "neutral"} className="shrink-0 px-1.5 py-0.5 text-[8.5px]">
+              {student.hasAccount ? "دارای حساب" : "بدون حساب"}
+            </StatusBadge>
+          </span>
+          <span className="mt-1.5 flex items-center gap-1.5">
+            <InsuranceBadge student={student} />
+            <span className="truncate text-[10.5px] text-ink-subtle">
+              {student.ageLabel} • {student.className}
+            </span>
           </span>
         </span>
-      </span>
 
-      <span className="flex w-14 shrink-0 flex-col items-center gap-1">
-        <BeltStrip color={belt.color} outline={belt.outline} stripes={student.dan ?? 0} className="size-auto w-12" />
-        <span className="text-[8.5px] font-extrabold leading-none text-ink-muted">{toPersianDigits(studentBeltLabel(student))}</span>
-      </span>
+        <span className="flex w-14 shrink-0 flex-col items-center gap-1">
+          <BeltStrip color={belt.color} outline={belt.outline} stripes={student.dan ?? 0} className="size-auto w-12" />
+          <span className="text-[8.5px] font-extrabold leading-none text-ink-muted">{toPersianDigits(studentBeltLabel(student))}</span>
+        </span>
 
-      <ChevronLeft className="size-4 shrink-0 text-ink-faint" aria-hidden="true" />
-    </Card>
+        <ChevronLeft className="size-4 shrink-0 text-ink-faint" aria-hidden="true" />
+      </Card>
+    </Link>
   );
 }
 

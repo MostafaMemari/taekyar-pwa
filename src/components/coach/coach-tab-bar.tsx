@@ -19,7 +19,12 @@ export function CoachTabBar() {
   return (
     <nav className="coach-tabbar" aria-label="ناوبری اصلی">
       {TABS.map((tab) => {
-        const active = tab.href === "/coach" ? pathname === "/coach" : pathname.startsWith(tab.href);
+        const active =
+          tab.href === "/coach"
+            ? pathname === "/coach"
+            : tab.href === "/coach/students"
+              ? pathname.startsWith("/coach/students") || pathname.startsWith("/coach/invitations")
+              : pathname.startsWith(tab.href);
 
         return (
           <Link

@@ -13,10 +13,21 @@ type SegmentedProps = {
   hint?: string;
   columns?: 2 | 3;
   required?: boolean;
+  disabled?: boolean;
   className?: string;
 };
 
-export function Segmented({ label, value, options, onChange, hint, columns = 2, required = true, className }: SegmentedProps) {
+export function Segmented({
+  label,
+  value,
+  options,
+  onChange,
+  hint,
+  columns = 2,
+  required = true,
+  disabled = false,
+  className,
+}: SegmentedProps) {
   return (
     <Field>
       <FieldLabel className="text-[13px] font-semibold text-ink-body">
@@ -32,7 +43,8 @@ export function Segmented({ label, value, options, onChange, hint, columns = 2, 
         }}
         variant="segmented"
         spacing={1}
-        className={cn("flex w-full flex-wrap rounded-xl bg-muted p-1", className)}
+        disabled={disabled}
+        className={cn("flex w-full flex-wrap rounded-xl bg-muted p-1", disabled && "opacity-60", className)}
       >
         {options.map((option) => (
           <ToggleGroupItem

@@ -1,18 +1,20 @@
 import { Bell, Landmark } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { ATTENDANCE_META, type AttendanceStatus } from "@/components/coach/coach-data";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
-type StatusTone = "success" | "warning" | "danger" | "brand" | "neutral";
+type StatusTone = "success" | "warning" | "danger" | "info" | "brand" | "neutral";
 
 const STATUS_TONES: Record<StatusTone, string> = {
   success: "bg-success-soft text-success",
   warning: "bg-warning-soft text-warning",
   danger: "bg-danger-soft text-danger",
+  info: "bg-info-soft text-info",
   brand: "bg-brand-50 text-accent-ink",
   neutral: "bg-muted text-ink-muted",
 };
@@ -42,6 +44,26 @@ export function CoachBell({ className }: { className?: string }) {
         ۲
       </Badge>
     </Button>
+  );
+}
+
+export function AttendanceStatusText({ status, className }: { status: AttendanceStatus; className?: string }) {
+  const meta = ATTENDANCE_META[status];
+
+  return (
+    <span
+      className={cn(
+        "inline-flex shrink-0 items-center gap-1.5 text-[10.5px] font-extrabold",
+        status === "PRESENT" && "text-success",
+        status === "LATE" && "text-warning",
+        status === "ABSENT" && "text-danger",
+        status === "EXCUSED" && "text-info",
+        className,
+      )}
+    >
+      <span className="size-1.5 rounded-full bg-current" aria-hidden="true" />
+      {meta.label}
+    </span>
   );
 }
 

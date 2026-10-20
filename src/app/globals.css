@@ -104,6 +104,8 @@
   --color-warning-soft: var(--st-amber-soft);
   --color-danger: var(--st-red);
   --color-danger-soft: var(--st-red-soft);
+  --color-info: var(--st-sky);
+  --color-info-soft: var(--st-sky-soft);
   --shadow-field: var(--field-shadow);
   --shadow-brand-xl: 0 20px 44px -16px color-mix(in srgb, var(--ak-600) 68%, transparent);
   --radius-sm: calc(var(--radius) * 0.6);
@@ -138,9 +140,11 @@
   --st-green: #059669;
   --st-amber: #b45309;
   --st-red: #dc2626;
+  --st-sky: #0284c7;
   --st-green-soft: color-mix(in srgb, var(--st-green) 11%, var(--surface));
   --st-amber-soft: color-mix(in srgb, var(--st-amber) 13%, var(--surface));
   --st-red-soft: color-mix(in srgb, var(--st-red) 10%, var(--surface));
+  --st-sky-soft: color-mix(in srgb, var(--st-sky) 11%, var(--surface));
   --field-bg: #ffffff;
   --field-line: #d7dce5;
   --field-line-hover: #b9c2d0;
@@ -209,9 +213,11 @@
   --st-green: #34d399;
   --st-amber: #fbbf24;
   --st-red: #f87171;
+  --st-sky: #38bdf8;
   --st-green-soft: color-mix(in srgb, var(--st-green) 14%, var(--surface));
   --st-amber-soft: color-mix(in srgb, var(--st-amber) 14%, var(--surface));
   --st-red-soft: color-mix(in srgb, var(--st-red) 14%, var(--surface));
+  --st-sky-soft: color-mix(in srgb, var(--st-sky) 14%, var(--surface));
   --field-bg: #1a1e29;
   --field-line: #323a4d;
   --field-line-hover: #434e66;

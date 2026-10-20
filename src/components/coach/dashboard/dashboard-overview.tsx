@@ -44,6 +44,7 @@ function StatCard({
 
 export function DashboardOverview() {
   const todaySessions = SESSIONS.filter((session) => session.when.includes("today")).length;
+  const pendingInvitations = INVITATIONS.filter((invitation) => invitation.status === "pending").length;
 
   return (
     <>
@@ -52,7 +53,7 @@ export function DashboardOverview() {
           variant="secondary"
           size="cta"
           className="h-auto rounded-2xl py-3 text-[11.5px] font-extrabold"
-          render={<Link href="/coach/students" />}
+          render={<Link href="/coach/students/new" />}
           nativeButton={false}
         >
           <UserPlus data-icon="inline-start" aria-hidden="true" />
@@ -62,7 +63,7 @@ export function DashboardOverview() {
           variant="field"
           size="cta"
           className="h-auto rounded-2xl py-3 text-[11.5px] font-extrabold"
-          render={<Link href="/coach/students" />}
+          render={<Link href="/coach/students/invite" />}
           nativeButton={false}
         >
           <Send data-icon="inline-start" aria-hidden="true" />
@@ -73,7 +74,13 @@ export function DashboardOverview() {
       <div className="grid grid-cols-2 gap-3">
         <StatCard icon={Users} value={toPersianDigits(String(STUDENTS.length))} label="هنرجویان" href="/coach/students" />
         <StatCard icon={CalendarDays} value={toPersianDigits(String(todaySessions))} label="کلاس های امروز" href="/coach/sessions" />
-        <StatCard icon={Clock} value={toPersianDigits(String(INVITATIONS.length))} label="دعوت نامه های در انتظار" accent />
+        <StatCard
+          icon={Clock}
+          value={toPersianDigits(String(pendingInvitations))}
+          label="دعوت نامه های در انتظار"
+          href="/coach/invitations"
+          accent
+        />
         <StatCard icon={TrendingUp} value={`${toPersianDigits("87")}٪`} label="میانگین حضور هفته" />
       </div>
     </>

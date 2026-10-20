@@ -1,56 +1,24 @@
-import { ClipboardList, Send, X } from "lucide-react";
-import type { ReactNode } from "react";
+"use client";
+
+import { ClipboardList, Send } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { SheetFrame } from "@/components/coach/coach-sheet-frame";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { SORT_OPTIONS, type SortKey } from "./students-options";
 
-function SheetFrame({
-  open,
-  onOpenChange,
-  title,
-  description,
-  children,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  title: string;
-  description: string;
-  children: ReactNode;
-}) {
-  return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent
-        side="bottom"
-        showCloseButton={false}
-        className="mx-auto w-full max-w-md rounded-t-3xl px-5 pt-2 pb-[max(18px,env(safe-area-inset-bottom))]"
-      >
-        <div className="mx-auto h-1 w-10 shrink-0 rounded-full bg-muted-foreground/25" aria-hidden="true" />
-
-        <SheetHeader className="flex-row items-center gap-2 p-0">
-          <SheetTitle className="flex-1 text-base font-extrabold text-ink">{title}</SheetTitle>
-          <SheetClose render={<Button variant="ghost" size="icon-sm" aria-label="بستن" />}>
-            <X aria-hidden="true" />
-          </SheetClose>
-        </SheetHeader>
-        <SheetDescription className="sr-only">{description}</SheetDescription>
-
-        {children}
-      </SheetContent>
-    </Sheet>
-  );
-}
-
 const ADD_OPTIONS = [
   {
+    href: "/coach/students/new",
     icon: ClipboardList,
     title: "فرم ثبت هنرجوی جدید",
     description: "ثبت پروفایل کامل هنرجو",
     tile: "bg-brand-50 text-accent-ink",
   },
   {
+    href: "/coach/students/invite",
     icon: Send,
     title: "دعوت با شماره تماس یا کد ملی",
     description: "ارسال دعوت نامه به هنرجو",
@@ -59,15 +27,21 @@ const ADD_OPTIONS = [
 ];
 
 export function AddStudentSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
+  const router = useRouter();
+
   return (
     <SheetFrame open={open} onOpenChange={onOpenChange} title="افزودن هنرجو" description="روش افزودن هنرجوی جدید را انتخاب کنید.">
       <div className="flex flex-col gap-2">
         {ADD_OPTIONS.map((option) => (
-          <SheetClose
+          <Button
             key={option.title}
-            render={
-              <Button type="button" variant="field" className="h-auto w-full justify-start gap-3 rounded-xl px-3 py-3 whitespace-normal" />
-            }
+            type="button"
+            variant="field"
+            className="h-auto w-full justify-start gap-3 rounded-xl px-3 py-3 whitespace-normal"
+            onClick={() => {
+              onOpenChange(false);
+              router.push(option.href);
+            }}
           >
             <span className={cn("grid size-10 shrink-0 place-items-center rounded-xl", option.tile)}>
               <option.icon aria-hidden="true" />
@@ -76,7 +50,7 @@ export function AddStudentSheet({ open, onOpenChange }: { open: boolean; onOpenC
               <b className="block text-[13px] font-extrabold text-ink">{option.title}</b>
               <span className="text-[11px] font-medium text-ink-subtle">{option.description}</span>
             </span>
-          </SheetClose>
+          </Button>
         ))}
       </div>
     </SheetFrame>

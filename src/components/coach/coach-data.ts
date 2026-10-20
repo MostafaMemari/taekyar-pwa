@@ -1,9 +1,11 @@
-import { Activity, Baby, Dumbbell, Flag, type LucideIcon, Medal, Users, Zap } from "lucide-react";
+import { Activity, Baby, Check, Clock, Dumbbell, Flag, type LucideIcon, Medal, Users, X, Zap } from "lucide-react";
 
 export type BeltKey = "white" | "yellow" | "green" | "blue" | "red" | "black";
 export type AgeGroup = "kids" | "teens" | "adults";
+export type Gender = "MALE" | "FEMALE";
 export type InsuranceStatus = "ok" | "soon" | "none";
 export type PeriodFilter = "today" | "week";
+export type AttendanceStatus = "PRESENT" | "LATE" | "ABSENT" | "EXCUSED";
 
 export const BELT_META: Record<BeltKey, { label: string; color: string; outline: string; rank: number }> = {
   white: { label: "سفید", color: "#e5e7eb", outline: "#cbd5e1", rank: 0 },
@@ -18,6 +20,16 @@ export const INSURANCE_META: Record<InsuranceStatus, { label: string; tone: "suc
   ok: { label: "بیمه فعال", tone: "success" },
   soon: { label: "نزدیک انقضا", tone: "warning" },
   none: { label: "بدون بیمه", tone: "danger" },
+};
+
+export const ATTENDANCE_META: Record<
+  AttendanceStatus,
+  { label: string; tone: "success" | "warning" | "danger" | "info"; color: string }
+> = {
+  PRESENT: { label: "حاضر", tone: "success", color: "#10b981" },
+  LATE: { label: "تأخیر", tone: "warning", color: "#f59e0b" },
+  ABSENT: { label: "غایب", tone: "danger", color: "#ef4444" },
+  EXCUSED: { label: "موجه", tone: "info", color: "#0ea5e9" },
 };
 
 export type CoachStudent = {
@@ -339,9 +351,50 @@ export const SESSIONS: ClassSession[] = [
   },
 ];
 
-export const INVITATIONS = [
-  { id: "nima-sadeghi", name: "نیما صادقی", sentAt: "دوشنبه 22 آبان 1404" },
-  { id: "pouya-naderi", name: "پویا نادری", sentAt: "پنجشنبه 17 آبان 1404" },
+export type InvitationStatus = "pending" | "accepted" | "rejected";
+
+export const INVITATION_STATUS_META = {
+  pending: { label: "در انتظار", tone: "warning", icon: Clock },
+  accepted: { label: "پذیرفته", tone: "success", icon: Check },
+  rejected: { label: "رد شده", tone: "danger", icon: X },
+} as const;
+
+export type Invitation = {
+  id: string;
+  name: string;
+  phone: string;
+  status: InvitationStatus;
+  sentAt: string;
+  respondedAt?: string;
+};
+
+export const INVITATIONS: Invitation[] = [
+  { id: "nima-sadeghi", name: "نیما صادقی", phone: "09120987654", status: "pending", sentAt: "۲۲ آبان ۱۴۰۴" },
+  { id: "dorsa-mousavi", name: "درسا موسوی", phone: "09107786543", status: "pending", sentAt: "۲۳ آبان ۱۴۰۴" },
+  {
+    id: "sina-moradi",
+    name: "سینا مرادی",
+    phone: "09198887766",
+    status: "accepted",
+    sentAt: "۸ مهر ۱۴۰۴",
+    respondedAt: "۹ مهر ۱۴۰۴",
+  },
+  {
+    id: "amirhossein-rostami",
+    name: "امیرحسین رستمی",
+    phone: "09123344566",
+    status: "accepted",
+    sentAt: "۲۰ شهریور ۱۴۰۴",
+    respondedAt: "۲۱ شهریور ۱۴۰۴",
+  },
+  {
+    id: "ali-kazemi",
+    name: "علی کاظمی",
+    phone: "09354433221",
+    status: "rejected",
+    sentAt: "۲ شهریور ۱۴۰۴",
+    respondedAt: "۴ شهریور ۱۴۰۴",
+  },
 ];
 
 export const BELT_EXAMS = [
