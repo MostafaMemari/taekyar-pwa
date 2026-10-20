@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — داشبورد مربی</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <!-- ============ brand band: identity + the coach's daily job ============ -->
+      <header class="hero-band">
+        <span class="hero-wm" aria-hidden="true">تک</span>
+
+        <div class="mx-auto w-full max-w-[430px]">
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0 flex-1">
+              <h1 class="hero-title truncate">سلام، مربی محمود کریمی</h1>
+              <p class="mt-1 text-[11px] font-semibold text-white/55">شنبه ۲۴ آبان ۱۴۰۴</p>
+            </div>
+            <a href="../shared/SHR-007-notifications.html" class="icon-btn-solid relative" aria-label="اعلان‌ها">
+              <i data-lucide="bell" class="size-5"></i>
+              <span class="nav-badge">۲</span>
+            </a>
+          </div>
+
+          <!-- hero CTA: attendance marking is the daily job -->
+          <a href="COA-015-attendance-marker.html" class="cta-hero mt-3.5" style="background:var(--surface);color:var(--ak-ink)">
+            <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-600 text-white shadow-brand-md">
+              <i data-lucide="clipboard-check" class="size-5"></i>
+            </span>
+            <span class="min-w-0 flex-1">
+              <b class="block text-[14px] font-extrabold text-gray-900">ثبت حضور و غیاب</b>
+              <span class="mt-0.5 block text-[10.5px] font-semibold text-gray-400">لیست امروز را علامت بزنید</span>
+            </span>
+            <i data-lucide="chevron-left" class="size-5 shrink-0 text-brand-600"></i>
+          </a>
+        </div>
+      </header>
+
+      <!-- ============ content sheet ============ -->
+      <div class="sheet-overlap">
+        <div class="mx-auto w-full max-w-[430px]">
+          <!-- active gym workspace (هر باشگاه فضای کاری مستقل دارد) -->
+          <a href="COA-009-clubs-list.html" class="gym-context">
+            <span class="gctx-ico"><i data-lucide="landmark" class="size-[18px]"></i></span>
+            <span class="min-w-0 flex-1">
+              <b>باشگاه شهدای گمنام</b>
+              <span class="gctx-sub">فضای کاری فعال شما — حضور غیاب و کلاس‌بندی این باشگاه</span>
+            </span>
+            <span class="gctx-swap">تغییر</span>
+          </a>
+
+          <!-- secondary quick actions -->
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            <a href="COA-004-student-create.html" class="btn btn-soft !rounded-2xl !py-3 text-[12px]"><i data-lucide="user-plus" class="size-4"></i>ثبت هنرجوی جدید</a>
+            <a href="COA-008-add-student-roster.html" class="btn btn-outline !rounded-2xl !py-3 text-[12px]"><i data-lucide="send" class="size-4"></i>دعوت هنرجو</a>
+          </div>
+
+          <!-- stat mosaic -->
+          <div class="mt-6 grid grid-cols-2 gap-3">
+            <a href="COA-003-students-list.html" class="stat-big" data-stat="students">
+              <span class="stat-ico"><i data-lucide="users" class="size-[18px]"></i></span>
+              <b>۲۴</b>
+              <span>هنرجویان</span>
+            </a>
+            <a href="COA-012-class-sessions-list.html" class="stat-big" data-stat="classes">
+              <span class="stat-ico"><i data-lucide="calendar-days" class="size-[18px]"></i></span>
+              <b>۳</b>
+              <span>کلاس‌های امروز</span>
+            </a>
+            <a href="COA-017-invitations-sent.html" class="stat-big is-accent" data-stat="invites">
+              <span class="stat-ico"><i data-lucide="clock" class="size-[18px]"></i></span>
+              <b>۲</b>
+              <span>دعوت‌نامه‌های در انتظار</span>
+            </a>
+            <a href="COA-016-attendance-student-report.html" class="stat-big" data-stat="attendance">
+              <span class="stat-ico"><i data-lucide="trending-up" class="size-[18px]"></i></span>
+              <b>۸۷٪</b>
+              <span>میانگین حضور هفته</span>
+            </a>
+          </div>
+
+          <!-- weekly attendance chart -->
+          <section class="mt-7">
+            <div class="section-head !mb-1">
+              <span class="section-tick"></span>
+              <h2 class="section-title">حضور این هفته</h2>
+              <span class="count-chip ms-auto">میانگین ۸۷٪</span>
+            </div>
+            <div class="card !p-4">
+              <svg viewBox="0 0 330 122" class="w-full" aria-label="نمودار حضور هنرجویان در هفته">
+                <defs>
+                  <linearGradient id="coaBar" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" style="stop-color:var(--ak-500)" /><stop offset="1" style="stop-color:var(--ak-600)" />
+                  </linearGradient>
+                </defs>
+                <g style="stroke:var(--surface-3)" stroke-width="1">
+                  <line x1="8" y1="96" x2="322" y2="96" />
+                  <line x1="8" y1="62" x2="322" y2="62" stroke-dasharray="3 5" />
+                  <line x1="8" y1="28" x2="322" y2="28" stroke-dasharray="3 5" />
+                </g>
+                <!-- bars: right→left شنبه تا جمعه -->
+                <g>
+                  <rect x="293" y="30" width="22" height="66" rx="8" fill="url(#coaBar)" />
+                  <rect x="247" y="40" width="22" height="56" rx="8" style="fill:color-mix(in srgb, var(--ak-600) 26%, transparent)" />
+                  <rect x="201" y="24" width="22" height="72" rx="8" style="fill:color-mix(in srgb, var(--ak-600) 26%, transparent)" />
+                  <rect x="155" y="34" width="22" height="62" rx="8" style="fill:color-mix(in srgb, var(--ak-600) 26%, transparent)" />
+                  <rect x="109" y="46" width="22" height="50" rx="8" style="fill:color-mix(in srgb, var(--ak-600) 26%, transparent)" />
+                  <rect x="63" y="20" width="22" height="76" rx="8" style="fill:color-mix(in srgb, var(--ak-600) 26%, transparent)" />
+                  <rect x="17" y="52" width="22" height="44" rx="8" style="fill:color-mix(in srgb, var(--ak-600) 26%, transparent)" />
+                </g>
+                <g font-size="9" font-weight="800" fill="#9ca3af" text-anchor="middle" font-family="Vazirmatn">
+                  <text x="304" y="22" style="fill:var(--ak-600)">۹۲</text>
+                  <text x="74" y="12">۹۵</text>
+                </g>
+                <g font-size="9.5" font-weight="700" fill="#9ca3af" text-anchor="middle" font-family="Vazirmatn">
+                  <text x="304" y="112">ش</text><text x="258" y="112">ی</text><text x="212" y="112">د</text>
+                  <text x="166" y="112">س</text><text x="120" y="112">چ</text><text x="74" y="112">پ</text><text x="28" y="112">ج</text>
+                </g>
+              </svg>
+              <div class="mt-1 flex items-center justify-between border-t pt-2.5" style="border-color: var(--line-1)">
+                <span class="text-[10px] font-bold" style="color: var(--ink-6)">۲۱۳ حضور ثبت‌شده از ۲۴۵ رکورد</span>
+                <a href="COA-016-attendance-student-report.html" class="text-[10px] font-extrabold" style="color: var(--ak-ink)">گزارش کامل</a>
+              </div>
+            </div>
+          </section>
+
+          <!-- coach tools: chat + analytics -->
+          <section class="mt-7">
+            <div class="section-head">
+              <span class="section-tick"></span>
+              <h2 class="section-title">ابزارهای مربی</h2>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <a href="../shared/SHR-018-chat-thread.html" class="card flex flex-col items-start gap-2.5">
+                <span class="lead-ico"><i data-lucide="message-square-text" class="size-[18px]"></i></span>
+                <span class="min-w-0">
+                  <b class="block text-[12.5px] font-extrabold text-gray-900">گفتگو با هنرجویان</b>
+                  <span class="mt-0.5 block text-[10.5px] font-semibold text-gray-400">۳ پیام خوانده‌نشده</span>
+                </span>
+              </a>
+              <button type="button" class="card flex flex-col items-start gap-2.5 text-start" data-demo="تحلیل کلاس‌ها به‌زودی در دسترس قرار می‌گیرد">
+                <span class="lead-ico !bg-sky-50 !text-sky-600"><i data-lucide="trending-up" class="size-[18px]"></i></span>
+                <span class="min-w-0">
+                  <b class="block text-[12.5px] font-extrabold text-gray-900">تحلیل کلاس‌ها</b>
+                  <span class="mt-0.5 block text-[10.5px] font-semibold text-gray-400">به‌زودی</span>
+                </span>
+              </button>
+            </div>
+          </section>
+
+          <div class="mt-7 grid gap-7">
+            <!-- pending invitations -->
+            <section>
+              <div class="section-head">
+                <span class="section-tick"></span>
+                <h2 class="section-title">دعوت‌نامه‌های در انتظار</h2>
+                <a href="COA-017-invitations-sent.html" class="link-more">مشاهده همه</a>
+              </div>
+              <div class="card divide-y divide-gray-100/80 !p-0">
+                <div class="flex items-center gap-3 p-4">
+                  <span class="avatar">ن</span>
+                  <div class="min-w-0 flex-1">
+                    <p class="truncate text-[13px] font-extrabold text-gray-900">نیما صادقی</p>
+                    <p class="mt-1 text-[10.5px] font-medium text-gray-400">ارسال: دوشنبه ۲۲ آبان ۱۴۰۴</p>
+                  </div>
+                  <span class="dot-status text-amber-500">در انتظار پاسخ</span>
+                </div>
+                <div class="flex items-center gap-3 p-4">
+                  <span class="avatar">پ</span>
+                  <div class="min-w-0 flex-1">
+                    <p class="truncate text-[13px] font-extrabold text-gray-900">پویا نادری</p>
+                    <p class="mt-1 text-[10.5px] font-medium text-gray-400">ارسال: پنجشنبه ۱۷ آبان ۱۴۰۴</p>
+                  </div>
+                  <span class="dot-status text-amber-500">در انتظار پاسخ</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- classes -->
+            <section>
+              <div class="section-head">
+                <span class="section-tick"></span>
+                <h2 class="section-title">کلاس‌ها</h2>
+                <a href="COA-012-class-sessions-list.html" class="link-more">مدیریت کلاس‌ها</a>
+              </div>
+              <div class="card divide-y divide-gray-100/80 !p-0">
+                <a href="COA-014-class-session-detail.html" class="flex items-center gap-3 p-4">
+                  <span class="lead-ico"><i data-lucide="calendar-days" class="size-[18px]"></i></span>
+                  <div class="min-w-0 flex-1">
+                    <p class="flex items-center gap-2 truncate text-[13px] font-extrabold text-gray-900">
+                      کلاس نوجوانان
+                      <span class="chip chip-green !px-2 !py-0.5 !text-[9px]">فعال</span>
+                    </p>
+                    <p class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-medium text-gray-400">
+                      <span class="truncate">باشگاه شهدای گمنام</span>
+                      <span class="text-gray-200">•</span>
+                      <span>۱۷:۰۰ تا ۱۸:۳۰</span>
+                    </p>
+                    <p class="mt-1.5 flex flex-wrap gap-1">
+                      <span class="chip chip-brand !px-2 !py-0.5 !text-[9px]">ش</span>
+                      <span class="chip chip-brand !px-2 !py-0.5 !text-[9px]">د</span>
+                      <span class="chip chip-brand !px-2 !py-0.5 !text-[9px]">چ</span>
+                    </p>
+                  </div>
+                  <i data-lucide="chevron-left" class="size-4 shrink-0 text-gray-300"></i>
+                </a>
+                <a href="COA-014-class-session-detail.html" class="flex items-center gap-3 p-4">
+                  <span class="lead-ico"><i data-lucide="calendar-days" class="size-[18px]"></i></span>
+                  <div class="min-w-0 flex-1">
+                    <p class="flex items-center gap-2 truncate text-[13px] font-extrabold text-gray-900">
+                      کلاس بزرگسالان
+                      <span class="chip chip-green !px-2 !py-0.5 !text-[9px]">فعال</span>
+                    </p>
+                    <p class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-medium text-gray-400">
+                      <span class="truncate">باشگاه شهدای گمنام</span>
+                      <span class="text-gray-200">•</span>
+                      <span>۱۹:۰۰ تا ۲۰:۳۰</span>
+                    </p>
+                    <p class="mt-1.5 flex flex-wrap gap-1">
+                      <span class="chip chip-brand !px-2 !py-0.5 !text-[9px]">ش</span>
+                      <span class="chip chip-brand !px-2 !py-0.5 !text-[9px]">س</span>
+                    </p>
+                  </div>
+                  <i data-lucide="chevron-left" class="size-4 shrink-0 text-gray-300"></i>
+                </a>
+                <a href="COA-014-class-session-detail.html" class="flex items-center gap-3 p-4">
+                  <span class="lead-ico"><i data-lucide="calendar-days" class="size-[18px]"></i></span>
+                  <div class="min-w-0 flex-1">
+                    <p class="flex items-center gap-2 truncate text-[13px] font-extrabold text-gray-900">
+                      کلاس کودکان
+                      <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">غیرفعال</span>
+                    </p>
+                    <p class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-medium text-gray-400">
+                      <span class="truncate">باشگاه شهدای گمنام</span>
+                      <span class="text-gray-200">•</span>
+                      <span>۱۶:۰۰ تا ۱۷:۰۰</span>
+                    </p>
+                    <p class="mt-1.5 flex flex-wrap gap-1">
+                      <span class="chip chip-brand !px-2 !py-0.5 !text-[9px]">پ</span>
+                    </p>
+                  </div>
+                  <i data-lucide="chevron-left" class="size-4 shrink-0 text-gray-300"></i>
+                </a>
+              </div>
+            </section>
+
+            <!-- belt exams -->
+            <section>
+              <div class="section-head">
+                <span class="section-tick"></span>
+                <h2 class="section-title">آزمون‌های پیش‌رو</h2>
+                <a href="../shared/SHR-014-belt-exams.html" class="link-more">همه</a>
+              </div>
+              <div class="grid gap-3">
+                <a href="../shared/SHR-014-belt-exams.html" class="exam-card !w-full">
+                  <span class="exam-date"><b>۲۸</b><span>آبان</span></span>
+                  <span class="min-w-0 flex-1">
+                    <span class="flex items-center gap-1.5">
+                      <b class="chip chip-brand !px-2 !py-0.5 !text-[9.5px]">دوره ۲۹۱</b>
+                      <b class="chip chip-green !px-2 !py-0.5 !text-[9.5px]">در حال ثبت‌نام</b>
+                    </span>
+                    <span class="mt-1.5 block truncate text-[12.5px] font-extrabold text-gray-900">آزمون کمربند زرد و سبز — استان تهران</span>
+                    <span class="mt-1 block text-[10px] font-medium text-gray-400">ثبت‌نام تا چهارشنبه ۲۶ آبان ۱۴۰۴</span>
+                  </span>
+                </a>
+                <a href="../shared/SHR-014-belt-exams.html" class="exam-card !w-full">
+                  <span class="exam-date"><b>۱۹</b><span>آذر</span></span>
+                  <span class="min-w-0 flex-1">
+                    <span class="flex items-center gap-1.5">
+                      <b class="chip chip-brand !px-2 !py-0.5 !text-[9.5px]">دوره ۲۹۲</b>
+                      <b class="chip chip-gray !px-2 !py-0.5 !text-[9.5px]">به‌زودی</b>
+                    </span>
+                    <span class="mt-1.5 block truncate text-[12.5px] font-extrabold text-gray-900">آزمون کمربند آبی و قرمز — خانه تکواندو</span>
+                    <span class="mt-1 block text-[10px] font-medium text-gray-400">ثبت‌نام از یکشنبه ۱ آذر ۱۴۰۴</span>
+                  </span>
+                </a>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+    <nav class="bottom-nav" aria-label="ناوبری اصلی"><a href="COA-001-dashboard.html" class="nav-item is-active"  aria-label="داشبورد"><span class="nav-ico relative"><i data-lucide="layout-dashboard" class="size-[18px]"></i></span><span>داشبورد</span></a><a href="COA-003-students-list.html" class="nav-item"  aria-label="هنرجویان"><span class="nav-ico relative"><i data-lucide="users" class="size-[18px]"></i></span><span>هنرجویان</span></a><a href="COA-009-clubs-list.html" class="nav-item"  aria-label="باشگاه‌ها"><span class="nav-ico relative"><i data-lucide="landmark" class="size-[18px]"></i></span><span>باشگاه‌ها</span></a><a href="COA-012-class-sessions-list.html" class="nav-item"  aria-label="کلاس‌ها"><span class="nav-ico relative"><i data-lucide="calendar-days" class="size-[18px]"></i></span><span>کلاس‌ها</span></a><a href="COA-002-my-profile.html" class="nav-item"  aria-label="پروفایل"><span class="nav-ico relative"><i data-lucide="user" class="size-[18px]"></i></span><span>پروفایل</span></a></nav>
+</body>
+</html>

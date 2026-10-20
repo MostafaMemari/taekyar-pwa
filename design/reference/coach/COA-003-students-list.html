@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — هنرجویان</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <!-- belt sprite: band + knot + angled tail (v5 anatomy, mini scale) -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <defs>
+        <symbol id="belt-g" viewBox="0 0 72 24">
+          <rect x="56.5" y="12.5" width="7" height="9.5" rx="2" transform="rotate(16 60 17)" fill="var(--belt-c)" stroke="var(--belt-s)"/>
+          <rect x="1.5" y="5" width="56" height="12" rx="6" fill="var(--belt-c)" stroke="var(--belt-s)"/>
+          <rect x="51.5" y="2.5" width="13" height="17" rx="4" fill="var(--belt-c)" stroke="var(--belt-s)"/>
+        </symbol>
+        <symbol id="belt-c" viewBox="0 0 30 12">
+          <rect x="0.75" y="2" width="27.75" height="8" rx="4" fill="var(--belt-c)" stroke="var(--belt-s)"/>
+          <rect x="22.75" y="0.75" width="6.5" height="10.5" rx="2.25" fill="var(--belt-c)" stroke="var(--belt-s)"/>
+        </symbol>
+      </defs>
+    </svg>
+
+    <main class="role-main app-frame">
+      <div class="page-wrap !pb-44">
+        <header class="masthead">
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">هنرجویان</h1>
+          </div>
+          <span class="count-chip mt-1 shrink-0"><i data-lucide="users" class="size-3"></i><b id="countVal" class="tabular-nums">۱۲</b><span>هنرجو</span></span>
+          <button type="button" class="btn btn-primary btn-sm mt-1 shrink-0 !px-3" data-sheet="add-sheet" aria-label="افزودن هنرجو">
+            <i data-lucide="user-plus" class="size-3.5"></i>افزودن
+          </button>
+        </header>
+
+        <!-- insurance quick stats — tap to filter -->
+        <div id="insTiles" class="mt-4 grid grid-cols-3 gap-2">
+          <button type="button" class="stat-tile !gap-1.5 transition active:scale-[.97]" data-ins="ok" aria-pressed="false">
+            <span class="grid size-8 place-items-center rounded-xl bg-emerald-50 text-emerald-600"><i data-lucide="shield-check" class="size-4"></i></span>
+            <b class="text-[15px] leading-none tabular-nums text-gray-800">۸</b>
+            <span class="text-[9px] font-bold leading-none text-gray-500">بیمه فعال</span>
+          </button>
+          <button type="button" class="stat-tile !gap-1.5 transition active:scale-[.97]" data-ins="soon" aria-pressed="false">
+            <span class="grid size-8 place-items-center rounded-xl bg-amber-50 text-amber-600"><i data-lucide="shield-alert" class="size-4"></i></span>
+            <b class="text-[15px] leading-none tabular-nums text-gray-800">۲</b>
+            <span class="text-[9px] font-bold leading-none text-gray-500">نزدیک انقضا</span>
+          </button>
+          <button type="button" class="stat-tile !gap-1.5 transition active:scale-[.97]" data-ins="none" aria-pressed="false">
+            <span class="grid size-8 place-items-center rounded-xl bg-red-50 text-red-500"><i data-lucide="shield-x" class="size-4"></i></span>
+            <b class="text-[15px] leading-none tabular-nums text-gray-800">۲</b>
+            <span class="text-[9px] font-bold leading-none text-gray-500">بدون بیمه</span>
+          </button>
+        </div>
+
+        <!-- gym workspace context -->
+        <a href="COA-009-clubs-list.html" class="gym-context mt-3">
+          <span class="gctx-ico"><i data-lucide="landmark" class="size-[18px]"></i></span>
+          <span class="min-w-0 flex-1">
+            <b>باشگاه شهدای گمنام</b>
+            <span class="gctx-sub">لیست هنرجویان این باشگاه</span>
+          </span>
+          <span class="gctx-swap">تغییر باشگاه</span>
+        </a>
+
+        <!-- search + sort (sticky) -->
+        <div class="toolbar">
+          <div class="flex items-center gap-2">
+            <div class="relative flex-1">
+              <i data-lucide="search" class="pointer-events-none absolute end-3.5 top-1/2 size-4 -translate-y-1/2 text-gray-400"></i>
+              <input id="search" type="search" placeholder="جستجو بر اساس نام، کد ملی یا کلاس…"
+                class="input-field !py-3 pe-10 text-[13px]" />
+            </div>
+            <button type="button" class="icon-btn !size-11 relative shrink-0" aria-label="مرتب‌سازی" data-sheet="sort-sheet">
+              <i data-lucide="arrow-up-down" class="size-4"></i>
+              <span id="sortDot" class="absolute end-2 top-2 hidden size-1.5 rounded-full bg-brand-500"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- filters: belt rank + age group (multi-select) -->
+        <div class="mt-1 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1.5 text-[11px] font-extrabold text-gray-500"><i data-lucide="sliders-horizontal" class="size-3.5"></i>فیلترها<span id="fCount" class="hidden min-w-[15px] rounded-full bg-brand-500 px-1 text-center text-[8.5px] font-extrabold leading-[15px] text-white tabular-nums">۰</span></span>
+            <span class="flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-[8.5px] font-bold text-gray-400"><i data-lucide="list-filter" class="size-2.5"></i>انتخاب چندگانه</span>
+            <button type="button" class="js-clear hidden inline-flex items-center gap-1 whitespace-nowrap text-[10.5px] font-extrabold text-red-500"><i data-lucide="x" class="size-3"></i>پاک‌کردن همه</button>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-12 shrink-0 text-[10px] font-bold text-gray-400">کمربند</span>
+            <div id="beltChips" class="flex flex-1 gap-1.5 overflow-x-auto no-scrollbar pb-0.5" data-chips role="group" aria-label="فیلتر کمربند — چند کمربند را می‌توانید همزمان انتخاب کنید">
+              <button type="button" class="filter-chip is-active !px-3 !py-1.5" data-val="all"><span class="text-[10px]">همه</span></button>
+              <button type="button" class="filter-chip !gap-1.5 !px-2.5 !py-1.5" data-val="white" aria-label="کمربند سفید"><svg class="w-[26px]" viewBox="0 0 30 12" style="--belt-c:#e5e7eb;--belt-s:#cbd5e1" aria-hidden="true"><use href="#belt-c"/></svg><span class="text-[10px]">سفید</span></button>
+              <button type="button" class="filter-chip !gap-1.5 !px-2.5 !py-1.5" data-val="yellow" aria-label="کمربند زرد"><svg class="w-[26px]" viewBox="0 0 30 12" style="--belt-c:#fbbf24;--belt-s:rgba(23,26,37,.16)" aria-hidden="true"><use href="#belt-c"/></svg><span class="text-[10px]">زرد</span></button>
+              <button type="button" class="filter-chip !gap-1.5 !px-2.5 !py-1.5" data-val="green" aria-label="کمربند سبز"><svg class="w-[26px]" viewBox="0 0 30 12" style="--belt-c:#22c55e;--belt-s:rgba(23,26,37,.16)" aria-hidden="true"><use href="#belt-c"/></svg><span class="text-[10px]">سبز</span></button>
+              <button type="button" class="filter-chip !gap-1.5 !px-2.5 !py-1.5" data-val="blue" aria-label="کمربند آبی"><svg class="w-[26px]" viewBox="0 0 30 12" style="--belt-c:#3b82f6;--belt-s:rgba(23,26,37,.16)" aria-hidden="true"><use href="#belt-c"/></svg><span class="text-[10px]">آبی</span></button>
+              <button type="button" class="filter-chip !gap-1.5 !px-2.5 !py-1.5" data-val="red" aria-label="کمربند قرمز"><svg class="w-[26px]" viewBox="0 0 30 12" style="--belt-c:#ef4444;--belt-s:rgba(23,26,37,.16)" aria-hidden="true"><use href="#belt-c"/></svg><span class="text-[10px]">قرمز</span></button>
+              <button type="button" class="filter-chip !gap-1.5 !px-2.5 !py-1.5" data-val="black" aria-label="کمربند مشکی"><svg class="w-[26px]" viewBox="0 0 30 12" style="--belt-c:#1f2937;--belt-s:rgba(255,255,255,.25)" aria-hidden="true"><use href="#belt-c"/></svg><span class="text-[10px]">مشکی</span></button>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-12 shrink-0 text-[10px] font-bold text-gray-400">رده سنی</span>
+            <div id="ageChips" class="flex flex-1 gap-1.5 overflow-x-auto no-scrollbar pb-0.5" data-chips role="group" aria-label="فیلتر رده سنی — چند رده را می‌توانید همزمان انتخاب کنید">
+              <button type="button" class="filter-chip is-active !px-3 !py-1.5" data-val="all"><span class="text-[10px]">همه</span></button>
+              <button type="button" class="filter-chip !px-3 !py-1.5" data-val="kids"><span class="text-[10px]">کودکان</span></button>
+              <button type="button" class="filter-chip !px-3 !py-1.5" data-val="teens"><span class="text-[10px]">نوجوانان</span></button>
+              <button type="button" class="filter-chip !px-3 !py-1.5" data-val="adults"><span class="text-[10px]">بزرگسالان</span></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- list -->
+        <div id="list" class="mt-3 space-y-2.5">
+          <a href="COA-005-student-detail.html" class="card group flex items-center gap-3 !py-3 transition hover:border-brand-100" data-s-item data-order="1" data-belt="green" data-age="teens" data-ins="ok" data-ins-days="200" data-name="سارا محمدی" data-filter-text="سارا محمدی ۰۰۶۴۵۲۳۱۸۷ کمربند سبز نوجوانان کلاس سبک کیوروگی دارای حساب بیمه">
+            <span class="avatar">س</span>
+            <span class="min-w-0 flex-1">
+              <span class="flex items-center gap-1.5">
+                <b class="truncate text-[13.5px] text-gray-800">سارا محمدی</b>
+                <span class="chip chip-brand !px-1.5 !py-0.5 !text-[8.5px]">دارای حساب</span>
+              </span>
+              <span class="mt-1.5 flex items-center gap-1.5">
+                <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-50 px-1.5 py-[3px] text-[8.5px] font-bold text-emerald-600"><i data-lucide="shield-check" class="size-2.5"></i>بیمه تا ۱۴۰۵/۰۵/۱۰</span>
+                <span class="truncate text-[10.5px] text-gray-400">نوجوانان • کلاس سبک کیوروگی</span>
+              </span>
+            </span>
+            <span class="flex w-[56px] shrink-0 flex-col items-center gap-1">
+              <svg class="w-12" viewBox="0 0 72 24" style="--belt-c:#22c55e;--belt-s:rgba(23,26,37,.16)" aria-hidden="true"><use href="#belt-g"/></svg>
+              <span class="text-[8.5px] font-extrabold leading-none text-gray-500">سبز</span>
+            </span>
+            <i data-lucide="chevron-left" class="size-4 shrink-0 text-gray-300 transition group-hover:text-brand-500"></i>
+          </a>
+
+          <a href="COA-005-student-detail.html" class="card group flex items-center gap-3 !py-3 transition hover:border-brand-100" data-s-item data-order="2" data-belt="green" data-age="teens" data-ins="ok" data-ins-days="178" data-name="امیرحسین محمدی" data-filter-text="امیرحسین محمدی ۰۰۱۲۳۴۵۶۷۸ کمربند سبز نوجوانان کلاس نوجوانان دارای حساب بیمه">
+            <span class="avatar">ا</span>
+            <span class="min-w-0 flex-1">
+              <span class="flex items-center gap-1.5">
+                <b class="truncate text-[13.5px] text-gray-800">امیرحسین محمدی</b>
+                <span class="chip chip-brand !px-1.5 !py-0.5 !text-[8.5px]">دارای حساب</span>
+              </span>
+              <span class="mt-1.5 flex items-center gap-1.5">
+                <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-50 px-1.5 py-[3px] text-[8.5px] font-bold text-emerald-600"><i data-lucide="shield-check" class="size-2.5"></i>بیمه تا ۱۴۰۶/۰۱/۲۲</span>
+                <span class="truncate text-[10.5px] text-gray-400">نوجوانان • کلاس نوجوانان</span>
+              </span>
+            </span>
+            <span class="flex w-[56px] shrink-0 flex-col items-center gap-1">
+              <svg class="w-12" viewBox="0 0 72 24" style="--belt-c:#22c55e;--belt-s:rgba(23,26,37,.16)" aria-hidden="true"><use href="#belt-g"/></svg>
+              <span class="text-[8.5px] font-extrabold leading-none text-gray-500">سبز</span>
+            </span>
+            <i data-lucide="chevron-left" class="size-4 shrink-0 text-gray-300 transition group-hover:text-brand-500"></i>
+          </a>
+
+          <a href="COA-005-student-detail.html" class="card group flex items-center gap-3 !py-3 transition hover:border-brand-100" data-s-item data-order="3" data-belt="yellow" data-age="teens" data-ins="ok" data-ins-days="130" data-name="علی رضایی" data-filter-text="علی رضایی ۰۰۳۸۴۷۵۶۱۹ کمربند زرد نوجوانان کلاس نوجوانان بدون حساب بیمه">
+            <span class="avatar">ع</span>
+            <span class="min-w-0 flex-1">
+              <span class="flex items-center gap-1.5">
+                <b class="truncate text-[13.5px] text-gray-800">علی رضایی</b>
+                <span class="chip chip-gray !px-1.5 !py-0.5 !text-[8.5px]">بدون حساب</span>
+              </span>
+              <span class="mt-1.5 flex items-center gap-1.5">
+                <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-50 px-1.5 py-[3px] text-[8.5px] font-bold text-emerald-600"><i data-lucide="shield-check" class="size-2.5"></i>بیمه تا ۱۴۰۵/۱۲/۰۵</span>
+                <span class="truncate text-[10.5px] text-gray-400">نوجوانان • کلاس نوجوانان</span>
+              </span>
+            </span>
+            <span class="flex w-[56px] shrink-0 flex-col items-center gap-1">
+              <svg class="w-12" viewBox="0 0 72 24" style="--belt-c:#fbbf24;--belt-s:rgba(23,26,37,.16)" aria-hidden="true"><use href="#belt-g"/></svg>
+              <span class="text-[8.5px] font-extrabold leading-none text-gray-500">زرد</span>
+            </span>
+            <i data-lucide="chevron-left" class="size-4 shrink-0 text-gray-300 transition group-hover:text-brand-500"></i>
+          </a>
+
+          <a href="COA-005-student-detail.html" class="card group flex items-center gap-3 !py-3 transition hover:border-brand-100" data-s-item data-order="4" data-belt="white" data-age="kids" data-ins="none" data-ins-days="9999" data-name="نیلوفر کاظمی" data-filter-text="نیلوفر کاظمی ۰۰۷۴۵۸۲۱۹۶ کمربند سفید کودکان کلاس کودکان بدون حساب بدون بیمه">
+            <span class="avatar">ن</span>
+            <span class="min-w-0 flex-1">
+              <span class="flex items-center gap-1.5">
+                <b class="truncate text-[13.5px] text-gray-800">نیلوفر کاظمی</b>
+                <span class="chip chip-gray !px-1.5 !py-0.5 !text-[8.5px]">بدون حساب</span>
+              </span>
+              <span class="mt-1.5 flex items-center gap-1.5">
+                <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-red-50 px-1.5 py-[3px] text-[8.5px] font-bold text-red-500"><i data-lucide="shield-x" class="size-2.5"></i>بدون بیمه</span>
+                <span class="truncate text-[10.5px] text-gray-400">کودکان • کلاس کودکان</span>
+              </span>
+            </span>
+            <span class="flex w-[56px] shrink-0 flex-col items-center gap-1">
+              <svg class="w-12" viewBox="0 0 72 24" style="--belt-c:#e5e7eb;--belt-s:#cbd5e1" aria-hidden="true"><use href="#belt-g"/></svg>
+              <span class="text-[8.5px] font-extrabold leading-none text-gray-500">سفید</span>
+            </span>
+            <i data-lucide="chevron-left" class="size-4 shrink-0 text-gray-300 transition group-hover:text-brand-500"></i>
+          </a>
+
+          <a href="COA-005-student-detail.html" class="card group flex items-center gap-3 !py-3 transition hover:border-brand-100" data-s-item data-order="5" data-belt="yellow" data-age="teens" data-ins="soon" data-ins-days="19" data-name="محمد حسینی" data-filter-text="محمد حسینی ۰۰۴۱۹۲۸۳۷۴ کمربند زرد نوجوانان کلاس نوجوانان دارای حساب بیمه انقضا">
+            <span class="avatar">م</span>
+            <span class="min-w-0 flex-1">
+              <span class="flex items-center gap-1.5">
+                <b class="truncate text-[13.5px] text-gray-800">محمد حسینی</b>
+                <span class="chip chip-brand !px-1.5 !py-0.5 !text-[8.5px]">دارای حساب</span>
+              </span>
+              <span class="mt-1.5 flex items-center gap-1.5">
+                <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-amber-50 px-1.5 py-[3px] text-[8.5px] font-bold text-amber-600"><i data-lucide="shield-alert" class="size-2.5"></i>بیمه تا ۱۴۰۵/۰۸/۱۴</span>
+                <span class="truncate text-[10.5px] text-gray-400">نوجوانان • کلاس نوجوانان</span>
+              </span>
+            </span>
+            <span class="flex w-[56px] shrink-0 flex-col items-center gap-1">
+              <svg class="w-12" viewBox="0 0 72 24" style="--belt-c:#fbbf24;--belt-s:rgba(23,26,37,.16)" aria-hidden="true"><use href="#belt-g"/></svg>
+              <span class="text-[8.5px] font-extrabold leading-none text-gray-500">زرد</span>
+            </span>
+            <i data-lucide="chevron-left" class="size-4 shrink-0 text-gray-300 transition group-hover:text-brand-500"></i>
+          </a>
+
+          <a href="COA-005-student-detail.html" class="card group flex items-center gap-3 !py-3 transition hover:border-brand-100" data-s-item data-order="6" data-belt="blue" data-age="adults" data-ins="ok" data-ins-days="204" data-name="رضا قاسمی" data-filter-text="رضا قاسمی ۰۰۵۱۰۲۹۳۸۴ کمربند آبی بزرگسالان کلاس بزرگسالان دارای حساب بیمه">
+            <span class="avatar">ر</span>
+            <span class="min-w-0 flex-1">
+              <span class="flex items-center gap-1.5">
+                <b class="truncate text-[13.5px] text-gray-800">رضا قاسمی</b>
+                <span class="chip chip-brand !px-1.5 !py-0.5 !text-[8.5px]">دارای حساب</span>
+              </span>
+              <span class="mt-1.5 flex items-center gap-1.5">
+                <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-50 px-1.5 py-[3px] text-[8.5px] font-bold text-emerald-600"><i data-lucide="shield-check" class="size-2.5"></i>بیمه تا ۱۴۰۶/۰۴/۱۸</span>
+                <span class="truncate text-[10.5px] text-gray-400">بزرگسالان • کلاس بزرگسالان</span>
+              </span>
+            </span>
+            <span class="flex w-[56px] shrink-0 flex-col items-center gap-1">
+              <svg class="w-12" viewBox="0 0 72 24" style="--belt-c:#3b82f6;--belt-s:rgba(23,26,37,.16)" aria-hidden="true"><use href="#belt-g"/></svg>
+              <span class="text-[8.5px] font-extrabold leading-none text-gray-500">آبی</span>
+            </span>
+            <i data-lucide="chevron-left" class="size-4 shrink-0 text-gray-300 transition group-hover:text-brand-500"></i>
+          </a>
+
+          <a href="COA-005-student-detail.html" class="card group flex items-center gap-3 !py-3 transition hover:border-brand-100" data-s-item data-order="7" data-belt="yellow" data-age="kids" data-ins="none" data-ins-days="9999" data-name="سینا مرادی" data-filter-text="سینا مرادی ۰۰۷۳۸۴۶۱۵۲ کمربند زرد کودکان کلاس کودکان بدون حساب بدون بیمه">
+            <span class="avatar">س</span>
+            <span class="min-w-0 flex-1">
+              <span class="flex items-center gap-1.5">
+                <b class="truncate text-[13.5px] text-gray-800">سینا مرادی</b>
+                <span class="chip chip-gray !px-1.5 !py-0.5 !text-[8.5px]">بدون حساب</span>
+              </span>
+              <span class="mt-1.5 flex items-center gap-1.5">
+                <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-red-50 px-1.5 py-[3px] text-[8.5px] font-bold text-red-500"><i data-lucide="shield-x" class="size-2.5"></i>بدون بیمه</span>
+                <span class="truncate text-[10.5px] text-gray-400">کودکان • کلاس کودکان</span>
+              </span>
+            </span>
+            <span class="flex w-[56px] shrink-0 flex-col items-center gap-1">
+              <svg class="w-12" viewBox="0 0 72 24" style="--belt-c:#fbbf24;--belt-s:rgba(23,26,37,.16)" aria-hidden="true"><use href="#belt-g"/></svg>
+              <span class="text-[8.5px] font-extrabold leading-none text-gray-500">زرد</span>
+            </span>
+            <i data-lucide="chevron-left" class="size-4 shrink-0 text-gray-300 transition group-hover:text-brand-500"></i>
+          </a>
+
+          <a href="COA-005-student-detail.html" class="card group flex items-center gap-3 !py-3 transition hover:border-brand-100" data-s-item data-order="8" data-belt="white" data-age="kids" data-ins="ok" data-ins-days="197" data-name="پارسا کاظمی" data-filter-text="پارسا کاظمی ۰۰۶۲۰۳۹۱۸۴ کمربند سفید کودکان کلاس کودکان دارای حساب بیمه">
+            <span class="avatar">پ</span>
+            <span class="min-w-0 flex-1">
+              <span class="flex items-center gap-1.5">
+                <b class="truncate text-[13.5px] text-gray-800">پارسا کاظمی</b>
+                <span class="chip chip-brand !px-1.5 !py-0.5 !text-[8.5px]">دارای حساب</span>
+              </span>
+              <span class="mt-1.5 flex items-center gap-1.5">
+                <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-50 px-1.5 py-[3px] text-[8.5px] font-bold text-emerald-600"><i data-lucide="shield-check" class="size-2.5"></i>بیمه تا ۱۴۰۶/۰۲/۱۱</span>
+                <span class="truncate text-[10.5px] text-gray-400">کودکان • کلاس کودکان</span>
+              </span>
+            </span>
+            <span class="flex w-[56px] shrink-0 flex-col items-center gap-1">
+              <svg class="w-12" viewBox="0 0 72 24" style="--belt-c:#e5e7eb;--belt-s:#cbd5e1" aria-hidden="true"><use href="#belt-g"/></svg>
+              <span class="text-[8.5px] font-extrabold leading-none text-gray-500">سفید</span>
+            </span>
+            <i data-lucide="chevron-left" class="size-4 shrink-0 text-gray-300 transition group-hover:text-brand-500"></i>
+          </a>
+
+          <a href="COA-005-student-detail.html" class="card group flex items-center gap-3 !py-3 transition hover:border-brand-100" data-s-item data-order="9" data-belt="white" data-age="kids" data-ins="soon" data-ins-days="7" data-name="درسا موسوی" data-filter-text="درسا موسوی ۰۰۹۵۶۴۷۳۸۲ کمربند سفید کودکان کلاس کودکان دارای حساب بیمه انقضا">
+            <span class="avatar">د</span>
+            <span class="min-w-0 flex-1">
+              <span class="flex items-center gap-1.5">
+                <b class="truncate text-[13.5px] text-gray-800">درسا موسوی</b>
+                <span class="chip chip-brand !px-1.5 !py-0.5 !text-[8.5px]">دارای حساب</span>
+              </span>
+              <span class="mt-1.5 flex items-center gap-1.5">
+                <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-amber-50 px-1.5 py-[3px] text-[8.5px] font-bold text-amber-600"><i data-lucide="shield-alert" class="size-2.5"></i>بیمه تا ۱۴۰۵/۰۸/۰۲</span>
+                <span class="truncate text-[10.5px] text-gray-400">کودکان • کلاس کودکان</span>
+              </span>
+            </span>
+            <span class="flex w-[56px] shrink-0 flex-col items-center gap-1">
+              <svg class="w-12" viewBox="0 0 72 24" style="--belt-c:#e5e7eb;--belt-s:#cbd5e1" aria-hidden="true"><use href="#belt-g"/></svg>
+              <span class="text-[8.5px] font-extrabold leading-none text-gray-500">سفید</span>
+            </span>
+            <i data-lucide="chevron-left" class="size-4 shrink-0 text-gray-300 transition group-hover:text-brand-500"></i>
+          </a>
+
+          <a href="COA-005-student-detail.html" class="card group flex items-center gap-3 !py-3 transition hover:border-brand-100" data-s-item data-order="10" data-belt="yellow" data-age="adults" data-ins="ok" data-ins-days="125" data-name="کیان احمدی" data-filter-text="کیان احمدی ۰۰۸۹۳۴۱۲۵۷ کمربند زرد بزرگسالان کلاس بزرگسالان دارای حساب بیمه">
+            <span class="avatar">ک</span>
+            <span class="min-w-0 flex-1">
+              <span class="flex items-center gap-1.5">
+                <b class="truncate text-[13.5px] text-gray-800">کیان احمدی</b>
+                <span class="chip chip-brand !px-1.5 !py-0.5 !text-[8.5px]">دارای حساب</span>
+              </span>
+              <span class="mt-1.5 flex items-center gap-1.5">
+                <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-50 px-1.5 py-[3px] text-[8.5px] font-bold text-emerald-600"><i data-lucide="shield-check" class="size-2.5"></i>بیمه تا ۱۴۰۵/۱۱/۲۹</span>
+                <span class="truncate text-[10.5px] text-gray-400">بزرگسالان • کلاس بزرگسالان</span>
+              </span>
+            </span>
+            <span class="flex w-[56px] shrink-0 flex-col items-center gap-1">
+              <svg class="w-12" viewBox="0 0 72 24" style="--belt-c:#fbbf24;--belt-s:rgba(23,26,37,.16)" aria-hidden="true"><use href="#belt-g"/></svg>
+              <span class="text-[8.5px] font-extrabold leading-none text-gray-500">زرد</span>
+            </span>
+            <i data-lucide="chevron-left" class="size-4 shrink-0 text-gray-300 transition group-hover:text-brand-500"></i>
+          </a>
+
+          <a href="COA-005-student-detail.html" class="card group flex items-center gap-3 !py-3 transition hover:border-brand-100" data-s-item data-order="11" data-belt="black" data-dan="1" data-age="adults" data-ins="ok" data-ins-days="219" data-name="آرش رستمی" data-filter-text="آرش رستمی ۰۰۲۸۴۷۵۶۱۳ کمربند مشکی دان ۱ بزرگسالان کلاس سبک کیوروگی دارای حساب بیمه">
+            <span class="avatar">آ</span>
+            <span class="min-w-0 flex-1">
+              <span class="flex items-center gap-1.5">
+                <b class="truncate text-[13.5px] text-gray-800">آرش رستمی</b>
+                <span class="chip chip-brand !px-1.5 !py-0.5 !text-[8.5px]">دارای حساب</span>
+              </span>
+              <span class="mt-1.5 flex items-center gap-1.5">
+                <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-50 px-1.5 py-[3px] text-[8.5px] font-bold text-emerald-600"><i data-lucide="shield-check" class="size-2.5"></i>بیمه تا ۱۴۰۶/۰۵/۰۳</span>
+                <span class="truncate text-[10.5px] text-gray-400">بزرگسالان • کلاس سبک کیوروگی</span>
+              </span>
+            </span>
+            <span class="flex w-[56px] shrink-0 flex-col items-center gap-1">
+              <svg class="w-12" viewBox="0 0 72 24" style="--belt-c:#1f2937;--belt-s:rgba(255,255,255,.25)" aria-hidden="true"><use href="#belt-g"/><rect x="8" y="9.9" width="7.5" height="2.2" rx="1.1" fill="#FBBF24"/></svg>
+              <span class="text-[8.5px] font-extrabold leading-none text-gray-500">مشکی دان ۱</span>
+            </span>
+            <i data-lucide="chevron-left" class="size-4 shrink-0 text-gray-300 transition group-hover:text-brand-500"></i>
+          </a>
+
+          <a href="COA-005-student-detail.html" class="card group flex items-center gap-3 !py-3 transition hover:border-brand-100" data-s-item data-order="12" data-belt="red" data-age="adults" data-ins="ok" data-ins-days="214" data-name="مریم شریفی" data-filter-text="مریم شریفی ۰۰۳۱۹۲۸۴۷۵ کمربند قرمز بزرگسالان کلاس سبک کیوروگی دارای حساب بیمه">
+            <span class="avatar">م</span>
+            <span class="min-w-0 flex-1">
+              <span class="flex items-center gap-1.5">
+                <b class="truncate text-[13.5px] text-gray-800">مریم شریفی</b>
+                <span class="chip chip-brand !px-1.5 !py-0.5 !text-[8.5px]">دارای حساب</span>
+              </span>
+              <span class="mt-1.5 flex items-center gap-1.5">
+                <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-50 px-1.5 py-[3px] text-[8.5px] font-bold text-emerald-600"><i data-lucide="shield-check" class="size-2.5"></i>بیمه تا ۱۴۰۶/۰۳/۰۹</span>
+                <span class="truncate text-[10.5px] text-gray-400">بزرگسالان • کلاس سبک کیوروگی</span>
+              </span>
+            </span>
+            <span class="flex w-[56px] shrink-0 flex-col items-center gap-1">
+              <svg class="w-12" viewBox="0 0 72 24" style="--belt-c:#ef4444;--belt-s:rgba(23,26,37,.16)" aria-hidden="true"><use href="#belt-g"/></svg>
+              <span class="text-[8.5px] font-extrabold leading-none text-gray-500">قرمز</span>
+            </span>
+            <i data-lucide="chevron-left" class="size-4 shrink-0 text-gray-300 transition group-hover:text-brand-500"></i>
+          </a>
+        </div>
+
+        <!-- empty state -->
+        <div id="empty" class="empty-state mt-2 hidden">
+          <span class="empty-icon"><i data-lucide="users" class="size-5"></i></span>
+          <p class="empty-title">هنرجویی یافت نشد</p>
+          <p class="empty-hint">ترکیب فیلترها یا عبارت جستجو را تغییر دهید.</p>
+          <button type="button" class="js-clear btn btn-outline btn-sm mt-1">پاک‌کردن فیلترها</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- pinned add dock — always above the bottom nav (list can be endless) -->
+    <div class="add-dock">
+      <button type="button" class="add-tile w-full" data-sheet="add-sheet" aria-label="افزودن هنرجو">
+        <span class="add-ico"><i data-lucide="plus" class="size-5"></i></span>
+        <span class="min-w-0 flex-1 text-start">
+          <b class="block text-[13px] text-gray-800">افزودن هنرجوی جدید</b>
+          <span class="mt-0.5 block text-[10.5px] text-gray-400">با فرم ثبت‌نام یا ارسال دعوت‌نامه</span>
+        </span>
+        <span class="add-badge">۲ روش</span>
+      </button>
+    </div>
+
+    <!-- add-student action sheet -->
+    <div class="overlay hidden" id="add-sheet" role="dialog" aria-modal="true">
+      <div class="sheet">
+        <div class="sheet-head">
+          <span class="sheet-grab"></span>
+          <p class="modal-title">افزودن هنرجو</p>
+          <button type="button" class="icon-btn !size-8" data-close aria-label="بستن"><i data-lucide="x" class="size-4"></i></button>
+        </div>
+        <div class="sheet-body space-y-2">
+          <a href="COA-004-student-create.html" class="opt-card !rounded-xl" data-close>
+            <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600"><i data-lucide="clipboard-list" class="size-5"></i></span>
+            <span class="min-w-0 flex-1"><b class="block text-[13px] text-gray-800">فرم ثبت هنرجوی جدید</b><span class="text-[11px] text-gray-400">ثبت پروفایل کامل هنرجو</span></span>
+          </a>
+          <a href="COA-008-add-student-roster.html" class="opt-card !rounded-xl" data-close>
+            <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-sky-50 text-sky-600"><i data-lucide="send" class="size-5"></i></span>
+            <span class="min-w-0 flex-1"><b class="block text-[13px] text-gray-800">دعوت با شماره تماس یا کد ملی</b><span class="text-[11px] text-gray-400">ارسال دعوت‌نامه به هنرجو</span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- sort sheet -->
+    <div class="overlay hidden" id="sort-sheet" role="dialog" aria-modal="true">
+      <div class="sheet">
+        <div class="sheet-head">
+          <span class="sheet-grab"></span>
+          <p class="modal-title">مرتب‌سازی هنرجویان</p>
+          <button type="button" class="icon-btn !size-8" data-close aria-label="بستن"><i data-lucide="x" class="size-4"></i></button>
+        </div>
+        <div class="sheet-body space-y-2">
+          <label class="opt-card" data-sheet-close>
+            <input type="radio" name="ty-sort" value="default" class="opt-input" data-label="ترتیب ثبت‌نام" checked />
+            <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-500"><i data-lucide="list-ordered" class="size-5"></i></span>
+            <span class="min-w-0 flex-1"><b class="block text-[13px] text-gray-800">ترتیب ثبت‌نام</b><span class="text-[11px] text-gray-400">همان ترتیب پیش‌فرض لیست</span></span>
+            <span class="opt-dot"><i data-lucide="check" class="size-3.5"></i></span>
+          </label>
+          <label class="opt-card" data-sheet-close>
+            <input type="radio" name="ty-sort" value="name" class="opt-input" data-label="نام و نام خانوادگی" />
+            <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-sky-50 text-sky-600"><i data-lucide="type" class="size-5"></i></span>
+            <span class="min-w-0 flex-1"><b class="block text-[13px] text-gray-800">نام و نام خانوادگی</b><span class="text-[11px] text-gray-400">بر اساس حروف الفبا</span></span>
+            <span class="opt-dot"><i data-lucide="check" class="size-3.5"></i></span>
+          </label>
+          <label class="opt-card" data-sheet-close>
+            <input type="radio" name="ty-sort" value="belt" class="opt-input" data-label="رتبه کمربند" />
+            <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-amber-50 text-amber-600"><i data-lucide="medal" class="size-5"></i></span>
+            <span class="min-w-0 flex-1"><b class="block text-[13px] text-gray-800">رتبه کمربند</b><span class="text-[11px] text-gray-400">از بالاترین به پایین‌ترین</span></span>
+            <span class="opt-dot"><i data-lucide="check" class="size-3.5"></i></span>
+          </label>
+          <label class="opt-card" data-sheet-close>
+            <input type="radio" name="ty-sort" value="ins" class="opt-input" data-label="تاریخ بیمه" />
+            <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-red-50 text-red-500"><i data-lucide="shield-alert" class="size-5"></i></span>
+            <span class="min-w-0 flex-1"><b class="block text-[13px] text-gray-800">تاریخ بیمه</b><span class="text-[11px] text-gray-400">نزدیک‌ترین انقضا در بالا</span></span>
+            <span class="opt-dot"><i data-lucide="check" class="size-3.5"></i></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      /* COA-003 page logic — unified filter (search × belts[] × ages[] × insurance) + sorting */
+      (function () {
+        "use strict";
+        var list = document.getElementById("list");
+        if (!list) return;
+        var cards = Array.prototype.slice.call(list.querySelectorAll("[data-s-item]"));
+        var search = document.getElementById("search");
+        var countVal = document.getElementById("countVal");
+        var fCount = document.getElementById("fCount");
+        var empty = document.getElementById("empty");
+        var clearBtns = Array.prototype.slice.call(document.querySelectorAll(".js-clear"));
+        var sortDot = document.getElementById("sortDot");
+        var beltG = document.getElementById("beltChips");
+        var ageG = document.getElementById("ageChips");
+        var belt = [], age = [], ins = null, sortKey = "default";
+        var fa = function (n) { return String(n).replace(/\d/g, function (d) { return "۰۱۲۳۴۵۶۷۸۹"[d]; }); };
+
+        /* ---- multi-select chips: several belts / age groups can be active at once.
+           «همه» stays exclusive with specific picks and always acts as a reset. ---- */
+        function activeVals(g) {
+          var out = [];
+          g.querySelectorAll(".filter-chip.is-active").forEach(function (c) {
+            var v = c.getAttribute("data-val");
+            if (v && v !== "all") out.push(v);
+          });
+          return out;
+        }
+        function setAria(c) { c.setAttribute("aria-pressed", c.classList.contains("is-active") ? "true" : "false"); }
+        function normalizeGroup(g) {
+          var allChip = g.querySelector('.filter-chip[data-val="all"]');
+          var anyActive = false, anySpecific = false;
+          g.querySelectorAll(".filter-chip").forEach(function (c) {
+            var on = c.classList.contains("is-active");
+            if (on) anyActive = true;
+            if (on && c !== allChip) anySpecific = true;
+          });
+          if (allChip) {
+            if (anySpecific) allChip.classList.remove("is-active");
+            else if (!anyActive) allChip.classList.add("is-active");
+            setAria(allChip);
+          }
+          g.querySelectorAll(".filter-chip").forEach(setAria);
+        }
+        function resetGroup(g) {
+          g.querySelectorAll(".filter-chip").forEach(function (c) {
+            c.classList.toggle("is-active", c.getAttribute("data-val") === "all");
+            setAria(c);
+          });
+        }
+        /* tap on «همه» → clear specific picks right away (runs before the generic toggle);
+           net effect after toggle + normalize: «همه» active, specifics cleared */
+        [beltG, ageG].forEach(function (g) {
+          if (!g) return;
+          g.addEventListener("click", function (e) {
+            var chip = e.target.closest(".filter-chip");
+            if (!chip || chip.getAttribute("data-val") !== "all") return;
+            chip.classList.add("is-active");
+            g.querySelectorAll(".filter-chip").forEach(function (c) {
+              if (c !== chip) { c.classList.remove("is-active"); setAria(c); }
+            });
+          });
+        });
+        function setInsTiles(v) {
+          document.querySelectorAll("#insTiles .stat-tile").forEach(function (t) {
+            var on = t.getAttribute("data-ins") === v && v !== null;
+            t.classList.toggle("is-active", on);
+            t.setAttribute("aria-pressed", on ? "true" : "false");
+          });
+        }
+
+        function apply() {
+          var q = (search.value || "").trim().toLowerCase();
+          var shown = 0;
+          cards.forEach(function (c) {
+            var ok = true;
+            if (belt.length) ok = belt.indexOf(c.getAttribute("data-belt")) !== -1;
+            if (ok && age.length) ok = age.indexOf(c.getAttribute("data-age")) !== -1;
+            if (ok && ins) ok = c.getAttribute("data-ins") === ins;
+            if (ok && q) ok = (c.getAttribute("data-filter-text") || "").toLowerCase().indexOf(q) !== -1;
+            c.classList.toggle("hidden", !ok);
+            if (ok) shown++;
+          });
+          if (countVal) countVal.textContent = fa(shown);
+          if (empty) empty.classList.toggle("hidden", shown > 0);
+          var dirty = belt.length > 0 || age.length > 0 || !!ins || !!q;
+          clearBtns.forEach(function (b) { b.classList.toggle("hidden", !dirty); });
+          if (fCount) {
+            var n = belt.length + age.length + (ins ? 1 : 0);
+            fCount.textContent = fa(n);
+            fCount.classList.toggle("hidden", n === 0);
+          }
+        }
+
+        if (beltG) beltG.addEventListener("chips:change", function () { normalizeGroup(beltG); belt = activeVals(beltG); apply(); });
+        if (ageG) ageG.addEventListener("chips:change", function () { normalizeGroup(ageG); age = activeVals(ageG); apply(); });
+        if (search) search.addEventListener("input", apply);
+
+        document.querySelectorAll("#insTiles .stat-tile").forEach(function (t) {
+          t.addEventListener("click", function () {
+            var was = t.classList.contains("is-active");
+            ins = was ? null : t.getAttribute("data-ins");
+            setInsTiles(ins);
+            apply();
+          });
+        });
+
+        clearBtns.forEach(function (b) {
+          b.addEventListener("click", function () {
+            if (search) search.value = "";
+            belt = []; age = []; ins = null;
+            if (beltG) resetGroup(beltG);
+            if (ageG) resetGroup(ageG);
+            setInsTiles(null);
+            apply();
+          });
+        });
+
+        /* ---- sorting ---- */
+        var RANK = { white: 0, yellow: 1, green: 2, blue: 3, red: 4, black: 5 };
+        function cmpFa(a, b) {
+          try { return a.localeCompare(b, "fa"); }
+          catch (e) { return a < b ? -1 : a > b ? 1 : 0; }
+        }
+        function sortCards() {
+          cards.slice().sort(function (a, b) {
+            if (sortKey === "name")
+              return cmpFa(a.getAttribute("data-name") || "", b.getAttribute("data-name") || "");
+            if (sortKey === "belt") {
+              var d = (RANK[b.getAttribute("data-belt")] || 0) - (RANK[a.getAttribute("data-belt")] || 0);
+              if (d) return d;
+              d = (+b.getAttribute("data-dan") || 0) - (+a.getAttribute("data-dan") || 0);
+              return d || (+a.getAttribute("data-order") || 0) - (+b.getAttribute("data-order") || 0);
+            }
+            if (sortKey === "ins")
+              return (+a.getAttribute("data-ins-days") || 9999) - (+b.getAttribute("data-ins-days") || 9999);
+            return (+a.getAttribute("data-order") || 0) - (+b.getAttribute("data-order") || 0);
+          }).forEach(function (c) { list.appendChild(c); });
+        }
+        document.querySelectorAll('input[name="ty-sort"]').forEach(function (r) {
+          r.addEventListener("change", function () {
+            sortKey = r.value;
+            sortCards();
+            if (sortDot) sortDot.classList.toggle("hidden", sortKey === "default");
+            if (window.tkToast) window.tkToast("مرتب‌سازی بر اساس " + (r.getAttribute("data-label") || "") + " اعمال شد");
+          });
+        });
+        /* data-sheet-close on the label preventDefaults the click → activate the radio manually */
+        document.querySelectorAll("#sort-sheet label.opt-card").forEach(function (lab) {
+          lab.addEventListener("click", function () {
+            var r = lab.querySelector('input[type="radio"]');
+            if (r && !r.checked) { r.checked = true; r.dispatchEvent(new Event("change", { bubbles: true })); }
+          });
+        });
+
+        apply();
+      })();
+    </script>
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+    <nav class="bottom-nav" aria-label="ناوبری اصلی"><a href="COA-001-dashboard.html" class="nav-item"  aria-label="داشبورد"><span class="nav-ico relative"><i data-lucide="layout-dashboard" class="size-[18px]"></i></span><span>داشبورد</span></a><a href="COA-003-students-list.html" class="nav-item is-active"  aria-label="هنرجویان"><span class="nav-ico relative"><i data-lucide="users" class="size-[18px]"></i></span><span>هنرجویان</span></a><a href="COA-009-clubs-list.html" class="nav-item"  aria-label="باشگاه‌ها"><span class="nav-ico relative"><i data-lucide="landmark" class="size-[18px]"></i></span><span>باشگاه‌ها</span></a><a href="COA-012-class-sessions-list.html" class="nav-item"  aria-label="کلاس‌ها"><span class="nav-ico relative"><i data-lucide="calendar-days" class="size-[18px]"></i></span><span>کلاس‌ها</span></a><a href="COA-002-my-profile.html" class="nav-item"  aria-label="پروفایل"><span class="nav-ico relative"><i data-lucide="user" class="size-[18px]"></i></span><span>پروفایل</span></a></nav>
+</body>
+</html>

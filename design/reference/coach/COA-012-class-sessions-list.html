@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — کلاس‌ها</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap pb-40">
+        <header class="masthead">
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">کلاس‌ها</h1>
+          </div>
+        </header>
+
+        <!-- gym workspace context -->
+        <a href="COA-009-clubs-list.html" class="gym-context mt-4">
+          <span class="gctx-ico"><i data-lucide="landmark" class="size-[18px]"></i></span>
+          <span class="min-w-0 flex-1">
+            <b>باشگاه شهدای گمنام</b>
+            <span class="gctx-sub">کلاس‌بندی و حضور غیاب این باشگاه</span>
+          </span>
+          <span class="gctx-swap">تغییر باشگاه</span>
+        </a>
+
+        <!-- search + period chips -->
+        <div class="toolbar">
+          <div class="relative">
+            <i data-lucide="search" class="pointer-events-none absolute end-3.5 top-1/2 size-4 -translate-y-1/2 text-gray-400"></i>
+            <input id="search" type="search" placeholder="جستجوی نام کلاس…" class="input-field !py-3 pe-10 text-[13px]" />
+          </div>
+          <div class="mt-3 flex flex-wrap gap-2" data-chips-single id="when-chips">
+            <button type="button" class="filter-chip is-active" data-when="">همه</button>
+            <button type="button" class="filter-chip" data-when="today">امروز</button>
+            <button type="button" class="filter-chip" data-when="week">این هفته</button>
+          </div>
+        </div>
+
+        <!-- list -->
+        <div id="list" class="space-y-3">
+
+          <a href="COA-014-class-session-detail.html" class="card block !py-4" data-item data-when="today week" data-search="کلاس سبک کیوروگی شهدای گمنام شنبه دوشنبه">
+            <div class="flex items-start gap-3">
+              <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600"><i data-lucide="zap" class="size-5"></i></span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                  <b class="truncate text-[13px] text-gray-800">کلاس سبک کیوروگی</b>
+                  <span class="chip chip-green shrink-0"><i data-lucide="check" class="size-3"></i>فعال</span>
+                </div>
+                <p class="mt-1 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام</p>
+                <div class="mt-2 flex flex-wrap items-center gap-1.5">
+                  <span class="chip chip-gray">شنبه</span>
+                  <span class="chip chip-gray">دوشنبه</span>
+                  <span class="chip chip-gray"><span dir="ltr">۱۷:۰۰ – ۱۸:۳۰</span></span>
+                  <span class="chip chip-brand"><i data-lucide="users" class="size-3"></i>حضور ۱۸/۲۲</span>
+                </div>
+              </div>
+              <i data-lucide="chevron-left" class="mt-1 size-4 shrink-0 text-gray-300"></i>
+            </div>
+          </a>
+
+          <a href="COA-014-class-session-detail.html" class="card block !py-4" data-item data-when="week" data-search="کلاس نوجوانان شهدای گمنام یکشنبه چهارشنبه">
+            <div class="flex items-start gap-3">
+              <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600"><i data-lucide="users" class="size-5"></i></span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                  <b class="truncate text-[13px] text-gray-800">کلاس نوجوانان</b>
+                  <span class="chip chip-green shrink-0"><i data-lucide="check" class="size-3"></i>فعال</span>
+                </div>
+                <p class="mt-1 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام</p>
+                <div class="mt-2 flex flex-wrap items-center gap-1.5">
+                  <span class="chip chip-gray">یکشنبه</span>
+                  <span class="chip chip-gray">چهارشنبه</span>
+                  <span class="chip chip-gray"><span dir="ltr">۱۶:۳۰ – ۱۸:۰۰</span></span>
+                  <span class="chip chip-brand"><i data-lucide="users" class="size-3"></i>حضور ۱۶/۱۸</span>
+                </div>
+              </div>
+              <i data-lucide="chevron-left" class="mt-1 size-4 shrink-0 text-gray-300"></i>
+            </div>
+          </a>
+
+          <a href="COA-014-class-session-detail.html" class="card block !py-4" data-item data-when="week" data-search="کلاس بزرگسالان شهدای گمنام سه‌شنبه">
+            <div class="flex items-start gap-3">
+              <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600"><i data-lucide="dumbbell" class="size-5"></i></span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                  <b class="truncate text-[13px] text-gray-800">کلاس بزرگسالان</b>
+                  <span class="chip chip-green shrink-0"><i data-lucide="check" class="size-3"></i>فعال</span>
+                </div>
+                <p class="mt-1 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام</p>
+                <div class="mt-2 flex flex-wrap items-center gap-1.5">
+                  <span class="chip chip-gray">سه‌شنبه</span>
+                  <span class="chip chip-gray"><span dir="ltr">۱۹:۰۰ – ۲۰:۳۰</span></span>
+                  <span class="chip chip-brand"><i data-lucide="users" class="size-3"></i>حضور ۱۲/۱۵</span>
+                </div>
+              </div>
+              <i data-lucide="chevron-left" class="mt-1 size-4 shrink-0 text-gray-300"></i>
+            </div>
+          </a>
+
+          <a href="COA-014-class-session-detail.html" class="card block !py-4" data-item data-when="week" data-search="کلاس پومسه شهدای گمنام پنجشنبه">
+            <div class="flex items-start gap-3">
+              <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600"><i data-lucide="medal" class="size-5"></i></span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                  <b class="truncate text-[13px] text-gray-800">کلاس پومسه</b>
+                  <span class="chip chip-green shrink-0"><i data-lucide="check" class="size-3"></i>فعال</span>
+                </div>
+                <p class="mt-1 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام</p>
+                <div class="mt-2 flex flex-wrap items-center gap-1.5">
+                  <span class="chip chip-gray">پنجشنبه</span>
+                  <span class="chip chip-gray"><span dir="ltr">۱۰:۰۰ – ۱۱:۳۰</span></span>
+                  <span class="chip chip-brand"><i data-lucide="users" class="size-3"></i>حضور ۱۰/۱۴</span>
+                </div>
+              </div>
+              <i data-lucide="chevron-left" class="mt-1 size-4 shrink-0 text-gray-300"></i>
+            </div>
+          </a>
+
+          <a href="COA-014-class-session-detail.html" class="card block !py-4" data-item data-when="week" data-search="کلاس آمادگی جسمانی شهدای گمنام جمعه">
+            <div class="flex items-start gap-3">
+              <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600"><i data-lucide="activity" class="size-5"></i></span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                  <b class="truncate text-[13px] text-gray-800">کلاس آمادگی جسمانی</b>
+                  <span class="chip chip-green shrink-0"><i data-lucide="check" class="size-3"></i>فعال</span>
+                </div>
+                <p class="mt-1 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام</p>
+                <div class="mt-2 flex flex-wrap items-center gap-1.5">
+                  <span class="chip chip-gray">جمعه</span>
+                  <span class="chip chip-gray"><span dir="ltr">۰۸:۰۰ – ۰۹:۳۰</span></span>
+                  <span class="chip chip-brand"><i data-lucide="users" class="size-3"></i>حضور ۸/۱۲</span>
+                </div>
+              </div>
+              <i data-lucide="chevron-left" class="mt-1 size-4 shrink-0 text-gray-300"></i>
+            </div>
+          </a>
+
+          <a href="COA-014-class-session-detail.html" class="card block !py-4" data-item data-when="today week" data-search="کلاس کودکان پارس شنبه">
+            <div class="flex items-start gap-3">
+              <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600"><i data-lucide="baby" class="size-5"></i></span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                  <b class="truncate text-[13px] text-gray-800">کلاس کودکان</b>
+                  <span class="chip chip-green shrink-0"><i data-lucide="check" class="size-3"></i>فعال</span>
+                </div>
+                <p class="mt-1 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام</p>
+                <div class="mt-2 flex flex-wrap items-center gap-1.5">
+                  <span class="chip chip-gray">شنبه</span>
+                  <span class="chip chip-gray"><span dir="ltr">۱۰:۰۰ – ۱۱:۰۰</span></span>
+                  <span class="chip chip-brand"><i data-lucide="users" class="size-3"></i>حضور ۹/۱۰</span>
+                </div>
+              </div>
+              <i data-lucide="chevron-left" class="mt-1 size-4 shrink-0 text-gray-300"></i>
+            </div>
+          </a>
+
+          <a href="COA-014-class-session-detail.html" class="card block !py-4" data-item data-when="" data-search="کلاس مبانی پارس دوشنبه">
+            <div class="flex items-start gap-3">
+              <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-gray-100 text-gray-400"><i data-lucide="flag" class="size-5"></i></span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                  <b class="truncate text-[13px] text-gray-800">کلاس مبانی</b>
+                  <span class="chip chip-gray shrink-0"><i data-lucide="minus" class="size-3"></i>غیرفعال</span>
+                </div>
+                <p class="mt-1 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام</p>
+                <div class="mt-2 flex flex-wrap items-center gap-1.5">
+                  <span class="chip chip-gray">دوشنبه</span>
+                  <span class="chip chip-gray"><span dir="ltr">۱۸:۰۰ – ۱۹:۳۰</span></span>
+                  <span class="chip chip-brand"><i data-lucide="users" class="size-3"></i>۱۱ هنرجو</span>
+                </div>
+              </div>
+              <i data-lucide="chevron-left" class="mt-1 size-4 shrink-0 text-gray-300"></i>
+            </div>
+          </a>
+
+          <!-- empty state -->
+          <div class="empty-state mt-4 hidden" data-empty>
+            <span class="empty-icon"><i data-lucide="calendar-days" class="size-5"></i></span>
+            <p class="empty-title">کلاسی یافت نشد</p>
+            <p class="empty-hint">عبارت جستجو یا بازهٔ زمانی را تغییر دهید.</p>
+          </div>
+        </div>
+
+        <!-- FAB -->
+        <a href="COA-013-class-session-form.html" id="fab" class="fab fixed bottom-24 end-5 z-40" aria-label="کلاس جدید">
+          <i data-lucide="plus" class="size-6"></i>
+        </a>
+      </div>
+    </main>
+
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+    <script>
+      /* combined demo filter: search + period chips (امروز = شنبه) */
+      (function () {
+        var input = document.getElementById("search");
+        var items = Array.prototype.slice.call(document.querySelectorAll("#list [data-item]"));
+        var empty = document.querySelector("#list [data-empty]");
+        var count = document.getElementById("count-badge");
+        var when = "";
+        var fa = function (n) { return String(n).replace(/\d/g, function (d) { return "۰۱۲۳۴۵۶۷۸۹"[d]; }); };
+        function apply() {
+          var q = (input.value || "").trim().toLowerCase();
+          var shown = 0;
+          items.forEach(function (it) {
+            var okWhen = !when || (it.getAttribute("data-when") || "").split(" ").indexOf(when) !== -1;
+            var okText = !q || (it.getAttribute("data-search") || "").toLowerCase().indexOf(q) !== -1;
+            var ok = okWhen && okText;
+            it.classList.toggle("hidden", !ok);
+            if (ok) shown++;
+          });
+          empty.classList.toggle("hidden", shown > 0);
+          count.textContent = shown === items.length
+            ? "۷ کلاس در این باشگاه"
+            : fa(shown) + " کلاس یافت شد";
+        }
+        input.addEventListener("input", apply);
+        document.getElementById("when-chips").addEventListener("chips:change", function () {
+          var active = document.querySelector("#when-chips .filter-chip.is-active");
+          when = active ? (active.getAttribute("data-when") || "") : "";
+          apply();
+        });
+      })();
+    </script>
+    <nav class="bottom-nav" aria-label="ناوبری اصلی"><a href="COA-001-dashboard.html" class="nav-item"  aria-label="داشبورد"><span class="nav-ico relative"><i data-lucide="layout-dashboard" class="size-[18px]"></i></span><span>داشبورد</span></a><a href="COA-003-students-list.html" class="nav-item"  aria-label="هنرجویان"><span class="nav-ico relative"><i data-lucide="users" class="size-[18px]"></i></span><span>هنرجویان</span></a><a href="COA-009-clubs-list.html" class="nav-item"  aria-label="باشگاه‌ها"><span class="nav-ico relative"><i data-lucide="landmark" class="size-[18px]"></i></span><span>باشگاه‌ها</span></a><a href="COA-012-class-sessions-list.html" class="nav-item is-active"  aria-label="کلاس‌ها"><span class="nav-ico relative"><i data-lucide="calendar-days" class="size-[18px]"></i></span><span>کلاس‌ها</span></a><a href="COA-002-my-profile.html" class="nav-item"  aria-label="پروفایل"><span class="nav-ico relative"><i data-lucide="user" class="size-[18px]"></i></span><span>پروفایل</span></a></nav>
+</body>
+</html>
