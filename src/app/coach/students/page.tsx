@@ -1,4 +1,4 @@
-import { StudentsDirectory } from "@/components/coach/students-directory";
+import { StudentsDirectory } from "@/components/coach/students/students-directory";
 
 export const metadata = { title: "هنرجویان" };
 
