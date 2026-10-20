@@ -24,10 +24,10 @@ export function AuthField({ label, htmlFor, required, optional, hint, children, 
       <FieldLabel htmlFor={htmlFor} className="text-[13px] font-semibold text-ink-body">
         {label}
         {required ? <span className="text-accent-ink"> *</span> : null}
-        {optional ? <span className="text-[9.5px] font-bold text-ink-faint"> (اختیاری)</span> : null}
+        {optional ? <span className="text-[9.5px] font-bold text-ink-subtle"> (اختیاری)</span> : null}
       </FieldLabel>
       {children}
-      {hint ? <FieldDescription className="text-start text-[11px] font-medium leading-5 text-ink-subtle">{hint}</FieldDescription> : null}
+      {hint ? <FieldDescription className="text-start text-[11px] font-medium leading-5 text-ink-muted">{hint}</FieldDescription> : null}
     </Field>
   );
 }

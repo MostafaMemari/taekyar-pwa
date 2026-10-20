@@ -54,14 +54,14 @@ export function CoachSignupForm() {
       <>
         <Stepper steps={STEPS} current={1} label="مراحل ثبت نام مربی" />
 
-        <div className="mt-7 flex flex-1 flex-col">
+        <div className="mt-6 flex flex-1 flex-col">
           <div className="flex items-center gap-2">
             <AuthPageTitle className="text-[22px] leading-8">مشخصات حرفه ای</AuthPageTitle>
             <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[10px] font-bold text-ink-subtle">اختیاری</span>
           </div>
           <AuthPageLead>همه اختیاری؛ بعداً از پروفایل تکمیل کنید.</AuthPageLead>
 
-          <form className="mt-5 flex flex-1 flex-col" onSubmit={handleSubmit} noValidate>
+          <form className="mt-4 flex flex-1 flex-col" onSubmit={handleSubmit} noValidate>
             <div className="flex flex-col gap-4">
               <PhotoPicker label="تصویر پروفایل" hint="JPG یا PNG — حداکثر ۵ مگابایت" optional />
 
@@ -112,14 +112,14 @@ export function CoachSignupForm() {
     <>
       <Stepper steps={STEPS} current={0} label="مراحل ثبت نام مربی" />
 
-      <div className="mt-7 flex flex-1 flex-col">
+      <div className="mt-6 flex flex-1 flex-col">
         <AuthPageTitle className="text-[22px] leading-8">مشخصات مربی</AuthPageTitle>
         <AuthPageLead>
           برای ساخت حساب مربی، <b className="font-extrabold text-ink-body">همه موارد اجباری</b> است.
         </AuthPageLead>
 
         <form
-          className="mt-5 flex flex-1 flex-col"
+          className="mt-4 flex flex-1 flex-col"
           onSubmit={(event) => {
             event.preventDefault();
             goTo(1);
@@ -132,7 +132,7 @@ export function CoachSignupForm() {
             withBirthDate={false}
             sampleName="محمود کریمی"
             genderLabel="جنسیت"
-            genderHint="جنسیت شما، باشگاه ها و هنرجویانی که به شما نمایش داده می شود را تعیین می کند."
+            genderHint="نمایش باشگاه ها و هنرجویان به این بستگی دارد."
           />
 
           <div className="cta-dock cta-row mt-6 gap-3">

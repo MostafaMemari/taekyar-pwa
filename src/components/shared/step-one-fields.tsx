@@ -35,7 +35,7 @@ type StepOneFieldsProps = {
 
 export function StepOneFields({ form, onChange, withBirthDate, birthDateHint, genderHint, sampleName, genderLabel }: StepOneFieldsProps) {
   return (
-    <FieldGroup className="gap-4">
+    <FieldGroup className="gap-3.5">
       <AuthField label="نام و نام خانوادگی" htmlFor="fullName" required>
         <AuthInput
           id="fullName"
@@ -48,7 +48,7 @@ export function StepOneFields({ form, onChange, withBirthDate, birthDateHint, ge
         />
       </AuthField>
 
-      <AuthField label="کد ملی" htmlFor="nationalCode" required hint="کد ملی ۱۰ رقمی شناسنامه، بدون خط تیره">
+      <AuthField label="کد ملی" htmlFor="nationalCode" required hint="۱۰ رقم، بدون خط تیره">
         <AuthInput
           id="nationalCode"
           name="nationalCode"

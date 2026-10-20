@@ -44,7 +44,7 @@ export function MeasurePicker({ id, title, unit, icon: Icon, min, max, defaultVa
       <Button
         id={id}
         type="button"
-        variant="outline"
+        variant="field"
         aria-haspopup="dialog"
         aria-expanded={open}
         className={cn("relative h-12 w-full rounded-xl px-11 text-sm font-semibold", value ? "text-ink" : "text-muted-foreground")}

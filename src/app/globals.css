@@ -97,6 +97,8 @@
   --color-ink-faint: var(--ink-7);
   --color-surface-sunken: var(--surface-3);
   --color-accent-ink: var(--ak-ink);
+  --color-field: var(--field-bg);
+  --shadow-field: var(--field-shadow);
   --shadow-brand-xl: 0 20px 44px -16px color-mix(in srgb, var(--ak-600) 68%, transparent);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -130,8 +132,9 @@
   --st-amber: #b45309;
   --st-red: #dc2626;
   --field-bg: #ffffff;
-  --field-line: #e1e4ea;
-  --field-line-hover: #c8cdd7;
+  --field-line: #d7dce5;
+  --field-line-hover: #b9c2d0;
+  --field-shadow: 0 1px 2px rgba(16, 18, 26, 0.05);
   --card-line: #ffffff;
   --card-shadow: 0 1px 2px rgba(16, 18, 26, 0.04), 0 14px 36px -18px rgba(16, 18, 26, 0.12);
   --ak-ink: var(--ak-600);
@@ -199,6 +202,7 @@
   --field-bg: #1a1e29;
   --field-line: #323a4d;
   --field-line-hover: #434e66;
+  --field-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
   --card-line: rgba(255, 255, 255, 0.065);
   --card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045), 0 18px 44px -20px rgba(0, 0, 0, 0.6);
   --ak-ink: var(--ak-400);

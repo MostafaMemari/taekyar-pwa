@@ -33,7 +33,7 @@ export function BeltPicker({ label, value, options, onChange, hint, required = t
       <FieldLabel className="text-[13px] font-semibold text-ink-body">
         {label}
         {required ? <span className="text-accent-ink"> *</span> : null}
-        {optional ? <span className="text-[9.5px] font-bold text-ink-faint"> (اختیاری)</span> : null}
+        {optional ? <span className="text-[9.5px] font-bold text-ink-subtle"> (اختیاری)</span> : null}
       </FieldLabel>
       <ToggleGroup
         aria-label={label}
@@ -48,7 +48,7 @@ export function BeltPicker({ label, value, options, onChange, hint, required = t
             key={option.value}
             value={option.value}
             className={cn(
-              "relative h-auto min-w-0 flex-col gap-1.5 rounded-xl border-border bg-background px-3 pt-7 pb-3 text-[11.5px] font-bold whitespace-normal aria-pressed:border-primary aria-pressed:bg-primary/5 aria-pressed:text-primary",
+              "relative h-auto min-w-0 flex-col gap-1.5 rounded-xl border-border bg-field px-3 pt-7 pb-3 text-[11.5px] font-bold whitespace-normal aria-pressed:border-primary aria-pressed:bg-primary/5 aria-pressed:text-primary",
               option.wide && columns === 2 ? "col-span-2" : null,
             )}
           >
@@ -67,7 +67,7 @@ export function BeltPicker({ label, value, options, onChange, hint, required = t
           </ToggleGroupItem>
         ))}
       </ToggleGroup>
-      {hint ? <FieldDescription className="text-start text-[11px] font-medium leading-5 text-ink-subtle">{hint}</FieldDescription> : null}
+      {hint ? <FieldDescription className="text-start text-[11px] font-medium leading-5 text-ink-muted">{hint}</FieldDescription> : null}
     </Field>
   );
 }

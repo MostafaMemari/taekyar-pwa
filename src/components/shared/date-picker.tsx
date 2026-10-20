@@ -115,7 +115,7 @@ export function DatePicker({ id, title, value, onChange, defaultValue, fromYear 
       <Button
         id={id}
         type="button"
-        variant="outline"
+        variant="field"
         aria-haspopup="dialog"
         aria-expanded={open}
         className={cn("relative h-12 w-full rounded-xl px-11 text-sm font-semibold", display ? "text-ink" : "text-muted-foreground")}

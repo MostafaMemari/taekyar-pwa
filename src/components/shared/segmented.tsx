@@ -45,7 +45,7 @@ export function Segmented({ label, value, options, onChange, hint, columns = 2, 
           </ToggleGroupItem>
         ))}
       </ToggleGroup>
-      {hint ? <FieldDescription className="text-start text-[11px] font-medium leading-5 text-ink-subtle">{hint}</FieldDescription> : null}
+      {hint ? <FieldDescription className="text-start text-[11px] font-medium leading-5 text-ink-muted">{hint}</FieldDescription> : null}
     </Field>
   );
 }

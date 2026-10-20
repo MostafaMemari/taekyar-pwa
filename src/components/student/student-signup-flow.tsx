@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, Info, Ruler, Scale } from "lucide-react";
+import { ChevronLeft, Ruler, Scale } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
@@ -80,22 +80,17 @@ export function StudentSignupFlow() {
       <AuthScreen subtitle="ثبت نام هنرجو" backHref="/" showHeader={false} footer={loginFooter}>
         <Stepper steps={STEPS} current={2} label="مراحل ثبت نام" />
 
-        <div className="mt-7 flex flex-1 flex-col">
+        <div className="mt-6 flex flex-1 flex-col">
           <AuthPageTitle className="text-[22px] leading-8">مدارک و مشخصات</AuthPageTitle>
           <AuthPageLead>
             عکس، بیمه و مشخصات جسمی؛ <b className="font-extrabold text-ink-body">همه اختیاری</b>.
           </AuthPageLead>
 
-          <form className="mt-5 flex flex-1 flex-col" onSubmit={handleDocumentsSubmit} noValidate>
+          <form className="mt-4 flex flex-1 flex-col" onSubmit={handleDocumentsSubmit} noValidate>
             <PhotoPicker label="عکس پروفایل" hint="JPG یا PNG — حداکثر ۵ مگابایت" optional />
 
             <div className="mt-4 grid gap-4">
-              <AuthField
-                label="تاریخ بیمه ورزشی"
-                htmlFor="insuranceDate"
-                optional
-                hint="پوشش حوادث ورزشی فدراسیون — ۷ روز قبل از انقضا یادآوری می شود."
-              >
+              <AuthField label="تاریخ بیمه ورزشی" htmlFor="insuranceDate" optional hint="۷ روز قبل از انقضا یادآوری می شود.">
                 <DatePicker
                   id="insuranceDate"
                   title="تاریخ بیمه ورزشی"
@@ -121,7 +116,7 @@ export function StudentSignupFlow() {
                   />
                 </AuthField>
 
-                <AuthField label="قد (سانتی متر)" htmlFor="height" optional hint="محدوده ۱۰۰ تا ۲۲۰">
+                <AuthField label="قد (سانتی متر)" htmlFor="height" optional>
                   <MeasurePicker
                     id="height"
                     title="قد"
@@ -147,10 +142,9 @@ export function StudentSignupFlow() {
               </Button>
             </div>
 
-            <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-[10.5px] font-semibold text-ink-faint">
-              <Info className="size-3.5 shrink-0" aria-hidden="true" />
-              در گام بعد، شماره موبایل و کد تایید را وارد می کنید.
-            </p>
+            <Link href="/signup/mobile?role=student" className="mt-3 block text-center text-[11.5px] font-bold text-ink-subtle">
+              رد کردن — بعداً تکمیل می کنم
+            </Link>
           </form>
         </div>
       </AuthScreen>
@@ -162,11 +156,11 @@ export function StudentSignupFlow() {
       <AuthScreen subtitle="ثبت نام هنرجو" backHref="/" showHeader={false} footer={loginFooter}>
         <Stepper steps={STEPS} current={1} label="مراحل ثبت نام" />
 
-        <div className="mt-7 flex flex-1 flex-col">
+        <div className="mt-6 flex flex-1 flex-col">
           <AuthPageTitle className="text-[22px] leading-8">کمربند فعلی</AuthPageTitle>
           <AuthPageLead>کمربند فعلی و تاریخ دریافت آن را انتخاب کنید.</AuthPageLead>
 
-          <form className="mt-5 flex flex-1 flex-col" onSubmit={handleBeltSubmit} noValidate>
+          <form className="mt-4 flex flex-1 flex-col" onSubmit={handleBeltSubmit} noValidate>
             <div className="flex flex-col gap-4">
               <BeltPicker
                 label="کمربند فعلی"
@@ -175,12 +169,7 @@ export function StudentSignupFlow() {
                 onChange={(value) => setBelt((current) => ({ ...current, belt: value ?? "" }))}
               />
 
-              <AuthField
-                label="تاریخ دریافت کمربند"
-                htmlFor="beltDate"
-                required
-                hint="تاریخ دریافت کمربند فعلی؛ کمربندهای پوم/دان نیز از همین قسمت ثبت می شوند."
-              >
+              <AuthField label="تاریخ دریافت کمربند" htmlFor="beltDate" required>
                 <DatePicker
                   id="beltDate"
                   title="تاریخ دریافت کمربند"
@@ -212,28 +201,21 @@ export function StudentSignupFlow() {
     <AuthScreen subtitle="ثبت نام هنرجو" backHref="/" showHeader={false} footer={loginFooter}>
       <Stepper steps={STEPS} current={0} label="مراحل ثبت نام" />
 
-      <div className="mt-7 flex flex-1 flex-col">
+      <div className="mt-6 flex flex-1 flex-col">
         <AuthPageTitle className="text-[22px] leading-8">اطلاعات پایه</AuthPageTitle>
         <AuthPageLead>
           برای ساخت پروفایل هنرجو، <b className="font-extrabold text-ink-body">همه موارد اجباری</b> است.
         </AuthPageLead>
 
         <form
-          className="mt-5 flex flex-1 flex-col"
+          className="mt-4 flex flex-1 flex-col"
           onSubmit={(event) => {
             event.preventDefault();
             goTo(1);
           }}
           noValidate
         >
-          <StepOneFields
-            form={stepOne}
-            onChange={updateStepOne}
-            withBirthDate
-            sampleName="سارا محمدی"
-            genderLabel="جنسیت"
-            birthDateHint="رده سنی هنرجو بر همین اساس محاسبه می شود."
-          />
+          <StepOneFields form={stepOne} onChange={updateStepOne} withBirthDate sampleName="سارا محمدی" genderLabel="جنسیت" />
 
           <div className="cta-dock cta-row mt-6 gap-3">
             <Button variant="outline" size="cta" render={<Link href="/" />} nativeButton={false}>

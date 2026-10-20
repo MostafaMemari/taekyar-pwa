@@ -11,6 +11,8 @@ const buttonVariants = cva(
         brand: "bg-gradient-to-br from-brand-500 to-brand-600 text-white shadow-brand-xl hover:brightness-105",
         outline:
           "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+        field:
+          "border-input bg-field text-foreground shadow-field hover:bg-muted/60 aria-expanded:bg-muted/60 aria-expanded:text-foreground",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
         ghost: "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
