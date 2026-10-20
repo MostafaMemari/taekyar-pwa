@@ -185,7 +185,7 @@ export function StudentsDirectory() {
           type="button"
           variant="brand"
           size="sm"
-          className="ms-auto h-8 rounded-xl px-3 text-[11px] font-bold"
+          className="ms-auto h-8 gap-1.5 rounded-xl px-3.5 text-[11px] font-bold has-data-[icon=inline-start]:pl-3.5"
           onClick={() => setAddOpen(true)}
         >
           <UserPlus data-icon="inline-start" aria-hidden="true" />
@@ -255,7 +255,7 @@ export function StudentsDirectory() {
       </div>
 
       <div className="mt-3 flex flex-col gap-2.5">
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex h-6 items-center justify-between gap-2">
           <span className="flex items-center gap-1.5 text-[11px] font-extrabold text-ink-muted">
             <SlidersHorizontal className="size-3.5" aria-hidden="true" />
             فیلترها
@@ -271,14 +271,14 @@ export function StudentsDirectory() {
               type="button"
               variant="ghost"
               size="xs"
-              className="h-6 gap-1 px-1.5 text-[10.5px] font-extrabold text-destructive"
+              className="h-6 shrink-0 gap-1 px-2 text-[10.5px] font-extrabold text-destructive has-data-[icon=inline-start]:pl-2"
               onClick={clearFilters}
             >
               <X data-icon="inline-start" aria-hidden="true" />
               پاک کردن همه
             </Button>
           ) : (
-            <span className="flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[8.5px] font-bold text-ink-subtle">
+            <span className="inline-flex h-6 shrink-0 items-center gap-1 rounded-full bg-muted px-2 text-[8.5px] font-bold text-ink-subtle">
               <ListFilter className="size-2.5" aria-hidden="true" />
               انتخاب چندگانه
             </span>

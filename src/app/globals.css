@@ -717,12 +717,13 @@
 
   & .coach-tab-ico {
     display: grid;
-    width: 2.6rem;
-    height: 1.75rem;
+    width: 2.75rem;
+    height: 1.85rem;
     place-items: center;
     border-radius: 9999px;
     transition:
       background-color 200ms ease,
+      color 200ms ease,
       transform 150ms ease;
   }
 
@@ -740,7 +741,9 @@
   }
 
   &.is-active .coach-tab-ico {
-    background: var(--ak-soft);
+    background: linear-gradient(135deg, var(--ak-500), var(--ak-600));
+    color: #ffffff;
+    box-shadow: 0 6px 14px -7px color-mix(in srgb, var(--ak-600) 75%, transparent);
   }
 }
 
