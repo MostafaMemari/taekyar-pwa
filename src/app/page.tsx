@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "خوش آمدید" };
 
 export default function WelcomePage() {
   return (
-    <main className="app-frame mx-auto flex h-dvh w-full max-w-[430px] flex-col overflow-y-auto overflow-x-clip">
+    <main className="app-frame mx-auto flex h-dvh w-full flex-col overflow-y-auto overflow-x-clip">
       <section className="welcome-hero flex min-h-0 flex-1 flex-col px-5 pb-3 pt-[max(1.5rem,env(safe-area-inset-top))] text-center">
         <div className="relative flex items-center justify-between gap-2">
           <span className="hero-chip" style={{ background: "var(--surface)", color: "var(--ak-ink)", borderColor: "var(--ak-tint-line)" }}>
@@ -33,7 +33,7 @@ export default function WelcomePage() {
             alt="هنرجوی تکواندو در حال اجرای ضربهٔ پا"
             fill
             priority
-            sizes="(max-width: 430px) 90vw, 360px"
+            sizes="(max-width: 520px) 90vw, 360px"
             className="object-cover object-[50%_24%]"
           />
           <span
@@ -47,7 +47,7 @@ export default function WelcomePage() {
         </figure>
       </section>
 
-      <section className="welcome-sheet mx-auto w-full max-w-[430px]">
+      <section className="welcome-sheet mx-auto w-full">
         <h2 className="text-[17px] font-extrabold text-ink">شروع کنید</h2>
 
         <div className="mt-3 flex flex-col gap-2.5">
