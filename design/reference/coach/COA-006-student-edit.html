@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — ویرایش اطلاعات هنرجو</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap content-form">
+        <header class="masthead app-bar">
+          <button type="button" class="icon-btn" data-back data-back-href="COA-005-student-detail.html" aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">ویرایش اطلاعات هنرجو</h1>
+          </div>
+        </header>
+
+        <form id="form" class="space-y-4 pb-28" novalidate>
+          <!-- مشخصات فردی -->
+          <section class="card">
+            <h2 class="section-title mb-4 flex items-center gap-2"><span class="grid size-7 place-items-center rounded-lg bg-brand-50 text-brand-600"><i data-lucide="user" class="size-4"></i></span>مشخصات فردی</h2>
+            <div class="grid gap-4">
+              <div>
+                <label class="form-label" for="fullName">نام و نام خانوادگی</label>
+                <input id="fullName" class="input-field" autocomplete="name" value="سارا محمدی" />
+              </div>
+              <div>
+                <label class="form-label" for="nationalCode">کد ملی</label>
+                <input id="nationalCode" dir="ltr" inputmode="numeric" maxlength="10" class="input-field input-ltr text-center tracking-widest" value="۰۰۶۴۵۲۳۱۸۷" />
+                <p class="field-hint">در صورت تغییر، کد ملی نباید تکراری باشد.</p>
+              </div>
+              <div>
+                <label class="form-label flex items-center gap-1.5">جنسیت <i data-lucide="lock" class="size-3.5 text-gray-400"></i></label>
+                <div class="seg pointer-events-none opacity-60" id="gender-seg" aria-disabled="true">
+                  <button type="button" class="seg-item is-active" data-value="FEMALE">زن</button>
+                  <button type="button" class="seg-item" data-value="MALE">مرد</button>
+                </div>
+                <p class="field-hint">این هنرجو مربی دارد و جنسیت آن قابل تغییر نیست.</p>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="form-label" for="birthDate">تاریخ تولد</label>
+                  <input id="birthDate" class="input-field text-center" value="۱۳۸۵/۰۲/۱۴" />
+                </div>
+                <div>
+                  <label class="form-label" for="fatherName">نام پدر</label>
+                  <input id="fatherName" class="input-field" value="علی" />
+                </div>
+              </div>
+              <div>
+                <label class="form-label" for="phoneNumber">شماره تماس</label>
+                <input id="phoneNumber" dir="ltr" inputmode="tel" class="input-field input-ltr" value="۰۹۱۲۱۲۳۴۵۶۷" />
+              </div>
+              <div>
+                <label class="form-label" for="province">استان</label>
+                <div class="select-wrap">
+                  <select id="province" class="!appearance-none">
+                    <option>البرز</option>
+                    <option>اصفهان</option>
+                    <option selected>تهران</option>
+                    <option>خراسان رضوی</option>
+                    <option>فارس</option>
+                    <option>مازندران</option>
+                    <option>گیلان</option>
+                  </select>
+                  <span class="select-caret"><i data-lucide="chevron-down" class="size-4"></i></span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- اطلاعات تکواندو -->
+          <section class="card">
+            <h2 class="section-title mb-4 flex items-center gap-2"><span class="grid size-7 place-items-center rounded-lg bg-amber-50 text-amber-600"><i data-lucide="medal" class="size-4"></i></span>اطلاعات تکواندو</h2>
+            <div class="grid gap-4">
+              <div>
+                <label class="form-label" for="belt">کمربند فعلی</label>
+                <div class="select-wrap">
+                  <select id="belt" class="!appearance-none">
+                    <option>کمربند سفید</option>
+                    <option>کمربند زرد</option>
+                    <option selected>کمربند سبز</option>
+                    <option>کمربند آبی</option>
+                    <option>کمربند قرمز</option>
+                  </select>
+                  <span class="select-caret"><i data-lucide="chevron-down" class="size-4"></i></span>
+                </div>
+                <p class="field-hint">برای تغییر کمربند از گزینه «تخصیص کمربند» در پرونده هنرجو استفاده کنید.</p>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="form-label" for="ageClass">رده سنی</label>
+                  <div class="select-wrap">
+                    <select id="ageClass" class="!appearance-none">
+                      <option>شکوفه</option>
+                      <option>نوجوان</option>
+                      <option>کادت</option>
+                      <option>جوان</option>
+                      <option selected>بزرگسال</option>
+                    </select>
+                    <span class="select-caret"><i data-lucide="chevron-down" class="size-4"></i></span>
+                  </div>
+                </div>
+                <div>
+                  <label class="form-label" for="weightClass">رده وزنی</label>
+                  <div class="select-wrap">
+                    <select id="weightClass" class="!appearance-none">
+                      <option>وزن دوم (−۴۹)</option>
+                      <option>وزن سوم (−۵۳)</option>
+                      <option selected>وزن چهارم (−۵۷)</option>
+                      <option>وزن پنجم (−۶۷)</option>
+                      <option>وزن ششم (+۶۷)</option>
+                    </select>
+                    <span class="select-caret"><i data-lucide="chevron-down" class="size-4"></i></span>
+                  </div>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="form-label" for="height">قد (سانتی‌متر)</label>
+                  <input id="height" inputmode="numeric" class="input-field" value="۱۶۴" />
+                </div>
+                <div>
+                  <label class="form-label" for="weight">وزن (کیلوگرم)</label>
+                  <input id="weight" inputmode="decimal" class="input-field" value="۵۴" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- عضویت و بیمه -->
+          <section class="card">
+            <h2 class="section-title mb-4 flex items-center gap-2"><span class="grid size-7 place-items-center rounded-lg bg-sky-50 text-sky-600"><i data-lucide="shield-check" class="size-4"></i></span>عضویت و بیمه</h2>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="form-label" for="membershipYear">سال عضویت</label>
+                <input id="membershipYear" inputmode="numeric" class="input-field text-center" value="۱۴۰۳" />
+              </div>
+              <div>
+                <label class="form-label" for="insuranceDate">تاریخ بیمه ورزشی</label>
+                <input id="insuranceDate" class="input-field text-center" value="۱۴۰۵/۰۵/۱۰" />
+              </div>
+              <div class="col-span-2">
+                <label class="form-label" for="expireImageDate">تاریخ انقضای عکس پرونده</label>
+                <input id="expireImageDate" class="input-field text-center" value="۱۴۰۵/۰۸/۰۱" />
+                <p class="field-hint">یادآوری تمدید عکس، ۷ روز قبل از انقضا برای شما ارسال می‌شود.</p>
+              </div>
+            </div>
+            <div class="mt-4">
+              <label class="form-label">تصویر هنرجو</label>
+              <button type="button" class="add-dashed" data-demo="تغییر تصویر در نسخه نمایشی فعال نیست"><i data-lucide="camera" class="size-4"></i>تغییر تصویر پرونده</button>
+            </div>
+          </section>
+
+          <!-- جلسات -->
+          <section class="card">
+            <h2 class="section-title mb-1 flex items-center gap-2"><span class="grid size-7 place-items-center rounded-lg bg-emerald-50 text-emerald-600"><i data-lucide="calendar-check" class="size-4"></i></span>جلسات</h2>
+            <p class="mb-3.5 text-[11px] text-gray-400">روزهای تمرین فعلی این هنرجو؛ با تغییر، کلاس‌های او به‌روزرسانی می‌شود.</p>
+            <div class="no-scrollbar flex flex-wrap gap-2" data-chips>
+              <button type="button" class="filter-chip is-active">شنبه</button>
+              <button type="button" class="filter-chip is-active">دوشنبه</button>
+              <button type="button" class="filter-chip is-active">چهارشنبه</button>
+              <button type="button" class="filter-chip">یکشنبه</button>
+              <button type="button" class="filter-chip">سه‌شنبه</button>
+              <button type="button" class="filter-chip">پنجشنبه</button>
+            </div>
+          </section>
+        </form>
+      </div>
+
+      <!-- sticky footer -->
+      <div class="save-bar flex items-center gap-3">
+        <a href="COA-005-student-detail.html" class="btn btn-outline flex-1 !py-3" data-back data-back-href="COA-005-student-detail.html">انصراف</a>
+        <button type="button" class="btn btn-primary flex-[2] !py-3" data-demo="ذخیره تغییرات در نسخه نمایشی شبیه‌سازی می‌شود">ذخیره تغییرات</button>
+      </div>
+    </main>
+
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — افزودن / دعوت هنرجو</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap content-form">
+        <header class="masthead app-bar">
+          <button type="button" class="icon-btn" data-back data-back-href="COA-003-students-list.html" aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">افزودن / دعوت هنرجو</h1>
+          </div>
+        </header>
+
+        <!-- phone chips -->
+        <section class="card">
+          <h2 class="section-title mb-1 flex items-center gap-2"><span class="grid size-7 place-items-center rounded-lg bg-brand-50 text-brand-600"><i data-lucide="phone" class="size-4"></i></span>شماره‌های تماس</h2>
+          <p class="mb-4 text-[11px] text-gray-400">شماره موبایل هنرجو را وارد و افزودن کنید؛ حداکثر ۱۰ شماره در هر ارسال.</p>
+
+          <div class="mb-3.5 flex flex-wrap gap-2">
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 py-1.5 pe-2 ps-3 text-[12px] font-bold text-brand-700">
+              ۰۹۱۲۰۹۸۷۶۵۴
+              <button type="button" class="grid size-4.5 place-items-center rounded-full text-brand-400 transition hover:text-brand-600" aria-label="حذف شماره" data-demo="حذف شماره در نسخه نمایشی فعال نیست"><i data-lucide="x" class="size-3.5"></i></button>
+            </span>
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 py-1.5 pe-2 ps-3 text-[12px] font-bold text-brand-700">
+              ۰۹۳۵۱۲۳۴۵۶۷
+              <button type="button" class="grid place-items-center rounded-full text-brand-400 transition hover:text-brand-600" aria-label="حذف شماره" data-demo="حذف شماره در نسخه نمایشی فعال نیست"><i data-lucide="x" class="size-3.5"></i></button>
+            </span>
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 py-1.5 pe-2 ps-3 text-[12px] font-bold text-brand-700">
+              ۰۹۰۲۱۱۱۲۲۳۳
+              <button type="button" class="grid place-items-center rounded-full text-brand-400 transition hover:text-brand-600" aria-label="حذف شماره" data-demo="حذف شماره در نسخه نمایشی فعال نیست"><i data-lucide="x" class="size-3.5"></i></button>
+            </span>
+          </div>
+
+          <button type="button" class="add-dashed" data-demo="افزودن شماره در نسخه نمایشی فعال نیست"><i data-lucide="plus" class="size-4"></i>افزودن شماره</button>
+        </section>
+
+        <!-- recent invitations -->
+        <section class="mt-4">
+          <div class="section-head">
+            <span class="section-tick"></span>
+            <h2 class="section-title">دعوت‌نامه‌های اخیر</h2>
+            <a href="COA-017-invitations-sent.html" class="link-more">همه</a>
+          </div>
+          <div class="card divide-y divide-gray-100/80 !p-0">
+            <div class="flex items-center gap-3 p-4">
+              <span class="avatar">ن</span>
+              <div class="min-w-0 flex-1">
+                <p class="truncate text-[13px] font-extrabold text-gray-900">نیما صادقی</p>
+                <p class="mt-0.5 text-[10.5px] font-medium text-gray-400">۰۹۱۲۰۹۸۷۶۵۴ · ارسال: دوشنبه ۲۲ آبان</p>
+              </div>
+              <span class="chip chip-amber shrink-0">در انتظار پاسخ</span>
+            </div>
+            <div class="flex items-center gap-3 p-4">
+              <span class="avatar">پ</span>
+              <div class="min-w-0 flex-1">
+                <p class="truncate text-[13px] font-extrabold text-gray-900">پویا نادری</p>
+                <p class="mt-0.5 text-[10.5px] font-medium text-gray-400">۰۹۳۵۱۲۳۴۵۶۷ · ارسال: امروز ۲۴ آبان</p>
+              </div>
+              <span class="chip chip-blue shrink-0">ارسال شد</span>
+            </div>
+            <div class="flex items-center gap-3 p-4">
+              <span class="avatar">آ</span>
+              <div class="min-w-0 flex-1">
+                <p class="truncate text-[13px] font-extrabold text-gray-900">آرش مرادی</p>
+                <p class="mt-0.5 text-[10.5px] font-medium text-gray-400">۰۹۰۲۱۱۱۲۲۳۳ · تأیید: شنبه ۱۶ آبان</p>
+              </div>
+              <span class="chip chip-green shrink-0">تأیید شد</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- invitation flow note -->
+        <div class="card-tint mt-4 space-y-2 !p-3.5 text-[11px] leading-5 text-gray-600">
+          <p class="font-bold text-gray-700">روند دعوت‌نامه چگونه است؟</p>
+          <p class="flex items-start gap-1.5"><span class="mt-0.5 shrink-0 text-sky-600"><i data-lucide="send" class="size-3.5"></i></span><span>هنرجو پیامک دعوت را دریافت و با تأیید آن، به فهرست شاگردان شما اضافه می‌شود.</span></p>
+          <p class="flex items-start gap-1.5"><span class="mt-0.5 shrink-0 text-emerald-600"><i data-lucide="user-plus" class="size-3.5"></i></span><span>اگر هنرجو حساب کاربری نداشته باشد، پروفایل او به‌صورت مستقیم برای شما ساخته می‌شود.</span></p>
+          <p class="flex items-start gap-1.5"><span class="mt-0.5 shrink-0 text-red-500"><i data-lucide="circle-alert" class="size-3.5"></i></span><span>اگر هنرجو از قبل مربی‌دار باشد، دعوت‌نامه قابل ارسال نیست.</span></p>
+        </div>
+
+        <a href="COA-004-student-create.html" class="btn btn-outline mt-4 w-full !py-3"><i data-lucide="clipboard-list" class="size-4"></i>ثبت مستقیم پروفایل هنرجو</a>
+      </div>
+
+      <!-- sticky footer -->
+      <div class="save-bar flex items-center gap-3">
+        <button type="button" class="btn btn-primary w-full !py-3" data-demo="ارسال دعوت‌نامه در نسخه نمایشی شبیه‌سازی می‌شود">ارسال دعوت‌نامه‌ها (۳ شماره)</button>
+      </div>
+    </main>
+
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

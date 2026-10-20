@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — ثبت هنرجوی جدید</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap content-form">
+        <header class="masthead app-bar">
+          <button type="button" class="icon-btn" data-back data-back-href="COA-003-students-list.html" aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">ثبت هنرجوی جدید</h1>
+          </div>
+        </header>
+
+        <form id="form" class="space-y-4 pb-28" novalidate>
+          <!-- مشخصات فردی -->
+          <section class="card">
+            <h2 class="section-title mb-4 flex items-center gap-2"><span class="grid size-7 place-items-center rounded-lg bg-brand-50 text-brand-600"><i data-lucide="user" class="size-4"></i></span>مشخصات فردی</h2>
+            <div class="grid gap-4">
+              <div>
+                <label class="form-label" for="fullName">نام و نام خانوادگی <b class="text-brand-600">*</b></label>
+                <input id="fullName" class="input-field" autocomplete="name" value="سامان رستمی" />
+              </div>
+              <div>
+                <label class="form-label" for="nationalCode">کد ملی <b class="text-brand-600">*</b></label>
+                <input id="nationalCode" dir="ltr" inputmode="numeric" maxlength="10" class="input-field input-ltr text-center tracking-widest" value="۰۰۸۵۵۲۳۴۷۶۹" />
+                <p class="field-hint">در صورت تکراری بودن کد ملی، ثبت انجام نمی‌شود.</p>
+              </div>
+              <div>
+                <label class="form-label">جنسیت <b class="text-brand-600">*</b></label>
+                <div class="seg" data-seg id="gender-seg">
+                  <button type="button" class="seg-item" data-value="FEMALE">زن</button>
+                  <button type="button" class="seg-item is-active" data-value="MALE">مرد</button>
+                </div>
+                <p class="field-hint">جنسیت هنرجو باید با جنسیت شما یکسان باشد.</p>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="form-label" for="birthDate">تاریخ تولد <b class="text-brand-600">*</b></label>
+                  <input id="birthDate" class="input-field text-center" value="۱۳۹۰/۰۳/۱۲" />
+                </div>
+                <div>
+                  <label class="form-label" for="fatherName">نام پدر</label>
+                  <input id="fatherName" class="input-field" value="حسین" />
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="form-label" for="phoneNumber">شماره تماس</label>
+                  <input id="phoneNumber" dir="ltr" inputmode="tel" class="input-field input-ltr" value="۰۹۱۲۴۵۶۷۸۹۰" />
+                </div>
+                <div>
+                  <label class="form-label" for="landlineNumber">تلفن ثابت</label>
+                  <input id="landlineNumber" dir="ltr" inputmode="tel" class="input-field input-ltr" value="۰۲۱۴۴۵۵۶۶۷۷" />
+                </div>
+              </div>
+              <div>
+                <label class="form-label" for="province">استان <b class="text-brand-600">*</b></label>
+                <div class="select-wrap">
+                  <select id="province" class="!appearance-none">
+                    <option>البرز</option>
+                    <option>اصفهان</option>
+                    <option selected>تهران</option>
+                    <option>خراسان رضوی</option>
+                    <option>فارس</option>
+                    <option>مازندران</option>
+                    <option>گیلان</option>
+                  </select>
+                  <span class="select-caret"><i data-lucide="chevron-down" class="size-4"></i></span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- اطلاعات تکواندو -->
+          <section class="card">
+            <h2 class="section-title mb-4 flex items-center gap-2"><span class="grid size-7 place-items-center rounded-lg bg-amber-50 text-amber-600"><i data-lucide="medal" class="size-4"></i></span>اطلاعات تکواندو</h2>
+            <div class="grid gap-4">
+              <div>
+                <label class="form-label" for="belt">کمربند فعلی <b class="text-brand-600">*</b></label>
+                <div class="select-wrap">
+                  <select id="belt" class="!appearance-none">
+                    <option>کمربند سفید</option>
+                    <option selected>کمربند زرد</option>
+                    <option>کمربند سبز</option>
+                    <option>کمربند آبی</option>
+                    <option>کمربند قرمز</option>
+                  </select>
+                  <span class="select-caret"><i data-lucide="chevron-down" class="size-4"></i></span>
+                </div>
+              </div>
+              <div>
+                <label class="form-label" for="beltDate">تاریخ دریافت کمربند فعلی <b class="text-brand-600">*</b></label>
+                <input id="beltDate" class="input-field text-center" value="۱۴۰۴/۰۶/۱۰" />
+                <p class="field-hint">تاریخ آزمون کمربند بعدی به‌صورت خودکار محاسبه می‌شود.</p>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="form-label" for="ageClass">رده سنی</label>
+                  <div class="select-wrap">
+                    <select id="ageClass" class="!appearance-none">
+                      <option>شکوفه</option>
+                      <option selected>نوجوان</option>
+                      <option>کادت</option>
+                      <option>جوان</option>
+                      <option>بزرگسال</option>
+                    </select>
+                    <span class="select-caret"><i data-lucide="chevron-down" class="size-4"></i></span>
+                  </div>
+                </div>
+                <div>
+                  <label class="form-label" for="weightClass">رده وزنی</label>
+                  <div class="select-wrap">
+                    <select id="weightClass" class="!appearance-none">
+                      <option>وزن اول (−۴۵)</option>
+                      <option selected>وزن دوم (−۴۸)</option>
+                      <option>وزن سوم (−۵۱)</option>
+                      <option>وزن چهارم (−۵۵)</option>
+                      <option>وزن پنجم (+۵۹)</option>
+                    </select>
+                    <span class="select-caret"><i data-lucide="chevron-down" class="size-4"></i></span>
+                  </div>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="form-label" for="height">قد (سانتی‌متر)</label>
+                  <input id="height" inputmode="numeric" class="input-field" value="۱۶۰" />
+                </div>
+                <div>
+                  <label class="form-label" for="weight">وزن (کیلوگرم)</label>
+                  <input id="weight" inputmode="decimal" class="input-field" value="۴۷" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- عضویت و بیمه -->
+          <section class="card">
+            <h2 class="section-title mb-4 flex items-center gap-2"><span class="grid size-7 place-items-center rounded-lg bg-sky-50 text-sky-600"><i data-lucide="shield-check" class="size-4"></i></span>عضویت و بیمه</h2>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="form-label" for="membershipYear">سال عضویت</label>
+                <input id="membershipYear" inputmode="numeric" class="input-field text-center" value="۱۴۰۴" />
+              </div>
+              <div>
+                <label class="form-label" for="insuranceDate">تاریخ بیمه ورزشی</label>
+                <input id="insuranceDate" class="input-field text-center" value="۱۴۰۵/۰۲/۱۹" />
+              </div>
+            </div>
+            <p class="field-hint mt-2">یادآوری تمدید بیمه، ۷ روز قبل از انقضا برای شما ارسال می‌شود.</p>
+            <div class="mt-4">
+              <label class="form-label">تصویر هنرجو</label>
+              <button type="button" class="add-dashed" data-demo="افزودن تصویر در نسخه نمایشی فعال نیست"><i data-lucide="camera" class="size-4"></i>افزودن تصویر</button>
+            </div>
+          </section>
+
+          <!-- جلسات -->
+          <section class="card">
+            <h2 class="section-title mb-1 flex items-center gap-2"><span class="grid size-7 place-items-center rounded-lg bg-emerald-50 text-emerald-600"><i data-lucide="calendar-check" class="size-4"></i></span>جلسات</h2>
+            <p class="mb-3.5 text-[11px] text-gray-400">روزهای تمرین هنرجو را انتخاب کنید؛ پس از ثبت، او به کلاس‌های همان روزها اضافه می‌شود.</p>
+            <div class="no-scrollbar flex flex-wrap gap-2" data-chips>
+              <button type="button" class="filter-chip is-active">شنبه</button>
+              <button type="button" class="filter-chip">یکشنبه</button>
+              <button type="button" class="filter-chip is-active">دوشنبه</button>
+              <button type="button" class="filter-chip">سه‌شنبه</button>
+              <button type="button" class="filter-chip is-active">چهارشنبه</button>
+              <button type="button" class="filter-chip">پنجشنبه</button>
+            </div>
+          </section>
+        </form>
+      </div>
+
+      <!-- sticky footer -->
+      <div class="save-bar flex items-center gap-3">
+        <a href="COA-003-students-list.html" class="btn btn-outline flex-1 !py-3" data-back data-back-href="COA-003-students-list.html">انصراف</a>
+        <button type="button" class="btn btn-primary flex-[2] !py-3" data-demo="ثبت هنرجو در نسخه نمایشی شبیه‌سازی می‌شود">ثبت هنرجو</button>
+      </div>
+    </main>
+
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — کلاس جدید</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap content-form">
+        <header class="masthead app-bar">
+          <button type="button" class="icon-btn" data-back data-back-href="COA-012-class-sessions-list.html" aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">کلاس جدید</h1>
+          </div>
+        </header>
+
+        <form class="mt-5 space-y-4 pb-28" novalidate>
+          <!-- اطلاعات کلاس -->
+          <section class="card">
+            <h2 class="section-title mb-4 flex items-center gap-2"><span class="grid size-7 place-items-center rounded-lg bg-brand-50 text-brand-600"><i data-lucide="calendar-days" class="size-4"></i></span>اطلاعات کلاس</h2>
+            <div class="space-y-4">
+              <div>
+                <label class="form-label" for="name">نام کلاس <b class="text-brand-600">*</b></label>
+                <input id="name" class="input-field" placeholder="مثلاً کلاس سبک کیوروگی" />
+              </div>
+              <div>
+                <label class="form-label" for="clubId">باشگاه <b class="text-brand-600">*</b></label>
+                <div class="select-wrap">
+                  <select id="clubId" class="!py-3.5 text-sm">
+                    <option value="" disabled>انتخاب باشگاه</option>
+                    <option selected>باشگاه شهدای گمنام</option>
+                    <option>باشگاه تکواندو پارس</option>
+                  </select>
+                  <span class="select-caret"><i data-lucide="chevron-down" class="size-4"></i></span>
+                </div>
+              </div>
+              <div>
+                <label class="form-label" for="capacity">ظرفیت کلاس (نفر)</label>
+                <input id="capacity" type="text" inputmode="numeric" dir="ltr" class="input-field input-ltr text-center" placeholder="مثلاً ۲۴" />
+                <p class="field-hint">سقف هنرجویان قابل ثبت در این کلاس.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- زمان‌بندی -->
+          <section class="card">
+            <h2 class="section-title mb-4 flex items-center gap-2"><span class="grid size-7 place-items-center rounded-lg bg-sky-50 text-sky-600"><i data-lucide="timer" class="size-4"></i></span>زمان‌بندی برگزاری</h2>
+            <div class="space-y-4">
+              <div>
+                <label class="form-label">روزهای برگزاری <b class="text-brand-600">*</b></label>
+                <div class="flex flex-wrap gap-2" data-chips>
+                  <button type="button" class="filter-chip is-active">شنبه</button>
+                  <button type="button" class="filter-chip">یکشنبه</button>
+                  <button type="button" class="filter-chip is-active">دوشنبه</button>
+                  <button type="button" class="filter-chip">سه‌شنبه</button>
+                  <button type="button" class="filter-chip">چهارشنبه</button>
+                  <button type="button" class="filter-chip">پنجشنبه</button>
+                  <button type="button" class="filter-chip">جمعه</button>
+                </div>
+                <p class="field-hint">حداقل یک روز برگزاری را انتخاب کنید.</p>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="form-label" for="startTime">ساعت شروع <b class="text-brand-600">*</b></label>
+                  <input id="startTime" type="text" dir="ltr" class="input-field text-center tracking-wider" value="۱۷:۰۰" />
+                </div>
+                <div>
+                  <label class="form-label" for="endTime">ساعت پایان <b class="text-brand-600">*</b></label>
+                  <input id="endTime" type="text" dir="ltr" class="input-field text-center tracking-wider" value="۱۸:۳۰" />
+                </div>
+              </div>
+              <div class="card-tint flex items-start gap-2.5 !p-3.5">
+                <span class="mt-0.5 shrink-0 text-brand-600"><i data-lucide="info" class="size-4"></i></span>
+                <p class="text-[11px] leading-5 text-gray-600">اگر بازهٔ زمانی با کلاس دیگری از همین باشگاه هم‌پوشانی داشته باشد، هنگام ثبت اخطار نمایش داده می‌شود.</p>
+              </div>
+            </div>
+          </section>
+        </form>
+      </div>
+
+      <!-- sticky footer -->
+      <div class="save-bar flex items-center gap-3">
+        <button type="button" class="btn btn-outline flex-1 !py-3" data-back data-back-href="COA-012-class-sessions-list.html">انصراف</button>
+        <button type="button" class="btn btn-primary flex-[2] !py-3" data-demo="کلاس نمونه ذخیره شد">
+          <span>ایجاد کلاس</span>
+        </button>
+      </div>
+    </main>
+
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

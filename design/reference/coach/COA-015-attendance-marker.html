@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — ثبت حضور و غیاب</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap content-form">
+        <header class="masthead app-bar">
+          <button type="button" class="icon-btn" data-back data-back-href="COA-012-class-sessions-list.html" aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">ثبت حضور و غیاب</h1>
+          </div>
+          <a href="COA-018-session-report.html" class="icon-btn shrink-0" aria-label="گزارش جلسه"><i data-lucide="clipboard-list" class="size-5"></i></a>
+        </header>
+
+        <!-- gym workspace context -->
+        <a href="COA-009-clubs-list.html" class="gym-context mt-4">
+          <span class="gctx-ico"><i data-lucide="landmark" class="size-[18px]"></i></span>
+          <span class="min-w-0 flex-1">
+            <b>باشگاه شهدای گمنام</b>
+            <span class="gctx-sub">حضور غیاب اختصاصی این باشگاه</span>
+          </span>
+          <span class="gctx-swap">تغییر باشگاه</span>
+        </a>
+
+        <!-- class + date summary -->
+        <div class="card mt-4">
+          <div class="flex items-center gap-3">
+            <span class="lead-ico"><i data-lucide="zap" class="size-[18px]"></i></span>
+            <div class="min-w-0 flex-1">
+              <b class="block truncate text-[13.5px] text-gray-900">کلاس سبک کیوروگی</b>
+              <p class="mt-0.5 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام · <span dir="ltr">۱۷:۰۰ – ۱۸:۳۰</span></p>
+            </div>
+            <span class="chip chip-brand shrink-0">۲۲ هنرجو</span>
+          </div>
+          <div class="mt-3 flex flex-wrap items-center gap-1.5 border-t border-gray-50 pt-3">
+            <span class="form-label !mb-0 text-[11px] text-gray-400">تاریخ جلسه:</span>
+            <span class="chip chip-brand"><i data-lucide="calendar-days" class="size-3"></i>شنبه ۲۴ آبان ۱۴۰۴</span>
+            <span class="chip chip-gray"><span dir="ltr">۱۴۰۴/۰۸/۲۴</span></span>
+          </div>
+        </div>
+
+        <!-- burned-calorie counter (demo) -->
+        <div class="card mt-3" data-count-host>
+          <div class="flex items-center gap-3">
+            <span class="lead-ico bg-orange-50 text-orange-500"><i data-lucide="flame" class="size-[18px]"></i></span>
+            <div class="min-w-0 flex-1">
+              <b class="block text-[12.5px] text-gray-900">مجموع سوخت این جلسه</b>
+              <p class="mt-0.5 text-[10.5px] font-medium text-gray-400">برآورد بر اساس مدت و شدت تمرین</p>
+            </div>
+            <div class="flex shrink-0 items-center gap-2">
+              <button type="button" class="icon-btn !size-9" data-count="minus" aria-label="کاهش"><i data-lucide="minus" class="size-4"></i></button>
+              <span class="display-num w-12 text-center text-[17px]" data-count-val data-n="320">۳۲۰</span>
+              <button type="button" class="icon-btn !size-9" data-count="plus" aria-label="افزایش"><i data-lucide="plus" class="size-4"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- muscle focus of this session (anatomy × attendance) -->
+        <div class="card mt-3">
+          <div class="flex items-center gap-3">
+            <div class="mini-body shrink-0 rounded-xl px-1.5 pt-1.5" style="background: var(--surface-2)">
+              <svg viewBox="0 0 240 440" class="h-[118px]" aria-label="عضلات هدف جلسه">
+                <defs>
+                  <clipPath id="mBodyClip">
+                    <path d="M120 6 C107.5 6 98.5 15 98.5 27 C98.5 39.5 108 50 120 50 C132 50 141.5 39.5 141.5 27 C141.5 15 132.5 6 120 6 Z" />
+                    <path d="M108.5 44 L108.5 56 C108.5 60.5 105.5 64 101 65.5 C107 68.8 113.5 70.3 120 70.3 C126.5 70.3 133 68.8 139 65.5 C134.5 64 131.5 60.5 131.5 56 L131.5 44 C127.5 46.6 112.5 46.6 108.5 44 Z" />
+                    <path d="M81 126.5 C71.5 130.5 64.5 138.5 61.5 148 C59.5 157.5 59.5 168 60.5 178 C61 186 63.5 193 67.5 198.5 C64.5 205.5 62.5 215.5 63 226.5 C63.5 238.5 66.5 249.5 71.5 258.5 C75.5 266.5 81.5 273.5 87.5 276.5 C92.5 278.5 96.5 274.5 95.5 268.5 C94 260.5 90 250.5 86 240.5 C82 230.5 78.5 219.5 77.5 208.5 C76.8 198.5 78 188.5 79.5 178.5 C81 168.5 82 156.5 81.5 146.5 C81.2 138.5 81.1 131.5 81 126.5 Z" />
+                    <path d="M159 126.5 C168.5 130.5 175.5 138.5 178.5 148 C180.5 157.5 180.5 168 179.5 178 C179 186 176.5 193 172.5 198.5 C175.5 205.5 177.5 215.5 177 226.5 C176.5 238.5 173.5 249.5 168.5 258.5 C164.5 266.5 158.5 273.5 152.5 276.5 C147.5 278.5 143.5 274.5 144.5 268.5 C146 260.5 150 250.5 154 240.5 C158 230.5 161.5 219.5 162.5 208.5 C163.2 198.5 162 188.5 160.5 178.5 C159 168.5 158 156.5 158.5 146.5 C158.8 138.5 158.9 131.5 159 126.5 Z" />
+                    <path d="M120 212 C115 213.5 111 216 109 220 C108.6 227 108.8 241 109.8 255 C111.2 273 112.1 294 110.9 310 C110.7 319 110.8 330 111.1 342 C111.5 356 111.9 370 112.2 384 C112.5 398 112.6 412 112.4 424.9 C110 427.2 105.3 427.2 100.6 424.9 C100.1 422 99.7 418.5 99.3 413 C98.7 407 97.6 399 96.4 389 C94.6 376 93.8 362 94.3 348 C94.8 338 95.3 328 95 318 C94.5 308 93.5 296 92.5 284 C91 270 90.5 256 91.5 244 C92.5 234 97 226 104 222 C109 217 114.5 214 120 212 Z" />
+                    <path d="M120 212 C125 213.5 129 216 131 220 C131.4 227 131.2 241 130.2 255 C128.8 273 127.9 294 129.1 310 C129.3 319 129.2 330 128.9 342 C128.5 356 128.1 370 127.8 384 C127.5 398 127.4 412 127.6 424.9 C130 427.2 134.7 427.2 139.4 424.9 C139.9 422 140.3 418.5 140.7 413 C141.3 407 142.4 399 143.6 389 C145.4 376 146.2 362 145.7 348 C145.2 338 144.7 328 145 318 C145.5 308 146.5 296 147.5 284 C149 270 149.5 256 148.5 244 C147.5 234 143 226 136 222 C131 217 125.5 214 120 212 Z" />
+                    <path d="M100 421 C96 425.5 91 430 87.8 434.3 C85 438.2 86 442.8 90.8 443.7 C96.4 444.8 102.8 444.8 108 443.8 C111.4 443.1 112.3 439.7 110.9 435.9 C109.5 432 108.9 426.5 108.5 421.3 C105.7 419.4 102.4 419.4 100 421 Z" />
+                    <path d="M140 421 C144 425.5 149 430 152.2 434.3 C155 438.2 154 442.8 149.2 443.7 C143.6 444.8 137.2 444.8 132 443.8 C128.6 443.1 127.7 439.7 129.1 435.9 C130.5 432 131.1 426.5 131.5 421.3 C134.3 419.4 137.6 419.4 140 421 Z" />
+                    <path d="M120 66 C110 66 101 68 93 71.5 C81 76.5 70.5 83.5 65.5 93 C59.5 103 59.5 115 65.5 123 C69.5 128 75 130.5 81 130.5 C75 137.5 71.5 147.5 70.5 157.5 C69.5 169 73 179.5 80 186 C87 192.5 93 195.5 97 199.5 C100 206.5 101 214.5 104 221.5 C107 228.5 113 232.5 120 232.5 C127 232.5 133 228.5 136 221.5 C139 214.5 140 206.5 143 199.5 C147 195.5 153 192.5 160 186 C167 179.5 170.5 169 169.5 157.5 C168.5 147.5 165 137.5 159 130.5 C165 130.5 170.5 128 174.5 123 C180.5 115 180.5 103 174.5 93 C169.5 83.5 159 76.5 147 71.5 C139 68 130 66 120 66 Z" />
+                  </clipPath>
+                </defs>
+                <g class="mb-base">
+                  <path d="M120 6 C107.5 6 98.5 15 98.5 27 C98.5 39.5 108 50 120 50 C132 50 141.5 39.5 141.5 27 C141.5 15 132.5 6 120 6 Z" />
+                  <path d="M108.5 44 L108.5 56 C108.5 60.5 105.5 64 101 65.5 C107 68.8 113.5 70.3 120 70.3 C126.5 70.3 133 68.8 139 65.5 C134.5 64 131.5 60.5 131.5 56 L131.5 44 C127.5 46.6 112.5 46.6 108.5 44 Z" />
+                  <path d="M81 126.5 C71.5 130.5 64.5 138.5 61.5 148 C59.5 157.5 59.5 168 60.5 178 C61 186 63.5 193 67.5 198.5 C64.5 205.5 62.5 215.5 63 226.5 C63.5 238.5 66.5 249.5 71.5 258.5 C75.5 266.5 81.5 273.5 87.5 276.5 C92.5 278.5 96.5 274.5 95.5 268.5 C94 260.5 90 250.5 86 240.5 C82 230.5 78.5 219.5 77.5 208.5 C76.8 198.5 78 188.5 79.5 178.5 C81 168.5 82 156.5 81.5 146.5 C81.2 138.5 81.1 131.5 81 126.5 Z" />
+                  <path d="M159 126.5 C168.5 130.5 175.5 138.5 178.5 148 C180.5 157.5 180.5 168 179.5 178 C179 186 176.5 193 172.5 198.5 C175.5 205.5 177.5 215.5 177 226.5 C176.5 238.5 173.5 249.5 168.5 258.5 C164.5 266.5 158.5 273.5 152.5 276.5 C147.5 278.5 143.5 274.5 144.5 268.5 C146 260.5 150 250.5 154 240.5 C158 230.5 161.5 219.5 162.5 208.5 C163.2 198.5 162 188.5 160.5 178.5 C159 168.5 158 156.5 158.5 146.5 C158.8 138.5 158.9 131.5 159 126.5 Z" />
+                  <path d="M120 212 C115 213.5 111 216 109 220 C108.6 227 108.8 241 109.8 255 C111.2 273 112.1 294 110.9 310 C110.7 319 110.8 330 111.1 342 C111.5 356 111.9 370 112.2 384 C112.5 398 112.6 412 112.4 424.9 C110 427.2 105.3 427.2 100.6 424.9 C100.1 422 99.7 418.5 99.3 413 C98.7 407 97.6 399 96.4 389 C94.6 376 93.8 362 94.3 348 C94.8 338 95.3 328 95 318 C94.5 308 93.5 296 92.5 284 C91 270 90.5 256 91.5 244 C92.5 234 97 226 104 222 C109 217 114.5 214 120 212 Z" />
+                  <path d="M120 212 C125 213.5 129 216 131 220 C131.4 227 131.2 241 130.2 255 C128.8 273 127.9 294 129.1 310 C129.3 319 129.2 330 128.9 342 C128.5 356 128.1 370 127.8 384 C127.5 398 127.4 412 127.6 424.9 C130 427.2 134.7 427.2 139.4 424.9 C139.9 422 140.3 418.5 140.7 413 C141.3 407 142.4 399 143.6 389 C145.4 376 146.2 362 145.7 348 C145.2 338 144.7 328 145 318 C145.5 308 146.5 296 147.5 284 C149 270 149.5 256 148.5 244 C147.5 234 143 226 136 222 C131 217 125.5 214 120 212 Z" />
+                  <path d="M100 421 C96 425.5 91 430 87.8 434.3 C85 438.2 86 442.8 90.8 443.7 C96.4 444.8 102.8 444.8 108 443.8 C111.4 443.1 112.3 439.7 110.9 435.9 C109.5 432 108.9 426.5 108.5 421.3 C105.7 419.4 102.4 419.4 100 421 Z" />
+                  <path d="M140 421 C144 425.5 149 430 152.2 434.3 C155 438.2 154 442.8 149.2 443.7 C143.6 444.8 137.2 444.8 132 443.8 C128.6 443.1 127.7 439.7 129.1 435.9 C130.5 432 131.1 426.5 131.5 421.3 C134.3 419.4 137.6 419.4 140 421 Z" />
+                  <path d="M120 66 C110 66 101 68 93 71.5 C81 76.5 70.5 83.5 65.5 93 C59.5 103 59.5 115 65.5 123 C69.5 128 75 130.5 81 130.5 C75 137.5 71.5 147.5 70.5 157.5 C69.5 169 73 179.5 80 186 C87 192.5 93 195.5 97 199.5 C100 206.5 101 214.5 104 221.5 C107 228.5 113 232.5 120 232.5 C127 232.5 133 228.5 136 221.5 C139 214.5 140 206.5 143 199.5 C147 195.5 153 192.5 160 186 C167 179.5 170.5 169 169.5 157.5 C168.5 147.5 165 137.5 159 130.5 C165 130.5 170.5 128 174.5 123 C180.5 115 180.5 103 174.5 93 C169.5 83.5 159 76.5 147 71.5 C139 68 130 66 120 66 Z" />
+                </g>
+                <g clip-path="url(#mBodyClip)">
+                <g fill="#34d399">
+                  <ellipse cx="74" cy="101" rx="20" ry="24" />
+                  <ellipse cx="166" cy="101" rx="20" ry="24" />
+                </g>
+                <g fill="#fbbf24">
+                  <rect x="88" y="131" width="64" height="87" rx="20" />
+                </g>
+                <g fill="#fb7185">
+                  <rect x="90" y="217" width="24" height="110" rx="12" />
+                  <rect x="126" y="217" width="24" height="110" rx="12" />
+                </g>
+                <g fill="#fda4af">
+                  <rect x="93" y="341" width="20" height="76" rx="10" />
+                  <rect x="127" y="341" width="20" height="76" rx="10" />
+                </g>
+                </g>
+              </svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-2">
+                <b class="text-[12.5px] font-extrabold text-gray-900">عضلات هدف این جلسه</b>
+                <span class="count-chip ms-auto">کیوروگی</span>
+              </div>
+              <div class="mt-2.5 space-y-2">
+                <div class="bar-row">
+                  <span class="bar-label !w-14">لگن و پا</span>
+                  <span class="bar-track"><span class="bar-fill" style="width:60%;background:linear-gradient(90deg,#fb7185,#f43f5e)"></span></span>
+                  <b class="bar-val">۶۰٪</b>
+                </div>
+                <div class="bar-row">
+                  <span class="bar-label !w-14">مرکز بدن</span>
+                  <span class="bar-track"><span class="bar-fill" style="width:25%;background:linear-gradient(90deg,#fbbf24,#f59e0b)"></span></span>
+                  <b class="bar-val">۲۵٪</b>
+                </div>
+                <div class="bar-row">
+                  <span class="bar-label !w-14">سرشانه</span>
+                  <span class="bar-track"><span class="bar-fill" style="width:15%;background:linear-gradient(90deg,#34d399,#10b981)"></span></span>
+                  <b class="bar-val">۱۵٪</b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- progress + quick actions -->
+        <div class="mt-4 flex items-center gap-3 rounded-2xl border border-gray-100 bg-white px-4 py-3">
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[11px] font-extrabold text-gray-700">پیشرفت علامت‌گذاری</span>
+              <span class="text-[10.5px] font-bold text-gray-400">۸ از ۸ هنرجو</span>
+            </div>
+            <div class="step-track mt-2"><span class="step-fill" style="width:100%"></span></div>
+            <div class="mt-2.5 flex flex-wrap gap-1.5" id="statusSummary">
+              <span class="chip chip-green !px-2.5 !py-0.5 !text-[10px]" data-sum="PRESENT">حاضر <b class="tabular-nums">۵</b></span>
+              <span class="chip chip-amber !px-2.5 !py-0.5 !text-[10px]" data-sum="LATE">تأخیر <b class="tabular-nums">۱</b></span>
+              <span class="chip chip-red !px-2.5 !py-0.5 !text-[10px]" data-sum="ABSENT">غایب <b class="tabular-nums">۱</b></span>
+              <span class="chip chip-blue !px-2.5 !py-0.5 !text-[10px]" data-sum="EXCUSED">موجه <b class="tabular-nums">۱</b></span>
+            </div>
+          </div>
+          <button type="button" id="all-present" class="btn btn-soft btn-sm shrink-0 !rounded-xl">
+            <i data-lucide="check" class="size-3.5"></i>همه حاضر
+          </button>
+        </div>
+
+        <!-- roster -->
+        <div id="roster" class="mt-3 space-y-3 pb-28">
+
+          <div class="card">
+            <div class="flex items-center gap-3">
+              <span class="avatar">س</span>
+              <b class="min-w-0 flex-1 truncate text-[13px] text-gray-800">سارا محمدی</b>
+              <span class="dot-status text-emerald-600">حاضر</span>
+            </div>
+            <div class="seg-4 mt-3">
+              <button type="button" class="seg-item is-present" data-status="PRESENT">حاضر</button>
+              <button type="button" class="seg-item" data-status="LATE">تأخیر</button>
+              <button type="button" class="seg-item" data-status="ABSENT">غایب</button>
+              <button type="button" class="seg-item" data-status="EXCUSED">موجه</button>
+            </div>
+                      <div class="mt-2.5 flex items-center gap-2 border-t border-gray-50 pt-2.5">
+              <button type="button" class="note-open inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[10.5px] font-extrabold transition active:scale-95" style="background:var(--surface-3);color:var(--ink-4)" data-sheet="noteSheet" data-note="سارا محمدی">
+                <i data-lucide="sticky-note" class="size-3.5"></i>توضیح
+              </button>
+              <span class="note-chip chip chip-blue min-w-0 flex-1 !justify-start hidden" data-full=""><i data-lucide="notebook-pen" class="size-3 shrink-0"></i><span class="note-text min-w-0 truncate">—</span></span>
+            </div>
+        </div>
+
+          <div class="card">
+            <div class="flex items-center gap-3">
+              <span class="avatar">ن</span>
+              <b class="min-w-0 flex-1 truncate text-[13px] text-gray-800">نیما صادقی</b>
+              <span class="dot-status text-emerald-600">حاضر</span>
+            </div>
+            <div class="seg-4 mt-3">
+              <button type="button" class="seg-item is-present" data-status="PRESENT">حاضر</button>
+              <button type="button" class="seg-item" data-status="LATE">تأخیر</button>
+              <button type="button" class="seg-item" data-status="ABSENT">غایب</button>
+              <button type="button" class="seg-item" data-status="EXCUSED">موجه</button>
+            </div>
+                      <div class="mt-2.5 flex items-center gap-2 border-t border-gray-50 pt-2.5">
+              <button type="button" class="note-open inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[10.5px] font-extrabold transition active:scale-95" style="background:var(--surface-3);color:var(--ink-4)" data-sheet="noteSheet" data-note="نیما صادقی">
+                <i data-lucide="sticky-note" class="size-3.5"></i>توضیح
+              </button>
+              <span class="note-chip chip chip-blue min-w-0 flex-1 !justify-start hidden" data-full=""><i data-lucide="notebook-pen" class="size-3 shrink-0"></i><span class="note-text min-w-0 truncate">—</span></span>
+            </div>
+        </div>
+
+          <div class="card">
+            <div class="flex items-center gap-3">
+              <span class="avatar">ع</span>
+              <b class="min-w-0 flex-1 truncate text-[13px] text-gray-800">علی رضایی</b>
+              <span class="dot-status text-amber-500">تأخیر</span>
+            </div>
+            <div class="seg-4 mt-3">
+              <button type="button" class="seg-item" data-status="PRESENT">حاضر</button>
+              <button type="button" class="seg-item is-late" data-status="LATE">تأخیر</button>
+              <button type="button" class="seg-item" data-status="ABSENT">غایب</button>
+              <button type="button" class="seg-item" data-status="EXCUSED">موجه</button>
+            </div>
+                      <div class="mt-2.5 flex items-center gap-2 border-t border-gray-50 pt-2.5">
+              <button type="button" class="note-open inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[10.5px] font-extrabold transition active:scale-95" style="background:var(--surface-3);color:var(--ink-4)" data-sheet="noteSheet" data-note="علی رضایی">
+                <i data-lucide="sticky-note" class="size-3.5"></i>توضیح
+              </button>
+              <span class="note-chip chip chip-blue min-w-0 flex-1 !justify-start" data-full="۱۵ دقیقه دیر رسید · گرم‌کردن را از دست داد"><i data-lucide="notebook-pen" class="size-3 shrink-0"></i><span class="note-text min-w-0 truncate">۱۵ دقیقه دیر رسید · گرم‌کردن را از دست داد</span></span>
+            </div>
+        </div>
+
+          <div class="card">
+            <div class="flex items-center gap-3">
+              <span class="avatar">م</span>
+              <b class="min-w-0 flex-1 truncate text-[13px] text-gray-800">محمد حسینی</b>
+              <span class="dot-status text-emerald-600">حاضر</span>
+            </div>
+            <div class="seg-4 mt-3">
+              <button type="button" class="seg-item is-present" data-status="PRESENT">حاضر</button>
+              <button type="button" class="seg-item" data-status="LATE">تأخیر</button>
+              <button type="button" class="seg-item" data-status="ABSENT">غایب</button>
+              <button type="button" class="seg-item" data-status="EXCUSED">موجه</button>
+            </div>
+                      <div class="mt-2.5 flex items-center gap-2 border-t border-gray-50 pt-2.5">
+              <button type="button" class="note-open inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[10.5px] font-extrabold transition active:scale-95" style="background:var(--surface-3);color:var(--ink-4)" data-sheet="noteSheet" data-note="محمد حسینی">
+                <i data-lucide="sticky-note" class="size-3.5"></i>توضیح
+              </button>
+              <span class="note-chip chip chip-blue min-w-0 flex-1 !justify-start hidden" data-full=""><i data-lucide="notebook-pen" class="size-3 shrink-0"></i><span class="note-text min-w-0 truncate">—</span></span>
+            </div>
+        </div>
+
+          <div class="card">
+            <div class="flex items-center gap-3">
+              <span class="avatar">ر</span>
+              <b class="min-w-0 flex-1 truncate text-[13px] text-gray-800">رضا قاسمی</b>
+              <span class="dot-status text-red-500">غایب</span>
+            </div>
+            <div class="seg-4 mt-3">
+              <button type="button" class="seg-item" data-status="PRESENT">حاضر</button>
+              <button type="button" class="seg-item" data-status="LATE">تأخیر</button>
+              <button type="button" class="seg-item is-absent" data-status="ABSENT">غایب</button>
+              <button type="button" class="seg-item" data-status="EXCUSED">موجه</button>
+            </div>
+                      <div class="mt-2.5 flex items-center gap-2 border-t border-gray-50 pt-2.5">
+              <button type="button" class="note-open inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[10.5px] font-extrabold transition active:scale-95" style="background:var(--surface-3);color:var(--ink-4)" data-sheet="noteSheet" data-note="رضا قاسمی">
+                <i data-lucide="sticky-note" class="size-3.5"></i>توضیح
+              </button>
+              <span class="note-chip chip chip-blue min-w-0 flex-1 !justify-start" data-full="مسافرت خانوادگی · اطلاع قبلی داده بود"><i data-lucide="notebook-pen" class="size-3 shrink-0"></i><span class="note-text min-w-0 truncate">مسافرت خانوادگی · اطلاع قبلی داده بود</span></span>
+            </div>
+        </div>
+
+          <div class="card">
+            <div class="flex items-center gap-3">
+              <span class="avatar">پ</span>
+              <b class="min-w-0 flex-1 truncate text-[13px] text-gray-800">پارسا کاظمی</b>
+              <span class="dot-status text-emerald-600">حاضر</span>
+            </div>
+            <div class="seg-4 mt-3">
+              <button type="button" class="seg-item is-present" data-status="PRESENT">حاضر</button>
+              <button type="button" class="seg-item" data-status="LATE">تأخیر</button>
+              <button type="button" class="seg-item" data-status="ABSENT">غایب</button>
+              <button type="button" class="seg-item" data-status="EXCUSED">موجه</button>
+            </div>
+                      <div class="mt-2.5 flex items-center gap-2 border-t border-gray-50 pt-2.5">
+              <button type="button" class="note-open inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[10.5px] font-extrabold transition active:scale-95" style="background:var(--surface-3);color:var(--ink-4)" data-sheet="noteSheet" data-note="پارسا کاظمی">
+                <i data-lucide="sticky-note" class="size-3.5"></i>توضیح
+              </button>
+              <span class="note-chip chip chip-blue min-w-0 flex-1 !justify-start hidden" data-full=""><i data-lucide="notebook-pen" class="size-3 shrink-0"></i><span class="note-text min-w-0 truncate">—</span></span>
+            </div>
+        </div>
+
+          <div class="card">
+            <div class="flex items-center gap-3">
+              <span class="avatar">س</span>
+              <b class="min-w-0 flex-1 truncate text-[13px] text-gray-800">سینا مرادی</b>
+              <span class="dot-status text-sky-500">موجه</span>
+            </div>
+            <div class="seg-4 mt-3">
+              <button type="button" class="seg-item" data-status="PRESENT">حاضر</button>
+              <button type="button" class="seg-item" data-status="LATE">تأخیر</button>
+              <button type="button" class="seg-item" data-status="ABSENT">غایب</button>
+              <button type="button" class="seg-item is-excused" data-status="EXCUSED">موجه</button>
+            </div>
+                      <div class="mt-2.5 flex items-center gap-2 border-t border-gray-50 pt-2.5">
+              <button type="button" class="note-open inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[10.5px] font-extrabold transition active:scale-95" style="background:var(--surface-3);color:var(--ink-4)" data-sheet="noteSheet" data-note="سینا مرادی">
+                <i data-lucide="sticky-note" class="size-3.5"></i>توضیح
+              </button>
+              <span class="note-chip chip chip-blue min-w-0 flex-1 !justify-start hidden" data-full=""><i data-lucide="notebook-pen" class="size-3 shrink-0"></i><span class="note-text min-w-0 truncate">—</span></span>
+            </div>
+        </div>
+
+          <div class="card">
+            <div class="flex items-center gap-3">
+              <span class="avatar">ا</span>
+              <b class="min-w-0 flex-1 truncate text-[13px] text-gray-800">امیرحسین رستمی</b>
+              <span class="dot-status text-emerald-600">حاضر</span>
+            </div>
+            <div class="seg-4 mt-3">
+              <button type="button" class="seg-item is-present" data-status="PRESENT">حاضر</button>
+              <button type="button" class="seg-item" data-status="LATE">تأخیر</button>
+              <button type="button" class="seg-item" data-status="ABSENT">غایب</button>
+              <button type="button" class="seg-item" data-status="EXCUSED">موجه</button>
+            </div>
+                      <div class="mt-2.5 flex items-center gap-2 border-t border-gray-50 pt-2.5">
+              <button type="button" class="note-open inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[10.5px] font-extrabold transition active:scale-95" style="background:var(--surface-3);color:var(--ink-4)" data-sheet="noteSheet" data-note="امیرحسین رستمی">
+                <i data-lucide="sticky-note" class="size-3.5"></i>توضیح
+              </button>
+              <span class="note-chip chip chip-blue min-w-0 flex-1 !justify-start hidden" data-full=""><i data-lucide="notebook-pen" class="size-3 shrink-0"></i><span class="note-text min-w-0 truncate">—</span></span>
+            </div>
+        </div>
+
+        </div>
+      </div>
+
+      <!-- sticky save bar -->
+      <div class="save-bar flex items-center gap-3">
+        <button type="button" class="btn btn-primary w-full !py-3.5" data-demo="حضور و غیاب نمونه ثبت شد">
+          <span>ذخیره حضور و غیاب (۸)</span>
+        </button>
+      </div>
+    </main>
+
+
+      <!-- shared note (توضیح) sheet -->
+      <div id="noteSheet" class="overlay hidden">
+        <div class="sheet">
+          <div class="sheet-head">
+            <span class="sheet-grab"></span>
+            <span class="grid size-10 shrink-0 place-items-center rounded-xl" style="background:var(--ak-soft);color:var(--ak-ink)"><i data-lucide="sticky-note" class="size-[18px]"></i></span>
+            <div class="min-w-0 flex-1">
+              <b class="block text-[14px] font-extrabold text-gray-900">توضیح حضور و غیاب</b>
+              <p class="mt-0.5 truncate text-[10.5px] font-semibold text-gray-400">هنرجو: <span id="noteStudent">—</span></p>
+            </div>
+            <button type="button" class="icon-btn !size-9" data-close aria-label="بستن"><i data-lucide="x" class="size-4"></i></button>
+          </div>
+          <div class="sheet-body space-y-4">
+            <div>
+              <span class="form-label">دلیل پیشنهادی</span>
+              <div id="noteReasons" class="flex flex-wrap gap-1.5" data-chips>
+                <button type="button" class="filter-chip !py-1.5 !text-[11px]">دیر در رسیدن</button>
+                <button type="button" class="filter-chip !py-1.5 !text-[11px]">بیماری</button>
+                <button type="button" class="filter-chip !py-1.5 !text-[11px]">مسافرت خانوادگی</button>
+                <button type="button" class="filter-chip !py-1.5 !text-[11px]">مصدومیت</button>
+                <button type="button" class="filter-chip !py-1.5 !text-[11px]">امتحان مدرسه</button>
+                <button type="button" class="filter-chip !py-1.5 !text-[11px]">اطلاع قبلی مربی</button>
+              </div>
+            </div>
+            <div>
+              <label class="form-label" for="noteText">توضیح تکمیلی</label>
+              <textarea id="noteText" rows="3" class="input-field resize-none" placeholder="مثلاً: ۱۵ دقیقه دیر رسید و بخش گرم‌کردن را از دست داد"></textarea>
+            </div>
+            <div class="flex items-center gap-2 pt-1">
+              <button type="button" id="noteSave" class="btn btn-primary flex-1 !py-3" data-close>ثبت توضیح</button>
+              <button type="button" id="noteClear" class="btn btn-outline !px-4" data-close>حذف</button>
+            </div>
+            <p class="text-[10px] leading-5 text-gray-400">نمونه رابط کاربری — توضیح‌ها فقط در همین صفحه نمایش داده می‌شوند.</p>
+          </div>
+        </div>
+      </div>
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+    <script>
+      /* demo wiring: 4-up status segments + live summary + note (توضیح) sheet */
+      (function () {
+        var CLS = { PRESENT: "is-present", LATE: "is-late", ABSENT: "is-absent", EXCUSED: "is-excused" };
+        var DOT = {
+          PRESENT: ["حاضر", "text-emerald-600"], LATE: ["تأخیر", "text-amber-500"],
+          ABSENT: ["غایب", "text-red-500"], EXCUSED: ["موجه", "text-sky-500"]
+        };
+        function fa(n) { return String(n).replace(/\d/g, function (d) { return "۰۱۲۳۴۵۶۷۸۹"[d]; }); }
+        function setStatus(seg, key) {
+          seg.querySelectorAll(".seg-item").forEach(function (i) { i.className = "seg-item"; });
+          var item = seg.querySelector('[data-status="' + key + '"]');
+          if (item) item.classList.add(CLS[key]);
+          var dot = seg.parentElement.querySelector(".dot-status");
+          if (dot) { var m = DOT[key] || DOT.PRESENT; dot.className = "dot-status " + m[1]; dot.textContent = m[0]; }
+        }
+        function recount() {
+          var c = { PRESENT: 0, LATE: 0, ABSENT: 0, EXCUSED: 0 };
+          document.querySelectorAll("#roster .seg-4").forEach(function (seg) {
+            var a = seg.querySelector(".seg-item.is-present, .seg-item.is-late, .seg-item.is-absent, .seg-item.is-excused");
+            if (a) c[a.getAttribute("data-status")]++;
+          });
+          document.querySelectorAll("#statusSummary [data-sum]").forEach(function (ch) {
+            var b = ch.querySelector("b");
+            if (b) b.textContent = fa(c[ch.getAttribute("data-sum")] || 0);
+          });
+        }
+        document.querySelectorAll(".seg-4").forEach(function (seg) {
+          seg.addEventListener("click", function (e) {
+            var item = e.target.closest(".seg-item");
+            if (!item) return;
+            setStatus(seg, item.getAttribute("data-status"));
+            recount();
+          });
+        });
+        document.getElementById("all-present").addEventListener("click", function () {
+          document.querySelectorAll("#roster .seg-4").forEach(function (seg) { setStatus(seg, "PRESENT"); });
+          recount();
+        });
+
+        /* ----- توضیح sheet: prefill -> save/clear writes chip on the student card ----- */
+        var target = null;
+        var reasons = document.getElementById("noteReasons");
+        var noteText = document.getElementById("noteText");
+        document.querySelectorAll(".note-open").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            target = btn.closest(".card");
+            document.getElementById("noteStudent").textContent = btn.getAttribute("data-note") || "—";
+            var chip = target ? target.querySelector(".note-chip") : null;
+            noteText.value = chip && !chip.classList.contains("hidden") ? (chip.getAttribute("data-full") || "") : "";
+            reasons.querySelectorAll(".filter-chip").forEach(function (c) { c.classList.remove("is-active"); });
+          });
+        });
+        document.getElementById("noteSave").addEventListener("click", function () {
+          if (!target) return;
+          var parts = [];
+          reasons.querySelectorAll(".filter-chip.is-active").forEach(function (c) { parts.push(c.textContent.trim()); });
+          var extra = noteText.value.trim();
+          if (extra) parts.push(extra);
+          var chip = target.querySelector(".note-chip");
+          var full = parts.join(" · ");
+          if (full) {
+            chip.setAttribute("data-full", full);
+            chip.querySelector(".note-text").textContent = full;
+            chip.classList.remove("hidden");
+            if (window.tkToast) tkToast("توضیح ثبت شد", "info");
+          } else {
+            chip.setAttribute("data-full", "");
+            chip.classList.add("hidden");
+            if (window.tkToast) tkToast("توضیح حذف شد", "info");
+          }
+          target = null;
+        });
+        document.getElementById("noteClear").addEventListener("click", function () {
+          if (!target) return;
+          var chip = target.querySelector(".note-chip");
+          chip.setAttribute("data-full", "");
+          chip.classList.add("hidden");
+          noteText.value = "";
+          target = null;
+        });
+        recount();
+      })();
+    </script>
+</body>
+</html>

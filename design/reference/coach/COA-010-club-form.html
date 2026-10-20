@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — باشگاه جدید</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap content-form">
+        <header class="masthead app-bar">
+          <button type="button" class="icon-btn" data-back data-back-href="COA-009-clubs-list.html" aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">ثبت باشگاه جدید</h1>
+          </div>
+        </header>
+
+        <form class="mt-5 space-y-4 pb-28" novalidate>
+          <!-- تصویر کاور -->
+          <section class="card">
+            <h2 class="section-title mb-4 flex items-center gap-2"><span class="grid size-7 place-items-center rounded-lg bg-sky-50 text-sky-600"><i data-lucide="camera" class="size-4"></i></span>تصویر کاور</h2>
+            <div class="add-dashed !cursor-default">
+              <i data-lucide="camera" class="size-4"></i>تصویر کاور باشگاه
+            </div>
+            <p class="field-hint">در نسخهٔ نمایشی، تصویر کاور نمایشی است و آپلود نمی‌شود.</p>
+          </section>
+
+          <!-- اطلاعات باشگاه -->
+          <section class="card">
+            <h2 class="section-title mb-4 flex items-center gap-2"><span class="grid size-7 place-items-center rounded-lg bg-brand-50 text-brand-600"><i data-lucide="landmark" class="size-4"></i></span>اطلاعات باشگاه</h2>
+            <div class="space-y-4">
+              <div>
+                <label class="form-label" for="name">نام باشگاه <b class="text-brand-600">*</b></label>
+                <input id="name" class="input-field" placeholder="مثلاً باشگاه تکواندو پارس" />
+              </div>
+              <div>
+                <label class="form-label" for="phone">تلفن باشگاه</label>
+                <input id="phone" type="tel" dir="ltr" inputmode="tel" class="input-field input-ltr text-center tracking-wider" placeholder="021-88452310" />
+                <p class="field-hint">شمارهٔ ثابت سالن برای هماهنگی هنرجویان.</p>
+              </div>
+              <div>
+                <label class="form-label" for="address">آدرس</label>
+                <textarea id="address" rows="3" class="input-field resize-none" placeholder="آدرس کامل سالن ورزشی…"></textarea>
+                <p class="mt-1 text-end text-[10px] font-semibold text-gray-300" dir="ltr"><span id="addr-count">۰</span> / ۲۰۰</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- پذیرش و رشته‌ها -->
+          <section class="card">
+            <h2 class="section-title mb-4 flex items-center gap-2"><span class="grid size-7 place-items-center rounded-lg bg-emerald-50 text-emerald-600"><i data-lucide="user-check" class="size-4"></i></span>پذیرش و رشته‌ها</h2>
+            <div class="space-y-4">
+              <div>
+                <label class="form-label">جنسیت پذیرش</label>
+                <div class="seg" data-seg>
+                  <button type="button" class="seg-item is-active" data-value="male">آقایان</button>
+                  <button type="button" class="seg-item" data-value="female">بانوان</button>
+                  <button type="button" class="seg-item" data-value="mixed">مختلط</button>
+                </div>
+                <p class="field-hint">فقط هنرجویان با همین جنسیت به باشگاه دعوت می‌شوند.</p>
+              </div>
+              <div>
+                <label class="form-label">رشته‌های فعال</label>
+                <div class="flex flex-wrap gap-2" data-chips>
+                  <button type="button" class="filter-chip is-active">کیوروگی</button>
+                  <button type="button" class="filter-chip is-active">پومسه</button>
+                  <button type="button" class="filter-chip">شکستن</button>
+                  <button type="button" class="filter-chip">دفاع شخصی</button>
+                  <button type="button" class="filter-chip">دموهای نمایشی</button>
+                </div>
+                <p class="field-hint">رشته‌های انتخابی در پروفایل باشگاه نمایش داده می‌شوند.</p>
+              </div>
+            </div>
+          </section>
+        </form>
+      </div>
+
+      <!-- sticky footer -->
+      <div class="save-bar flex items-center gap-3">
+        <button type="button" class="btn btn-outline flex-1 !py-3" data-back data-back-href="COA-009-clubs-list.html">انصراف</button>
+        <button type="button" class="btn btn-primary flex-[2] !py-3" data-demo="باشگاه نمونه ذخیره شد">
+          <span>ایجاد باشگاه</span>
+        </button>
+      </div>
+    </main>
+
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

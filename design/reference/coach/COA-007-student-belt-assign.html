@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — تخصیص کمربند</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap content-form">
+        <header class="masthead app-bar">
+          <button type="button" class="icon-btn" data-back data-back-href="COA-005-student-detail.html" aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">تخصیص کمربند</h1>
+          </div>
+        </header>
+
+        <div id="page">
+          <!-- student context strip -->
+          <div class="card flex items-center gap-3">
+            <span class="avatar !size-12 !text-base">س</span>
+            <div class="min-w-0 flex-1">
+              <b class="block truncate text-[14px] text-gray-900">سارا محمدی</b>
+              <span class="mt-0.5 flex items-center gap-2 text-[11px] text-gray-400">
+                <span>کد ملی <span class="inline-block">۰۰۶۴۵۲۳۱۸۷</span></span>
+                <span class="text-gray-200">•</span>
+                <span class="inline-flex items-center gap-1.5"><span class="belt-dot belt-green"></span>کمربند فعلی: سبز</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- belt selection -->
+          <form id="form" class="mt-4 space-y-4 pb-28" novalidate>
+            <section class="card">
+              <h2 class="section-title mb-1 flex items-center gap-2"><span class="grid size-7 place-items-center rounded-lg bg-amber-50 text-amber-600"><i data-lucide="medal" class="size-4"></i></span>انتخاب کمربند</h2>
+              <p class="mb-4 text-[11px] text-gray-400">کمربند بعدی هنرجو را از میان کمربندهای رنگی انتخاب کنید.</p>
+              <div class="space-y-2">
+                <label class="opt-card bg-white">
+                  <input type="radio" name="assign-belt" value="WHITE" class="opt-input" />
+                  <span class="belt-dot belt-white"></span>
+                  <span class="min-w-0 flex-1"><b class="block text-[13px] font-bold text-gray-800">کمربند سفید</b><span class="text-[11px] text-gray-400">آغاز مسیر — ثبت عضویت</span></span>
+                  <span class="opt-dot"><i data-lucide="check" class="size-3.5"></i></span>
+                </label>
+                <label class="opt-card bg-white">
+                  <input type="radio" name="assign-belt" value="YELLOW" class="opt-input" />
+                  <span class="belt-dot belt-yellow"></span>
+                  <span class="min-w-0 flex-1"><b class="block text-[13px] font-bold text-gray-800">کمربند زرد</b><span class="text-[11px] text-gray-400">حداقل ۳ ماه تمرین پس از کمربند قبلی</span></span>
+                  <span class="opt-dot"><i data-lucide="check" class="size-3.5"></i></span>
+                </label>
+                <label class="opt-card">
+                  <input type="radio" name="assign-belt" value="GREEN" class="opt-input" checked />
+                  <span class="belt-dot belt-green"></span>
+                  <span class="min-w-0 flex-1"><b class="block text-[13px] font-bold text-gray-800">کمربند سبز</b><span class="text-[11px] text-gray-400">حداقل ۳ ماه تمرین — آزمون فنی دوره ۲۹۱</span></span>
+                  <span class="opt-dot"><i data-lucide="check" class="size-3.5"></i></span>
+                </label>
+                <label class="opt-card bg-white">
+                  <input type="radio" name="assign-belt" value="BLUE" class="opt-input" />
+                  <span class="belt-dot belt-blue"></span>
+                  <span class="min-w-0 flex-1"><b class="block text-[13px] font-bold text-gray-800">کمربند آبی</b><span class="text-[11px] text-gray-400">حداقل ۶ ماه تمرین پس از کمربند قبلی</span></span>
+                  <span class="opt-dot"><i data-lucide="check" class="size-3.5"></i></span>
+                </label>
+                <label class="opt-card bg-white">
+                  <input type="radio" name="assign-belt" value="RED" class="opt-input" />
+                  <span class="belt-dot belt-red"></span>
+                  <span class="min-w-0 flex-1"><b class="block text-[13px] font-bold text-gray-800">کمربند قرمز</b><span class="text-[11px] text-gray-400">حداقل ۶ ماه تمرین — پیش‌نیاز آزمون پوم</span></span>
+                  <span class="opt-dot"><i data-lucide="check" class="size-3.5"></i></span>
+                </label>
+              </div>
+            </section>
+
+            <section class="card">
+              <label class="form-label" for="beltDate">تاریخ دریافت کمربند <b class="text-brand-600">*</b></label>
+              <input id="beltDate" class="input-field text-center tracking-wider" value="۱۴۰۴/۰۸/۲۵" inputmode="numeric" />
+              <p class="field-hint">تاریخ را مطابق آزمون فنی ثبت کنید؛ قالب نمونه: ۱۴۰۴/۰۸/۲۵.</p>
+
+              <div class="mt-4">
+                <label class="form-label" for="beltNote">یادداشت مربی</label>
+                <textarea id="beltNote" rows="3" class="input-field !leading-6" placeholder="مثلاً: قبولی در آزمون فنی با میانگین نمره ۱۸">قبولی در آزمون فنی دوره ۲۹۱ — اجرای کامل پومسه‌های تائگوک ۱ و ۲ با میانگین نمره ۱۸.</textarea>
+              </div>
+
+              <div class="card-tint mt-4 space-y-2 !p-3.5 text-[11px] leading-5 text-gray-600">
+                <p class="flex items-start gap-1.5"><span class="mt-0.5 shrink-0 text-brand-600"><i data-lucide="info" class="size-3.5"></i></span><span>تاریخ آزمون کمربند بعدی (آبی) به‌صورت خودکار بر اساس مدت‌زمان کمربند سبز — ۳ ماه — محاسبه و ثبت می‌شود؛ یادآوری ارتقاء ۱۰ روز قبل ارسال خواهد شد.</span></p>
+                <p class="flex items-start gap-1.5"><span class="mt-0.5 shrink-0 text-brand-600"><i data-lucide="info" class="size-3.5"></i></span><span>با ثبت، این کمربند به‌عنوان کمربند فعلی هنرجو ثبت و در سابقه کمربند او درج می‌شود.</span></p>
+              </div>
+            </section>
+          </form>
+        </div>
+      </div>
+
+      <!-- sticky footer -->
+      <div class="save-bar flex items-center gap-3">
+        <a href="COA-005-student-detail.html" class="btn btn-outline flex-1 !py-3" data-back data-back-href="COA-005-student-detail.html">انصراف</a>
+        <button type="button" class="btn btn-primary flex-[2] !py-3" data-demo="ثبت کمربند در نسخه نمایشی شبیه‌سازی می‌شود">ثبت کمربند</button>
+      </div>
+    </main>
+
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

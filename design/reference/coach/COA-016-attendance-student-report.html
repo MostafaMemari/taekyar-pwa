@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — گزارش حضور و غیاب سارا محمدی</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <!-- identity band: the student this report is about -->
+      <header class="band-lite">
+        <span class="hero-wm" aria-hidden="true">گزارش</span>
+        <div class="mx-auto w-full max-w-[430px]">
+          <div class="flex items-center justify-between gap-3">
+            <button type="button" class="icon-btn-solid" data-back data-back-href="COA-005-student-detail.html" aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+            <span class="hero-chip">گزارش حضور و غیاب</span>
+          </div>
+          <div class="mt-3 flex items-center gap-4">
+            <span class="identity-avatar">س</span>
+            <div class="min-w-0 flex-1">
+              <h1 class="identity-name">سارا محمدی</h1>
+              <div class="identity-meta">
+                <span class="meta-glass"><span class="belt-dot belt-green"></span>کمربند سبز</span>
+                <span class="meta-glass">باشگاه شهدای گمنام</span>
+                <span class="meta-glass">کد ملی <span dir="ltr">۰۰۶۴۵۲۳۱۸۷</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="sheet-overlap">
+        <div class="mx-auto w-full max-w-[430px]">
+          <!-- summary -->
+          <div class="card !p-4">
+            <div class="flex items-center gap-5">
+              <div class="ring-stat is-light !size-[64px]">
+                <svg viewBox="0 0 64 64" fill="none">
+                  <circle cx="32" cy="32" r="26" style="stroke:var(--surface-3)" stroke-width="7" />
+                  <circle cx="32" cy="32" r="26" style="stroke:var(--ak-600)" stroke-width="7" stroke-linecap="round" stroke-dasharray="138.9 163.4" />
+                </svg>
+                <span class="ring-val"><b class="!text-[15px]">۸۵٪</b><span class="!text-[8px]">حضور</span></span>
+              </div>
+              <div class="min-w-0 flex-1 space-y-2">
+                <div class="bar-row">
+                  <span class="bar-label">حاضر</span>
+                  <span class="bar-track"><span class="bar-fill" style="width:85%;background:#10b981"></span></span>
+                  <span class="bar-val">۲۹</span>
+                </div>
+                <div class="bar-row">
+                  <span class="bar-label">تأخیر</span>
+                  <span class="bar-track"><span class="bar-fill" style="width:9%;background:#f59e0b"></span></span>
+                  <span class="bar-val">۳</span>
+                </div>
+                <div class="bar-row">
+                  <span class="bar-label">غیبت</span>
+                  <span class="bar-track"><span class="bar-fill" style="width:3%;background:#ef4444"></span></span>
+                  <span class="bar-val">۱</span>
+                </div>
+                <div class="bar-row">
+                  <span class="bar-label">غیبت موجه</span>
+                  <span class="bar-track"><span class="bar-fill" style="width:3%;background:#0ea5e9"></span></span>
+                  <span class="bar-val">۱</span>
+                </div>
+              </div>
+            </div>
+            <p class="mt-3 border-t border-gray-50 pt-2.5 text-center text-[10.5px] font-semibold text-gray-400">مجموع: ۳۴ جلسه — از ابتدای عضویت تا شنبه ۲۴ آبان</p>
+          </div>
+
+          <!-- status filter chips -->
+          <div class="toolbar">
+            <div class="flex flex-wrap gap-2" data-chips-single id="status-chips">
+              <button type="button" class="filter-chip is-active" data-v="">همه</button>
+              <button type="button" class="filter-chip" data-v="PRESENT">حاضر</button>
+              <button type="button" class="filter-chip" data-v="LATE">تأخیر</button>
+              <button type="button" class="filter-chip" data-v="ABSENT">غایب</button>
+              <button type="button" class="filter-chip" data-v="EXCUSED">موجه</button>
+            </div>
+          </div>
+
+          <!-- monthly history -->
+          <div id="list" class="mt-1">
+            <h3 class="list-group-title" style="position:static">آبان ۱۴۰۴</h3>
+            <div class="card-flat mb-2.5 flex items-center gap-3 !py-3.5" data-att data-status="PRESENT">
+              <span class="lead-ico"><i data-lucide="calendar-days" class="size-[18px]"></i></span>
+              <div class="min-w-0 flex-1">
+                <p class="truncate text-[13px] font-bold text-gray-800">کلاس سبک کیوروگی</p>
+                <p class="mt-0.5 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام · شنبه ۲۴ آبان</p>
+              </div>
+              <span class="dot-status text-emerald-600">حاضر</span>
+            </div>
+            <div class="card-flat mb-2.5 flex items-center gap-3 !py-3.5" data-att data-status="PRESENT">
+              <span class="lead-ico"><i data-lucide="calendar-days" class="size-[18px]"></i></span>
+              <div class="min-w-0 flex-1">
+                <p class="truncate text-[13px] font-bold text-gray-800">کلاس سبک کیوروگی</p>
+                <p class="mt-0.5 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام · دوشنبه ۱۹ آبان</p>
+              </div>
+              <span class="dot-status text-emerald-600">حاضر</span>
+            </div>
+            <div class="card-flat mb-2.5 flex items-center gap-3 !py-3.5" data-att data-status="LATE">
+              <span class="lead-ico"><i data-lucide="calendar-days" class="size-[18px]"></i></span>
+              <div class="min-w-0 flex-1">
+                <p class="truncate text-[13px] font-bold text-gray-800">کلاس سبک کیوروگی</p>
+                <p class="mt-0.5 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام · شنبه ۱۷ آبان</p>
+                <p class="mt-1 truncate text-[11px] text-gray-400"><span class="font-bold">یادداشت:</span> ترافیک</p>
+              </div>
+              <span class="dot-status text-amber-500">تأخیر</span>
+            </div>
+            <div class="card-flat mb-2.5 flex items-center gap-3 !py-3.5" data-att data-status="PRESENT">
+              <span class="lead-ico"><i data-lucide="calendar-days" class="size-[18px]"></i></span>
+              <div class="min-w-0 flex-1">
+                <p class="truncate text-[13px] font-bold text-gray-800">کلاس سبک کیوروگی</p>
+                <p class="mt-0.5 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام · دوشنبه ۱۲ آبان</p>
+              </div>
+              <span class="dot-status text-emerald-600">حاضر</span>
+            </div>
+
+            <h3 class="list-group-title" style="position:static">مهر ۱۴۰۴</h3>
+            <div class="card-flat mb-2.5 flex items-center gap-3 !py-3.5" data-att data-status="PRESENT">
+              <span class="lead-ico"><i data-lucide="calendar-days" class="size-[18px]"></i></span>
+              <div class="min-w-0 flex-1">
+                <p class="truncate text-[13px] font-bold text-gray-800">کلاس سبک کیوروگی</p>
+                <p class="mt-0.5 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام · یکشنبه ۲۷ مهر</p>
+              </div>
+              <span class="dot-status text-emerald-600">حاضر</span>
+            </div>
+            <div class="card-flat mb-2.5 flex items-center gap-3 !py-3.5" data-att data-status="EXCUSED">
+              <span class="lead-ico"><i data-lucide="calendar-days" class="size-[18px]"></i></span>
+              <div class="min-w-0 flex-1">
+                <p class="truncate text-[13px] font-bold text-gray-800">کلاس سبک کیوروگی</p>
+                <p class="mt-0.5 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام · سه‌شنبه ۲۲ مهر</p>
+                <p class="mt-1 truncate text-[11px] text-gray-400"><span class="font-bold">یادداشت:</span> مریضی — با اطلاع مربی</p>
+              </div>
+              <span class="dot-status text-sky-500">غیبت موجه</span>
+            </div>
+            <div class="card-flat mb-2.5 flex items-center gap-3 !py-3.5" data-att data-status="PRESENT">
+              <span class="lead-ico"><i data-lucide="calendar-days" class="size-[18px]"></i></span>
+              <div class="min-w-0 flex-1">
+                <p class="truncate text-[13px] font-bold text-gray-800">کلاس سبک کیوروگی</p>
+                <p class="mt-0.5 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام · یکشنبه ۲۰ مهر</p>
+              </div>
+              <span class="dot-status text-emerald-600">حاضر</span>
+            </div>
+            <div class="card-flat mb-2.5 flex items-center gap-3 !py-3.5" data-att data-status="LATE">
+              <span class="lead-ico"><i data-lucide="calendar-days" class="size-[18px]"></i></span>
+              <div class="min-w-0 flex-1">
+                <p class="truncate text-[13px] font-bold text-gray-800">کلاس سبک کیوروگی</p>
+                <p class="mt-0.5 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام · سه‌شنبه ۱۵ مهر</p>
+              </div>
+              <span class="dot-status text-amber-500">تأخیر</span>
+            </div>
+            <div class="card-flat mb-2.5 flex items-center gap-3 !py-3.5" data-att data-status="PRESENT">
+              <span class="lead-ico"><i data-lucide="calendar-days" class="size-[18px]"></i></span>
+              <div class="min-w-0 flex-1">
+                <p class="truncate text-[13px] font-bold text-gray-800">کلاس سبک کیوروگی</p>
+                <p class="mt-0.5 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام · یکشنبه ۱۳ مهر</p>
+              </div>
+              <span class="dot-status text-emerald-600">حاضر</span>
+            </div>
+            <div class="card-flat mb-2.5 flex items-center gap-3 !py-3.5" data-att data-status="PRESENT">
+              <span class="lead-ico"><i data-lucide="calendar-days" class="size-[18px]"></i></span>
+              <div class="min-w-0 flex-1">
+                <p class="truncate text-[13px] font-bold text-gray-800">کلاس سبک کیوروگی</p>
+                <p class="mt-0.5 truncate text-[11px] text-gray-400">باشگاه شهدای گمنام · سه‌شنبه ۸ مهر</p>
+              </div>
+              <span class="dot-status text-emerald-600">حاضر</span>
+            </div>
+
+            <!-- empty state -->
+            <div class="empty-state mt-4 hidden" data-empty>
+              <span class="empty-icon"><i data-lucide="calendar-check" class="size-5"></i></span>
+              <p class="empty-title">رکوردی با این وضعیت یافت نشد</p>
+              <p class="empty-hint">وضعیت دیگری را انتخاب کنید.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+    <script>
+      /* demo filter: status chips over history rows (groups hide when empty) */
+      (function () {
+        var rows = Array.prototype.slice.call(document.querySelectorAll("#list [data-att]"));
+        var empty = document.querySelector("#list [data-empty]");
+        var titles = Array.prototype.slice.call(document.querySelectorAll("#list .list-group-title"));
+        function apply() {
+          var v = (document.querySelector("#status-chips .filter-chip.is-active") || {}).getAttribute;
+          var st = v ? (document.querySelector("#status-chips .filter-chip.is-active").getAttribute("data-v") || "") : "";
+          var shown = 0;
+          rows.forEach(function (r) {
+            var ok = !st || r.getAttribute("data-status") === st;
+            r.classList.toggle("hidden", !ok);
+            if (ok) shown++;
+          });
+          titles.forEach(function (t) {
+            var visible = false, n = t.nextElementSibling;
+            while (n && !n.classList.contains("list-group-title")) {
+              if (n.hasAttribute("data-att") && !n.classList.contains("hidden")) visible = true;
+              n = n.nextElementSibling;
+            }
+            t.classList.toggle("hidden", !visible);
+          });
+          empty.classList.toggle("hidden", shown > 0);
+        }
+        document.getElementById("status-chips").addEventListener("chips:change", apply);
+      })();
+    </script>
+    <nav class="bottom-nav" aria-label="ناوبری اصلی"><a href="COA-001-dashboard.html" class="nav-item"  aria-label="داشبورد"><span class="nav-ico relative"><i data-lucide="layout-dashboard" class="size-[18px]"></i></span><span>داشبورد</span></a><a href="COA-003-students-list.html" class="nav-item is-active"  aria-label="هنرجویان"><span class="nav-ico relative"><i data-lucide="users" class="size-[18px]"></i></span><span>هنرجویان</span></a><a href="COA-009-clubs-list.html" class="nav-item"  aria-label="باشگاه‌ها"><span class="nav-ico relative"><i data-lucide="landmark" class="size-[18px]"></i></span><span>باشگاه‌ها</span></a><a href="COA-012-class-sessions-list.html" class="nav-item"  aria-label="کلاس‌ها"><span class="nav-ico relative"><i data-lucide="calendar-days" class="size-[18px]"></i></span><span>کلاس‌ها</span></a><a href="COA-002-my-profile.html" class="nav-item"  aria-label="پروفایل"><span class="nav-ico relative"><i data-lucide="user" class="size-[18px]"></i></span><span>پروفایل</span></a></nav>
+</body>
+</html>
