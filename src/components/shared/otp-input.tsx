@@ -17,6 +17,7 @@ export function OtpInput({ length = 5, value, onChange }: OtpInputProps) {
       onChange={(next) => onChange(toPersianDigits(digitsOnly(next, length)))}
       inputMode="numeric"
       autoComplete="one-time-code"
+      autoFocus
       textAlign="center"
       aria-label="کد تایید"
       containerClassName="justify-center"

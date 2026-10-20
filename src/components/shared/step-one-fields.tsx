@@ -41,6 +41,7 @@ export function StepOneFields({ form, onChange, withBirthDate, birthDateHint, ge
           id="fullName"
           name="fullName"
           autoComplete="name"
+          autoFocus
           icon={UserRound}
           placeholder={`مثلاً ${sampleName}`}
           value={form.fullName}

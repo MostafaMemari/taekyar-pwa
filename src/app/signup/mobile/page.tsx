@@ -49,6 +49,7 @@ function SignupMobileForm() {
             type="tel"
             inputMode="tel"
             autoComplete="tel"
+            autoFocus
             maxLength={11}
             dir="ltr"
             icon={Smartphone}
