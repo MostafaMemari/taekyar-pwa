@@ -1,14 +1,15 @@
 "use client";
 
 import { CalendarDays, Check, ChevronLeft, Minus, Plus, Search, Users } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
-import { type ClassSession, type PeriodFilter, SESSIONS } from "@/components/coach/coach-data";
 import { GymContext, SessionTime, StatusBadge } from "@/components/coach/coach-ui";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { ACTIVE_CLUB, type ClassSession, type PeriodFilter, SESSIONS } from "@/lib/coach/coach-data";
 import { toLatinDigits, toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
@@ -22,55 +23,57 @@ const PERIODS: { value: Period; label: string }[] = [
 
 function SessionCard({ session }: { session: ClassSession }) {
   return (
-    <Card className="gap-0 p-4">
-      <div className="flex items-start gap-3">
-        <span
-          className={cn(
-            "grid size-10 shrink-0 place-items-center rounded-xl",
-            session.active ? "bg-brand-50 text-accent-ink" : "bg-muted text-ink-subtle",
-          )}
-        >
-          <session.icon className="size-5" aria-hidden="true" />
-        </span>
+    <Link href={`/coach/sessions/${session.id}`} className="block rounded-xl transition duration-150 active:scale-[0.995]">
+      <Card className="gap-0 p-4">
+        <div className="flex items-start gap-3">
+          <span
+            className={cn(
+              "grid size-10 shrink-0 place-items-center rounded-xl",
+              session.active ? "bg-brand-50 text-accent-ink" : "bg-muted text-ink-subtle",
+            )}
+          >
+            <session.icon className="size-5" aria-hidden="true" />
+          </span>
 
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
-            <b className="truncate text-[13px] font-extrabold text-ink">{session.name}</b>
-            <StatusBadge tone={session.active ? "success" : "neutral"} className="shrink-0">
-              {session.active ? <Check aria-hidden="true" /> : <Minus aria-hidden="true" />}
-              {session.active ? "فعال" : "غیرفعال"}
-            </StatusBadge>
-          </div>
-          <p className="mt-1 truncate text-[11px] text-ink-subtle">{session.club}</p>
-
-          <div className="mt-2 flex flex-wrap items-center gap-1.5">
-            {session.days.map((day) => (
-              <StatusBadge key={day} className="text-[10px]">
-                {day}
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <b className="truncate text-[13px] font-extrabold text-ink">{session.name}</b>
+              <StatusBadge tone={session.active ? "success" : "neutral"} className="shrink-0">
+                {session.active ? <Check aria-hidden="true" /> : <Minus aria-hidden="true" />}
+                {session.active ? "فعال" : "غیرفعال"}
               </StatusBadge>
-            ))}
-            <StatusBadge className="text-[10px]">
-              <SessionTime start={session.start} end={session.end} />
-            </StatusBadge>
-            <StatusBadge tone="brand" className="text-[10px]">
-              <Users aria-hidden="true" />
-              {session.attendance ? (
-                <>
-                  حضور{" "}
-                  <span dir="ltr">
-                    {toPersianDigits(String(session.attendance.present))}/{toPersianDigits(String(session.attendance.total))}
-                  </span>
-                </>
-              ) : (
-                `${toPersianDigits(String(session.members))} هنرجو`
-              )}
-            </StatusBadge>
-          </div>
-        </div>
+            </div>
+            <p className="mt-1 truncate text-[11px] text-ink-subtle">{session.club}</p>
 
-        <ChevronLeft className="mt-1 size-4 shrink-0 text-ink-faint" aria-hidden="true" />
-      </div>
-    </Card>
+            <div className="mt-2 flex flex-wrap items-center gap-1.5">
+              {session.days.map((day) => (
+                <StatusBadge key={day} className="text-[10px]">
+                  {day}
+                </StatusBadge>
+              ))}
+              <StatusBadge className="text-[10px]">
+                <SessionTime start={session.start} end={session.end} />
+              </StatusBadge>
+              <StatusBadge tone="brand" className="text-[10px]">
+                <Users aria-hidden="true" />
+                {session.attendance ? (
+                  <>
+                    حضور{" "}
+                    <span dir="ltr">
+                      {toPersianDigits(String(session.attendance.present))}/{toPersianDigits(String(session.attendance.total))}
+                    </span>
+                  </>
+                ) : (
+                  `${toPersianDigits(String(session.members))} هنرجو`
+                )}
+              </StatusBadge>
+            </div>
+          </div>
+
+          <ChevronLeft className="mt-1 size-4 shrink-0 text-ink-faint" aria-hidden="true" />
+        </div>
+      </Card>
+    </Link>
   );
 }
 
@@ -78,8 +81,9 @@ export function SessionsDirectory() {
   const [query, setQuery] = useState("");
   const [period, setPeriod] = useState<Period>("all");
 
+  const clubSessions = SESSIONS.filter((session) => session.clubId === ACTIVE_CLUB.id);
   const normalizedQuery = toLatinDigits(query).trim().toLowerCase();
-  const visible = SESSIONS.filter((session) => {
+  const visible = clubSessions.filter((session) => {
     const matchesPeriod = period === "all" || session.when.includes(period);
     if (!matchesPeriod) return false;
     if (!normalizedQuery) return true;
@@ -101,8 +105,8 @@ export function SessionsDirectory() {
       <header className="flex items-center gap-2">
         <h1 className="text-[22px] font-extrabold text-ink">کلاس ها</h1>
         <StatusBadge tone="neutral" className="mt-0.5">
-          {visible.length === SESSIONS.length
-            ? `${toPersianDigits(String(SESSIONS.length))} کلاس`
+          {visible.length === clubSessions.length
+            ? `${toPersianDigits(String(clubSessions.length))} کلاس`
             : `${toPersianDigits(String(visible.length))} کلاس یافت شد`}
         </StatusBadge>
       </header>
@@ -169,11 +173,12 @@ export function SessionsDirectory() {
 
       <div className="pointer-events-none fixed inset-x-0 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-40 mx-auto flex max-w-[var(--app-max-width)] justify-end px-5">
         <Button
-          type="button"
           variant="brand"
           size="icon"
           aria-label="کلاس جدید"
           className="pointer-events-auto size-14 rounded-2xl shadow-brand-xl"
+          render={<Link href="/coach/sessions/new" />}
+          nativeButton={false}
         >
           <Plus className="size-6" aria-hidden="true" />
         </Button>

@@ -1,13 +1,13 @@
 import { Award, Bell, ChevronLeft, History, LogOut, type LucideIcon, Palette, Pencil, Settings, ShieldCheck } from "lucide-react";
 import { Fragment } from "react";
 import { CoachBand, CoachSheet } from "@/components/coach/coach-band";
-import { COACH } from "@/components/coach/coach-data";
 import { CoachBell, SectionHeading, StatusBadge } from "@/components/coach/coach-ui";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { COACH } from "@/lib/coach/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 
 export const metadata = { title: "پروفایل مربی" };

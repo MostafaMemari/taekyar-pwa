@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { INVITATIONS } from "@/components/coach/coach-data";
 import { PersonAvatar, SectionHeading, StatusBadge } from "@/components/coach/coach-ui";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { INVITATIONS } from "@/lib/coach/coach-data";
 import { cn } from "@/lib/utils";
 
 export function DashboardInvitations() {

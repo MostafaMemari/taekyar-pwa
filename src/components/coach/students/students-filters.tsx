@@ -1,10 +1,10 @@
 import { ListFilter, SlidersHorizontal, X } from "lucide-react";
-import { type AgeGroup, BELT_META, type BeltKey } from "@/components/coach/coach-data";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { type AgeGroup, BELT_META, type BeltKey } from "@/lib/coach/coach-data";
+import { AGE_OPTIONS, BELT_ORDER, normalizeMulti } from "@/lib/coach/students-options";
 import { toPersianDigits } from "@/lib/digits";
-import { AGE_OPTIONS, BELT_ORDER, normalizeMulti } from "./students-options";
 
 export function StudentsFilters({
   belts,

@@ -4,7 +4,6 @@ import { CircleAlert, ClipboardList, Phone, Plus, Send, UserPlus, X } from "luci
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
-import { INVITATION_STATUS_META, INVITATIONS } from "@/components/coach/coach-data";
 import { ActionDock, FormSection } from "@/components/coach/coach-form";
 import { SheetFrame } from "@/components/coach/coach-sheet-frame";
 import { PersonAvatar, SectionHeading, StatusBadge } from "@/components/coach/coach-ui";
@@ -12,6 +11,7 @@ import { AuthField } from "@/components/shared/auth-field";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { INVITATION_STATUS_META, INVITATIONS } from "@/lib/coach/coach-data";
 import { digitsOnly, toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 

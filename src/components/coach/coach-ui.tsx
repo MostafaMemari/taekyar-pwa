@@ -1,10 +1,10 @@
 import { Bell, Landmark } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ATTENDANCE_META, type AttendanceStatus } from "@/components/coach/coach-data";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ATTENDANCE_META, type AttendanceStatus } from "@/lib/coach/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
@@ -96,10 +96,12 @@ export function SessionTime({ start, end, className }: { start: string; end: str
 }
 
 export function GymContext({
+  name = "باشگاه شهدای گمنام",
   subtitle = "فضای کاری فعال شما — حضور و غیاب و کلاس بندی این باشگاه",
   actionLabel = "تغییر",
   className,
 }: {
+  name?: string;
   subtitle?: string;
   actionLabel?: string;
   className?: string;
@@ -116,7 +118,7 @@ export function GymContext({
         <Landmark className="size-[18px]" aria-hidden="true" />
       </span>
       <span className="min-w-0 flex-1">
-        <b className="block truncate text-[13px] font-extrabold text-ink">باشگاه شهدای گمنام</b>
+        <b className="block truncate text-[13px] font-extrabold text-ink">{name}</b>
         <span className="mt-0.5 block truncate text-[10.5px] font-medium text-ink-subtle">{subtitle}</span>
       </span>
       <span className="shrink-0 rounded-full bg-brand-50 px-2.5 py-1 text-[10px] font-extrabold text-accent-ink transition-colors group-hover:bg-brand-100">

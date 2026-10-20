@@ -1,13 +1,13 @@
 import { ChevronLeft, Users } from "lucide-react";
 import Link from "next/link";
-import { BELT_META, type CoachStudent, INSURANCE_META, studentBeltLabel } from "@/components/coach/coach-data";
 import { PersonAvatar, StatusBadge } from "@/components/coach/coach-ui";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { BELT_META, type CoachStudent, INSURANCE_META, studentBeltLabel } from "@/lib/coach/coach-data";
+import { INSURANCE_ICONS } from "@/lib/coach/students-options";
 import { toPersianDigits } from "@/lib/digits";
-import { INSURANCE_ICONS } from "./students-options";
 
 function InsuranceBadge({ student }: { student: CoachStudent }) {
   const meta = INSURANCE_META[student.insurance];

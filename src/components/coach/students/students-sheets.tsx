@@ -6,8 +6,8 @@ import { SheetFrame } from "@/components/coach/coach-sheet-frame";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { SORT_OPTIONS, type SortKey } from "@/lib/coach/students-options";
 import { cn } from "@/lib/utils";
-import { SORT_OPTIONS, type SortKey } from "./students-options";
 
 const ADD_OPTIONS = [
   {

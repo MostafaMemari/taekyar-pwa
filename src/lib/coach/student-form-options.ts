@@ -1,5 +1,5 @@
-import type { BeltKey } from "@/components/coach/coach-data";
 import type { BeltOption } from "@/components/shared/belt-picker";
+import type { BeltKey } from "@/lib/coach/coach-data";
 
 export const STUDENT_BELT_OPTIONS: BeltOption[] = [
   { value: "white", label: "سفید", color: "#F3F4F6", outline: "#D1D5DB", knotColor: "#E5E7EB" },

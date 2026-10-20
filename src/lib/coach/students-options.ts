@@ -1,5 +1,5 @@
 import { ListOrdered, type LucideIcon, Medal, ShieldAlert, ShieldCheck, ShieldX, Type } from "lucide-react";
-import { type AgeGroup, type BeltKey, INSURANCE_META, type InsuranceStatus, STUDENTS } from "@/components/coach/coach-data";
+import { type AgeGroup, type BeltKey, INSURANCE_META, type InsuranceStatus, STUDENTS } from "@/lib/coach/coach-data";
 
 export type SortKey = "default" | "name" | "belt" | "ins";
 

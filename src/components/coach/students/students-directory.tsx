@@ -2,12 +2,12 @@
 
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { type AgeGroup, BELT_META, type BeltKey, type InsuranceStatus, STUDENTS, studentBeltLabel } from "@/components/coach/coach-data";
 import { Button } from "@/components/ui/button";
+import { type AgeGroup, BELT_META, type BeltKey, type InsuranceStatus, STUDENTS, studentBeltLabel } from "@/lib/coach/coach-data";
+import type { SortKey } from "@/lib/coach/students-options";
 import { toLatinDigits } from "@/lib/digits";
 import { StudentsFilters } from "./students-filters";
 import { StudentsList } from "./students-list";
-import type { SortKey } from "./students-options";
 import { StudentsOverview } from "./students-overview";
 import { AddStudentSheet, SortStudentsSheet } from "./students-sheets";
 import { StudentsToolbar } from "./students-toolbar";

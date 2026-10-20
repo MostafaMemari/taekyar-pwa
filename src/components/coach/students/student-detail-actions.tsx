@@ -9,7 +9,7 @@ import { SectionHeading } from "@/components/coach/coach-ui";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import type { StudentProfile } from "./student-profile-data";
+import type { StudentProfile } from "@/lib/coach/student-profile-data";
 
 const ACTIONS = [
   { icon: Pencil, label: "ویرایش اطلاعات هنرجو", href: (id: string) => `/coach/students/${id}/edit` },

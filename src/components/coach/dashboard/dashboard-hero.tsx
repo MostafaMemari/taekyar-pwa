@@ -1,9 +1,9 @@
 import { ChevronLeft, ClipboardCheck } from "lucide-react";
 import Link from "next/link";
 import { CoachBand } from "@/components/coach/coach-band";
-import { COACH } from "@/components/coach/coach-data";
 import { CoachBell } from "@/components/coach/coach-ui";
 import { Card } from "@/components/ui/card";
+import { COACH } from "@/lib/coach/coach-data";
 
 export function DashboardHero() {
   return (

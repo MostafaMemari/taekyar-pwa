@@ -1,7 +1,7 @@
-import { BELT_EXAMS } from "@/components/coach/coach-data";
 import { SectionHeading, StatusBadge } from "@/components/coach/coach-ui";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { BELT_EXAMS } from "@/lib/coach/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 
 export function DashboardExams() {

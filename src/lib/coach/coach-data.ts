@@ -22,14 +22,39 @@ export const INSURANCE_META: Record<InsuranceStatus, { label: string; tone: "suc
   none: { label: "بدون بیمه", tone: "danger" },
 };
 
-export const ATTENDANCE_META: Record<
-  AttendanceStatus,
-  { label: string; tone: "success" | "warning" | "danger" | "info"; color: string }
-> = {
-  PRESENT: { label: "حاضر", tone: "success", color: "#10b981" },
-  LATE: { label: "تأخیر", tone: "warning", color: "#f59e0b" },
-  ABSENT: { label: "غایب", tone: "danger", color: "#ef4444" },
-  EXCUSED: { label: "موجه", tone: "info", color: "#0ea5e9" },
+export const ATTENDANCE_META: Record<AttendanceStatus, { label: string; tone: "success" | "warning" | "danger" | "info"; color: string }> =
+  {
+    PRESENT: { label: "حاضر", tone: "success", color: "#10b981" },
+    LATE: { label: "تأخیر", tone: "warning", color: "#f59e0b" },
+    ABSENT: { label: "غایب", tone: "danger", color: "#ef4444" },
+    EXCUSED: { label: "موجه", tone: "info", color: "#0ea5e9" },
+  };
+
+export type ClubAdmission = "male" | "female" | "mixed";
+
+export const CLUB_ADMISSION_META: Record<ClubAdmission, { label: string }> = {
+  male: { label: "آقایان" },
+  female: { label: "بانوان" },
+  mixed: { label: "مختلط" },
+};
+
+export const CLUB_DISCIPLINES = ["کیوروگی", "پومسه", "شکستن", "دفاع شخصی", "دموهای نمایشی"] as const;
+
+export type Club = {
+  id: string;
+  name: string;
+  watermark: string;
+  active: boolean;
+  workspace: boolean;
+  admission: ClubAdmission;
+  classesCount: number;
+  studentsCount: number;
+  capacity: number;
+  attendance: string;
+  address: string;
+  phone: string;
+  disciplines: string[];
+  registeredAt: string;
 };
 
 export type CoachStudent = {
@@ -61,22 +86,27 @@ export const COACH = {
 };
 
 export const ACTIVE_CLUB = {
+  id: "shohada",
   name: "باشگاه شهدای گمنام",
   address: "تهران، شهرک غرب، بلوار فرحزادی، سالن ورزشی شهدای گمنام",
 };
 
-export const CLUBS = [
+export const CLUBS: Club[] = [
   {
     id: "shohada",
     name: "باشگاه شهدای گمنام",
     watermark: "ش",
     active: true,
     workspace: true,
-    gender: null,
+    admission: "mixed",
     classesCount: 6,
     studentsCount: 12,
+    capacity: 80,
     attendance: "89",
     address: "تهران، شهرک غرب، بلوار فرحزادی، سالن ورزشی شهدای گمنام",
+    phone: "02188452310",
+    disciplines: ["کیوروگی", "پومسه", "شکستن"],
+    registeredAt: "1403/12/28",
   },
   {
     id: "pars",
@@ -84,13 +114,21 @@ export const CLUBS = [
     watermark: "پ",
     active: true,
     workspace: false,
-    gender: "آقایان",
+    admission: "male",
     classesCount: 2,
     studentsCount: 6,
+    capacity: 40,
     attendance: "81",
     address: "تهران، خیابان آزادی، نبش کوچه مهر، سالن ورزشی پارس",
+    phone: "02166123456",
+    disciplines: ["کیوروگی", "دفاع شخصی"],
+    registeredAt: "1404/02/11",
   },
-] as const;
+];
+
+export function getClub(id: string): Club | undefined {
+  return CLUBS.find((club) => club.id === id);
+}
 
 export const STUDENTS: CoachStudent[] = [
   {
@@ -254,6 +292,7 @@ export type ClassSession = {
   id: string;
   name: string;
   club: string;
+  clubId: string;
   days: string[];
   start: string;
   end: string;
@@ -269,6 +308,7 @@ export const SESSIONS: ClassSession[] = [
     id: "kyorugi",
     name: "کلاس سبک کیوروگی",
     club: ACTIVE_CLUB.name,
+    clubId: "shohada",
     days: ["شنبه", "دوشنبه"],
     start: "17:00",
     end: "18:30",
@@ -281,6 +321,7 @@ export const SESSIONS: ClassSession[] = [
     id: "teenagers",
     name: "کلاس نوجوانان",
     club: ACTIVE_CLUB.name,
+    clubId: "shohada",
     days: ["یکشنبه", "چهارشنبه"],
     start: "16:30",
     end: "18:00",
@@ -293,6 +334,7 @@ export const SESSIONS: ClassSession[] = [
     id: "adults",
     name: "کلاس بزرگسالان",
     club: ACTIVE_CLUB.name,
+    clubId: "shohada",
     days: ["سه شنبه"],
     start: "19:00",
     end: "20:30",
@@ -305,6 +347,7 @@ export const SESSIONS: ClassSession[] = [
     id: "poomsae",
     name: "کلاس پومسه",
     club: ACTIVE_CLUB.name,
+    clubId: "shohada",
     days: ["پنجشنبه"],
     start: "10:00",
     end: "11:30",
@@ -317,6 +360,7 @@ export const SESSIONS: ClassSession[] = [
     id: "fitness",
     name: "کلاس آمادگی جسمانی",
     club: ACTIVE_CLUB.name,
+    clubId: "shohada",
     days: ["جمعه"],
     start: "08:00",
     end: "09:30",
@@ -329,6 +373,7 @@ export const SESSIONS: ClassSession[] = [
     id: "kids",
     name: "کلاس کودکان",
     club: ACTIVE_CLUB.name,
+    clubId: "shohada",
     days: ["شنبه"],
     start: "10:00",
     end: "11:00",
@@ -341,6 +386,7 @@ export const SESSIONS: ClassSession[] = [
     id: "basics",
     name: "کلاس مبانی",
     club: ACTIVE_CLUB.name,
+    clubId: "shohada",
     days: ["دوشنبه"],
     start: "18:00",
     end: "19:30",
@@ -349,7 +395,37 @@ export const SESSIONS: ClassSession[] = [
     members: 11,
     icon: Flag,
   },
+  {
+    id: "pars-kids",
+    name: "کلاس کودکان پارس",
+    club: "باشگاه تکواندو پارس",
+    clubId: "pars",
+    days: ["شنبه", "سه شنبه"],
+    start: "16:00",
+    end: "17:15",
+    active: true,
+    when: ["week"],
+    attendance: { present: 8, total: 9 },
+    icon: Baby,
+  },
+  {
+    id: "pars-self-defense",
+    name: "کلاس دفاع شخصی",
+    club: "باشگاه تکواندو پارس",
+    clubId: "pars",
+    days: ["چهارشنبه"],
+    start: "19:00",
+    end: "20:00",
+    active: true,
+    when: ["week"],
+    attendance: { present: 11, total: 15 },
+    icon: Flag,
+  },
 ];
+
+export function getClubSessions(clubId: string): ClassSession[] {
+  return SESSIONS.filter((session) => session.clubId === clubId);
+}
 
 export type InvitationStatus = "pending" | "accepted" | "rejected";
 

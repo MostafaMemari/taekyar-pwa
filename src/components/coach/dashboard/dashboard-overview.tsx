@@ -1,8 +1,8 @@
 import { CalendarDays, Clock, type LucideIcon, Send, TrendingUp, UserPlus, Users } from "lucide-react";
 import Link from "next/link";
-import { INVITATIONS, SESSIONS, STUDENTS } from "@/components/coach/coach-data";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { INVITATIONS, SESSIONS, STUDENTS } from "@/lib/coach/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 

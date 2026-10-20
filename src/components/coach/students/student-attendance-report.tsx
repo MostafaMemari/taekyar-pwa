@@ -4,14 +4,14 @@ import { CalendarCheck2 } from "lucide-react";
 import { useState } from "react";
 import { attendanceTotal } from "@/components/coach/attendance-summary";
 import { CoachSheet } from "@/components/coach/coach-band";
-import { ATTENDANCE_META, type AttendanceStatus } from "@/components/coach/coach-data";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { ATTENDANCE_META, type AttendanceStatus } from "@/lib/coach/coach-data";
+import { groupAttendanceByMonth, type StudentProfile } from "@/lib/coach/student-profile-data";
 import { toPersianDigits } from "@/lib/digits";
 import { StudentAttendanceRecordCard } from "./student-attendance-record-card";
 import { StudentAttendanceSummary } from "./student-attendance-summary";
 import { StudentBand } from "./student-band";
-import { groupAttendanceByMonth, type StudentProfile } from "./student-profile-data";
 
 type AttendanceFilter = "ALL" | AttendanceStatus;
 

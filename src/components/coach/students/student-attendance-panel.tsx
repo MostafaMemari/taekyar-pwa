@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { attendanceTotal } from "@/components/coach/attendance-summary";
 import { Button } from "@/components/ui/button";
+import type { StudentProfile } from "@/lib/coach/student-profile-data";
 import { toPersianDigits } from "@/lib/digits";
 import { StudentAttendanceRecordCard } from "./student-attendance-record-card";
 import { StudentAttendanceSummary } from "./student-attendance-summary";
-import type { StudentProfile } from "./student-profile-data";
 
 export function StudentAttendancePanel({ profile }: { profile: StudentProfile }) {
   const counts = profile.attendance.counts;

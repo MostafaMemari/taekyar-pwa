@@ -3,7 +3,6 @@
 import { CalendarDays, Check, Info, Medal } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
-import { BELT_META, type BeltKey } from "@/components/coach/coach-data";
 import { FormDock, FormSection } from "@/components/coach/coach-form";
 import { PersonAvatar } from "@/components/coach/coach-ui";
 import { AuthField } from "@/components/shared/auth-field";
@@ -12,10 +11,11 @@ import { Card } from "@/components/ui/card";
 import { FieldLabel } from "@/components/ui/field";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
+import { BELT_META, type BeltKey } from "@/lib/coach/coach-data";
+import { BELT_ASSIGN_OPTIONS } from "@/lib/coach/student-form-options";
+import type { StudentProfile } from "@/lib/coach/student-profile-data";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
-import { BELT_ASSIGN_OPTIONS } from "./student-form-options";
-import type { StudentProfile } from "./student-profile-data";
 
 export function StudentBeltForm({ profile }: { profile: StudentProfile }) {
   const router = useRouter();

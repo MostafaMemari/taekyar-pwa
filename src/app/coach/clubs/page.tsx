@@ -1,11 +1,11 @@
 import { Check, Info, Landmark, LogIn, MapPin, Pencil, Plus, Star } from "lucide-react";
 import Link from "next/link";
 import { CoachBand, CoachSheet } from "@/components/coach/coach-band";
-import { CLUBS } from "@/components/coach/coach-data";
 import { CoachBell, StatusBadge } from "@/components/coach/coach-ui";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { CLUB_ADMISSION_META, CLUBS } from "@/lib/coach/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
@@ -65,7 +65,7 @@ export default function CoachClubsPage() {
                         فضای کاری فعال
                       </StatusBadge>
                     ) : (
-                      <StatusBadge>{club.gender}</StatusBadge>
+                      <StatusBadge>{CLUB_ADMISSION_META[club.admission].label}</StatusBadge>
                     )}
                   </div>
                 </div>
@@ -103,10 +103,26 @@ export default function CoachClubsPage() {
                   <LogIn data-icon="inline-start" aria-hidden="true" />
                   <span>ورود به باشگاه</span>
                 </Button>
-                <Button type="button" variant="field" size="icon" className="size-10 rounded-xl" aria-label={`مشخصات ${club.name}`}>
+                <Button
+                  type="button"
+                  variant="field"
+                  size="icon"
+                  className="size-10 rounded-xl"
+                  aria-label={`مشخصات ${club.name}`}
+                  render={<Link href={`/coach/clubs/${club.id}`} />}
+                  nativeButton={false}
+                >
                   <Info aria-hidden="true" />
                 </Button>
-                <Button type="button" variant="field" size="icon" className="size-10 rounded-xl" aria-label={`ویرایش ${club.name}`}>
+                <Button
+                  type="button"
+                  variant="field"
+                  size="icon"
+                  className="size-10 rounded-xl"
+                  aria-label={`ویرایش ${club.name}`}
+                  render={<Link href={`/coach/clubs/${club.id}/edit`} />}
+                  nativeButton={false}
+                >
                   <Pencil aria-hidden="true" />
                 </Button>
               </div>
@@ -117,6 +133,8 @@ export default function CoachClubsPage() {
             type="button"
             variant="outline"
             className="h-auto w-full flex-col gap-1.5 whitespace-normal rounded-2xl border-dashed py-5 text-center"
+            render={<Link href="/coach/clubs/new" />}
+            nativeButton={false}
           >
             <span className="grid size-11 place-items-center rounded-2xl bg-accent text-accent-ink">
               <Plus className="size-5" aria-hidden="true" />

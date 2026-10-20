@@ -5,12 +5,12 @@ import { useState } from "react";
 import { CoachSheet } from "@/components/coach/coach-band";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { StudentProfile } from "@/lib/coach/student-profile-data";
 import { StudentAttendancePanel } from "./student-attendance-panel";
 import { StudentBand } from "./student-band";
 import { StudentClubsPanel } from "./student-clubs-panel";
 import { StudentDetailActions } from "./student-detail-actions";
 import { StudentInfoPanel } from "./student-info-panel";
-import type { StudentProfile } from "./student-profile-data";
 
 export function StudentDetail({ profile }: { profile: StudentProfile }) {
   const [menuOpen, setMenuOpen] = useState(false);

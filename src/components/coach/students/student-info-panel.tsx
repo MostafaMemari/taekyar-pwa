@@ -1,9 +1,9 @@
-import { BELT_META } from "@/components/coach/coach-data";
 import { SectionHeading } from "@/components/coach/coach-ui";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { BELT_META } from "@/lib/coach/coach-data";
+import type { StudentProfile } from "@/lib/coach/student-profile-data";
 import { toPersianDigits } from "@/lib/digits";
-import type { StudentProfile } from "./student-profile-data";
 
 function InfoRow({ label, value, ltr }: { label: string; value: string; ltr?: boolean }) {
   return (

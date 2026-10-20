@@ -1,10 +1,10 @@
 import { UserPlus, Users } from "lucide-react";
-import type { InsuranceStatus } from "@/components/coach/coach-data";
 import { GymContext, StatusBadge } from "@/components/coach/coach-ui";
 import { Button } from "@/components/ui/button";
+import type { InsuranceStatus } from "@/lib/coach/coach-data";
+import { INSURANCE_FILTERS, INSURANCE_ICONS, INSURANCE_TILE_TONES } from "@/lib/coach/students-options";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
-import { INSURANCE_FILTERS, INSURANCE_ICONS, INSURANCE_TILE_TONES } from "./students-options";
 
 export function StudentsOverview({
   count,

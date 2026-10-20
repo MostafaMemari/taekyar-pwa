@@ -1,4 +1,4 @@
-import { ATTENDANCE_META } from "@/components/coach/coach-data";
+import { ATTENDANCE_META } from "@/lib/coach/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 

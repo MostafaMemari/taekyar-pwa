@@ -8,7 +8,7 @@ import {
   type Gender,
   SESSIONS,
   STUDENTS,
-} from "@/components/coach/coach-data";
+} from "@/lib/coach/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 
 export type StudentClub = {

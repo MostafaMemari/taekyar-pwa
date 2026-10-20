@@ -3,8 +3,8 @@ import Link from "next/link";
 import { StatusBadge } from "@/components/coach/coach-ui";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import type { StudentProfile } from "@/lib/coach/student-profile-data";
 import { cn } from "@/lib/utils";
-import type { StudentProfile } from "./student-profile-data";
 
 export function StudentClubsPanel({ profile }: { profile: StudentProfile }) {
   return (

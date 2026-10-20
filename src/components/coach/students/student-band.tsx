@@ -2,10 +2,10 @@ import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { CoachBand } from "@/components/coach/coach-band";
-import { BELT_META } from "@/components/coach/coach-data";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { type StudentProfile, studentBeltText } from "./student-profile-data";
+import { BELT_META } from "@/lib/coach/coach-data";
+import { type StudentProfile, studentBeltText } from "@/lib/coach/student-profile-data";
 
 export function StudentBand({
   profile,

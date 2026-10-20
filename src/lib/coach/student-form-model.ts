@@ -1,5 +1,5 @@
-import type { BeltKey, Gender } from "@/components/coach/coach-data";
-import type { StudentProfile } from "./student-profile-data";
+import type { BeltKey, Gender } from "@/lib/coach/coach-data";
+import type { StudentProfile } from "@/lib/coach/student-profile-data";
 
 export type StudentFormState = {
   fullName: string;

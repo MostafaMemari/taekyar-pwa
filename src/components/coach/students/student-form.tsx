@@ -3,9 +3,9 @@
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import { FormDock } from "@/components/coach/coach-form";
+import { emptyStudentForm, type StudentFormState, type StudentFormUpdater, studentToForm } from "@/lib/coach/student-form-model";
+import type { StudentProfile } from "@/lib/coach/student-profile-data";
 import { StudentEnrollmentFields, StudentPersonalFields, StudentSessionsFields, StudentSportsFields } from "./student-form-fields";
-import { emptyStudentForm, type StudentFormState, type StudentFormUpdater, studentToForm } from "./student-form-model";
-import type { StudentProfile } from "./student-profile-data";
 
 export function StudentForm({ mode, profile }: { mode: "create" | "edit"; profile?: StudentProfile }) {
   const router = useRouter();

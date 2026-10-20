@@ -1,9 +1,9 @@
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import { SESSIONS } from "@/components/coach/coach-data";
 import { SectionHeading, SessionTime, StatusBadge } from "@/components/coach/coach-ui";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { SESSIONS } from "@/lib/coach/coach-data";
 import { cn } from "@/lib/utils";
 
 export function DashboardSessions() {
