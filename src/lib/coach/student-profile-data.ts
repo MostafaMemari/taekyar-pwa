@@ -20,6 +20,7 @@ export type StudentClub = {
 
 export type StudentBeltHistoryEntry = {
   belt: BeltKey;
+  poom?: number;
   dan?: number;
   date: string;
   note: string;
@@ -116,7 +117,8 @@ function buildBeltHistory(student: CoachStudent): StudentBeltHistoryEntry[] {
     .reverse()
     .map((entry, index) => ({
       ...entry,
-      dan: entry.belt === "black" ? (student.dan ?? 1) : undefined,
+      poom: entry.belt === "black" ? student.poom : undefined,
+      dan: entry.belt === "black" ? student.dan : undefined,
       current: index === 0,
     }));
 }
@@ -197,7 +199,8 @@ export function getStudentProfile(id: string): StudentProfile | undefined {
 }
 
 export function studentBeltText(student: CoachStudent): string {
-  if (student.dan) return `مشکی دان ${toPersianDigits(String(student.dan))}`;
+  if (student.poom) return `کمربند پوم ${toPersianDigits(String(student.poom))}`;
+  if (student.dan) return `کمربند دان ${toPersianDigits(String(student.dan))}`;
   return `کمربند ${BELT_META[student.belt].label}`;
 }
 

@@ -23,10 +23,10 @@ const BELTS: readonly BeltOption[] = [
   { value: "GREEN", label: "سبز", color: "#22C55E", knotColor: "#16A34A" },
   { value: "BLUE", label: "آبی", color: "#3B82F6", knotColor: "#2563EB" },
   { value: "RED", label: "قرمز", color: "#EF4444", knotColor: "#DC2626" },
-  { value: "POOM_1", label: "پوم ۱", color: "#1F2937", knotColor: "#111827", stripes: 1 },
-  { value: "DAN_1", label: "دان ۱", color: "#1F2937", knotColor: "#111827", stripes: 2 },
-  { value: "DAN_2", label: "دان ۲", color: "#1F2937", knotColor: "#111827", stripes: 3 },
-  { value: "DAN_3", label: "دان ۳", color: "#1F2937", knotColor: "#111827", stripes: 4 },
+  { value: "POOM_1", label: "پوم ۱", color: "#1F2937", bottomColor: "#DC2626", knotColor: "#111827", stripes: 1 },
+  { value: "DAN_1", label: "دان ۱", color: "#1F2937", knotColor: "#111827", stripes: 1 },
+  { value: "DAN_2", label: "دان ۲", color: "#1F2937", knotColor: "#111827", stripes: 2 },
+  { value: "DAN_3", label: "دان ۳", color: "#1F2937", knotColor: "#111827", stripes: 3 },
 ];
 
 type BeltForm = { belt: string; beltDate: string };

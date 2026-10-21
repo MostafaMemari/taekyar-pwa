@@ -10,6 +10,7 @@ export type BeltOption = {
   value: string;
   label: string;
   color: string;
+  bottomColor?: string;
   outline?: string;
   knotColor?: string;
   stripes?: number;
@@ -57,6 +58,7 @@ export function BeltPicker({ label, value, options, onChange, hint, required = t
             </span>
             <BeltStrip
               color={option.color}
+              bottomColor={option.bottomColor}
               outline={option.outline}
               knotColor={option.knotColor}
               stripes={option.stripes}

@@ -143,7 +143,7 @@ export function StudentSportsFields({ form, onChange, locked = false }: FieldsPr
         label="کمربند فعلی"
         value={form.belt || null}
         options={STUDENT_BELT_OPTIONS}
-        onChange={(value) => onChange("belt", (value ?? "") as StudentFormState["belt"])}
+        onChange={(value) => onChange("belt", value ?? "")}
         hint={locked ? "برای تغییر کمربند از گزینه «تخصیص کمربند» در پرونده هنرجو استفاده کنید." : undefined}
       />
 

@@ -1,7 +1,7 @@
 import { SectionHeading } from "@/components/coach/coach-ui";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { BELT_META } from "@/lib/coach/coach-data";
+import { BELT_META, studentBeltDotStyle } from "@/lib/coach/coach-data";
 import type { StudentProfile } from "@/lib/coach/student-profile-data";
 import { toPersianDigits } from "@/lib/digits";
 
@@ -47,12 +47,16 @@ export function StudentInfoPanel({ profile }: { profile: StudentProfile }) {
         <ol className="relative flex flex-col gap-4 before:absolute before:inset-y-2 before:start-[7px] before:w-px before:bg-[var(--line-2)]">
           {profile.beltHistory.map((entry) => {
             const belt = BELT_META[entry.belt];
-            const label = entry.dan ? `مشکی دان ${toPersianDigits(String(entry.dan))}` : `کمربند ${belt.label}`;
+            const label = entry.poom
+              ? `کمربند پوم ${toPersianDigits(String(entry.poom))}`
+              : entry.dan
+                ? `کمربند دان ${toPersianDigits(String(entry.dan))}`
+                : `کمربند ${belt.label}`;
 
             return (
               <li key={`${entry.belt}-${entry.date}`} className="relative flex gap-3">
                 <span className="relative z-10 mt-1 grid size-4 shrink-0 place-items-center rounded-full bg-card ring-2 ring-[var(--line-2)]">
-                  <span className="size-2 rounded-full" style={{ backgroundColor: belt.color }} aria-hidden="true" />
+                  <span className="size-2 rounded-full" style={studentBeltDotStyle(entry)} aria-hidden="true" />
                 </span>
 
                 <div className="min-w-0 flex-1">

@@ -11,7 +11,7 @@ import { Card } from "@/components/ui/card";
 import { FieldLabel } from "@/components/ui/field";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { BELT_META, type BeltKey } from "@/lib/coach/coach-data";
+import { studentBeltDotStyle, studentBeltLabel } from "@/lib/coach/coach-data";
 import { BELT_ASSIGN_OPTIONS } from "@/lib/coach/student-form-options";
 import type { StudentProfile } from "@/lib/coach/student-profile-data";
 import { toPersianDigits } from "@/lib/digits";
@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 
 export function StudentBeltForm({ profile }: { profile: StudentProfile }) {
   const router = useRouter();
-  const [belt, setBelt] = useState<BeltKey>(profile.belt);
+  const [belt, setBelt] = useState(profile.poom ? `poom-${profile.poom}` : profile.dan ? `dan-${profile.dan}` : profile.belt);
   const [date, setDate] = useState(profile.beltDate);
   const [note, setNote] = useState("");
 
@@ -40,13 +40,8 @@ export function StudentBeltForm({ profile }: { profile: StudentProfile }) {
               •
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <span
-                className="size-2.5 rounded-full ring-2 ring-black/5"
-                style={{ backgroundColor: BELT_META[profile.belt].color }}
-                aria-hidden="true"
-              />
-              کمربند فعلی: {BELT_META[profile.belt].label}
-              {profile.dan ? ` دان ${toPersianDigits(String(profile.dan))}` : null}
+              <span className="size-2.5 rounded-full ring-2 ring-black/5" style={studentBeltDotStyle(profile)} aria-hidden="true" />
+              کمربند فعلی: {studentBeltLabel(profile)}
             </span>
           </span>
         </div>
@@ -54,10 +49,10 @@ export function StudentBeltForm({ profile }: { profile: StudentProfile }) {
 
       <FormSection icon={Medal} title="انتخاب کمربند" tone="amber">
         <p className="-mt-2 text-start text-[11px] font-medium leading-5 text-ink-muted">
-          کمربند بعدی هنرجو را از میان کمربندهای رنگی انتخاب کنید.
+          کمربند بعدی هنرجو را انتخاب کنید؛ کمربند پوم دو رنگ (مشکی روی قرمز) و کمربند دان مشکی با تعداد خطوط درجه است.
         </p>
 
-        <RadioGroup aria-label="انتخاب کمربند" value={belt} onValueChange={(value) => setBelt(value as BeltKey)} className="gap-2">
+        <RadioGroup aria-label="انتخاب کمربند" value={belt} onValueChange={setBelt} className="gap-2">
           {BELT_ASSIGN_OPTIONS.map((option) => {
             const selected = belt === option.value;
 
@@ -74,7 +69,11 @@ export function StudentBeltForm({ profile }: { profile: StudentProfile }) {
                 <RadioGroupItem id={`belt-${option.value}`} value={option.value} className="shrink-0" />
                 <span
                   className="size-3.5 shrink-0 rounded-full ring-2 ring-black/5"
-                  style={{ backgroundColor: BELT_META[option.value].color }}
+                  style={
+                    option.bottomColor
+                      ? { background: `linear-gradient(to bottom, ${option.color} 50%, ${option.bottomColor} 50%)` }
+                      : { backgroundColor: option.color }
+                  }
                   aria-hidden="true"
                 />
                 <span className="min-w-0 flex-1">

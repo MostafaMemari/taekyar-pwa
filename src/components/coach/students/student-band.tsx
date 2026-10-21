@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { CoachBand } from "@/components/coach/coach-band";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { BELT_META } from "@/lib/coach/coach-data";
+import { studentBeltDotStyle } from "@/lib/coach/coach-data";
 import { type StudentProfile, studentBeltText } from "@/lib/coach/student-profile-data";
 
 export function StudentBand({
@@ -22,8 +22,6 @@ export function StudentBand({
   action?: ReactNode;
   meta?: ReactNode;
 }) {
-  const belt = BELT_META[profile.belt];
-
   return (
     <CoachBand watermark={watermark}>
       <div className="flex items-center justify-between gap-3">
@@ -51,7 +49,7 @@ export function StudentBand({
           <h1 className="truncate text-[20px] font-extrabold leading-7">{profile.name}</h1>
           <div className="mt-2 flex flex-wrap gap-1.5">
             <span className="meta-glass">
-              <span className="size-2.5 rounded-full ring-2 ring-white/30" style={{ backgroundColor: belt.color }} aria-hidden="true" />
+              <span className="size-2.5 rounded-full ring-2 ring-white/30" style={studentBeltDotStyle(profile)} aria-hidden="true" />
               {studentBeltText(profile)}
             </span>
             <span className="meta-glass">{profile.clubs[0]?.name ?? "بدون باشگاه"}</span>

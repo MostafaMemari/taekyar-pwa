@@ -19,6 +19,7 @@ export function BeltMotif({ className }: { className?: string }) {
 
 type BeltStripProps = {
   color: string;
+  bottomColor?: string;
   stripes?: number;
   outline?: string;
   knotColor?: string;
@@ -26,7 +27,7 @@ type BeltStripProps = {
   className?: string;
 };
 
-export function BeltStrip({ color, stripes = 0, outline, knotColor, stretch, className }: BeltStripProps) {
+export function BeltStrip({ color, bottomColor, stripes = 0, outline, knotColor, stretch, className }: BeltStripProps) {
   return (
     <svg
       viewBox="0 0 88 26"
@@ -34,12 +35,24 @@ export function BeltStrip({ color, stripes = 0, outline, knotColor, stretch, cla
       className={cn(stretch ? "size-auto" : null, "w-full", className)}
       aria-hidden="true"
     >
-      <rect x="1" y="5" width="87" height="9" rx="3" fill={color} stroke={outline} />
+      {bottomColor ? (
+        <>
+          <rect x="1" y="5" width="87" height="9" rx="3" fill={bottomColor} stroke={outline} />
+          <path d="M4 5 H85 A3 3 0 0 1 88 8 V10 H1 V8 A3 3 0 0 1 4 5 Z" fill={color} />
+          {outline ? <rect x="1" y="5" width="87" height="9" rx="3" fill="none" stroke={outline} /> : null}
+        </>
+      ) : (
+        <rect x="1" y="5" width="87" height="9" rx="3" fill={color} stroke={outline} />
+      )}
       {Array.from({ length: stripes }, (_, index) => 7.5 + index * 6).map((x) => (
-        <rect key={x} x={x} y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24" />
+        <rect key={x} x={x} y={bottomColor ? 7 : 8} width="3.1" height="3" rx="0.7" fill="#FBBF24" />
       ))}
-      <rect x="69.5" y="13" width="4.6" height="11.5" rx="2.2" fill={knotColor ?? color} transform="rotate(12 71.8 13)" />
+      <g transform="rotate(12 71.8 13)">
+        <rect x="69.5" y="13" width="4.6" height="11.5" rx="2.2" fill={knotColor ?? color} />
+        {bottomColor ? <path d="M69.5 18.75H74.1V22.3A2.2 2.2 0 0 1 69.5 22.3Z" fill={bottomColor} /> : null}
+      </g>
       <rect x="64" y="2.5" width="12" height="12" rx="3" fill={knotColor ?? color} />
+      {bottomColor ? <path d="M64 8.5H76V11.5A3 3 0 0 1 73 14.5H67A3 3 0 0 1 64 11.5Z" fill={bottomColor} /> : null}
     </svg>
   );
 }

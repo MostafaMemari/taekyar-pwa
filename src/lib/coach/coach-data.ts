@@ -1,4 +1,5 @@
 import { Activity, Baby, Check, Clock, Dumbbell, Flag, type LucideIcon, Medal, Users, X, Zap } from "lucide-react";
+import { toPersianDigits } from "@/lib/digits";
 
 export type BeltKey = "white" | "yellow" | "green" | "blue" | "red" | "black";
 export type AgeGroup = "kids" | "teens" | "adults";
@@ -62,6 +63,7 @@ export type CoachStudent = {
   name: string;
   nationalCode: string;
   belt: BeltKey;
+  poom?: number;
   dan?: number;
   ageGroup: AgeGroup;
   ageLabel: string;
@@ -507,5 +509,12 @@ export const WEEKLY_ATTENDANCE = [
 export const WEEKLY_TOTAL = { present: 213, total: 245 };
 
 export function studentBeltLabel(student: CoachStudent) {
-  return student.dan ? `مشکی دان ${student.dan}` : BELT_META[student.belt].label;
+  if (student.poom) return `پوم ${toPersianDigits(String(student.poom))}`;
+  if (student.dan) return `دان ${toPersianDigits(String(student.dan))}`;
+  return BELT_META[student.belt].label;
+}
+
+export function studentBeltDotStyle(student: Pick<CoachStudent, "belt" | "poom">) {
+  if (!student.poom) return { backgroundColor: BELT_META[student.belt].color };
+  return { background: `linear-gradient(to bottom, ${BELT_META.black.color} 50%, #DC2626 50%)` };
 }

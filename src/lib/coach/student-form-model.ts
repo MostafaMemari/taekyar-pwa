@@ -1,4 +1,4 @@
-import type { BeltKey, Gender } from "@/lib/coach/coach-data";
+import type { Gender } from "@/lib/coach/coach-data";
 import type { StudentProfile } from "@/lib/coach/student-profile-data";
 
 export type StudentFormState = {
@@ -10,7 +10,7 @@ export type StudentFormState = {
   phone: string;
   landline: string;
   province: string;
-  belt: BeltKey | "";
+  belt: string;
   beltDate: string;
   ageClass: string;
   weightClass: string;
@@ -57,7 +57,7 @@ export function studentToForm(profile: StudentProfile): StudentFormState {
     phone: profile.phone,
     landline: profile.landline,
     province: profile.province,
-    belt: profile.belt,
+    belt: profile.poom ? `poom-${profile.poom}` : profile.dan ? `dan-${profile.dan}` : profile.belt,
     beltDate: profile.beltDate,
     ageClass: profile.ageClass,
     weightClass: profile.weightClass,
