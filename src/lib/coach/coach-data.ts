@@ -497,16 +497,16 @@ export const BELT_EXAMS = [
 ];
 
 export const WEEKLY_ATTENDANCE = [
-  { day: "ش", value: 92 },
-  { day: "ی", value: 88 },
-  { day: "د", value: 94 },
-  { day: "س", value: 90 },
-  { day: "چ", value: 84 },
-  { day: "پ", value: 95 },
-  { day: "ج", value: 78 },
+  { day: "ش", value: 92, previous: 84 },
+  { day: "ی", value: 88, previous: 86 },
+  { day: "د", value: 94, previous: 90 },
+  { day: "س", value: 90, previous: 88 },
+  { day: "چ", value: 84, previous: 80 },
+  { day: "پ", value: 95, previous: 92 },
+  { day: "ج", value: 78, previous: 74 },
 ];
 
-export const WEEKLY_TOTAL = { present: 213, total: 245 };
+export const WEEKLY_TOTAL = { present: 213, total: 245, previousPresent: 199, previousTotal: 240 };
 
 export function studentBeltLabel(student: CoachStudent) {
   if (student.poom) return `پوم ${toPersianDigits(String(student.poom))}`;

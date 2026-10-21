@@ -1,4 +1,4 @@
-import { CalendarDays, Clock, type LucideIcon, Send, TrendingUp, UserPlus, Users } from "lucide-react";
+import { CalendarDays, Clock, Send, UserPlus, Users } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -6,45 +6,15 @@ import { INVITATIONS, SESSIONS, STUDENTS } from "@/lib/coach/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
-function StatCard({
-  icon: Icon,
-  value,
-  label,
-  href,
-  accent = false,
-}: {
-  icon: LucideIcon;
-  value: string;
-  label: string;
-  href?: string;
-  accent?: boolean;
-}) {
-  const card = (
-    <Card className={cn("flex-row items-center gap-3 rounded-2xl px-3.5 py-3", accent && "bg-accent ring-brand-100")}>
-      <span
-        className={cn("grid size-9 shrink-0 place-items-center rounded-xl", accent ? "bg-card text-accent-ink" : "bg-muted text-ink-muted")}
-      >
-        <Icon className="size-[18px]" aria-hidden="true" />
-      </span>
-      <span className="min-w-0">
-        <b className="block text-[18px] font-extrabold leading-none tabular-nums text-ink">{value}</b>
-        <span className="mt-1.5 block text-[10px] font-bold leading-4 text-ink-subtle">{label}</span>
-      </span>
-    </Card>
-  );
-
-  if (!href) return card;
-
-  return (
-    <Link href={href} className="block transition duration-150 active:scale-[0.98]">
-      {card}
-    </Link>
-  );
-}
-
 export function DashboardOverview() {
   const todaySessions = SESSIONS.filter((session) => session.when.includes("today")).length;
   const pendingInvitations = INVITATIONS.filter((invitation) => invitation.status === "pending").length;
+
+  const stats = [
+    { href: "/coach/students", label: "هنرجو", value: STUDENTS.length, icon: Users },
+    { href: "/coach/sessions", label: "کلاس امروز", value: todaySessions, icon: CalendarDays },
+    { href: "/coach/invitations", label: "دعوت در انتظار", value: pendingInvitations, icon: Clock },
+  ];
 
   return (
     <>
@@ -71,18 +41,24 @@ export function DashboardOverview() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <StatCard icon={Users} value={toPersianDigits(String(STUDENTS.length))} label="هنرجویان" href="/coach/students" />
-        <StatCard icon={CalendarDays} value={toPersianDigits(String(todaySessions))} label="کلاس های امروز" href="/coach/sessions" />
-        <StatCard
-          icon={Clock}
-          value={toPersianDigits(String(pendingInvitations))}
-          label="دعوت نامه های در انتظار"
-          href="/coach/invitations"
-          accent
-        />
-        <StatCard icon={TrendingUp} value={`${toPersianDigits("87")}٪`} label="میانگین حضور هفته" />
-      </div>
+      <Card className="grid grid-cols-3 gap-0 p-0">
+        {stats.map((stat, index) => (
+          <Link
+            key={stat.href}
+            href={stat.href}
+            className={cn(
+              "flex flex-col items-center gap-1 px-2 py-3.5 transition-colors hover:bg-muted/40",
+              index > 0 && "border-s border-[var(--line-2)]",
+            )}
+          >
+            <span className="flex items-center gap-1.5 text-[10px] font-bold text-ink-subtle">
+              <stat.icon className="size-3.5" aria-hidden="true" />
+              {stat.label}
+            </span>
+            <b className="text-[20px] font-extrabold leading-6 tabular-nums text-ink">{toPersianDigits(String(stat.value))}</b>
+          </Link>
+        ))}
+      </Card>
     </>
   );
 }

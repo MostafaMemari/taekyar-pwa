@@ -6,7 +6,6 @@ import { DashboardHero } from "@/components/coach/dashboard/dashboard-hero";
 import { DashboardInvitations } from "@/components/coach/dashboard/dashboard-invitations";
 import { DashboardOverview } from "@/components/coach/dashboard/dashboard-overview";
 import { DashboardSessions } from "@/components/coach/dashboard/dashboard-sessions";
-import { DashboardTools } from "@/components/coach/dashboard/dashboard-tools";
 
 export const metadata = { title: "داشبورد مربی" };
 
@@ -19,9 +18,8 @@ export default function CoachDashboardPage() {
         <GymContext className="mt-1" />
         <DashboardOverview />
         <DashboardAttendance />
-        <DashboardTools />
-        <DashboardInvitations />
         <DashboardSessions />
+        <DashboardInvitations />
         <DashboardExams />
       </CoachSheet>
     </main>

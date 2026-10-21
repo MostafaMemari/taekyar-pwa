@@ -15,7 +15,7 @@ export const STORAGE_KEYS = {
   accent: "ty-accent",
 } as const;
 
-export const META_THEME_COLORS = { dark: "#0b0d12", light: "#ce004f" } as const;
+export const META_THEME_COLORS = { dark: "#11151d", light: "#ce004f" } as const;
 
 export const THEME_INIT_SOURCE = `!function(){try{var d=document.documentElement,t=localStorage.getItem("${STORAGE_KEYS.theme}"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("${STORAGE_KEYS.accent}");if(a)d.setAttribute("data-accent",a)}catch(e){}}();`;
 

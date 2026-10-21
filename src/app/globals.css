@@ -193,15 +193,15 @@
 
 .dark {
   color-scheme: dark;
-  --canvas: #0b0d12;
-  --surface: #151821;
-  --surface-2: #1a1e29;
-  --surface-3: #222735;
-  --surface-4: #2b3140;
-  --line-1: #1c202b;
-  --line-2: #242a38;
-  --line-3: #2f3647;
-  --glass: rgba(19, 22, 31, 0.86);
+  --canvas: #11151d;
+  --surface: #1a1f29;
+  --surface-2: #202633;
+  --surface-3: #272e3c;
+  --surface-4: #313949;
+  --line-1: #1e2330;
+  --line-2: #262d3a;
+  --line-3: #313949;
+  --glass: rgba(17, 21, 29, 0.86);
   --ink-1: #eef1f7;
   --ink-2: #dadee8;
   --ink-3: #c0c7d5;
@@ -218,7 +218,7 @@
   --st-amber-soft: color-mix(in srgb, var(--st-amber) 14%, var(--surface));
   --st-red-soft: color-mix(in srgb, var(--st-red) 14%, var(--surface));
   --st-sky-soft: color-mix(in srgb, var(--st-sky) 14%, var(--surface));
-  --field-bg: #1a1e29;
+  --field-bg: #202633;
   --field-line: #323a4d;
   --field-line-hover: #434e66;
   --field-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
