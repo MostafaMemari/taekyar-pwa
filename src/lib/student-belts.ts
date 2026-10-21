@@ -30,8 +30,8 @@ const DAN_BELTS: BeltOption[] = BLACK_RANKS.map((rank) => ({
 
 export const STUDENT_BELT_GROUPS: BeltOptionGroup[] = [
   { value: "color", label: "رنگی", columns: 3, options: COLOR_BELTS },
-  { value: "poom", label: "پوم", columns: 2, options: POOM_BELTS },
-  { value: "dan", label: "دان", columns: 2, options: DAN_BELTS },
+  { value: "poom", label: "پوم", columns: 3, options: POOM_BELTS },
+  { value: "dan", label: "دان", columns: 3, options: DAN_BELTS },
 ];
 
 export const STUDENT_BELT_OPTIONS: readonly BeltOption[] = STUDENT_BELT_GROUPS.flatMap((group) => group.options);

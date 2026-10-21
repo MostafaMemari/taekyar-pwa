@@ -88,7 +88,7 @@ export function BeltPicker({
         onValueChange={(next) => onChange(next[0] ?? null)}
         variant="outline"
         spacing={2}
-        className={cn("grid w-full gap-2", gridColumns === 3 ? "grid-cols-3" : "grid-cols-2")}
+        className={cn("grid w-full gap-2", gridColumns === 3 ? "grid-cols-3 [&>*:last-child:nth-child(3n+1)]:col-start-2" : "grid-cols-2")}
       >
         {visibleOptions.map((option) => (
           <ToggleGroupItem
