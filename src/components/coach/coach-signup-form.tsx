@@ -81,7 +81,6 @@ export function CoachSignupForm() {
                 label="کمربند مربی"
                 required={false}
                 optional
-                columns={2}
                 value={professional.belt || null}
                 options={COACH_BELTS}
                 onChange={(value) => setProfessional((current) => ({ ...current, belt: value ?? "" }))}

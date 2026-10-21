@@ -97,7 +97,7 @@ npx next typegen                 # generate route types without a full build
 - `PhotoPicker` is always the stacked card layout (camera button above the label); student and coach screens share it. `BeltPicker` strips are inset with `px-3` and use `stretch` so the SVG fills the reduced width.
 - Height and weight use the shared `MeasurePicker`: a bottom `Sheet` with a vertical, scroll-snapping number wheel (five rows, highlighted center) built on `WheelColumn`. Tapping a row applies that value immediately; «تایید» applies the centered value, and «پاک کردن» clears it. Pass min/max/unit/defaultValue; don't replace it with free-text inputs or a horizontal ruler.
 - Date fields use the shared `DatePicker`: the same bottom `Sheet` with three `WheelColumn`s for year, month (Persian names), and day. It clamps the day to the selected month (Esfand 30 in leap years), applies on «تایید», clears on «پاک کردن», and renders the stored `YYYY/MM/DD` in Persian digits. Pass `fromYear`/`toYear`; don't replace it with a typed date input.
-- Student black belts are labeled «پوم ۱» and «دان ۱» … «دان ۳» (no «مشکی» prefix). Coach belts run from «دان ۴» to «دان ۹» in a two-column grid.
+- Student black belts are labeled «پوم ۱» and «دان ۱» … «دان ۳» (no «مشکی» prefix). Coach belts run from «دان ۴» to «دان ۹» in a three-column grid.
 - Gender starts as `MALE` in signup and complete-profile state, matching the design's preselected «مرد».
 - Inline field icons track the field's focus state with the ring token (`group-focus-within` on `InputGroup`, `group-focus-visible` on `SelectTrigger`), so the icon and border highlight together.
 - Prefer semantic tokens (`bg-primary`, `text-muted-foreground`, `text-ink-body`) over raw palette classes.
