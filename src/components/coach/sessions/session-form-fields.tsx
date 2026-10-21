@@ -3,6 +3,7 @@
 import { CalendarDays, Info, Landmark, Timer } from "lucide-react";
 import { FormSection } from "@/components/coach/coach-form";
 import { AuthField, AuthSelect } from "@/components/shared/auth-field";
+import { TimePicker } from "@/components/shared/time-picker";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -83,27 +84,17 @@ export function SessionScheduleFields({ form, onChange }: FieldsProps) {
 
       <div className="grid grid-cols-2 gap-3">
         <AuthField label="ساعت شروع" htmlFor="startTime" required>
-          <Input
+          <TimePicker
             id="startTime"
-            name="startTime"
-            type="time"
-            dir="ltr"
+            title="ساعت شروع"
             value={form.start}
-            onChange={(event) => onChange("start", event.target.value)}
-            className="h-12 rounded-xl px-3 text-center text-sm font-semibold tabular-nums"
+            onChange={(value) => onChange("start", value)}
+            defaultValue="17:00"
           />
         </AuthField>
 
         <AuthField label="ساعت پایان" htmlFor="endTime" required>
-          <Input
-            id="endTime"
-            name="endTime"
-            type="time"
-            dir="ltr"
-            value={form.end}
-            onChange={(event) => onChange("end", event.target.value)}
-            className="h-12 rounded-xl px-3 text-center text-sm font-semibold tabular-nums"
-          />
+          <TimePicker id="endTime" title="ساعت پایان" value={form.end} onChange={(value) => onChange("end", value)} defaultValue="18:30" />
         </AuthField>
       </div>
 
