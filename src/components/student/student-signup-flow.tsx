@@ -5,15 +5,15 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import { AuthPageLead, AuthPageTitle } from "@/components/shared/auth-brand-header";
-import { AuthField } from "@/components/shared/auth-field";
+import { AuthField, AuthInput } from "@/components/shared/auth-field";
 import { AuthScreen } from "@/components/shared/auth-screen";
 import { type BeltOption, BeltPicker } from "@/components/shared/belt-picker";
 import { DatePicker } from "@/components/shared/date-picker";
-import { MeasurePicker } from "@/components/shared/measure-picker";
 import { PhotoPicker } from "@/components/shared/photo-picker";
 import { type StepOneField, StepOneFields, type StepOneForm } from "@/components/shared/step-one-fields";
 import { Stepper } from "@/components/shared/stepper";
 import { Button } from "@/components/ui/button";
+import { digitsOnly, toPersianDigits } from "@/lib/digits";
 
 const STEPS = [{ label: "اطلاعات پایه" }, { label: "کمربند" }, { label: "مدارک" }];
 
@@ -103,30 +103,30 @@ export function StudentSignupFlow() {
 
               <div className="grid grid-cols-2 gap-3">
                 <AuthField label="وزن (کیلوگرم)" htmlFor="weight" optional hint="تعیین رده وزنی">
-                  <MeasurePicker
+                  <AuthInput
                     id="weight"
-                    title="وزن"
-                    unit="کیلوگرم"
+                    name="weight"
+                    dir="ltr"
+                    inputMode="numeric"
+                    maxLength={3}
                     icon={Scale}
-                    min={30}
-                    max={150}
-                    defaultValue={60}
-                    value={documents.weight}
-                    onChange={(value) => updateDocuments("weight", value)}
+                    placeholder={toPersianDigits("60")}
+                    value={toPersianDigits(documents.weight)}
+                    onChange={(event) => updateDocuments("weight", digitsOnly(event.target.value, 3))}
                   />
                 </AuthField>
 
                 <AuthField label="قد (سانتی متر)" htmlFor="height" optional>
-                  <MeasurePicker
+                  <AuthInput
                     id="height"
-                    title="قد"
-                    unit="سانتی متر"
+                    name="height"
+                    dir="ltr"
+                    inputMode="numeric"
+                    maxLength={3}
                     icon={Ruler}
-                    min={100}
-                    max={220}
-                    defaultValue={170}
-                    value={documents.height}
-                    onChange={(value) => updateDocuments("height", value)}
+                    placeholder={toPersianDigits("170")}
+                    value={toPersianDigits(documents.height)}
+                    onChange={(event) => updateDocuments("height", digitsOnly(event.target.value, 3))}
                   />
                 </AuthField>
               </div>

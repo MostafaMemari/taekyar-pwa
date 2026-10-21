@@ -2,10 +2,9 @@
 
 import { CalendarCheck, Medal, Ruler, Scale, ShieldCheck, User, UsersRound, Weight } from "lucide-react";
 import { FormSection } from "@/components/coach/coach-form";
-import { AuthField, AuthSelect } from "@/components/shared/auth-field";
+import { AuthField, AuthInput, AuthSelect } from "@/components/shared/auth-field";
 import { BeltPicker } from "@/components/shared/belt-picker";
 import { DatePicker } from "@/components/shared/date-picker";
-import { MeasurePicker } from "@/components/shared/measure-picker";
 import { PhotoPicker } from "@/components/shared/photo-picker";
 import { Segmented } from "@/components/shared/segmented";
 import { Input } from "@/components/ui/input";
@@ -191,30 +190,30 @@ export function StudentSportsFields({ form, onChange, locked = false }: FieldsPr
 
       <div className="grid grid-cols-2 gap-3">
         <AuthField label="قد (سانتی متر)" htmlFor="height">
-          <MeasurePicker
+          <AuthInput
             id="height"
-            title="قد"
-            unit="سانتی متر"
+            name="height"
+            dir="ltr"
+            inputMode="numeric"
+            maxLength={3}
             icon={Ruler}
-            min={100}
-            max={220}
-            defaultValue={170}
-            value={form.height}
-            onChange={(value) => onChange("height", value)}
+            placeholder={toPersianDigits("170")}
+            value={toPersianDigits(form.height)}
+            onChange={(event) => onChange("height", digitsOnly(event.target.value, 3))}
           />
         </AuthField>
 
         <AuthField label="وزن (کیلوگرم)" htmlFor="weight">
-          <MeasurePicker
+          <AuthInput
             id="weight"
-            title="وزن"
-            unit="کیلوگرم"
+            name="weight"
+            dir="ltr"
+            inputMode="numeric"
+            maxLength={3}
             icon={Scale}
-            min={30}
-            max={150}
-            defaultValue={60}
-            value={form.weight}
-            onChange={(value) => onChange("weight", value)}
+            placeholder={toPersianDigits("60")}
+            value={toPersianDigits(form.weight)}
+            onChange={(event) => onChange("weight", digitsOnly(event.target.value, 3))}
           />
         </AuthField>
       </div>
