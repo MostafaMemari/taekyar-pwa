@@ -1,9 +1,13 @@
+"use client";
+
 import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { FieldGroup } from "@/components/ui/field";
+import { isCoachFormRoute } from "@/lib/coach/coach-form-routes";
 import { cn } from "@/lib/utils";
 
 const SECTION_TONES = {
@@ -39,10 +43,15 @@ export function FormSection({
 }
 
 export function ActionDock({ children, className }: { children: ReactNode; className?: string }) {
+  const pathname = usePathname();
+
   return (
     <div
       className={cn(
-        "fixed inset-x-0 bottom-[calc(5.9rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-[var(--app-max-width)] px-4",
+        "fixed inset-x-0 z-30 mx-auto max-w-[var(--app-max-width)] px-4",
+        isCoachFormRoute(pathname)
+          ? "bottom-[calc(0.875rem+env(safe-area-inset-bottom))]"
+          : "bottom-[calc(5.9rem+env(safe-area-inset-bottom))]",
         className,
       )}
     >

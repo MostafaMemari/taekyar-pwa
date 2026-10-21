@@ -3,6 +3,7 @@
 import { CalendarDays, Landmark, LayoutDashboard, User, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { isCoachFormRoute } from "@/lib/coach/coach-form-routes";
 import { cn } from "@/lib/utils";
 
 const TABS = [
@@ -15,6 +16,8 @@ const TABS = [
 
 export function CoachTabBar() {
   const pathname = usePathname();
+
+  if (isCoachFormRoute(pathname)) return null;
 
   return (
     <nav className="coach-tabbar" aria-label="ناوبری اصلی">
