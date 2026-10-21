@@ -1,27 +1,26 @@
-import type { BeltOption } from "@/components/shared/belt-picker";
+import { STUDENT_BELT_OPTIONS } from "@/lib/student-belts";
 
-export const STUDENT_BELT_OPTIONS: BeltOption[] = [
-  { value: "white", label: "سفید", color: "#F3F4F6", outline: "#D1D5DB", knotColor: "#E5E7EB" },
-  { value: "yellow", label: "زرد", color: "#FBBF24", knotColor: "#F59E0B" },
-  { value: "green", label: "سبز", color: "#22C55E", knotColor: "#16A34A" },
-  { value: "blue", label: "آبی", color: "#3B82F6", knotColor: "#2563EB" },
-  { value: "red", label: "قرمز", color: "#EF4444", knotColor: "#DC2626" },
-  { value: "poom-1", label: "پوم ۱", color: "#1F2937", bottomColor: "#DC2626", knotColor: "#111827", stripes: 1 },
-  { value: "dan-1", label: "دان ۱", color: "#1F2937", knotColor: "#111827", stripes: 1 },
-  { value: "dan-2", label: "دان ۲", color: "#1F2937", knotColor: "#111827", stripes: 2 },
-  { value: "dan-3", label: "دان ۳", color: "#1F2937", knotColor: "#111827", stripes: 3 },
-];
+const BELT_VISUALS = new Map(STUDENT_BELT_OPTIONS.map((option) => [option.value, option]));
 
-export const BELT_ASSIGN_OPTIONS: { value: string; label: string; description: string; color: string; bottomColor?: string }[] = [
-  { value: "white", label: "کمربند سفید", description: "آغاز مسیر — ثبت عضویت", color: "#F3F4F6" },
-  { value: "yellow", label: "کمربند زرد", description: "حداقل ۳ ماه تمرین پس از کمربند قبلی", color: "#FBBF24" },
-  { value: "green", label: "کمربند سبز", description: "حداقل ۳ ماه تمرین — آزمون فنی", color: "#22C55E" },
-  { value: "blue", label: "کمربند آبی", description: "حداقل ۶ ماه تمرین پس از کمربند قبلی", color: "#3B82F6" },
-  { value: "red", label: "کمربند قرمز", description: "حداقل ۶ ماه تمرین — پیش نیاز آزمون پوم", color: "#EF4444" },
-  { value: "poom-1", label: "پوم ۱", description: "کمربند دو رنگ مشکی/قرمز — یک خط", color: "#1F2937", bottomColor: "#DC2626" },
-  { value: "dan-1", label: "دان ۱", description: "کمربند مشکی — یک خط", color: "#1F2937" },
-  { value: "dan-2", label: "دان ۲", description: "کمربند مشکی — دو خط", color: "#1F2937" },
-  { value: "dan-3", label: "دان ۳", description: "کمربند مشکی — سه خط", color: "#1F2937" },
+function assignOption(value: string, label: string, description: string) {
+  const visual = BELT_VISUALS.get(value);
+  return { value, label, description, color: visual?.color ?? "#1F2937", bottomColor: visual?.bottomColor };
+}
+
+export const BELT_ASSIGN_OPTIONS = [
+  assignOption("white", "کمربند سفید", "آغاز مسیر — ثبت عضویت"),
+  assignOption("yellow", "کمربند زرد", "حداقل ۳ ماه تمرین پس از کمربند قبلی"),
+  assignOption("green", "کمربند سبز", "حداقل ۳ ماه تمرین — آزمون فنی"),
+  assignOption("blue", "کمربند آبی", "حداقل ۶ ماه تمرین پس از کمربند قبلی"),
+  assignOption("red", "کمربند قرمز", "حداقل ۶ ماه تمرین — پیش نیاز آزمون پوم"),
+  assignOption("poom-1", "پوم ۱", "کمربند دو رنگ مشکی/قرمز — یک خط"),
+  assignOption("poom-2", "پوم ۲", "کمربند دو رنگ مشکی/قرمز — دو خط"),
+  assignOption("poom-3", "پوم ۳", "کمربند دو رنگ مشکی/قرمز — سه خط"),
+  assignOption("poom-4", "پوم ۴", "کمربند دو رنگ مشکی/قرمز — چهار خط"),
+  assignOption("dan-1", "دان ۱", "کمربند مشکی — یک خط"),
+  assignOption("dan-2", "دان ۲", "کمربند مشکی — دو خط"),
+  assignOption("dan-3", "دان ۳", "کمربند مشکی — سه خط"),
+  assignOption("dan-4", "دان ۴", "کمربند مشکی — چهار خط"),
 ];
 
 export const AGE_CLASS_OPTIONS = [

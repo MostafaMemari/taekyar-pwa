@@ -10,15 +10,10 @@ import { Segmented } from "@/components/shared/segmented";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { StudentFormState, StudentFormUpdater } from "@/lib/coach/student-form-model";
-import {
-  AGE_CLASS_OPTIONS,
-  GENDER_OPTIONS,
-  STUDENT_BELT_OPTIONS,
-  TRAINING_DAYS,
-  WEIGHT_CLASS_OPTIONS,
-} from "@/lib/coach/student-form-options";
+import { AGE_CLASS_OPTIONS, GENDER_OPTIONS, TRAINING_DAYS, WEIGHT_CLASS_OPTIONS } from "@/lib/coach/student-form-options";
 import { digitsOnly, toPersianDigits } from "@/lib/digits";
 import { PROVINCES } from "@/lib/provinces";
+import { STUDENT_BELT_GROUPS } from "@/lib/student-belts";
 
 type FieldsProps = {
   form: StudentFormState;
@@ -142,7 +137,7 @@ export function StudentSportsFields({ form, onChange, locked = false }: FieldsPr
       <BeltPicker
         label="کمربند فعلی"
         value={form.belt || null}
-        options={STUDENT_BELT_OPTIONS}
+        groups={STUDENT_BELT_GROUPS}
         onChange={(value) => onChange("belt", value ?? "")}
         hint={locked ? "برای تغییر کمربند از گزینه «تخصیص کمربند» در پرونده هنرجو استفاده کنید." : undefined}
       />

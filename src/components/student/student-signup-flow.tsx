@@ -7,27 +7,16 @@ import { type FormEvent, useState } from "react";
 import { AuthPageLead, AuthPageTitle } from "@/components/shared/auth-brand-header";
 import { AuthField, AuthInput } from "@/components/shared/auth-field";
 import { AuthScreen } from "@/components/shared/auth-screen";
-import { type BeltOption, BeltPicker } from "@/components/shared/belt-picker";
+import { BeltPicker } from "@/components/shared/belt-picker";
 import { DatePicker } from "@/components/shared/date-picker";
 import { PhotoPicker } from "@/components/shared/photo-picker";
 import { type StepOneField, StepOneFields, type StepOneForm } from "@/components/shared/step-one-fields";
 import { Stepper } from "@/components/shared/stepper";
 import { Button } from "@/components/ui/button";
 import { digitsOnly, toPersianDigits } from "@/lib/digits";
+import { STUDENT_BELT_GROUPS } from "@/lib/student-belts";
 
 const STEPS = [{ label: "اطلاعات پایه" }, { label: "کمربند" }, { label: "مدارک" }];
-
-const BELTS: readonly BeltOption[] = [
-  { value: "WHITE", label: "سفید", color: "#F3F4F6", outline: "#D1D5DB", knotColor: "#E5E7EB" },
-  { value: "YELLOW", label: "زرد", color: "#FBBF24", knotColor: "#F59E0B" },
-  { value: "GREEN", label: "سبز", color: "#22C55E", knotColor: "#16A34A" },
-  { value: "BLUE", label: "آبی", color: "#3B82F6", knotColor: "#2563EB" },
-  { value: "RED", label: "قرمز", color: "#EF4444", knotColor: "#DC2626" },
-  { value: "POOM_1", label: "پوم ۱", color: "#1F2937", bottomColor: "#DC2626", knotColor: "#111827", stripes: 1 },
-  { value: "DAN_1", label: "دان ۱", color: "#1F2937", knotColor: "#111827", stripes: 1 },
-  { value: "DAN_2", label: "دان ۲", color: "#1F2937", knotColor: "#111827", stripes: 2 },
-  { value: "DAN_3", label: "دان ۳", color: "#1F2937", knotColor: "#111827", stripes: 3 },
-];
 
 type BeltForm = { belt: string; beltDate: string };
 type DocumentsForm = { insuranceDate: string; weight: string; height: string };
@@ -165,7 +154,7 @@ export function StudentSignupFlow() {
               <BeltPicker
                 label="کمربند فعلی"
                 value={belt.belt || null}
-                options={BELTS}
+                groups={STUDENT_BELT_GROUPS}
                 onChange={(value) => setBelt((current) => ({ ...current, belt: value ?? "" }))}
               />
 
