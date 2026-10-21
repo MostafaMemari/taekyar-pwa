@@ -51,8 +51,6 @@ export const STUDENT_BELT_GROUPS: BeltOptionGroup[] = [
   { value: "dan", label: "دان", columns: 3, options: DAN_BELTS },
 ];
 
-export const STUDENT_BELT_OPTIONS: readonly BeltOption[] = STUDENT_BELT_GROUPS.flatMap((group) => group.options);
-
 export const COLOR_BELT_KEYS: ColorBeltKey[] = ["white", "yellow", "green", "blue", "red"];
 
 const BELT_META: Record<string, StudentBeltMeta> = Object.fromEntries(
@@ -97,4 +95,30 @@ export function beltDotStyle(belt: StudentBeltKey) {
   const meta = getStudentBeltMeta(belt);
   if (!meta.bottomColor) return { backgroundColor: meta.color };
   return { background: `linear-gradient(to bottom, ${meta.color} 50%, ${meta.bottomColor} 50%)` };
+}
+
+const COLOR_PROGRESSION: Partial<Record<StudentBeltKey, StudentBeltKey>> = {
+  white: "yellow",
+  yellow: "green",
+  green: "blue",
+  blue: "red",
+};
+
+export function nextStudentBelt(belt: StudentBeltKey, age: number): StudentBeltKey | null {
+  const colorNext = COLOR_PROGRESSION[belt];
+  if (colorNext) return colorNext;
+
+  if (belt === "red") return age > 0 && age <= 15 ? "poom-1" : "dan-1";
+
+  if (isPoomBelt(belt)) {
+    const rank = Number(belt.slice(5));
+    return rank < 4 ? (`poom-${rank + 1}` as PoomBeltKey) : "dan-4";
+  }
+
+  if (isDanBelt(belt)) {
+    const rank = Number(belt.slice(4));
+    return rank < 10 ? (`dan-${rank + 1}` as DanBeltKey) : null;
+  }
+
+  return null;
 }

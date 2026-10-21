@@ -1,26 +1,27 @@
 "use client";
 
-import { CalendarDays, Check, Info, Medal } from "lucide-react";
+import { CalendarDays, Info, TrendingUp } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import { FormDock, FormSection } from "@/components/coach/coach-form";
 import { PersonAvatar } from "@/components/coach/coach-ui";
 import { AuthField } from "@/components/shared/auth-field";
 import { DatePicker } from "@/components/shared/date-picker";
+import { BeltStrip } from "@/components/shared/taekyar-mark";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card } from "@/components/ui/card";
-import { FieldLabel } from "@/components/ui/field";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { studentBeltDotStyle, studentBeltLabel } from "@/lib/coach/coach-data";
-import { BELT_ASSIGN_OPTIONS } from "@/lib/coach/student-form-options";
-import type { StudentProfile } from "@/lib/coach/student-profile-data";
+import { beltAssignDescription } from "@/lib/coach/student-form-options";
+import { type StudentProfile, studentAge } from "@/lib/coach/student-profile-data";
 import { toPersianDigits } from "@/lib/digits";
-import type { StudentBeltKey } from "@/lib/student-belts";
-import { cn } from "@/lib/utils";
+import { getStudentBeltMeta, nextStudentBelt } from "@/lib/student-belts";
 
 export function StudentBeltForm({ profile }: { profile: StudentProfile }) {
   const router = useRouter();
-  const [belt, setBelt] = useState(profile.belt);
   const [date, setDate] = useState(profile.beltDate);
+
+  const nextBelt = nextStudentBelt(profile.belt, studentAge(profile.birthDate));
+  const nextBeltMeta = nextBelt ? getStudentBeltMeta(nextBelt) : null;
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -46,52 +47,33 @@ export function StudentBeltForm({ profile }: { profile: StudentProfile }) {
         </div>
       </Card>
 
-      <FormSection icon={Medal} title="انتخاب کمربند" tone="amber">
+      <FormSection icon={TrendingUp} title="کمربند بعدی" tone="amber">
         <p className="-mt-2 text-start text-[11px] font-medium leading-5 text-ink-muted">
-          کمربند جدید هنرجو را انتخاب کنید؛ کمربند پوم دو رنگ (مشکی روی قرمز) و کمربند دان مشکی با تعداد خطوط درجه است.
+          کمربند بعدی هنرجو بر اساس کمربند فعلی و رده سنی او تعیین می شود و تنها همین کمربند قابل ثبت است.
         </p>
 
-        <RadioGroup aria-label="انتخاب کمربند" value={belt} onValueChange={(value) => setBelt(value as StudentBeltKey)} className="gap-2">
-          {BELT_ASSIGN_OPTIONS.map((option) => {
-            const selected = belt === option.value;
-
-            return (
-              <FieldLabel
-                key={option.value}
-                htmlFor={`belt-${option.value}`}
-                onClick={() => setBelt(option.value)}
-                className={cn(
-                  "flex w-full cursor-pointer items-center gap-3 rounded-xl border p-3 transition-colors",
-                  selected ? "border-primary/35 bg-brand-50/60" : "border-border bg-field hover:bg-muted/50",
-                )}
-              >
-                <RadioGroupItem id={`belt-${option.value}`} value={option.value} className="shrink-0" />
-                <span
-                  className="size-3.5 shrink-0 rounded-full ring-2 ring-black/5"
-                  style={
-                    option.bottomColor
-                      ? { background: `linear-gradient(to bottom, ${option.color} 50%, ${option.bottomColor} 50%)` }
-                      : { backgroundColor: option.color }
-                  }
-                  aria-hidden="true"
-                />
-                <span className="min-w-0 flex-1">
-                  <b className="block text-[13px] font-bold text-ink">{option.label}</b>
-                  <span className="mt-0.5 block text-[11px] text-ink-subtle">{option.description}</span>
-                </span>
-                <span
-                  className={cn(
-                    "grid size-5 shrink-0 place-items-center rounded-full border",
-                    selected ? "border-primary bg-primary text-primary-foreground" : "border-border text-transparent",
-                  )}
-                  aria-hidden="true"
-                >
-                  <Check className="size-3" />
-                </span>
-              </FieldLabel>
-            );
-          })}
-        </RadioGroup>
+        {nextBelt && nextBeltMeta ? (
+          <Card className="flex-row items-center gap-4 p-4">
+            <BeltStrip
+              color={nextBeltMeta.color}
+              bottomColor={nextBeltMeta.bottomColor}
+              outline={nextBeltMeta.outline}
+              stripes={nextBeltMeta.stripeCount}
+              className="size-auto w-24 shrink-0"
+            />
+            <div className="min-w-0 flex-1 text-start">
+              <b className="block text-[14px] font-extrabold text-ink">{nextBeltMeta.label}</b>
+              <p className="mt-1 text-[11px] font-medium leading-5 text-ink-subtle">{beltAssignDescription(nextBelt)}</p>
+            </div>
+          </Card>
+        ) : (
+          <Alert className="rounded-xl border-none bg-info-soft/60 p-3 text-start">
+            <Info className="text-info" aria-hidden="true" />
+            <AlertDescription className="text-[11px] leading-5 text-ink-muted">
+              این هنرجو در بالاترین کمربند ممکن است و کمربند بعدی برای او تعریف نشده است.
+            </AlertDescription>
+          </Alert>
+        )}
       </FormSection>
 
       <FormSection icon={CalendarDays} title="جزئیات تخصیص" tone="sky">

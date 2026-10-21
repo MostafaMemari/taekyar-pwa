@@ -1,27 +1,30 @@
-import { STUDENT_BELT_OPTIONS, type StudentBeltKey } from "@/lib/student-belts";
+import type { StudentBeltKey } from "@/lib/student-belts";
 
-const BELT_VISUALS = new Map(STUDENT_BELT_OPTIONS.map((option) => [option.value, option]));
-
-const BELT_DESCRIPTIONS: Record<string, string> = {
+const BELT_DESCRIPTIONS: Record<StudentBeltKey, string> = {
   white: "آغاز مسیر — ثبت عضویت",
   yellow: "حداقل ۳ ماه تمرین پس از کمربند قبلی",
-  green: "حداقل ۳ ماه تمرین — آزمون فنی",
+  green: "حداقل ۴ ماه تمرین — آزمون فنی",
   blue: "حداقل ۶ ماه تمرین پس از کمربند قبلی",
-  red: "حداقل ۶ ماه تمرین — پیش نیاز آزمون پوم",
+  red: "حداقل ۹ ماه تمرین — پیش نیاز آزمون پوم",
+  "poom-1": "۹ ماه تمرین — آزمون پوم ۱ (۸ تا ۱۵ سال)",
+  "poom-2": "۲۴ ماه تمرین — آزمون پوم ۲ (۹ تا ۱۵ سال)",
+  "poom-3": "۳۶ ماه تمرین — آزمون پوم ۳ (۱۱ تا ۱۵ سال)",
+  "poom-4": "۴۸ ماه تمرین — آزمون پوم ۴ (۱۴ تا ۱۸ سال)",
+  "dan-1": "۹ ماه تمرین — آزمون دان ۱ (از ۱۵ سال)",
+  "dan-2": "۲۴ ماه تمرین — آزمون دان ۲ (از ۱۶ سال)",
+  "dan-3": "۳۶ ماه تمرین — آزمون دان ۳",
+  "dan-4": "۴۸ ماه تمرین — آزمون دان ۴ (از ۲۱ سال)",
+  "dan-5": "۶۰ ماه تمرین — آزمون دان ۵ (از ۲۵ سال)",
+  "dan-6": "۷۲ ماه تمرین — آزمون دان ۶ (از ۳۰ سال)",
+  "dan-7": "۹۶ ماه تمرین — آزمون دان ۷ (از ۳۶ سال)",
+  "dan-8": "۱۰۸ ماه تمرین — آزمون دان ۸ (از ۴۴ سال)",
+  "dan-9": "۱۲۰ ماه تمرین — آزمون دان ۹ (از ۵۳ سال)",
+  "dan-10": "بالاترین درجه کمربند",
 };
 
-function assignOption(value: StudentBeltKey, label: string, description: string) {
-  const visual = BELT_VISUALS.get(value);
-  return { value, label, description, color: visual?.color ?? "#1F2937", bottomColor: visual?.bottomColor };
+export function beltAssignDescription(belt: StudentBeltKey) {
+  return BELT_DESCRIPTIONS[belt];
 }
-
-export const BELT_ASSIGN_OPTIONS = STUDENT_BELT_OPTIONS.map((option) =>
-  assignOption(
-    option.value as StudentBeltKey,
-    option.label,
-    BELT_DESCRIPTIONS[option.value] ?? `آزمون فنی کمربند ${option.label} — ${option.stripes ?? 0} خط`,
-  ),
-);
 
 export const GENDER_OPTIONS = [
   { value: "MALE", label: "مرد" },

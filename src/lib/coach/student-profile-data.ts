@@ -7,6 +7,7 @@ import {
   STUDENTS,
   studentSessionSummary,
 } from "@/lib/coach/coach-data";
+import { toLatinDigits } from "@/lib/digits";
 import { studentBeltLabel } from "@/lib/student-belts";
 
 export type StudentClub = {
@@ -197,6 +198,15 @@ export function getStudentProfile(id: string): StudentProfile | undefined {
 
 export function studentBeltText(student: CoachStudent): string {
   return studentBeltLabel(student.belt);
+}
+
+export function studentAge(birthDate: string) {
+  const birthYear = Number(toLatinDigits(birthDate).slice(0, 4));
+  if (!Number.isFinite(birthYear) || birthYear <= 0) return 0;
+
+  const parts = new Intl.DateTimeFormat("en-US-u-ca-persian", { year: "numeric" }).formatToParts(new Date());
+  const currentYear = Number(parts.find((part) => part.type === "year")?.value ?? 0);
+  return currentYear > birthYear ? currentYear - birthYear : 0;
 }
 
 export function groupAttendanceByMonth(records: StudentAttendanceRecord[]) {

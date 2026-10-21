@@ -900,19 +900,21 @@ COLOR | POOM | DAN
   "rankType": "COLOR",
   "rank": null,
   "color": "Green",
-  "colorHex": "#008000",
+  "colorHex": "#00FF00",
   "description": null,
   "requirements": null,
   "minAge": null,
   "maxAge": null,
-  "durationMonth": 6,
+  "durationMonth": 4,
   "stripeCount": null,
   "nextBeltId": "uuid"
 }
 ```
 
 - فرم تخصیص کمربند (`/coach/students/[id]/belt`) باید `beltId` را از همین مسیر بگیرد.
-- فیلتر سمت فرانت برای کمربندهای قابل انتخاب هنرجو: 19 مقدار `BeltName`.
+- این فرم فقط کمربند بعدی هنرجو را نشان می دهد و لیست 19تایی `BeltName` را نمایش نمی دهد.
+- زنجیره ارتقا در فرانت (`nextStudentBelt`): سفید → زرد → سبز → آبی → قرمز؛ قرمز → پوم 1 برای 15 سال و کمتر یا دان 1 برای بالای 15 سال؛ پوم و دان هر یک درجه بالاتر؛ پوم 4 به دان 4 تبدیل می شود و دان 10 پایان زنجیره است.
+- توجه: سید فعلی `nextBeltId` را به صورت خطی و متناوب بین پوم و دان پر می کند (مثلا دان 2 → پوم 3). اگر بک اند همین زنجیره را مبنا می گیرد، برای هنرجوی بزرگسال باید `nextBeltId` اصلاح شود؛ در غیر این صورت فرانت باید مثل `nextStudentBelt` از `rankType` و `level` استفاده کند.
 
 ### 9.2 `GET /belt/:id`
 
