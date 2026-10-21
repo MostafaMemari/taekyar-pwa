@@ -9,16 +9,15 @@ import { Card } from "@/components/ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { ACTIVE_CLUB, type ClassSession, type PeriodFilter, SESSIONS } from "@/lib/coach/coach-data";
+import { ACTIVE_CLUB, type ClassSession, SESSIONS, sessionIsToday, weekDayLabels } from "@/lib/coach/coach-data";
 import { toLatinDigits, toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
-type Period = "all" | PeriodFilter;
+type Period = "all" | "today";
 
 const PERIODS: { value: Period; label: string }[] = [
   { value: "all", label: "همه" },
   { value: "today", label: "امروز" },
-  { value: "week", label: "این هفته" },
 ];
 
 function SessionCard({ session }: { session: ClassSession }) {
@@ -29,7 +28,7 @@ function SessionCard({ session }: { session: ClassSession }) {
           <span
             className={cn(
               "grid size-10 shrink-0 place-items-center rounded-xl",
-              session.active ? "bg-brand-50 text-accent-ink" : "bg-muted text-ink-subtle",
+              session.isActive ? "bg-brand-50 text-accent-ink" : "bg-muted text-ink-subtle",
             )}
           >
             <session.icon className="size-5" aria-hidden="true" />
@@ -38,15 +37,15 @@ function SessionCard({ session }: { session: ClassSession }) {
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <b className="truncate text-[13px] font-extrabold text-ink">{session.name}</b>
-              <StatusBadge tone={session.active ? "success" : "neutral"} className="shrink-0">
-                {session.active ? <Check aria-hidden="true" /> : <Minus aria-hidden="true" />}
-                {session.active ? "فعال" : "غیرفعال"}
+              <StatusBadge tone={session.isActive ? "success" : "neutral"} className="shrink-0">
+                {session.isActive ? <Check aria-hidden="true" /> : <Minus aria-hidden="true" />}
+                {session.isActive ? "فعال" : "غیرفعال"}
               </StatusBadge>
             </div>
             <p className="mt-1 truncate text-[11px] text-ink-subtle">{session.club}</p>
 
             <div className="mt-2 flex flex-wrap items-center gap-1.5">
-              {session.days.map((day) => (
+              {weekDayLabels(session.weekDays).map((day) => (
                 <StatusBadge key={day} className="text-[10px]">
                   {day}
                 </StatusBadge>
@@ -56,16 +55,7 @@ function SessionCard({ session }: { session: ClassSession }) {
               </StatusBadge>
               <StatusBadge tone="brand" className="text-[10px]">
                 <Users aria-hidden="true" />
-                {session.attendance ? (
-                  <>
-                    حضور{" "}
-                    <span dir="ltr">
-                      {toPersianDigits(String(session.attendance.present))}/{toPersianDigits(String(session.attendance.total))}
-                    </span>
-                  </>
-                ) : (
-                  `${toPersianDigits(String(session.members))} هنرجو`
-                )}
+                {toPersianDigits(String(session.studentIds.length))} هنرجو
               </StatusBadge>
             </div>
           </div>
@@ -84,12 +74,12 @@ export function SessionsDirectory() {
   const clubSessions = SESSIONS.filter((session) => session.clubId === ACTIVE_CLUB.id);
   const normalizedQuery = toLatinDigits(query).trim().toLowerCase();
   const visible = clubSessions.filter((session) => {
-    const matchesPeriod = period === "all" || session.when.includes(period);
+    const matchesPeriod = period === "all" || sessionIsToday(session.weekDays);
     if (!matchesPeriod) return false;
     if (!normalizedQuery) return true;
 
     const haystack = toLatinDigits(
-      `${session.name} ${session.club} ${session.days.join(" ")} ${session.start} ${session.end}`,
+      `${session.name} ${session.club} ${weekDayLabels(session.weekDays).join(" ")} ${session.start} ${session.end}`,
     ).toLowerCase();
 
     return haystack.includes(normalizedQuery);

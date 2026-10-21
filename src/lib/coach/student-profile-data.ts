@@ -2,29 +2,19 @@ import type { AttendanceCounts } from "@/components/coach/attendance-summary";
 import {
   ACTIVE_CLUB,
   type AttendanceStatus,
-  BELT_META,
-  type BeltKey,
   type CoachStudent,
   type Gender,
-  SESSIONS,
   STUDENTS,
+  studentSessionSummary,
 } from "@/lib/coach/coach-data";
-import { toPersianDigits } from "@/lib/digits";
+import { studentBeltLabel } from "@/lib/student-belts";
 
 export type StudentClub = {
+  id: string;
   name: string;
   active: boolean;
-  since?: string;
-  leftAt?: string;
-};
-
-export type StudentBeltHistoryEntry = {
-  belt: BeltKey;
-  poom?: number;
-  dan?: number;
-  date: string;
-  note: string;
-  current?: boolean;
+  joinedAt?: string;
+  removedAt?: string;
 };
 
 export type StudentAttendanceRecord = {
@@ -50,34 +40,60 @@ export type StudentProfile = CoachStudent & {
   landline: string;
   province: string;
   beltDate: string;
-  ageClass: string;
-  weightClass: string;
   height: string;
   weight: string;
   membershipYear: string;
   registeredAt: string;
-  imageExpireDate: string;
-  trainingDays: string[];
+  expireImageDate: string;
   clubs: StudentClub[];
-  beltHistory: StudentBeltHistoryEntry[];
   attendance: StudentAttendance;
 };
 
 const FEMALE_IDS = new Set(["sara-mohammadi", "niloofar-kazemi", "dorsa-mousavi", "maryam-sharifi"]);
 
-const AGE_DIMENSIONS: Record<CoachStudent["ageGroup"], { birthDate: string; ageClass: string; height: string; weight: string }> = {
-  kids: { birthDate: "1398/01/01", ageClass: "شکوفه", height: "130", weight: "30" },
-  teens: { birthDate: "1388/01/01", ageClass: "نوجوان", height: "160", weight: "50" },
-  adults: { birthDate: "1375/01/01", ageClass: "بزرگسال", height: "175", weight: "70" },
+type DemoAgeGroup = "kids" | "teens" | "adults";
+
+const DEMO_AGE_GROUPS: Record<string, DemoAgeGroup> = {
+  "sara-mohammadi": "teens",
+  "amirhossein-mohammadi": "teens",
+  "ali-rezaei": "teens",
+  "niloofar-kazemi": "kids",
+  "mohammad-hosseini": "teens",
+  "reza-ghasemi": "adults",
+  "sina-moradi": "kids",
+  "parsa-kazemi": "kids",
+  "dorsa-mousavi": "kids",
+  "kian-ahmadi": "adults",
+  "arash-rostami": "adults",
+  "maryam-sharifi": "adults",
 };
 
-const BELT_CHAIN: { belt: BeltKey; date: string; note: string }[] = [
-  { belt: "white", date: "1403/05/15", note: `ثبت در بدو عضویت — ${ACTIVE_CLUB.name}` },
-  { belt: "yellow", date: "1403/10/02", note: "آزمون فنی دوره ۲۸۳ — استان تهران" },
-  { belt: "green", date: "1404/08/25", note: "آزمون فنی دوره ۲۹۱ — استان تهران" },
-  { belt: "blue", date: "1405/01/12", note: "آزمون فنی — استان تهران" },
-  { belt: "red", date: "1405/06/20", note: "آزمون فنی — استان تهران" },
-  { belt: "black", date: "1405/10/01", note: "ارتقا به رده دان — آزمون پوم" },
+const AGE_DIMENSIONS: Record<DemoAgeGroup, { birthDate: string; height: string; weight: string }> = {
+  kids: { birthDate: "1398/01/01", height: "130", weight: "30" },
+  teens: { birthDate: "1388/01/01", height: "160", weight: "50" },
+  adults: { birthDate: "1375/01/01", height: "175", weight: "70" },
+};
+
+const BELT_DATE_BY_RANK = [
+  "1403/05/15",
+  "1403/10/02",
+  "1404/08/25",
+  "1405/01/12",
+  "1405/06/20",
+  "1405/10/01",
+  "1405/12/15",
+  "1406/02/20",
+  "1406/05/10",
+  "1406/07/01",
+  "1406/08/12",
+  "1406/09/20",
+  "1406/10/05",
+  "1406/11/18",
+  "1407/01/10",
+  "1407/03/22",
+  "1407/05/14",
+  "1407/07/09",
+  "1407/09/01",
 ];
 
 const DEFAULT_ATTENDANCE: AttendanceCounts = { present: 20, late: 2, absent: 1, excused: 0, total: 23 };
@@ -89,12 +105,6 @@ const DEFAULT_RECORD_TEMPLATE: { status: AttendanceStatus; date: string; month: 
   { status: "PRESENT", date: "دوشنبه ۱۲ آبان", month: "آبان ۱۴۰۴" },
   { status: "PRESENT", date: "یکشنبه ۲۷ مهر", month: "مهر ۱۴۰۴" },
   { status: "ABSENT", date: "سه شنبه ۲۲ مهر", month: "مهر ۱۴۰۴", note: "عدم حضور بدون اطلاع" },
-];
-
-const SARA_BELT_HISTORY: StudentBeltHistoryEntry[] = [
-  { belt: "green", date: "1404/08/25", note: "آزمون فنی دوره ۲۹۱ — استان تهران", current: true },
-  { belt: "yellow", date: "1403/10/02", note: "آزمون فنی دوره ۲۸۳ — استان تهران" },
-  { belt: "white", date: "1403/05/15", note: `ثبت در بدو عضویت — ${ACTIVE_CLUB.name}` },
 ];
 
 const SARA_ATTENDANCE_RECORDS: StudentAttendanceRecord[] = (
@@ -112,15 +122,10 @@ const SARA_ATTENDANCE_RECORDS: StudentAttendanceRecord[] = (
   ] satisfies Omit<StudentAttendanceRecord, "className" | "club">[]
 ).map((record) => ({ ...record, className: "کیوروگی آقایان", club: ACTIVE_CLUB.name }));
 
-function buildBeltHistory(student: CoachStudent): StudentBeltHistoryEntry[] {
-  return BELT_CHAIN.slice(0, BELT_META[student.belt].rank + 1)
-    .reverse()
-    .map((entry, index) => ({
-      ...entry,
-      poom: entry.belt === "black" ? student.poom : undefined,
-      dan: entry.belt === "black" ? student.dan : undefined,
-      current: index === 0,
-    }));
+function beltRankIndex(belt: string) {
+  if (belt.startsWith("poom-")) return 5 + Number(belt.slice(5));
+  if (belt.startsWith("dan-")) return 9 + Math.min(Number(belt.slice(4)), 10);
+  return ["white", "yellow", "green", "blue", "red"].indexOf(belt);
 }
 
 function buildAttendanceRecords(className: string): StudentAttendanceRecord[] {
@@ -133,8 +138,8 @@ function buildAttendanceRecords(className: string): StudentAttendanceRecord[] {
 }
 
 function buildStudentProfile(student: CoachStudent): StudentProfile {
-  const age = AGE_DIMENSIONS[student.ageGroup];
-  const session = SESSIONS.find((item) => item.name === student.className);
+  const age = AGE_DIMENSIONS[DEMO_AGE_GROUPS[student.id] ?? "teens"];
+  const rank = Math.max(0, beltRankIndex(student.belt));
 
   const base: StudentProfile = {
     ...student,
@@ -143,19 +148,15 @@ function buildStudentProfile(student: CoachStudent): StudentProfile {
     fatherName: "علی",
     phone: `0912${student.nationalCode.slice(-7)}`,
     landline: "02144556677",
-    province: "تهران",
-    beltDate: BELT_CHAIN[BELT_META[student.belt].rank].date,
-    ageClass: age.ageClass,
-    weightClass: "وزن چهارم (−۵۷)",
+    province: "TEHRAN",
+    beltDate: BELT_DATE_BY_RANK[Math.min(rank, BELT_DATE_BY_RANK.length - 1)],
     height: age.height,
     weight: age.weight,
     membershipYear: "1403",
     registeredAt: "1403/05/15",
-    imageExpireDate: "1405/08/01",
-    trainingDays: session?.days ?? ["شنبه", "دوشنبه"],
-    clubs: [{ name: ACTIVE_CLUB.name, active: true, since: "مرداد ۱۴۰۳" }],
-    beltHistory: buildBeltHistory(student),
-    attendance: { counts: DEFAULT_ATTENDANCE, records: buildAttendanceRecords(student.className) },
+    expireImageDate: "1405/08/01",
+    clubs: [{ id: ACTIVE_CLUB.id, name: ACTIVE_CLUB.name, active: true, joinedAt: "مرداد ۱۴۰۳" }],
+    attendance: { counts: DEFAULT_ATTENDANCE, records: buildAttendanceRecords(studentSessionSummary(student.id)) },
   };
 
   if (student.id !== "sara-mohammadi") return base;
@@ -167,22 +168,18 @@ function buildStudentProfile(student: CoachStudent): StudentProfile {
     fatherName: "علی",
     phone: "09121234567",
     landline: "02144556677",
-    province: "تهران",
+    province: "TEHRAN",
     beltDate: "1404/08/25",
-    ageClass: "بزرگسال",
-    weightClass: "وزن چهارم (−۵۷)",
     height: "164",
     weight: "54",
     membershipYear: "1403",
     registeredAt: "1403/05/15",
     insuranceDate: "1405/05/10",
-    imageExpireDate: "1405/08/01",
-    trainingDays: ["شنبه", "دوشنبه", "چهارشنبه"],
+    expireImageDate: "1405/08/01",
     clubs: [
-      { name: ACTIVE_CLUB.name, active: true, since: "مرداد ۱۴۰۳" },
-      { name: "باشگاه میدان گلها", active: false, leftAt: "اردیبهشت ۱۴۰۴" },
+      { id: ACTIVE_CLUB.id, name: ACTIVE_CLUB.name, active: true, joinedAt: "مرداد ۱۴۰۳" },
+      { id: "pars", name: "باشگاه میدان گلها", active: false, joinedAt: "مهر ۱۴۰۳", removedAt: "اردیبهشت ۱۴۰۴" },
     ],
-    beltHistory: SARA_BELT_HISTORY,
     attendance: {
       counts: { present: 29, late: 3, absent: 1, excused: 1, total: 34 },
       records: SARA_ATTENDANCE_RECORDS,
@@ -199,9 +196,7 @@ export function getStudentProfile(id: string): StudentProfile | undefined {
 }
 
 export function studentBeltText(student: CoachStudent): string {
-  if (student.poom) return `کمربند پوم ${toPersianDigits(String(student.poom))}`;
-  if (student.dan) return `کمربند دان ${toPersianDigits(String(student.dan))}`;
-  return `کمربند ${BELT_META[student.belt].label}`;
+  return studentBeltLabel(student.belt);
 }
 
 export function groupAttendanceByMonth(records: StudentAttendanceRecord[]) {

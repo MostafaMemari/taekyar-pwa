@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDays, ClipboardCheck, EllipsisVertical, Gauge, Pencil, Plus, Users } from "lucide-react";
+import { CalendarDays, ClipboardCheck, EllipsisVertical, Pencil, Plus, Users } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { CoachSheet } from "@/components/coach/coach-band";
@@ -17,13 +17,12 @@ import { ClubInfoCard } from "./club-info-card";
 export function ClubDetail({ club }: { club: Club }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const sessions = getClubSessions(club.id);
-  const nextSession = sessions.find((session) => session.active);
+  const nextSession = sessions.find((session) => session.isActive);
   const attendanceHref = nextSession ? `/coach/sessions/${nextSession.id}/attendance` : "/coach/sessions/new";
 
   const stats = [
     { icon: CalendarDays, value: club.classesCount, label: "کلاس فعال" },
     { icon: Users, value: club.studentsCount, label: "هنرجو", accent: true },
-    { icon: Gauge, value: club.capacity, label: "ظرفیت (نفر)" },
   ];
 
   return (
@@ -57,7 +56,7 @@ export function ClubDetail({ club }: { club: Club }) {
           ثبت حضور و غیاب این باشگاه
         </Button>
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 gap-3">
           {stats.map((stat) => (
             <Card
               key={stat.label}

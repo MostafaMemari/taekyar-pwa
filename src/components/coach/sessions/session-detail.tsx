@@ -8,6 +8,7 @@ import { CoachSheet } from "@/components/coach/coach-band";
 import { SectionHeading, SessionTime, StatusBadge } from "@/components/coach/coach-ui";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { weekDayLabels } from "@/lib/coach/coach-data";
 import { getSessionDetail } from "@/lib/coach/session-data";
 import { toPersianDigits } from "@/lib/digits";
 import { SessionBand } from "./session-band";
@@ -61,16 +62,16 @@ export function SessionDetailView({ sessionId }: { sessionId: string }) {
               <h2 className="truncate text-[15px] font-extrabold text-ink">{detail.name}</h2>
               <p className="mt-1 truncate text-[12px] text-ink-muted">{detail.club}</p>
             </div>
-            <StatusBadge tone={detail.active ? "success" : "neutral"} className="shrink-0">
-              {detail.active ? <Check aria-hidden="true" /> : <Minus aria-hidden="true" />}
-              {detail.active ? "فعال" : "غیرفعال"}
+            <StatusBadge tone={detail.isActive ? "success" : "neutral"} className="shrink-0">
+              {detail.isActive ? <Check aria-hidden="true" /> : <Minus aria-hidden="true" />}
+              {detail.isActive ? "فعال" : "غیرفعال"}
             </StatusBadge>
           </div>
 
           <dl className="mt-4 border-t border-[var(--line-1)] pt-2">
             <InfoRow label="روزهای برگزاری">
               <span className="flex flex-wrap justify-end gap-1">
-                {detail.days.map((day) => (
+                {weekDayLabels(detail.weekDays).map((day) => (
                   <StatusBadge key={day}>{day}</StatusBadge>
                 ))}
               </span>
@@ -79,7 +80,6 @@ export function SessionDetailView({ sessionId }: { sessionId: string }) {
               <SessionTime start={detail.start} end={detail.end} />
             </InfoRow>
             <InfoRow label="تعداد هنرجو">{toPersianDigits(String(detail.memberCount))} نفر</InfoRow>
-            <InfoRow label="ظرفیت کلاس">{toPersianDigits(String(detail.capacity))} نفر</InfoRow>
           </dl>
         </Card>
 

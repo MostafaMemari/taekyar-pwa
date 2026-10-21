@@ -1,4 +1,4 @@
-import { Award, Bell, ChevronLeft, History, LogOut, type LucideIcon, Palette, Pencil, Settings, ShieldCheck } from "lucide-react";
+import { Bell, ChevronLeft, LogOut, type LucideIcon, Palette, Pencil, Settings, ShieldCheck } from "lucide-react";
 import { Fragment } from "react";
 import { CoachBand, CoachSheet } from "@/components/coach/coach-band";
 import { CoachBell, SectionHeading, StatusBadge } from "@/components/coach/coach-ui";
@@ -7,8 +7,10 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { COACH } from "@/lib/coach/coach-data";
+import { COACH, coachBeltLabel, GENDER_META } from "@/lib/coach/coach-data";
 import { toPersianDigits } from "@/lib/digits";
+import { PROVINCES } from "@/lib/provinces";
+import { getStudentBeltMeta } from "@/lib/student-belts";
 
 export const metadata = { title: "پروفایل مربی" };
 
@@ -40,15 +42,16 @@ function MenuRow({ icon: Icon, label, badge }: { icon: LucideIcon; label: string
 }
 
 export default function CoachProfilePage() {
+  const belt = getStudentBeltMeta(COACH.belt);
+  const province = PROVINCES.find((option) => option.value === COACH.province)?.label ?? COACH.province;
   const infoRows = [
     { label: "نام و نام خانوادگی", value: COACH.name },
     { label: "کد ملی", value: toPersianDigits(COACH.nationalCode), ltr: true },
-    { label: "جنسیت", value: COACH.gender },
-    { label: "استان", value: COACH.province },
+    { label: "جنسیت", value: GENDER_META[COACH.gender].label },
+    { label: "استان", value: province },
     { label: "تاریخ تولد", value: toPersianDigits(COACH.birthDate), ltr: true },
-    { label: "شماره تماس", value: toPersianDigits(COACH.phone), ltr: true },
+    { label: "شماره موبایل", value: toPersianDigits(COACH.mobile), ltr: true },
     { label: "کمربند", value: "", belt: true },
-    { label: "سال شروع مربیگری", value: toPersianDigits(COACH.startYear) },
   ];
 
   return (
@@ -67,21 +70,14 @@ export default function CoachProfilePage() {
           <div className="min-w-0 flex-1">
             <h1 className="truncate text-[20px] font-extrabold leading-7">{COACH.name}</h1>
             <p className="mt-0.5 text-[11px] font-semibold text-white/65" dir="ltr">
-              {toPersianDigits(COACH.phone)}
+              {toPersianDigits(COACH.mobile)}
             </p>
             <div className="mt-2 flex flex-wrap gap-1.5">
               <span className="meta-glass">
                 <span className="size-2.5 rounded-full bg-ink ring-2 ring-white/30" aria-hidden="true" />
-                دان {toPersianDigits(String(COACH.beltDan))}
+                {coachBeltLabel(COACH.belt)}
               </span>
-              <span className="meta-glass">
-                <Award className="size-3" aria-hidden="true" />
-                {COACH.certificate}
-              </span>
-              <span className="meta-glass">
-                <History className="size-3" aria-hidden="true" />
-                سابقه {toPersianDigits(String(COACH.experienceYears))} سال
-              </span>
+              <span className="meta-glass">{province}</span>
             </div>
           </div>
 
@@ -113,8 +109,8 @@ export default function CoachProfilePage() {
                 <dd className="flex items-center gap-1.5 text-[12px] font-extrabold text-ink" dir={row.ltr ? "ltr" : undefined}>
                   {row.belt ? (
                     <>
-                      <BeltStrip color="#1f2937" knotColor="#111827" stripes={COACH.beltDan} className="size-auto w-9" />
-                      <span>دان {toPersianDigits(String(COACH.beltDan))}</span>
+                      <BeltStrip color={belt.color} knotColor="#111827" stripes={belt.stripeCount} className="size-auto w-9" />
+                      <span>{coachBeltLabel(COACH.belt)}</span>
                     </>
                   ) : (
                     row.value

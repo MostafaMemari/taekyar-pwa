@@ -5,6 +5,7 @@ import { CoachSheet } from "@/components/coach/coach-band";
 import { GymContext, SectionHeading, SessionTime, StatusBadge } from "@/components/coach/coach-ui";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { weekDayLabels } from "@/lib/coach/coach-data";
 import type { SessionDetail } from "@/lib/coach/session-data";
 import { toPersianDigits } from "@/lib/digits";
 import { SessionBand } from "./session-band";
@@ -24,7 +25,7 @@ export function SessionReport({ detail }: { detail: SessionDetail }) {
         backHref={`/coach/sessions/${detail.id}`}
         watermark="گزارش"
         chip="گزارش جلسه"
-        subtitle={`جلسه ${detail.days[0]} — ثبت شده توسط ${detail.lastSession.recordedBy}`}
+        subtitle={`جلسه ${weekDayLabels(detail.weekDays).join(" و ")} — ثبت شده توسط ${detail.lastSession.recordedBy}`}
         meta={
           <>
             <span className="meta-glass">

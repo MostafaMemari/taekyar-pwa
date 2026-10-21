@@ -4,7 +4,7 @@ import { SectionHeading, SessionTime, StatusBadge } from "@/components/coach/coa
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
-import type { ClassSession } from "@/lib/coach/coach-data";
+import { type ClassSession, weekDayLabels } from "@/lib/coach/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
@@ -21,7 +21,7 @@ export function ClubClasses({ sessions }: { sessions: ClassSession[] }) {
                 <span
                   className={cn(
                     "grid size-10 shrink-0 place-items-center rounded-xl",
-                    session.active ? "bg-brand-50 text-accent-ink" : "bg-muted text-ink-subtle",
+                    session.isActive ? "bg-brand-50 text-accent-ink" : "bg-muted text-ink-subtle",
                   )}
                 >
                   <session.icon className="size-5" aria-hidden="true" />
@@ -30,7 +30,7 @@ export function ClubClasses({ sessions }: { sessions: ClassSession[] }) {
                 <span className="min-w-0 flex-1">
                   <span className="flex items-center gap-2">
                     <b className="truncate text-[13px] font-extrabold text-ink">{session.name}</b>
-                    {session.active ? null : (
+                    {session.isActive ? null : (
                       <StatusBadge className="shrink-0">
                         <Minus aria-hidden="true" />
                         غیرفعال
@@ -38,7 +38,7 @@ export function ClubClasses({ sessions }: { sessions: ClassSession[] }) {
                     )}
                   </span>
                   <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
-                    {session.days.map((day) => (
+                    {weekDayLabels(session.weekDays).map((day) => (
                       <StatusBadge key={day}>{day}</StatusBadge>
                     ))}
                     <StatusBadge>
@@ -46,16 +46,7 @@ export function ClubClasses({ sessions }: { sessions: ClassSession[] }) {
                     </StatusBadge>
                     <StatusBadge tone="brand">
                       <Users aria-hidden="true" />
-                      {session.attendance ? (
-                        <>
-                          حضور{" "}
-                          <span dir="ltr">
-                            {toPersianDigits(String(session.attendance.present))}/{toPersianDigits(String(session.attendance.total))}
-                          </span>
-                        </>
-                      ) : (
-                        `${toPersianDigits(String(session.members ?? 0))} هنرجو`
-                      )}
+                      {toPersianDigits(String(session.studentIds.length))} هنرجو
                     </StatusBadge>
                   </span>
                 </span>

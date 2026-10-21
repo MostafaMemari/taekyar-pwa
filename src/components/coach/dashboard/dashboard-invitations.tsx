@@ -3,10 +3,11 @@ import { PersonAvatar, SectionHeading, StatusBadge } from "@/components/coach/co
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { INVITATIONS } from "@/lib/coach/coach-data";
+import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
 export function DashboardInvitations() {
-  const pending = INVITATIONS.filter((invitation) => invitation.status === "pending");
+  const pending = INVITATIONS.filter((invitation) => invitation.status === "PENDING");
 
   return (
     <section>
@@ -25,18 +26,24 @@ export function DashboardInvitations() {
         }
       />
       <Card className="gap-0 p-0">
-        {pending.map((invitation, index) => (
-          <div key={invitation.id} className={cn("flex items-center gap-3 p-4", index > 0 && "border-t border-[var(--line-2)]")}>
-            <PersonAvatar name={invitation.name} className="size-9" fallbackClassName="text-[12px]" />
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-[13px] font-extrabold text-ink">{invitation.name}</p>
-              <p className="mt-1 text-[10.5px] font-medium text-ink-subtle">ارسال: {invitation.sentAt}</p>
+        {pending.length > 0 ? (
+          pending.map((invitation, index) => (
+            <div key={invitation.id} className={cn("flex items-center gap-3 p-4", index > 0 && "border-t border-[var(--line-2)]")}>
+              <PersonAvatar name={invitation.studentName ?? invitation.nationalCode} className="size-9" fallbackClassName="text-[12px]" />
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[13px] font-extrabold text-ink">{invitation.studentName ?? "هنرجوی بدون حساب"}</p>
+                <p className="mt-1 truncate text-[10.5px] font-medium text-ink-subtle">
+                  کد ملی {toPersianDigits(invitation.nationalCode)} · ارسال: {invitation.sentAt}
+                </p>
+              </div>
+              <StatusBadge tone="warning" className="shrink-0">
+                در انتظار پاسخ
+              </StatusBadge>
             </div>
-            <StatusBadge tone="warning" className="shrink-0">
-              در انتظار پاسخ
-            </StatusBadge>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p className="p-4 text-center text-[11px] font-semibold text-ink-subtle">دعوت نامه در انتظاری وجود ندارد.</p>
+        )}
       </Card>
     </section>
   );

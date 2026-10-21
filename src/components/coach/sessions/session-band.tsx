@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { CoachBand } from "@/components/coach/coach-band";
 import { SessionTime } from "@/components/coach/coach-ui";
 import { Button } from "@/components/ui/button";
+import { weekDayLabels } from "@/lib/coach/coach-data";
 import type { SessionDetail } from "@/lib/coach/session-data";
 
 export function SessionBand({
@@ -49,7 +50,7 @@ export function SessionBand({
         <div className="min-w-0 flex-1">
           <h1 className="truncate text-[20px] font-extrabold leading-7">{detail.name}</h1>
           <p className="mt-1 truncate text-[11px] font-semibold text-white/65">
-            {subtitle ?? `${detail.club} · ${detail.days.join(" و ")}`}
+            {subtitle ?? `${detail.club} · ${weekDayLabels(detail.weekDays).join(" و ")}`}
           </p>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {meta ?? (
@@ -58,7 +59,7 @@ export function SessionBand({
                   <Landmark aria-hidden="true" />
                   {detail.club}
                 </span>
-                <span className="meta-glass">{detail.days.join(" و ")}</span>
+                <span className="meta-glass">{weekDayLabels(detail.weekDays).join(" و ")}</span>
                 <span className="meta-glass">
                   <SessionTime start={detail.start} end={detail.end} />
                 </span>

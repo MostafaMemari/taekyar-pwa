@@ -2,25 +2,21 @@ import { ListFilter, SlidersHorizontal, X } from "lucide-react";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { type AgeGroup, BELT_META, type BeltKey } from "@/lib/coach/coach-data";
-import { AGE_OPTIONS, BELT_ORDER, normalizeMulti } from "@/lib/coach/students-options";
+import { BELT_ORDER, normalizeMulti } from "@/lib/coach/students-options";
 import { toPersianDigits } from "@/lib/digits";
+import { type ColorBeltKey, getStudentBeltMeta } from "@/lib/student-belts";
 
 export function StudentsFilters({
   belts,
-  ages,
   filterCount,
   isDirty,
   onBeltsChange,
-  onAgesChange,
   onClear,
 }: {
-  belts: BeltKey[];
-  ages: AgeGroup[];
+  belts: ColorBeltKey[];
   filterCount: number;
   isDirty: boolean;
-  onBeltsChange: (value: BeltKey[]) => void;
-  onAgesChange: (value: AgeGroup[]) => void;
+  onBeltsChange: (value: ColorBeltKey[]) => void;
   onClear: () => void;
 }) {
   return (
@@ -69,43 +65,21 @@ export function StudentsFilters({
           <ToggleGroupItem value="all" className="h-7 rounded-full px-3 text-[10px] font-bold">
             همه
           </ToggleGroupItem>
-          {BELT_ORDER.map((belt) => (
-            <ToggleGroupItem
-              key={belt}
-              value={belt}
-              aria-label={`کمربند ${BELT_META[belt].label}`}
-              className="h-7 gap-1.5 rounded-full px-2.5 text-[10px] font-bold aria-pressed:border-primary/35 aria-pressed:bg-brand-50 aria-pressed:text-accent-ink"
-            >
-              <BeltStrip color={BELT_META[belt].color} outline={BELT_META[belt].outline} className="size-auto w-[26px]" />
-              <span>{BELT_META[belt].label}</span>
-            </ToggleGroupItem>
-          ))}
-        </ToggleGroup>
-      </div>
+          {BELT_ORDER.map((belt) => {
+            const meta = getStudentBeltMeta(belt);
 
-      <div className="flex items-center gap-2">
-        <span className="w-12 shrink-0 text-[10px] font-bold text-ink-subtle">رده سنی</span>
-        <ToggleGroup
-          aria-label="فیلتر رده سنی"
-          multiple
-          value={ages.length > 0 ? ages : ["all"]}
-          onValueChange={(next) => onAgesChange(normalizeMulti(next, ages))}
-          variant="outline"
-          spacing={1.5}
-          className="no-scrollbar min-w-0 flex-1 overflow-x-auto pb-0.5"
-        >
-          <ToggleGroupItem value="all" className="h-7 rounded-full px-3 text-[10px] font-bold">
-            همه
-          </ToggleGroupItem>
-          {AGE_OPTIONS.map((option) => (
-            <ToggleGroupItem
-              key={option.value}
-              value={option.value}
-              className="h-7 rounded-full px-3 text-[10px] font-bold aria-pressed:border-primary/35 aria-pressed:bg-brand-50 aria-pressed:text-accent-ink"
-            >
-              {option.label}
-            </ToggleGroupItem>
-          ))}
+            return (
+              <ToggleGroupItem
+                key={belt}
+                value={belt}
+                aria-label={`کمربند ${meta.label}`}
+                className="h-7 gap-1.5 rounded-full px-2.5 text-[10px] font-bold aria-pressed:border-primary/35 aria-pressed:bg-brand-50 aria-pressed:text-accent-ink"
+              >
+                <BeltStrip color={meta.color} outline={meta.outline} className="size-auto w-[26px]" />
+                <span>{meta.label}</span>
+              </ToggleGroupItem>
+            );
+          })}
         </ToggleGroup>
       </div>
     </div>

@@ -9,7 +9,6 @@ export type SessionRosterEntry = {
 };
 
 export type SessionDetail = ClassSession & {
-  capacity: number;
   memberCount: number;
   lastSession: {
     date: string;
@@ -19,24 +18,44 @@ export type SessionDetail = ClassSession & {
   roster: SessionRosterEntry[];
 };
 
-const ROSTER_TEMPLATE: { studentId: string; status: AttendanceStatus; note?: string }[] = [
-  { studentId: "sara-mohammadi", status: "PRESENT" },
-  { studentId: "amirhossein-mohammadi", status: "PRESENT" },
-  { studentId: "ali-rezaei", status: "LATE", note: "۱۵ دقیقه دیر رسید · گرم کردن را از دست داد" },
-  { studentId: "mohammad-hosseini", status: "PRESENT" },
-  { studentId: "reza-ghasemi", status: "ABSENT", note: "مسافرت خانوادگی · اطلاع قبلی داده بود" },
-  { studentId: "parsa-kazemi", status: "PRESENT" },
-  { studentId: "sina-moradi", status: "EXCUSED", note: "مرخص استعلاجی · مدرک پزشکی هفته آینده ارائه می شود" },
-  { studentId: "maryam-sharifi", status: "PRESENT" },
+const STATUS_PATTERN: { status: AttendanceStatus; note?: string }[] = [
+  { status: "PRESENT" },
+  { status: "PRESENT" },
+  { status: "LATE", note: "۱۵ دقیقه دیر رسید · گرم کردن را از دست داد" },
+  { status: "PRESENT" },
+  { status: "ABSENT", note: "مسافرت خانوادگی · اطلاع قبلی داده بود" },
+  { status: "PRESENT" },
+  { status: "EXCUSED", note: "مرخص استعلاجی · مدرک پزشکی هفته آینده ارائه می شود" },
+  { status: "PRESENT" },
+  { status: "PRESENT" },
 ];
 
-function buildLastSessionCounts(session: ClassSession): AttendanceCounts {
-  const total = session.attendance?.total ?? session.members ?? 12;
-  const present = session.attendance?.present ?? Math.max(total - 2, 0);
-  const late = Math.min(total >= 10 ? 2 : 1, Math.max(total - present, 0));
-  const absent = Math.max(total - present - late, 0);
+function buildRoster(session: ClassSession): SessionRosterEntry[] {
+  return session.studentIds.flatMap((studentId, index) => {
+    const student = STUDENTS.find((item) => item.id === studentId);
+    if (!student) return [];
 
-  return { present, late, absent, excused: 0, total };
+    return [
+      {
+        studentId,
+        name: student.name,
+        ...STATUS_PATTERN[index % STATUS_PATTERN.length],
+      },
+    ];
+  });
+}
+
+function countRoster(roster: SessionRosterEntry[]): AttendanceCounts {
+  const counts: AttendanceCounts = { present: 0, late: 0, absent: 0, excused: 0, total: roster.length };
+
+  for (const entry of roster) {
+    if (entry.status === "PRESENT") counts.present += 1;
+    if (entry.status === "LATE") counts.late += 1;
+    if (entry.status === "ABSENT") counts.absent += 1;
+    if (entry.status === "EXCUSED") counts.excused = (counts.excused ?? 0) + 1;
+  }
+
+  return counts;
 }
 
 export function getSession(id: string): ClassSession | undefined {
@@ -47,23 +66,14 @@ export function getSessionDetail(id: string): SessionDetail | undefined {
   const session = getSession(id);
   if (!session) return undefined;
 
-  const memberCount = session.attendance?.total ?? session.members ?? 12;
-  const roster = ROSTER_TEMPLATE.map((entry) => {
-    const student = STUDENTS.find((item) => item.id === entry.studentId);
-
-    return {
-      ...entry,
-      name: student?.name ?? "هنرجو",
-    };
-  });
+  const roster = buildRoster(session);
 
   return {
     ...session,
-    capacity: memberCount + 2,
-    memberCount,
+    memberCount: roster.length,
     lastSession: {
       date: "شنبه ۲۴ آبان ۱۴۰۴",
-      counts: buildLastSessionCounts(session),
+      counts: countRoster(roster),
       recordedBy: COACH.name,
     },
     roster,

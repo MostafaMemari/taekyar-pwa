@@ -2,13 +2,13 @@ import { CalendarDays, Clock, Send, UserPlus, Users } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { INVITATIONS, SESSIONS, STUDENTS } from "@/lib/coach/coach-data";
+import { INVITATIONS, SESSIONS, STUDENTS, sessionIsToday } from "@/lib/coach/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
 export function DashboardOverview() {
-  const todaySessions = SESSIONS.filter((session) => session.when.includes("today")).length;
-  const pendingInvitations = INVITATIONS.filter((invitation) => invitation.status === "pending").length;
+  const todaySessions = SESSIONS.filter((session) => sessionIsToday(session.weekDays)).length;
+  const pendingInvitations = INVITATIONS.filter((invitation) => invitation.status === "PENDING").length;
 
   const stats = [
     { href: "/coach/students", label: "هنرجو", value: STUDENTS.length, icon: Users },

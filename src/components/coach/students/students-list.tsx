@@ -5,9 +5,10 @@ import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
-import { BELT_META, type CoachStudent, INSURANCE_META, studentBeltLabel } from "@/lib/coach/coach-data";
+import { type CoachStudent, INSURANCE_META, studentBeltLabel, studentSessionSummary } from "@/lib/coach/coach-data";
 import { INSURANCE_ICONS } from "@/lib/coach/students-options";
 import { toPersianDigits } from "@/lib/digits";
+import { getStudentBeltMeta } from "@/lib/student-belts";
 
 function InsuranceBadge({ student }: { student: CoachStudent }) {
   const meta = INSURANCE_META[student.insurance];
@@ -22,7 +23,7 @@ function InsuranceBadge({ student }: { student: CoachStudent }) {
 }
 
 function StudentCard({ student }: { student: CoachStudent }) {
-  const belt = BELT_META[student.belt];
+  const belt = getStudentBeltMeta(student.belt);
 
   return (
     <Link href={`/coach/students/${student.id}`} className="block transition duration-150 active:scale-[0.995]">
@@ -38,18 +39,16 @@ function StudentCard({ student }: { student: CoachStudent }) {
           </span>
           <span className="mt-1.5 flex items-center gap-1.5">
             <InsuranceBadge student={student} />
-            <span className="truncate text-[10.5px] text-ink-subtle">
-              {student.ageLabel} • {student.className}
-            </span>
+            <span className="truncate text-[10.5px] text-ink-subtle">{studentSessionSummary(student.id)}</span>
           </span>
         </span>
 
         <span className="flex w-14 shrink-0 flex-col items-center gap-1">
           <BeltStrip
             color={belt.color}
-            bottomColor={student.poom ? "#DC2626" : undefined}
+            bottomColor={belt.bottomColor}
             outline={belt.outline}
-            stripes={student.poom ?? student.dan ?? 0}
+            stripes={belt.stripeCount}
             className="size-auto w-12"
           />
           <span className="text-[8.5px] font-extrabold leading-none text-ink-muted">{studentBeltLabel(student)}</span>

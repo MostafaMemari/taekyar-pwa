@@ -5,7 +5,7 @@ import { CoachBell, StatusBadge } from "@/components/coach/coach-ui";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CLUB_ADMISSION_META, CLUBS } from "@/lib/coach/coach-data";
+import { CLUBS, GENDER_META } from "@/lib/coach/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
@@ -55,30 +55,29 @@ export default function CoachClubsPage() {
                 <div className="min-w-0 flex-1">
                   <b className="block truncate text-[14.5px] font-extrabold text-ink">{club.name}</b>
                   <div className="mt-1 flex flex-wrap gap-1.5">
-                    <StatusBadge tone="success">
-                      <Check aria-hidden="true" />
-                      فعال
+                    <StatusBadge tone={club.isActive ? "success" : "neutral"}>
+                      {club.isActive ? <Check aria-hidden="true" /> : null}
+                      {club.isActive ? "فعال" : "غیرفعال"}
                     </StatusBadge>
-                    {club.workspace ? (
+                    {club.id === "shohada" ? (
                       <StatusBadge tone="brand">
                         <Star aria-hidden="true" />
                         فضای کاری فعال
                       </StatusBadge>
                     ) : (
-                      <StatusBadge>{CLUB_ADMISSION_META[club.admission].label}</StatusBadge>
+                      <StatusBadge>{GENDER_META[club.gender].clubLabel}</StatusBadge>
                     )}
                   </div>
                 </div>
                 <span className="text-[44px] font-extrabold leading-none text-brand-600/10" aria-hidden="true">
-                  {club.watermark}
+                  {club.name.slice(0, 1)}
                 </span>
               </div>
 
-              <div className="grid grid-cols-3 border-y border-[var(--line-2)] bg-[var(--surface-2)]">
+              <div className="grid grid-cols-2 border-y border-[var(--line-2)] bg-[var(--surface-2)]">
                 {[
                   { value: toPersianDigits(String(club.classesCount)), label: "کلاس فعال" },
                   { value: toPersianDigits(String(club.studentsCount)), label: "هنرجو" },
-                  { value: `${toPersianDigits(club.attendance)}٪`, label: "حضور هفته" },
                 ].map((stat, index) => (
                   <div key={stat.label} className={cn("flex flex-col items-center py-2.5", index > 0 && "border-s border-[var(--line-2)]")}>
                     <b className="text-[14px] font-extrabold tabular-nums text-ink">{stat.value}</b>
@@ -89,7 +88,7 @@ export default function CoachClubsPage() {
 
               <div className="flex items-start gap-1.5 px-4 pt-3 text-[11px] leading-5 text-ink-subtle">
                 <MapPin className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
-                <span className="line-clamp-2">{club.address}</span>
+                <span className="line-clamp-2">{club.address || "آدرس ثبت نشده"}</span>
               </div>
 
               <div className="flex items-center gap-2 px-4 pb-4 pt-3">

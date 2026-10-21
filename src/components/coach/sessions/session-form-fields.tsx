@@ -7,10 +7,9 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { CLUBS } from "@/lib/coach/coach-data";
+import { CLUBS, type WeekDay } from "@/lib/coach/coach-data";
 import type { SessionFormState, SessionFormUpdater } from "@/lib/coach/session-form-model";
-import { SESSION_DAYS } from "@/lib/coach/session-form-options";
-import { digitsOnly, toPersianDigits } from "@/lib/digits";
+import { SESSION_DAY_OPTIONS } from "@/lib/coach/session-form-options";
 
 type FieldsProps = {
   form: SessionFormState;
@@ -44,19 +43,9 @@ export function SessionInfoFields({ form, onChange }: FieldsProps) {
         />
       </AuthField>
 
-      <AuthField label="ظرفیت کلاس (نفر)" htmlFor="capacity" hint="سقف هنرجویان قابل ثبت در این کلاس.">
-        <Input
-          id="capacity"
-          name="capacity"
-          dir="ltr"
-          inputMode="numeric"
-          maxLength={3}
-          placeholder={toPersianDigits("24")}
-          value={toPersianDigits(form.capacity)}
-          onChange={(event) => onChange("capacity", digitsOnly(event.target.value, 3))}
-          className="h-12 rounded-xl px-4 text-center text-sm font-semibold"
-        />
-      </AuthField>
+      <p className="text-start text-[11px] font-medium leading-5 text-ink-muted">
+        کلاس به باشگاه انتخاب شده متصل می شود؛ افزودن هنرجو پس از ساخت کلاس انجام می شود.
+      </p>
     </FormSection>
   );
 }
@@ -72,23 +61,23 @@ export function SessionScheduleFields({ form, onChange }: FieldsProps) {
           aria-label="روزهای برگزاری"
           multiple
           value={form.days}
-          onValueChange={(next) => onChange("days", next)}
+          onValueChange={(next) => onChange("days", next as WeekDay[])}
           variant="outline"
           spacing={2}
           className="flex w-full flex-wrap"
         >
-          {SESSION_DAYS.map((day) => (
+          {SESSION_DAY_OPTIONS.map((day) => (
             <ToggleGroupItem
-              key={day}
-              value={day}
+              key={day.value}
+              value={day.value}
               className="h-9 rounded-full px-3.5 text-[11px] font-bold aria-pressed:border-primary/35 aria-pressed:bg-brand-50 aria-pressed:text-accent-ink"
             >
-              {day}
+              {day.label}
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
         <FieldDescription className="text-start text-[11px] font-medium leading-5 text-ink-muted">
-          حداقل یک روز برگزاری را انتخاب کنید.
+          حداقل یک روز برگزاری را انتخاب کنید. ساعت پایان باید بعد از ساعت شروع باشد.
         </FieldDescription>
       </Field>
 
@@ -121,7 +110,7 @@ export function SessionScheduleFields({ form, onChange }: FieldsProps) {
       <Alert className="rounded-xl border-none bg-info-soft/60 p-3 text-start">
         <Info className="text-info" aria-hidden="true" />
         <AlertDescription className="text-[11px] leading-5 text-ink-muted">
-          اگر بازه زمانی با کلاس دیگری از همین باشگاه هم پوشانی داشته باشد، هنگام ثبت اخطار نمایش داده می شود.
+          بازه زمانی باید معتبر باشد (شروع قبل از پایان). برای هر کلاس سقف ظرفیت تعیین نمی شود و هنرجویان بعد از ساخت کلاس اضافه می شوند.
         </AlertDescription>
       </Alert>
     </FormSection>

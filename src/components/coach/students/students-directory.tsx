@@ -3,9 +3,10 @@
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { type AgeGroup, BELT_META, type BeltKey, type InsuranceStatus, STUDENTS, studentBeltLabel } from "@/lib/coach/coach-data";
+import { type InsuranceStatus, STUDENTS, studentBeltLabel, studentSessionSummary } from "@/lib/coach/coach-data";
 import type { SortKey } from "@/lib/coach/students-options";
 import { toLatinDigits } from "@/lib/digits";
+import { beltRank, type ColorBeltKey } from "@/lib/student-belts";
 import { StudentsFilters } from "./students-filters";
 import { StudentsList } from "./students-list";
 import { StudentsOverview } from "./students-overview";
@@ -14,8 +15,7 @@ import { StudentsToolbar } from "./students-toolbar";
 
 export function StudentsDirectory() {
   const [query, setQuery] = useState("");
-  const [belts, setBelts] = useState<BeltKey[]>([]);
-  const [ages, setAges] = useState<AgeGroup[]>([]);
+  const [belts, setBelts] = useState<ColorBeltKey[]>([]);
   const [insurance, setInsurance] = useState<InsuranceStatus | null>(null);
   const [sort, setSort] = useState<SortKey>("default");
   const [addOpen, setAddOpen] = useState(false);
@@ -24,13 +24,12 @@ export function StudentsDirectory() {
   const normalizedQuery = toLatinDigits(query).trim().toLowerCase();
 
   const visible = STUDENTS.filter((student) => {
-    if (belts.length > 0 && !belts.includes(student.belt)) return false;
-    if (ages.length > 0 && !ages.includes(student.ageGroup)) return false;
+    if (belts.length > 0 && !belts.includes(student.belt as ColorBeltKey)) return false;
     if (insurance && student.insurance !== insurance) return false;
     if (!normalizedQuery) return true;
 
     const haystack = toLatinDigits(
-      `${student.name} ${student.nationalCode} ${studentBeltLabel(student)} ${student.ageLabel} ${student.className}`,
+      `${student.name} ${student.nationalCode} ${studentBeltLabel(student)} ${studentSessionSummary(student.id)}`,
     ).toLowerCase();
 
     return haystack.includes(normalizedQuery);
@@ -38,21 +37,17 @@ export function StudentsDirectory() {
 
   const sorted = [...visible].sort((a, b) => {
     if (sort === "name") return a.name.localeCompare(b.name, "fa");
-    if (sort === "belt") {
-      const byRank = BELT_META[b.belt].rank - BELT_META[a.belt].rank;
-      return byRank !== 0 ? byRank : (b.dan ?? 0) - (a.dan ?? 0);
-    }
+    if (sort === "belt") return beltRank(b.belt) - beltRank(a.belt);
     if (sort === "ins") return a.insuranceDays - b.insuranceDays;
     return 0;
   });
 
-  const filterCount = belts.length + ages.length + (insurance ? 1 : 0);
+  const filterCount = belts.length + (insurance ? 1 : 0);
   const isDirty = filterCount > 0 || query.trim().length > 0;
 
   const clearFilters = () => {
     setQuery("");
     setBelts([]);
-    setAges([]);
     setInsurance(null);
   };
 
@@ -68,15 +63,7 @@ export function StudentsDirectory() {
         onOpenSort={() => setSortOpen(true)}
       />
 
-      <StudentsFilters
-        belts={belts}
-        ages={ages}
-        filterCount={filterCount}
-        isDirty={isDirty}
-        onBeltsChange={setBelts}
-        onAgesChange={setAges}
-        onClear={clearFilters}
-      />
+      <StudentsFilters belts={belts} filterCount={filterCount} isDirty={isDirty} onBeltsChange={setBelts} onClear={clearFilters} />
 
       <StudentsList students={sorted} onClear={clearFilters} />
 

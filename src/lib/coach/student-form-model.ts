@@ -1,5 +1,6 @@
 import type { Gender } from "@/lib/coach/coach-data";
 import type { StudentProfile } from "@/lib/coach/student-profile-data";
+import type { StudentBeltKey } from "@/lib/student-belts";
 
 export type StudentFormState = {
   fullName: string;
@@ -10,16 +11,13 @@ export type StudentFormState = {
   phone: string;
   landline: string;
   province: string;
-  belt: string;
+  belt: StudentBeltKey | "";
   beltDate: string;
-  ageClass: string;
-  weightClass: string;
   height: string;
   weight: string;
   membershipYear: string;
   insuranceDate: string;
-  imageExpireDate: string;
-  trainingDays: string[];
+  expireImageDate: string;
 };
 
 export type StudentFormUpdater = <K extends keyof StudentFormState>(field: K, value: StudentFormState[K]) => void;
@@ -36,14 +34,11 @@ export function emptyStudentForm(): StudentFormState {
     province: "",
     belt: "",
     beltDate: "",
-    ageClass: "",
-    weightClass: "",
     height: "",
     weight: "",
     membershipYear: "",
     insuranceDate: "",
-    imageExpireDate: "",
-    trainingDays: [],
+    expireImageDate: "",
   };
 }
 
@@ -57,15 +52,12 @@ export function studentToForm(profile: StudentProfile): StudentFormState {
     phone: profile.phone,
     landline: profile.landline,
     province: profile.province,
-    belt: profile.poom ? `poom-${profile.poom}` : profile.dan ? `dan-${profile.dan}` : profile.belt,
+    belt: profile.belt,
     beltDate: profile.beltDate,
-    ageClass: profile.ageClass,
-    weightClass: profile.weightClass,
     height: profile.height,
     weight: profile.weight,
     membershipYear: profile.membershipYear,
     insuranceDate: profile.insuranceDate ?? "",
-    imageExpireDate: profile.imageExpireDate,
-    trainingDays: profile.trainingDays,
+    expireImageDate: profile.expireImageDate,
   };
 }

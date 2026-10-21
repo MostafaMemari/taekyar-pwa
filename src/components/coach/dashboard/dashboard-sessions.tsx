@@ -1,14 +1,14 @@
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Users } from "lucide-react";
 import Link from "next/link";
 import { SectionHeading, StatusBadge } from "@/components/coach/coach-ui";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { SESSIONS } from "@/lib/coach/coach-data";
+import { SESSIONS, sessionIsToday, weekDayLabels } from "@/lib/coach/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
 export function DashboardSessions() {
-  const todaySessions = SESSIONS.filter((session) => session.when.includes("today")).sort((a, b) => a.start.localeCompare(b.start));
+  const todaySessions = SESSIONS.filter((session) => sessionIsToday(session.weekDays)).sort((a, b) => a.start.localeCompare(b.start));
 
   return (
     <section>
@@ -27,14 +27,11 @@ export function DashboardSessions() {
         }
       />
       <Card className="gap-0 p-0">
-        {todaySessions.map((session, index) => {
-          const attendance = session.attendance;
-          const percent = attendance ? Math.round((attendance.present / attendance.total) * 100) : 0;
-
-          return (
+        {todaySessions.length > 0 ? (
+          todaySessions.map((session, index) => (
             <Link
               key={session.id}
-              href="/coach/sessions"
+              href={`/coach/sessions/${session.id}`}
               className={cn(
                 "flex items-center gap-3 p-4 transition-colors hover:bg-muted/40",
                 index > 0 && "border-t border-[var(--line-2)]",
@@ -48,35 +45,25 @@ export function DashboardSessions() {
               <span className="min-w-0 flex-1">
                 <span className="flex items-center gap-2">
                   <b className="truncate text-[13px] font-extrabold text-ink">{session.name}</b>
-                  <StatusBadge tone={session.active ? "success" : "neutral"} className="shrink-0">
-                    {session.active ? "فعال" : "غیرفعال"}
+                  <StatusBadge tone={session.isActive ? "success" : "neutral"} className="shrink-0">
+                    {session.isActive ? "فعال" : "غیرفعال"}
                   </StatusBadge>
                 </span>
                 <span className="mt-1 block truncate text-[10px] font-medium text-ink-subtle">
-                  {session.club} · {session.days.join("، ")}
+                  {session.club} · {weekDayLabels(session.weekDays).join("، ")}
                 </span>
-                {attendance ? (
-                  <span className="mt-2 flex items-center gap-2">
-                    <span className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-muted">
-                      <span
-                        className={cn(
-                          "block h-full rounded-full",
-                          percent >= 85 ? "bg-success" : percent >= 70 ? "bg-brand-500" : "bg-warning",
-                        )}
-                        style={{ width: `${percent}%` }}
-                      />
-                    </span>
-                    <span className="shrink-0 text-[9px] font-bold tabular-nums text-ink-subtle">
-                      {toPersianDigits(String(attendance.present))} از {toPersianDigits(String(attendance.total))}
-                    </span>
-                  </span>
-                ) : null}
+                <span className="mt-1.5 flex items-center gap-1 text-[9.5px] font-bold text-ink-subtle">
+                  <Users className="size-3" aria-hidden="true" />
+                  {toPersianDigits(String(session.studentIds.length))} هنرجو
+                </span>
               </span>
 
               <ChevronLeft className="size-4 shrink-0 text-ink-faint" aria-hidden="true" />
             </Link>
-          );
-        })}
+          ))
+        ) : (
+          <p className="p-4 text-center text-[11px] font-semibold text-ink-subtle">برای امروز کلاسی ثبت نشده است.</p>
+        )}
       </Card>
     </section>
   );

@@ -10,18 +10,17 @@ import { DatePicker } from "@/components/shared/date-picker";
 import { Card } from "@/components/ui/card";
 import { FieldLabel } from "@/components/ui/field";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Textarea } from "@/components/ui/textarea";
 import { studentBeltDotStyle, studentBeltLabel } from "@/lib/coach/coach-data";
 import { BELT_ASSIGN_OPTIONS } from "@/lib/coach/student-form-options";
 import type { StudentProfile } from "@/lib/coach/student-profile-data";
 import { toPersianDigits } from "@/lib/digits";
+import type { StudentBeltKey } from "@/lib/student-belts";
 import { cn } from "@/lib/utils";
 
 export function StudentBeltForm({ profile }: { profile: StudentProfile }) {
   const router = useRouter();
-  const [belt, setBelt] = useState(profile.poom ? `poom-${profile.poom}` : profile.dan ? `dan-${profile.dan}` : profile.belt);
+  const [belt, setBelt] = useState(profile.belt);
   const [date, setDate] = useState(profile.beltDate);
-  const [note, setNote] = useState("");
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -49,10 +48,10 @@ export function StudentBeltForm({ profile }: { profile: StudentProfile }) {
 
       <FormSection icon={Medal} title="انتخاب کمربند" tone="amber">
         <p className="-mt-2 text-start text-[11px] font-medium leading-5 text-ink-muted">
-          کمربند بعدی هنرجو را انتخاب کنید؛ کمربند پوم دو رنگ (مشکی روی قرمز) و کمربند دان مشکی با تعداد خطوط درجه است.
+          کمربند جدید هنرجو را انتخاب کنید؛ کمربند پوم دو رنگ (مشکی روی قرمز) و کمربند دان مشکی با تعداد خطوط درجه است.
         </p>
 
-        <RadioGroup aria-label="انتخاب کمربند" value={belt} onValueChange={setBelt} className="gap-2">
+        <RadioGroup aria-label="انتخاب کمربند" value={belt} onValueChange={(value) => setBelt(value as StudentBeltKey)} className="gap-2">
           {BELT_ASSIGN_OPTIONS.map((option) => {
             const selected = belt === option.value;
 
@@ -96,12 +95,7 @@ export function StudentBeltForm({ profile }: { profile: StudentProfile }) {
       </FormSection>
 
       <FormSection icon={CalendarDays} title="جزئیات تخصیص" tone="sky">
-        <AuthField
-          label="تاریخ دریافت کمربند"
-          htmlFor="beltDate"
-          required
-          hint="تاریخ را مطابق آزمون فنی ثبت کنید؛ قالب نمونه: ۱۴۰۴/۰۸/۲۵."
-        >
+        <AuthField label="تاریخ دریافت کمربند" htmlFor="beltDate" required hint="تاریخ را مطابق آزمون فنی ثبت کنید.">
           <DatePicker
             id="beltDate"
             title="تاریخ دریافت کمربند"
@@ -113,25 +107,10 @@ export function StudentBeltForm({ profile }: { profile: StudentProfile }) {
           />
         </AuthField>
 
-        <AuthField label="یادداشت مربی" htmlFor="beltNote">
-          <Textarea
-            id="beltNote"
-            name="beltNote"
-            rows={3}
-            placeholder="مثلاً: قبولی در آزمون فنی با میانگین نمره ۱۸"
-            value={note}
-            onChange={(event) => setNote(event.target.value)}
-            className="min-h-24 rounded-xl p-3 text-sm leading-6"
-          />
-        </AuthField>
-
         <Card className="gap-2 bg-muted/50 p-3.5 text-[11px] leading-5 text-ink-muted ring-0">
           <p className="flex items-start gap-1.5">
             <Info className="mt-0.5 size-3.5 shrink-0 text-accent-ink" aria-hidden="true" />
-            <span>
-              تاریخ آزمون کمربند بعدی به صورت خودکار بر اساس مدت زمان کمربند فعلی محاسبه و ثبت می شود؛ یادآوری ارتقاء ۱۰ روز قبل ارسال خواهد
-              شد.
-            </span>
+            <span>تاریخ آزمون کمربند بعدی به صورت خودکار بر اساس مدت زمان کمربند جدید محاسبه می شود.</span>
           </p>
           <p className="flex items-start gap-1.5">
             <Info className="mt-0.5 size-3.5 shrink-0 text-accent-ink" aria-hidden="true" />

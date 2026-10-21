@@ -1,15 +1,10 @@
 import { ListOrdered, type LucideIcon, Medal, ShieldAlert, ShieldCheck, ShieldX, Type } from "lucide-react";
-import { type AgeGroup, type BeltKey, INSURANCE_META, type InsuranceStatus, STUDENTS } from "@/lib/coach/coach-data";
+import { INSURANCE_META, type InsuranceStatus, STUDENTS } from "@/lib/coach/coach-data";
+import type { ColorBeltKey } from "@/lib/student-belts";
 
 export type SortKey = "default" | "name" | "belt" | "ins";
 
-export const BELT_ORDER: BeltKey[] = ["white", "yellow", "green", "blue", "red", "black"];
-
-export const AGE_OPTIONS: { value: AgeGroup; label: string }[] = [
-  { value: "kids", label: "کودکان" },
-  { value: "teens", label: "نوجوانان" },
-  { value: "adults", label: "بزرگسالان" },
-];
+export const BELT_ORDER: ColorBeltKey[] = ["white", "yellow", "green", "blue", "red"];
 
 export const INSURANCE_ICONS: Record<InsuranceStatus, LucideIcon> = {
   ok: ShieldCheck,

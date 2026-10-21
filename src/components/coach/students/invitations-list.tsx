@@ -1,16 +1,16 @@
-import { Phone, UserPlus } from "lucide-react";
+import { IdCard, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { PersonAvatar, StatusBadge } from "@/components/coach/coach-ui";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { INVITATION_STATUS_META, INVITATIONS, type InvitationStatus } from "@/lib/coach/coach-data";
-import { formatMobileForDisplay, toPersianDigits } from "@/lib/digits";
+import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
 const SUMMARY: { status: InvitationStatus; label: string; tone: string }[] = [
-  { status: "pending", label: "در انتظار", tone: "text-warning" },
-  { status: "accepted", label: "پذیرفته", tone: "text-success" },
-  { status: "rejected", label: "رد شده", tone: "text-danger" },
+  { status: "PENDING", label: "در انتظار", tone: "text-warning" },
+  { status: "CONFIRMED", label: "پذیرفته", tone: "text-success" },
+  { status: "REJECTED", label: "رد شده", tone: "text-danger" },
 ];
 
 export function InvitationsList() {
@@ -34,11 +34,11 @@ export function InvitationsList() {
 
           return (
             <Card key={invitation.id} className="flex-row items-center gap-3 rounded-2xl px-3.5 py-3.5">
-              <PersonAvatar name={invitation.name} />
+              <PersonAvatar name={invitation.studentName ?? invitation.nationalCode} />
 
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <b className="truncate text-[13px] font-extrabold text-ink">{invitation.name}</b>
+                  <b className="truncate text-[13px] font-extrabold text-ink">{invitation.studentName ?? "هنرجوی بدون حساب"}</b>
                   <StatusBadge tone={meta.tone} className="shrink-0">
                     <Icon aria-hidden="true" />
                     {meta.label}
@@ -46,8 +46,8 @@ export function InvitationsList() {
                 </div>
 
                 <p className="mt-1 flex items-center gap-1.5 text-[11px] text-ink-subtle">
-                  <Phone className="size-3 shrink-0" aria-hidden="true" />
-                  <span dir="ltr">{formatMobileForDisplay(invitation.phone)}</span>
+                  <IdCard className="size-3 shrink-0" aria-hidden="true" />
+                  کد ملی <span dir="ltr">{toPersianDigits(invitation.nationalCode)}</span>
                 </p>
 
                 <p className="mt-0.5 text-[11px] text-ink-subtle">
@@ -71,7 +71,7 @@ export function InvitationsList() {
       </Button>
 
       <p className="text-center text-[10.5px] font-medium leading-5 text-ink-subtle">
-        برای دعوت مجدد هنرجویی که دعوت نامه اش رد شده، همان شماره موبایل را دوباره وارد کنید.
+        برای دعوت مجدد هنرجویی که دعوت نامه اش رد شده، همان کد ملی را دوباره ثبت کنید.
       </p>
     </div>
   );

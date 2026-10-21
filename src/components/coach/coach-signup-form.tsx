@@ -16,12 +16,14 @@ import { Button } from "@/components/ui/button";
 const STEPS = [{ label: "مشخصات پایه" }, { label: "حرفه ای · اختیاری" }];
 
 const COACH_BELTS: readonly BeltOption[] = [
+  { value: "DAN_3", label: "دان ۳", color: "#1F2937", knotColor: "#111827", stripes: 3 },
   { value: "DAN_4", label: "دان ۴", color: "#1F2937", knotColor: "#111827", stripes: 4 },
   { value: "DAN_5", label: "دان ۵", color: "#1F2937", knotColor: "#111827", stripes: 5 },
   { value: "DAN_6", label: "دان ۶", color: "#1F2937", knotColor: "#111827", stripes: 6 },
   { value: "DAN_7", label: "دان ۷", color: "#1F2937", knotColor: "#111827", stripes: 7 },
   { value: "DAN_8", label: "دان ۸", color: "#1F2937", knotColor: "#111827", stripes: 8 },
   { value: "DAN_9", label: "دان ۹", color: "#1F2937", knotColor: "#111827", stripes: 9 },
+  { value: "DAN_10", label: "دان ۱۰", color: "#1F2937", knotColor: "#111827", stripes: 10 },
 ];
 
 type ProfessionalForm = { birthDate: string; belt: string };
@@ -84,7 +86,7 @@ export function CoachSignupForm() {
                 value={professional.belt || null}
                 options={COACH_BELTS}
                 onChange={(value) => setProfessional((current) => ({ ...current, belt: value ?? "" }))}
-                hint="اگر کمربند دان ۴ به بالا ندارید، این بخش را خالی بگذارید."
+                hint="محدوده مجاز کمربند مربی از دان ۳ تا دان ۱۰ است؛ اگر در این محدوده نیستید، این بخش را خالی بگذارید."
               />
             </div>
 

@@ -1,19 +1,19 @@
 "use client";
 
-import { CalendarCheck, Medal, Ruler, Scale, ShieldCheck, User, UsersRound, Weight } from "lucide-react";
+import { Medal, Ruler, Scale, ShieldCheck, User } from "lucide-react";
 import { FormSection } from "@/components/coach/coach-form";
 import { AuthField, AuthInput, AuthSelect } from "@/components/shared/auth-field";
 import { BeltPicker } from "@/components/shared/belt-picker";
 import { DatePicker } from "@/components/shared/date-picker";
 import { PhotoPicker } from "@/components/shared/photo-picker";
 import { Segmented } from "@/components/shared/segmented";
+import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { Input } from "@/components/ui/input";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { StudentFormState, StudentFormUpdater } from "@/lib/coach/student-form-model";
-import { AGE_CLASS_OPTIONS, GENDER_OPTIONS, TRAINING_DAYS, WEIGHT_CLASS_OPTIONS } from "@/lib/coach/student-form-options";
+import { GENDER_OPTIONS } from "@/lib/coach/student-form-options";
 import { digitsOnly, toPersianDigits } from "@/lib/digits";
 import { PROVINCES } from "@/lib/provinces";
-import { STUDENT_BELT_GROUPS } from "@/lib/student-belts";
+import { getStudentBeltMeta, STUDENT_BELT_GROUPS } from "@/lib/student-belts";
 
 type FieldsProps = {
   form: StudentFormState;
@@ -35,7 +35,7 @@ export function StudentPersonalFields({ form, onChange, locked = false }: Fields
         />
       </AuthField>
 
-      <AuthField label="کد ملی" htmlFor="nationalCode" required hint="در صورت تکراری بودن کد ملی، ثبت انجام نمی شود.">
+      <AuthField label="کد ملی" htmlFor="nationalCode" required hint="کد ملی باید در سامانه یکتا باشد.">
         <Input
           id="nationalCode"
           name="nationalCode"
@@ -57,7 +57,7 @@ export function StudentPersonalFields({ form, onChange, locked = false }: Fields
         onChange={(value) => onChange("gender", value as StudentFormState["gender"])}
         required={!locked}
         disabled={locked}
-        hint={locked ? "این هنرجو مربی دارد و جنسیت آن قابل تغییر نیست." : "جنسیت هنرجو باید با جنسیت شما یکسان باشد."}
+        hint={locked ? "جنسیت هنرجو پس از ثبت قابل تغییر نیست." : "جنسیت هنرجو باید با جنسیت شما یکسان باشد."}
       />
 
       <div className="grid grid-cols-2 gap-3">
@@ -73,7 +73,7 @@ export function StudentPersonalFields({ form, onChange, locked = false }: Fields
           />
         </AuthField>
 
-        <AuthField label="نام پدر" htmlFor="fatherName">
+        <AuthField label="نام پدر" htmlFor="fatherName" optional>
           <Input
             id="fatherName"
             name="fatherName"
@@ -87,7 +87,7 @@ export function StudentPersonalFields({ form, onChange, locked = false }: Fields
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <AuthField label="شماره تماس" htmlFor="phone">
+        <AuthField label="شماره تماس" htmlFor="phone" optional>
           <Input
             id="phone"
             name="phone"
@@ -102,7 +102,7 @@ export function StudentPersonalFields({ form, onChange, locked = false }: Fields
           />
         </AuthField>
 
-        <AuthField label="تلفن ثابت" htmlFor="landline">
+        <AuthField label="تلفن ثابت" htmlFor="landline" optional>
           <Input
             id="landline"
             name="landline"
@@ -131,87 +131,87 @@ export function StudentPersonalFields({ form, onChange, locked = false }: Fields
   );
 }
 
-export function StudentSportsFields({ form, onChange, locked = false }: FieldsProps & { locked?: boolean }) {
+export function StudentSportsFields({ form, onChange, mode }: FieldsProps & { mode: "create" | "edit" }) {
+  const belt = form.belt ? getStudentBeltMeta(form.belt) : null;
+
   return (
     <FormSection icon={Medal} title="اطلاعات تکواندو" tone="amber">
-      <BeltPicker
-        label="کمربند فعلی"
-        value={form.belt || null}
-        groups={STUDENT_BELT_GROUPS}
-        onChange={(value) => onChange("belt", value ?? "")}
-        hint={locked ? "برای تغییر کمربند از گزینه «تخصیص کمربند» در پرونده هنرجو استفاده کنید." : undefined}
-      />
-
-      <AuthField
-        label="تاریخ دریافت کمربند فعلی"
-        htmlFor="beltDate"
-        required={!locked}
-        hint="تاریخ آزمون کمربند بعدی به صورت خودکار محاسبه می شود."
-      >
-        <DatePicker
-          id="beltDate"
-          title="تاریخ دریافت کمربند"
-          value={form.beltDate}
-          onChange={(value) => onChange("beltDate", value)}
-          defaultValue="1404/06/10"
-          fromYear={1390}
-          toYear={1405}
-        />
-      </AuthField>
-
-      <div className="grid grid-cols-2 gap-3">
-        <AuthField label="رده سنی" htmlFor="ageClass">
-          <AuthSelect
-            id="ageClass"
-            value={form.ageClass || null}
-            onValueChange={(value) => onChange("ageClass", value ?? "")}
-            placeholder="انتخاب کنید"
-            options={AGE_CLASS_OPTIONS}
-            icon={UsersRound}
+      {mode === "create" ? (
+        <>
+          <BeltPicker
+            label="کمربند فعلی"
+            value={form.belt || null}
+            groups={STUDENT_BELT_GROUPS}
+            onChange={(value) => onChange("belt", (value ?? "") as StudentFormState["belt"])}
+            hint="کمربند و تاریخ دریافت آن فقط هنگام ثبت اولیه تعیین می شود."
           />
-        </AuthField>
 
-        <AuthField label="رده وزنی" htmlFor="weightClass">
-          <AuthSelect
-            id="weightClass"
-            value={form.weightClass || null}
-            onValueChange={(value) => onChange("weightClass", value ?? "")}
-            placeholder="انتخاب کنید"
-            options={WEIGHT_CLASS_OPTIONS}
-            icon={Weight}
-          />
-        </AuthField>
-      </div>
+          <AuthField label="تاریخ دریافت کمربند فعلی" htmlFor="beltDate" required>
+            <DatePicker
+              id="beltDate"
+              title="تاریخ دریافت کمربند"
+              value={form.beltDate}
+              onChange={(value) => onChange("beltDate", value)}
+              defaultValue="1404/06/10"
+              fromYear={1390}
+              toYear={1405}
+            />
+          </AuthField>
 
-      <div className="grid grid-cols-2 gap-3">
-        <AuthField label="قد (سانتی متر)" htmlFor="height">
-          <AuthInput
-            id="height"
-            name="height"
-            dir="ltr"
-            inputMode="numeric"
-            maxLength={3}
-            icon={Ruler}
-            placeholder={toPersianDigits("170")}
-            value={toPersianDigits(form.height)}
-            onChange={(event) => onChange("height", digitsOnly(event.target.value, 3))}
-          />
-        </AuthField>
+          <div className="grid grid-cols-2 gap-3">
+            <AuthField label="قد (سانتی متر)" htmlFor="height" optional>
+              <AuthInput
+                id="height"
+                name="height"
+                dir="ltr"
+                inputMode="numeric"
+                maxLength={3}
+                icon={Ruler}
+                placeholder={toPersianDigits("170")}
+                value={toPersianDigits(form.height)}
+                onChange={(event) => onChange("height", digitsOnly(event.target.value, 3))}
+              />
+            </AuthField>
 
-        <AuthField label="وزن (کیلوگرم)" htmlFor="weight">
-          <AuthInput
-            id="weight"
-            name="weight"
-            dir="ltr"
-            inputMode="numeric"
-            maxLength={3}
-            icon={Scale}
-            placeholder={toPersianDigits("60")}
-            value={toPersianDigits(form.weight)}
-            onChange={(event) => onChange("weight", digitsOnly(event.target.value, 3))}
-          />
-        </AuthField>
-      </div>
+            <AuthField label="وزن (کیلوگرم)" htmlFor="weight" optional>
+              <AuthInput
+                id="weight"
+                name="weight"
+                dir="ltr"
+                inputMode="numeric"
+                maxLength={3}
+                icon={Scale}
+                placeholder={toPersianDigits("60")}
+                value={toPersianDigits(form.weight)}
+                onChange={(event) => onChange("weight", digitsOnly(event.target.value, 3))}
+              />
+            </AuthField>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="flex items-center justify-between gap-3 rounded-xl border border-border bg-field p-3.5">
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] font-medium text-ink-subtle">کمربند فعلی</p>
+              <p className="mt-1 text-[13px] font-extrabold text-ink">{belt?.label ?? "ثبت نشده"}</p>
+            </div>
+            {belt ? (
+              <BeltStrip
+                color={belt.color}
+                bottomColor={belt.bottomColor}
+                outline={belt.outline}
+                stripes={belt.stripeCount}
+                className="size-auto w-16"
+              />
+            ) : null}
+          </div>
+
+          <p className="text-start text-[11px] font-medium leading-5 text-ink-muted">
+            برای تغییر کمربند از گزینه «تخصیص کمربند» در پرونده هنرجو استفاده کنید. قد، وزن و تاریخ کمربند فقط در زمان ثبت اولیه قابل ثبت
+            هستند.
+          </p>
+        </>
+      )}
     </FormSection>
   );
 }
@@ -220,7 +220,7 @@ export function StudentEnrollmentFields({ form, onChange, showImageExpiry = fals
   return (
     <FormSection icon={ShieldCheck} title="عضویت و بیمه" tone="sky">
       <div className="grid grid-cols-2 gap-3">
-        <AuthField label="سال عضویت" htmlFor="membershipYear">
+        <AuthField label="سال عضویت" htmlFor="membershipYear" optional>
           <Input
             id="membershipYear"
             name="membershipYear"
@@ -234,7 +234,7 @@ export function StudentEnrollmentFields({ form, onChange, showImageExpiry = fals
           />
         </AuthField>
 
-        <AuthField label="تاریخ بیمه ورزشی" htmlFor="insuranceDate">
+        <AuthField label="تاریخ بیمه ورزشی" htmlFor="insuranceDate" optional>
           <DatePicker
             id="insuranceDate"
             title="تاریخ بیمه ورزشی"
@@ -247,21 +247,18 @@ export function StudentEnrollmentFields({ form, onChange, showImageExpiry = fals
         </AuthField>
       </div>
 
-      <p className="text-start text-[11px] font-medium leading-5 text-ink-muted">
-        یادآوری تمدید بیمه، ۷ روز قبل از انقضا برای شما ارسال می شود.
-      </p>
-
       {showImageExpiry ? (
         <AuthField
           label="تاریخ انقضای عکس پرونده"
-          htmlFor="imageExpireDate"
+          htmlFor="expireImageDate"
+          optional
           hint="یادآوری تمدید عکس، ۷ روز قبل از انقضا برای شما ارسال می شود."
         >
           <DatePicker
-            id="imageExpireDate"
+            id="expireImageDate"
             title="تاریخ انقضای عکس پرونده"
-            value={form.imageExpireDate}
-            onChange={(value) => onChange("imageExpireDate", value)}
+            value={form.expireImageDate}
+            onChange={(value) => onChange("expireImageDate", value)}
             defaultValue="1405/08/01"
             fromYear={1395}
             toYear={1406}
@@ -269,39 +266,7 @@ export function StudentEnrollmentFields({ form, onChange, showImageExpiry = fals
         </AuthField>
       ) : null}
 
-      <PhotoPicker label="تصویر هنرجو" hint="JPG یا PNG — حداکثر ۵ مگابایت" />
-    </FormSection>
-  );
-}
-
-export function StudentSessionsFields({ form, onChange, locked = false }: FieldsProps & { locked?: boolean }) {
-  return (
-    <FormSection icon={CalendarCheck} title="جلسات" tone="emerald">
-      <p className="-mt-2 text-start text-[11px] font-medium leading-5 text-ink-muted">
-        {locked
-          ? "روزهای تمرین فعلی این هنرجو؛ با تغییر، کلاس های او به روزرسانی می شود."
-          : "روزهای تمرین هنرجو را انتخاب کنید؛ پس از ثبت، او به کلاس های همان روزها اضافه می شود."}
-      </p>
-
-      <ToggleGroup
-        aria-label="روزهای تمرین"
-        multiple
-        value={form.trainingDays}
-        onValueChange={(next) => onChange("trainingDays", next)}
-        variant="outline"
-        spacing={2}
-        className="flex w-full flex-wrap"
-      >
-        {TRAINING_DAYS.map((day) => (
-          <ToggleGroupItem
-            key={day}
-            value={day}
-            className="h-9 rounded-full px-3.5 text-[11px] font-bold aria-pressed:border-primary/35 aria-pressed:bg-brand-50 aria-pressed:text-accent-ink"
-          >
-            {day}
-          </ToggleGroupItem>
-        ))}
-      </ToggleGroup>
+      <PhotoPicker label="تصویر هنرجو" optional hint="JPG یا PNG — حداکثر ۵ مگابایت" />
     </FormSection>
   );
 }

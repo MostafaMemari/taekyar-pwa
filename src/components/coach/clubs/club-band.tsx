@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { CoachBand } from "@/components/coach/coach-band";
 import { Button } from "@/components/ui/button";
-import { CLUB_ADMISSION_META, type Club } from "@/lib/coach/coach-data";
+import { type Club, GENDER_META } from "@/lib/coach/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 
 export function ClubBand({ club, backHref, action }: { club: Club; backHref: string; action?: ReactNode }) {
@@ -33,7 +33,7 @@ export function ClubBand({ club, backHref, action }: { club: Club; backHref: str
           <h1 className="truncate text-[20px] font-extrabold leading-7">{club.name}</h1>
           <p className="mt-1 truncate text-[11px] font-semibold text-white/65">فضای تمرین و هنرجویان وابسته به این باشگاه</p>
           <div className="mt-2 flex flex-wrap gap-1.5">
-            <span className="meta-glass">{CLUB_ADMISSION_META[club.admission].label}</span>
+            <span className="meta-glass">{GENDER_META[club.gender].clubLabel}</span>
             <span className="meta-glass">
               <CalendarDays aria-hidden="true" />
               {toPersianDigits(String(club.classesCount))} کلاس

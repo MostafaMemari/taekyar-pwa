@@ -24,7 +24,7 @@ export function StudentClubsPanel({ profile }: { profile: StudentProfile }) {
             <div className="min-w-0 flex-1">
               <p className="truncate text-[13px] font-bold text-ink">{club.name}</p>
               <p className="mt-0.5 text-[11px] text-ink-subtle">
-                {club.active ? `عضویت از ${club.since ?? "—"}` : `تاریخ خروج: ${club.leftAt ?? "—"}`}
+                {club.active ? `عضویت از ${club.joinedAt ?? "—"}` : `تاریخ خروج: ${club.removedAt ?? "—"}`}
               </p>
             </div>
 
