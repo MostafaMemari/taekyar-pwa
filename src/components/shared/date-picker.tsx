@@ -143,9 +143,9 @@ export function DatePicker({ id, title, value, onChange, defaultValue, fromYear 
 
           <div className="rounded-2xl bg-muted/60 px-3 pt-3 pb-2">
             <div className="grid grid-cols-3 gap-2 text-center text-[10px] font-semibold text-ink-subtle">
-              <span>سال</span>
-              <span>ماه</span>
               <span>روز</span>
+              <span>ماه</span>
+              <span>سال</span>
             </div>
 
             <div className="relative mt-1">
@@ -157,12 +157,12 @@ export function DatePicker({ id, title, value, onChange, defaultValue, fromYear 
               <div className="relative z-10 grid grid-cols-3 gap-2">
                 <WheelColumn
                   className="min-w-0"
-                  ariaLabel="سال"
-                  min={fromYear}
-                  max={toYear}
-                  value={draft.year}
-                  onChange={setYear}
-                  scrollKey={open}
+                  ariaLabel="روز"
+                  min={1}
+                  max={days}
+                  value={draft.day}
+                  onChange={setDay}
+                  scrollKey={`${open}-${days}`}
                   showBand={false}
                 />
 
@@ -180,12 +180,12 @@ export function DatePicker({ id, title, value, onChange, defaultValue, fromYear 
 
                 <WheelColumn
                   className="min-w-0"
-                  ariaLabel="روز"
-                  min={1}
-                  max={days}
-                  value={draft.day}
-                  onChange={setDay}
-                  scrollKey={`${open}-${days}`}
+                  ariaLabel="سال"
+                  min={fromYear}
+                  max={toYear}
+                  value={draft.year}
+                  onChange={setYear}
+                  scrollKey={open}
                   showBand={false}
                 />
               </div>
