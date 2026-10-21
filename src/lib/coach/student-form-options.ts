@@ -21,6 +21,8 @@ export const BELT_ASSIGN_OPTIONS = [
   assignOption("dan-2", "دان ۲", "کمربند مشکی — دو خط"),
   assignOption("dan-3", "دان ۳", "کمربند مشکی — سه خط"),
   assignOption("dan-4", "دان ۴", "کمربند مشکی — چهار خط"),
+  assignOption("dan-5", "دان ۵", "کمربند مشکی — پنج خط"),
+  assignOption("dan-6", "دان ۶", "کمربند مشکی — شش خط"),
 ];
 
 export const AGE_CLASS_OPTIONS = [

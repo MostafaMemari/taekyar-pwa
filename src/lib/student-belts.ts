@@ -9,9 +9,10 @@ const COLOR_BELTS: BeltOption[] = [
   { value: "red", label: "قرمز", color: "#EF4444", knotColor: "#DC2626" },
 ];
 
-const BLACK_RANKS = [1, 2, 3, 4] as const;
+const POOM_RANKS = [1, 2, 3, 4] as const;
+const DAN_RANKS = [1, 2, 3, 4, 5, 6] as const;
 
-const POOM_BELTS: BeltOption[] = BLACK_RANKS.map((rank) => ({
+const POOM_BELTS: BeltOption[] = POOM_RANKS.map((rank) => ({
   value: `poom-${rank}`,
   label: `پوم ${toPersianDigits(String(rank))}`,
   color: "#1F2937",
@@ -20,7 +21,7 @@ const POOM_BELTS: BeltOption[] = BLACK_RANKS.map((rank) => ({
   stripes: rank,
 }));
 
-const DAN_BELTS: BeltOption[] = BLACK_RANKS.map((rank) => ({
+const DAN_BELTS: BeltOption[] = DAN_RANKS.map((rank) => ({
   value: `dan-${rank}`,
   label: `دان ${toPersianDigits(String(rank))}`,
   color: "#1F2937",
