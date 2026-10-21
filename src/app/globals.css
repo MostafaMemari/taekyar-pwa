@@ -207,7 +207,7 @@
   --ink-3: #c0c7d5;
   --ink-4: #a2abbd;
   --ink-5: #8791a5;
-  --ink-6: #6d7890;
+  --ink-6: #7f8aa0;
   --ink-7: #525d73;
   --ink-8: #3c4557;
   --st-green: #34d399;
@@ -304,6 +304,12 @@
   --ak-800: #1e40af;
   --ak-900: #1e3a8a;
   --ak-950: #172554;
+}
+
+/* Tints live after the accent presets so dark mode wins the cascade. */
+.dark {
+  --ak-50: color-mix(in srgb, var(--ak-500) 16%, var(--surface));
+  --ak-100: color-mix(in srgb, var(--ak-500) 28%, var(--surface));
 }
 
 @layer base {
