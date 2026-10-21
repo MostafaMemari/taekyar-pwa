@@ -129,7 +129,7 @@ export function CoachSignupForm() {
             form={stepOne}
             onChange={updateStepOne}
             withBirthDate={false}
-            sampleName="محمود کریمی"
+            sampleName="محمدرضا یاری"
             genderLabel="جنسیت"
             genderHint="نمایش باشگاه ها و هنرجویان به این بستگی دارد."
           />

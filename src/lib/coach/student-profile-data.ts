@@ -110,7 +110,7 @@ const SARA_ATTENDANCE_RECORDS: StudentAttendanceRecord[] = (
     { id: "sara-9", status: "PRESENT", date: "یکشنبه ۱۳ مهر", month: "مهر ۱۴۰۴" },
     { id: "sara-10", status: "PRESENT", date: "سه شنبه ۸ مهر", month: "مهر ۱۴۰۴" },
   ] satisfies Omit<StudentAttendanceRecord, "className" | "club">[]
-).map((record) => ({ ...record, className: "کلاس سبک کیوروگی", club: ACTIVE_CLUB.name }));
+).map((record) => ({ ...record, className: "کیوروگی آقایان", club: ACTIVE_CLUB.name }));
 
 function buildBeltHistory(student: CoachStudent): StudentBeltHistoryEntry[] {
   return BELT_CHAIN.slice(0, BELT_META[student.belt].rank + 1)
@@ -177,10 +177,10 @@ function buildStudentProfile(student: CoachStudent): StudentProfile {
     registeredAt: "1403/05/15",
     insuranceDate: "1405/05/10",
     imageExpireDate: "1405/08/01",
-    trainingDays: ["شنبه", "دوشنبه"],
+    trainingDays: ["شنبه", "دوشنبه", "چهارشنبه"],
     clubs: [
       { name: ACTIVE_CLUB.name, active: true, since: "مرداد ۱۴۰۳" },
-      { name: "باشگاه پارس", active: false, leftAt: "اردیبهشت ۱۴۰۴" },
+      { name: "باشگاه میدان گلها", active: false, leftAt: "اردیبهشت ۱۴۰۴" },
     ],
     beltHistory: SARA_BELT_HISTORY,
     attendance: {

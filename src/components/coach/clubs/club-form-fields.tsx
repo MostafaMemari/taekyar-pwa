@@ -38,7 +38,7 @@ export function ClubInfoFields({ form, onChange }: FieldsProps) {
         <Input
           id="name"
           name="name"
-          placeholder="مثلاً باشگاه تکواندو پارس"
+          placeholder="مثلاً باشگاه بلوار مارلیک"
           value={form.name}
           onChange={(event) => onChange("name", event.target.value)}
           className="h-12 rounded-xl px-4 text-sm"

@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ATTENDANCE_META, type AttendanceStatus } from "@/lib/coach/coach-data";
+import { ACTIVE_CLUB, ATTENDANCE_META, type AttendanceStatus } from "@/lib/coach/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
@@ -96,7 +96,7 @@ export function SessionTime({ start, end, className }: { start: string; end: str
 }
 
 export function GymContext({
-  name = "باشگاه شهدای گمنام",
+  name = ACTIVE_CLUB.name,
   subtitle = "فضای کاری فعال شما — حضور و غیاب و کلاس بندی این باشگاه",
   actionLabel = "تغییر",
   className,

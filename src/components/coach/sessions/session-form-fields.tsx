@@ -26,7 +26,7 @@ export function SessionInfoFields({ form, onChange }: FieldsProps) {
         <Input
           id="name"
           name="name"
-          placeholder="مثلاً کلاس سبک کیوروگی"
+          placeholder="مثلاً کیوروگی آقایان"
           value={form.name}
           onChange={(event) => onChange("name", event.target.value)}
           className="h-12 rounded-xl px-4 text-sm"
