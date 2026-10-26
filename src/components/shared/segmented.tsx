@@ -1,7 +1,7 @@
 "use client";
 
 import type { LucideIcon } from "lucide-react";
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
+import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { cn } from "@/lib/utils";
 
@@ -11,6 +11,7 @@ type SegmentedProps = {
   options: readonly { value: string; label: string; icon?: LucideIcon }[];
   onChange: (value: string) => void;
   hint?: string;
+  error?: string;
   columns?: 2 | 3;
   required?: boolean;
   disabled?: boolean;
@@ -23,6 +24,7 @@ export function Segmented({
   options,
   onChange,
   hint,
+  error,
   columns = 2,
   required = true,
   disabled = false,
@@ -57,6 +59,7 @@ export function Segmented({
           </ToggleGroupItem>
         ))}
       </ToggleGroup>
+      {error ? <FieldError className="text-start text-[11px] font-semibold">{error}</FieldError> : null}
       {hint ? <FieldDescription className="text-start text-[11px] font-medium leading-5 text-ink-muted">{hint}</FieldDescription> : null}
     </Field>
   );

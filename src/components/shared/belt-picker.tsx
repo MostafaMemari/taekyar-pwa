@@ -3,7 +3,7 @@
 import { Check } from "lucide-react";
 import { useState } from "react";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
+import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { cn } from "@/lib/utils";
 
@@ -32,6 +32,7 @@ type BeltPickerProps = {
   groups?: readonly BeltOptionGroup[];
   onChange: (value: string | null) => void;
   hint?: string;
+  error?: string;
   required?: boolean;
   optional?: boolean;
   columns?: 2 | 3;
@@ -44,6 +45,7 @@ export function BeltPicker({
   groups,
   onChange,
   hint,
+  error,
   required = true,
   optional,
   columns = 3,
@@ -115,6 +117,7 @@ export function BeltPicker({
           </ToggleGroupItem>
         ))}
       </ToggleGroup>
+      {error ? <FieldError className="text-start text-[11px] font-semibold">{error}</FieldError> : null}
       {hint ? <FieldDescription className="text-start text-[11px] font-medium leading-5 text-ink-muted">{hint}</FieldDescription> : null}
     </Field>
   );

@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { CoachSignupForm } from "@/components/coach/coach-signup-form";
 import { AuthScreen } from "@/components/shared/auth-screen";
+import { CoachSignupForm } from "@/features/auth/forms/coach-signup-form";
 
 export const metadata = { title: "ثبت نام مربی" };
 

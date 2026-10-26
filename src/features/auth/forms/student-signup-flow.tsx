@@ -1,0 +1,330 @@
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ChevronLeft, Ruler, Scale } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { type BaseSyntheticEvent, useState } from "react";
+import { type Control, Controller, type UseFormReturn, useForm } from "react-hook-form";
+import { AuthPageLead, AuthPageTitle } from "@/components/shared/auth-brand-header";
+import { AuthField, AuthInput } from "@/components/shared/auth-field";
+import { AuthScreen } from "@/components/shared/auth-screen";
+import { BeltPicker } from "@/components/shared/belt-picker";
+import { DatePicker } from "@/components/shared/date-picker";
+import { PhotoPicker } from "@/components/shared/photo-picker";
+import { StepOneFields } from "@/components/shared/step-one-fields";
+import { Stepper } from "@/components/shared/stepper";
+import { Button } from "@/components/ui/button";
+import { type StudentSignupData, toBeltName } from "@/features/auth/api";
+import { savePendingSignup } from "@/features/auth/pending-signup";
+import { type StepOneForm, type StudentSignupForm, studentSignupSchema } from "@/features/auth/schemas";
+import { digitsOnly, toPersianDigits } from "@/lib/digits";
+import { toGregorianDate } from "@/lib/jalali";
+import { STUDENT_BELT_GROUPS } from "@/lib/student-belts";
+
+const STEPS = [{ label: "اطلاعات پایه" }, { label: "کمربند" }, { label: "مدارک" }];
+
+const defaultValues: StudentSignupForm = {
+  fullName: "",
+  nationalCode: "",
+  gender: "MALE",
+  province: "",
+  birthDate: "",
+  belt: "",
+  beltDate: "",
+  insuranceDate: "",
+  weight: "",
+  height: "",
+};
+
+const loginFooter = (
+  <>
+    قبلاً ثبت نام کرده اید؟
+    <Link href="/login" className="ms-1 font-bold text-accent-ink">
+      ورود
+    </Link>
+  </>
+);
+
+type StudentForm = UseFormReturn<StudentSignupForm>;
+
+function StepOneStep({ form, onNext }: { form: StudentForm; onNext: () => void }) {
+  return (
+    <AuthScreen subtitle="ثبت نام هنرجو" backHref="/" showHeader={false} footer={loginFooter}>
+      <Stepper steps={STEPS} current={0} label="مراحل ثبت نام" />
+
+      <div className="mt-6 flex flex-1 flex-col">
+        <AuthPageTitle className="text-[22px] leading-8">اطلاعات پایه</AuthPageTitle>
+        <AuthPageLead>
+          برای ساخت پروفایل هنرجو، <b className="font-extrabold text-ink-body">همه موارد اجباری</b> است.
+        </AuthPageLead>
+
+        <form
+          className="mt-4 flex flex-1 flex-col"
+          onSubmit={(event) => {
+            event.preventDefault();
+            onNext();
+          }}
+          noValidate
+        >
+          <StepOneFields
+            // RHF control is invariant; the step-one subset is structurally safe.
+            control={form.control as unknown as Control<StepOneForm>}
+            errors={form.formState.errors}
+            withBirthDate
+            sampleName="سارا محمدی"
+            genderLabel="جنسیت"
+          />
+
+          <div className="cta-dock cta-row mt-6 gap-3">
+            <Button variant="outline" size="cta" render={<Link href="/" />} nativeButton={false}>
+              بازگشت
+            </Button>
+            <Button type="submit" variant="brand" size="cta">
+              <span>مرحله بعد</span>
+              <ChevronLeft data-icon="inline-end" aria-hidden="true" />
+            </Button>
+          </div>
+        </form>
+      </div>
+    </AuthScreen>
+  );
+}
+
+type BeltStepProps = { form: StudentForm; onBack: () => void; onNext: () => void };
+
+function BeltStep({ form, onBack, onNext }: BeltStepProps) {
+  const errors = form.formState.errors;
+
+  return (
+    <AuthScreen subtitle="ثبت نام هنرجو" backHref="/" showHeader={false} footer={loginFooter}>
+      <Stepper steps={STEPS} current={1} label="مراحل ثبت نام" />
+
+      <div className="mt-6 flex flex-1 flex-col">
+        <AuthPageTitle className="text-[22px] leading-8">کمربند فعلی</AuthPageTitle>
+        <AuthPageLead>کمربند فعلی و تاریخ دریافت آن را انتخاب کنید.</AuthPageLead>
+
+        <form
+          className="mt-4 flex flex-1 flex-col"
+          onSubmit={(event) => {
+            event.preventDefault();
+            onNext();
+          }}
+          noValidate
+        >
+          <div className="flex flex-col gap-4">
+            <Controller
+              control={form.control}
+              name="belt"
+              render={({ field }) => (
+                <BeltPicker
+                  label="کمربند فعلی"
+                  value={field.value || null}
+                  groups={STUDENT_BELT_GROUPS}
+                  onChange={(value) => field.onChange(value ?? "")}
+                  error={errors.belt?.message}
+                />
+              )}
+            />
+
+            <AuthField label="تاریخ دریافت کمربند" htmlFor="beltDate" required error={errors.beltDate?.message}>
+              <Controller
+                control={form.control}
+                name="beltDate"
+                render={({ field }) => (
+                  <DatePicker
+                    id="beltDate"
+                    title="تاریخ دریافت کمربند"
+                    value={field.value}
+                    onChange={(value) => field.onChange(value)}
+                    defaultValue="1402/01/01"
+                    fromYear={1390}
+                    toYear={1405}
+                  />
+                )}
+              />
+            </AuthField>
+          </div>
+
+          <div className="cta-dock cta-row mt-6 gap-3">
+            <Button type="button" variant="outline" size="cta" onClick={onBack}>
+              بازگشت
+            </Button>
+            <Button type="submit" variant="brand" size="cta">
+              <span>مرحله بعد</span>
+              <ChevronLeft data-icon="inline-end" aria-hidden="true" />
+            </Button>
+          </div>
+        </form>
+      </div>
+    </AuthScreen>
+  );
+}
+
+type DocumentsStepProps = {
+  form: StudentForm;
+  onBack: () => void;
+  onSubmit: (event?: BaseSyntheticEvent) => Promise<void>;
+  onSkip: () => void;
+};
+
+function DocumentsStep({ form, onBack, onSubmit, onSkip }: DocumentsStepProps) {
+  const errors = form.formState.errors;
+
+  return (
+    <AuthScreen subtitle="ثبت نام هنرجو" backHref="/" showHeader={false} footer={loginFooter}>
+      <Stepper steps={STEPS} current={2} label="مراحل ثبت نام" />
+
+      <div className="mt-6 flex flex-1 flex-col">
+        <AuthPageTitle className="text-[22px] leading-8">مدارک و مشخصات</AuthPageTitle>
+        <AuthPageLead>
+          عکس، بیمه و مشخصات جسمی؛ <b className="font-extrabold text-ink-body">همه اختیاری</b>.
+        </AuthPageLead>
+
+        <form className="mt-4 flex flex-1 flex-col" onSubmit={onSubmit} noValidate>
+          <PhotoPicker label="عکس پروفایل" hint="JPG یا PNG — حداکثر ۵ مگابایت" optional />
+
+          <div className="mt-4 grid gap-4">
+            <AuthField label="تاریخ بیمه ورزشی" htmlFor="insuranceDate" optional hint="۷ روز قبل از انقضا یادآوری می شود.">
+              <Controller
+                control={form.control}
+                name="insuranceDate"
+                render={({ field }) => (
+                  <DatePicker
+                    id="insuranceDate"
+                    title="تاریخ بیمه ورزشی"
+                    value={field.value}
+                    onChange={(value) => field.onChange(value)}
+                    fromYear={1395}
+                    toYear={1406}
+                  />
+                )}
+              />
+            </AuthField>
+
+            <div className="grid grid-cols-2 gap-3">
+              <AuthField label="وزن (کیلوگرم)" htmlFor="weight" optional hint="تعیین رده وزنی" error={errors.weight?.message}>
+                <Controller
+                  control={form.control}
+                  name="weight"
+                  render={({ field }) => (
+                    <AuthInput
+                      id="weight"
+                      name={field.name}
+                      dir="ltr"
+                      inputMode="numeric"
+                      maxLength={3}
+                      icon={Scale}
+                      placeholder={toPersianDigits("60")}
+                      value={toPersianDigits(field.value)}
+                      onChange={(event) => field.onChange(digitsOnly(event.target.value, 3))}
+                      onBlur={field.onBlur}
+                      ref={field.ref}
+                    />
+                  )}
+                />
+              </AuthField>
+
+              <AuthField label="قد (سانتی متر)" htmlFor="height" optional error={errors.height?.message}>
+                <Controller
+                  control={form.control}
+                  name="height"
+                  render={({ field }) => (
+                    <AuthInput
+                      id="height"
+                      name={field.name}
+                      dir="ltr"
+                      inputMode="numeric"
+                      maxLength={3}
+                      icon={Ruler}
+                      placeholder={toPersianDigits("170")}
+                      value={toPersianDigits(field.value)}
+                      onChange={(event) => field.onChange(digitsOnly(event.target.value, 3))}
+                      onBlur={field.onBlur}
+                      ref={field.ref}
+                    />
+                  )}
+                />
+              </AuthField>
+            </div>
+          </div>
+
+          <div className="cta-dock cta-row mt-6 gap-3">
+            <Button type="button" variant="outline" size="cta" onClick={onBack}>
+              بازگشت
+            </Button>
+            <Button type="submit" variant="brand" size="cta">
+              <span>ثبت و دریافت کد تایید</span>
+              <ChevronLeft data-icon="inline-end" aria-hidden="true" />
+            </Button>
+          </div>
+
+          <Link
+            href="/signup/mobile?role=student"
+            onClick={onSkip}
+            className="mt-3 block text-center text-[11.5px] font-bold text-ink-subtle"
+          >
+            رد کردن — بعداً تکمیل می کنم
+          </Link>
+        </form>
+      </div>
+    </AuthScreen>
+  );
+}
+
+export function StudentSignupFlow() {
+  const router = useRouter();
+  const [step, setStep] = useState(0);
+  const form = useForm<StudentSignupForm>({
+    resolver: zodResolver(studentSignupSchema),
+    defaultValues,
+  });
+
+  const goTo = (next: number) => {
+    setStep(next);
+    window.scrollTo({ top: 0 });
+  };
+
+  const nextFromStepOne = async () => {
+    const valid = await form.trigger(["fullName", "nationalCode", "gender", "province", "birthDate"]);
+    // zodResolver validates the whole object, so drop errors from the later steps.
+    form.clearErrors(["belt", "beltDate", "insuranceDate", "weight", "height"]);
+    if (valid) goTo(1);
+  };
+
+  const nextFromBelt = async () => {
+    if (await form.trigger(["belt", "beltDate"])) goTo(2);
+  };
+
+  const saveSignup = (values: StudentSignupForm) => {
+    const studentData: StudentSignupData = {
+      fullName: values.fullName.trim(),
+      nationalCode: values.nationalCode,
+      gender: values.gender,
+      province: values.province,
+      birthDate: toGregorianDate(values.birthDate) ?? "",
+      belt: toBeltName(values.belt),
+      beltDate: toGregorianDate(values.beltDate) ?? "",
+      ...(values.insuranceDate ? { insuranceDate: toGregorianDate(values.insuranceDate) ?? undefined } : {}),
+      ...(values.height ? { height: Number(values.height) } : {}),
+      ...(values.weight ? { weight: Number(values.weight) } : {}),
+    };
+
+    savePendingSignup({ kind: "student", studentData });
+  };
+
+  const submit = form.handleSubmit((values) => {
+    saveSignup(values);
+    router.push("/signup/mobile?role=student");
+  });
+
+  if (step === 2) {
+    return <DocumentsStep form={form} onBack={() => goTo(1)} onSubmit={submit} onSkip={() => saveSignup(form.getValues())} />;
+  }
+
+  if (step === 1) {
+    return <BeltStep form={form} onBack={() => goTo(0)} onNext={nextFromBelt} />;
+  }
+
+  return <StepOneStep form={form} onNext={nextFromStepOne} />;
+}

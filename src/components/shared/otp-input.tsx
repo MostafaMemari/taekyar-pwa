@@ -3,18 +3,20 @@
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { digitsOnly, toPersianDigits } from "@/lib/digits";
 
+const OTP_LENGTH = 5;
+
 type OtpInputProps = {
   length?: number;
   value: string;
   onChange: (value: string) => void;
 };
 
-export function OtpInput({ length = 5, value, onChange }: OtpInputProps) {
+export function OtpInput({ length = OTP_LENGTH, value, onChange }: OtpInputProps) {
   return (
     <InputOTP
       maxLength={length}
-      value={value}
-      onChange={(next) => onChange(toPersianDigits(digitsOnly(next, length)))}
+      value={toPersianDigits(value)}
+      onChange={(next) => onChange(digitsOnly(next, length))}
       inputMode="numeric"
       autoComplete="one-time-code"
       autoFocus

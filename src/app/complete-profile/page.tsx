@@ -1,4 +1,4 @@
-import { CompleteProfileForm } from "@/components/student/complete-profile-form";
+import { CompleteProfileForm } from "@/features/auth/forms/complete-profile-form";
 
 export const metadata = { title: "تکمیل پروفایل هنرجو" };
 

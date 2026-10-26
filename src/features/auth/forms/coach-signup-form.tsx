@@ -1,17 +1,23 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useState } from "react";
+import { useState } from "react";
+import { type Control, Controller, useForm } from "react-hook-form";
 import { AuthPageLead, AuthPageTitle } from "@/components/shared/auth-brand-header";
 import { AuthField } from "@/components/shared/auth-field";
 import { type BeltOption, BeltPicker } from "@/components/shared/belt-picker";
 import { DatePicker } from "@/components/shared/date-picker";
 import { PhotoPicker } from "@/components/shared/photo-picker";
-import { type StepOneField, StepOneFields, type StepOneForm } from "@/components/shared/step-one-fields";
+import { StepOneFields } from "@/components/shared/step-one-fields";
 import { Stepper } from "@/components/shared/stepper";
 import { Button } from "@/components/ui/button";
+import { type CoachSignupData, toBeltName } from "@/features/auth/api";
+import { savePendingSignup } from "@/features/auth/pending-signup";
+import { type CoachSignupValues, coachSignupSchema, type StepOneForm } from "@/features/auth/schemas";
+import { toGregorianDate } from "@/lib/jalali";
 
 const STEPS = [{ label: "مشخصات پایه" }, { label: "حرفه ای · اختیاری" }];
 
@@ -26,30 +32,49 @@ const COACH_BELTS: readonly BeltOption[] = [
   { value: "DAN_10", label: "دان ۱۰", color: "#1F2937", knotColor: "#111827", stripes: 10 },
 ];
 
-type ProfessionalForm = { birthDate: string; belt: string };
-
-const emptyStepOne: StepOneForm = { fullName: "", nationalCode: "", gender: "MALE", province: "", birthDate: "" };
-const emptyProfessional: ProfessionalForm = { birthDate: "", belt: "" };
+const defaultValues: CoachSignupValues = {
+  fullName: "",
+  nationalCode: "",
+  gender: "MALE",
+  province: "",
+  birthDate: "",
+  belt: "",
+};
 
 export function CoachSignupForm() {
   const router = useRouter();
   const [step, setStep] = useState(0);
-  const [stepOne, setStepOne] = useState<StepOneForm>(emptyStepOne);
-  const [professional, setProfessional] = useState<ProfessionalForm>(emptyProfessional);
+  const form = useForm<CoachSignupValues>({
+    resolver: zodResolver(coachSignupSchema),
+    defaultValues,
+  });
 
   const goTo = (next: number) => {
     setStep(next);
     window.scrollTo({ top: 0 });
   };
 
-  const updateStepOne = <K extends StepOneField>(field: K, value: StepOneForm[K]) => {
-    setStepOne((current) => ({ ...current, [field]: value }));
+  const nextStep = async () => {
+    if (await form.trigger(["fullName", "nationalCode", "gender", "province"])) goTo(1);
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    router.push("/signup/mobile?role=coach");
+  const saveSignup = (values: CoachSignupValues) => {
+    const coachData: CoachSignupData = {
+      fullName: values.fullName.trim(),
+      nationalCode: values.nationalCode,
+      gender: values.gender,
+      province: values.province,
+      ...(values.birthDate ? { birthDate: toGregorianDate(values.birthDate) ?? undefined } : {}),
+      ...(values.belt ? { belt: toBeltName(values.belt) } : {}),
+    };
+
+    savePendingSignup({ kind: "coach", coachData });
   };
+
+  const submit = form.handleSubmit((values) => {
+    saveSignup(values);
+    router.push("/signup/mobile?role=coach");
+  });
 
   if (step === 1) {
     return (
@@ -63,30 +88,42 @@ export function CoachSignupForm() {
           </div>
           <AuthPageLead>همه اختیاری؛ بعداً از پروفایل تکمیل کنید.</AuthPageLead>
 
-          <form className="mt-4 flex flex-1 flex-col" onSubmit={handleSubmit} noValidate>
+          <form className="mt-4 flex flex-1 flex-col" onSubmit={submit} noValidate>
             <div className="flex flex-col gap-4">
               <PhotoPicker label="تصویر پروفایل" hint="JPG یا PNG — حداکثر ۵ مگابایت" optional />
 
               <AuthField label="تاریخ تولد" htmlFor="birthDate" optional>
-                <DatePicker
-                  id="birthDate"
-                  title="تاریخ تولد"
-                  value={professional.birthDate}
-                  onChange={(value) => setProfessional((current) => ({ ...current, birthDate: value }))}
-                  defaultValue="1365/01/01"
-                  fromYear={1345}
-                  toYear={1405}
+                <Controller
+                  control={form.control}
+                  name="birthDate"
+                  render={({ field }) => (
+                    <DatePicker
+                      id="birthDate"
+                      title="تاریخ تولد"
+                      value={field.value}
+                      onChange={(value) => field.onChange(value)}
+                      defaultValue="1365/01/01"
+                      fromYear={1345}
+                      toYear={1405}
+                    />
+                  )}
                 />
               </AuthField>
 
-              <BeltPicker
-                label="کمربند مربی"
-                required={false}
-                optional
-                value={professional.belt || null}
-                options={COACH_BELTS}
-                onChange={(value) => setProfessional((current) => ({ ...current, belt: value ?? "" }))}
-                hint="محدوده مجاز کمربند مربی از دان ۳ تا دان ۱۰ است؛ اگر در این محدوده نیستید، این بخش را خالی بگذارید."
+              <Controller
+                control={form.control}
+                name="belt"
+                render={({ field }) => (
+                  <BeltPicker
+                    label="کمربند مربی"
+                    required={false}
+                    optional
+                    value={field.value || null}
+                    options={COACH_BELTS}
+                    onChange={(value) => field.onChange(value ?? "")}
+                    hint="محدوده مجاز کمربند مربی از دان ۳ تا دان ۱۰ است؛ اگر در این محدوده نیستید، این بخش را خالی بگذارید."
+                  />
+                )}
               />
             </div>
 
@@ -100,7 +137,11 @@ export function CoachSignupForm() {
               </Button>
             </div>
 
-            <Link href="/signup/mobile?role=coach" className="mt-3 block text-center text-[11.5px] font-bold text-ink-subtle">
+            <Link
+              href="/signup/mobile?role=coach"
+              onClick={() => saveSignup(form.getValues())}
+              className="mt-3 block text-center text-[11.5px] font-bold text-ink-subtle"
+            >
               رد کردن — بعداً تکمیل می کنم
             </Link>
           </form>
@@ -123,13 +164,14 @@ export function CoachSignupForm() {
           className="mt-4 flex flex-1 flex-col"
           onSubmit={(event) => {
             event.preventDefault();
-            goTo(1);
+            void nextStep();
           }}
           noValidate
         >
           <StepOneFields
-            form={stepOne}
-            onChange={updateStepOne}
+            // RHF control is invariant; the step-one subset is structurally safe.
+            control={form.control as unknown as Control<StepOneForm>}
+            errors={form.formState.errors}
             withBirthDate={false}
             sampleName="محمدرضا یاری"
             genderLabel="جنسیت"

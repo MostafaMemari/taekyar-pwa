@@ -2,7 +2,7 @@
 
 import type { LucideIcon } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
+import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -14,11 +14,12 @@ type AuthFieldProps = {
   required?: boolean;
   optional?: boolean;
   hint?: ReactNode;
+  error?: string;
   children: ReactNode;
   className?: string;
 };
 
-export function AuthField({ label, htmlFor, required, optional, hint, children, className }: AuthFieldProps) {
+export function AuthField({ label, htmlFor, required, optional, hint, error, children, className }: AuthFieldProps) {
   return (
     <Field className={className}>
       <FieldLabel htmlFor={htmlFor} className="text-[13px] font-semibold text-ink-body">
@@ -27,8 +28,19 @@ export function AuthField({ label, htmlFor, required, optional, hint, children, 
         {optional ? <span className="text-[9.5px] font-bold text-ink-subtle"> (اختیاری)</span> : null}
       </FieldLabel>
       {children}
+      {error ? <FieldError className="text-start text-[11px] font-semibold">{error}</FieldError> : null}
       {hint ? <FieldDescription className="text-start text-[11px] font-medium leading-5 text-ink-muted">{hint}</FieldDescription> : null}
     </Field>
+  );
+}
+
+export function AuthFormError({ message }: { message?: string }) {
+  if (!message) return null;
+
+  return (
+    <p role="alert" className="mt-4 rounded-xl bg-destructive/10 px-3 py-2 text-[11.5px] font-semibold text-destructive">
+      {message}
+    </p>
   );
 }
 
