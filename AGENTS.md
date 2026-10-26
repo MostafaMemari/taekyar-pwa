@@ -16,14 +16,25 @@ The project is currently a **design-to-code conversion**: the finished HTML scre
 
 Everything below the managed block is project-specific; `next dev` preserves it.
 
-## Scope: UI conversion only
+## Scope
 
-- **No API, no validation, no auth/session, no persistence.** Do not add fetch/axios calls, server actions, route handlers, cookies, localStorage sessions, auth guards, validation schemas, or error/loading states that a design does not show.
-- Forms are visual only: local `useState`, `noValidate`, and a submit handler that navigates with `router.push(...)`. Prototype footnotes such as «نمونه رابط کاربری — بدون اعتبارسنجی» are intentional.
-- `src/lib/api/`, `src/lib/auth/`, and the auth hooks were deleted on purpose. Do not recreate equivalents unless the user asks.
-- Implement only the small UI behaviors the designs imply (step switching, OTP countdown, theme toggle, Persian digit formatting) without connecting them to a backend.
-- The backend contract is unknown; never assume endpoint shapes, payloads, or role rules.
+- Auth is wired to the real backend: login, signup, OTP verification and complete-profile use the `ky` client in `src/lib/api/`, React Hook Form + Zod validation, and a stored session. Do not stub or bypass these flows.
+- The rest of the app (student and coach dashboards) is still a **design-to-code conversion**: screens stay visual unless an endpoint is explicitly wired. Do not invent API calls, payloads, or role rules for them.
+- Forms outside auth are visual only: local `useState`, `noValidate`, and a submit handler that navigates with `router.push(...)`. Prototype footnotes such as «نمونه رابط کاربری — بدون اعتبارسنجی» are intentional.
+- Implement only the small UI behaviors the designs imply (step switching, OTP countdown, theme toggle, Persian digit formatting) without adding unrelated state.
 - Reuse shared UI and layout components across roles, but keep role-specific screens separate. Don't duplicate shared UI, and don't merge unrelated role flows into one component to avoid a second file.
+
+## Feature-based architecture
+
+- `src/features/` is the default home for product code. Each feature owns its own logic, forms, hooks, schemas and API calls; feature-specific code must not sit in the shared folders without a concrete reason.
+- Create a feature folder only when a real capability and its code exist. Never scaffold empty or speculative features (`students`, `classes`, `tournaments`, …) ahead of the code.
+- Split a feature internally (`forms/`, `hooks/`, `api/`, `schemas/`, `components/`, `lib/`) only when there is enough code to justify the split. Never create a folder for one file.
+- `src/app/` is routing only: `page.tsx`, `layout.tsx`, route groups, and the wiring that imports the matching feature. Do not define a feature's forms or main logic inside `page.tsx`.
+- Keep Next.js-required files (`page.tsx`, `layout.tsx`, `error.tsx`, `loading.tsx`, `not-found.tsx`) where the framework expects them and follow its contract.
+- Auth forms live in `src/features/auth/forms/`; auth hooks in `src/features/auth/hooks/`; auth-only components in `src/features/auth/components/`; API, schemas, session and pending-signup helpers in the feature root. Never merge login with signup, or student signup with coach signup.
+- Coach, student, clubs, classes and tournaments code belongs to `src/features/<domain>/`. Clubs currently lives inside `src/features/coach/components/clubs/` because it is a coach-only sub-domain; don't create a cross-feature dependency just to give it a top-level folder.
+- `src/components/ui/` holds base UI primitives (`Button`, `Input`, `Dialog`, …) only. `src/components/shared/` holds only components genuinely shared by independent areas; a component used by a single feature stays in that feature.
+- `src/lib/` holds domain-agnostic infrastructure and utilities (API client, digit helpers, Jalali dates, theme, …). Feature-specific code never goes there.
 
 ## Design source of truth
 
@@ -62,7 +73,7 @@ npx next typegen                 # generate route types without a full build
 
 - Prefer the plain, readable version. No abstraction until a second caller exists; no memoization, lazy loading, or micro-optimization without a measured reason.
 - Deduplicate real duplication; a little repetition beats a forced shared helper.
-- One primary responsibility per file. Colocate route-specific code under `src/app/<route>/`; introduce `src/components` or `src/lib` only when shared code first needs a home. Avoid both oversized files and one-export-per-file sprawl.
+- One primary responsibility per file. Feature code lives under `src/features/<feature>/`; `src/app` only wires routes. Introduce `src/components/shared` or `src/lib` only when code is genuinely shared. Avoid both oversized files and one-export-per-file sprawl.
 - No comments by default. Add one only for a non-obvious constraint or decision the code cannot express — never to restate what the code already says.
 
 ## React & Next.js
@@ -93,7 +104,7 @@ npx next typegen                 # generate route types without a full build
 - shadcn has no stepper primitive; keep the shared semantic `<ol>` implementation in `stepper.tsx` rather than rebuilding step headers per screen.
 - Use built-in variants before custom classes — `brand`, `outline`, `cta`, `segmented` already encode the design's CTAs and segmented controls. `className` is for layout; don't restyle component colors or typography through it.
 - Two-button bottom CTA rows use `cta-dock cta-row` together. `cta-row` is a grid with `minmax(0, 3fr)` / `minmax(0, 9fr)` columns, so the back/primary split is always 3:9 regardless of label length. Back buttons read «بازگشت»; don't add `flex-1`/`flex-[3]` or extra display classes to these rows.
-- Coach form routes are immersive: `CoachTabBar` hides there and `ActionDock` takes its place at the bottom. The route list lives in `src/lib/coach/coach-form-routes.ts`; register any new page that uses `FormDock`/`ActionDock`.
+- Coach form routes are immersive: `CoachTabBar` hides there and `ActionDock` takes its place at the bottom. The route list lives in `src/features/coach/lib/coach-form-routes.ts`; register any new page that uses `FormDock`/`ActionDock`.
 - Optional steps use the `optional` prop on `AuthField`, `BeltPicker`, and `PhotoPicker` (renders `(اختیاری)` with no asterisk). The student documents step and coach professional step are fully optional; their CTAs submit without requiring input.
 - `PhotoPicker` is always the stacked card layout (camera button above the label); student and coach screens share it. `BeltPicker` strips are inset with `px-3` and use `stretch` so the SVG fills the reduced width.
 - Date fields use the shared `DatePicker`: a bottom `Sheet` with three `WheelColumn`s for year, month (Persian names), and day. It clamps the day to the selected month (Esfand 30 in leap years), applies on «تایید», clears on «پاک کردن», and renders the stored `YYYY/MM/DD` in Persian digits. Pass `fromYear`/`toYear`; don't replace it with a typed date input.
@@ -134,8 +145,9 @@ Installed under `.agents/skills/`, which is **gitignored** — they may be missi
 ## Layout
 
 - `src/app/` — App Router. `layout.tsx` (fa/rtl shell, Vazirmatn, metadata), `globals.css` (theme tokens), `page.tsx` (welcome), plus routes `login/` (with `login/clubs/`), `verify/`, `signup/student/`, `signup/coach/`, `signup/mobile/`, `complete-profile/`, `student/`, and `coach/`.
-- `src/components/ui/` — shadcn components only, generated by the CLI. Put composed/wrapper UI in `src/components/shared/`, and role screens in `src/components/student/` or `src/components/coach/`. These folders hold `.tsx` components only.
-- `src/lib/` — `utils.ts` (`cn` re-export), `digits.ts` (Persian/Latin digit display helpers), `provinces.ts` (province options), `theme.ts` (theme bootstrap), and `coach/` (coach prototype data, options, and form models — plain `.ts`, no JSX).
+- `src/components/ui/` — shadcn components only, generated by the CLI. Put generic composed/wrapper UI in `src/components/shared/`. These folders hold `.tsx` components only.
+- `src/features/` — feature code; `src/app` pages only wire routes to it. `features/auth/` holds auth forms (`forms/`), hooks (`hooks/`), components (`components/`), plus `api.ts`, `schemas.ts`, `session.ts`, `pending-signup.ts`. `features/coach/{components,lib}/` holds coach screens and their prototype data/models.
+- `src/lib/` — general infrastructure: `api/` (ky client), `utils.ts` (`cn` re-export), `digits.ts` (Persian/Latin digit display helpers), `jalali.ts`, `provinces.ts`, `student-belts.ts`, `theme.ts`. No role-specific or auth-specific code.
 - `design/reference/` — the HTML designs being converted; source material, not shipping code.
 - `docs/coach-api.md` — the coach backend contract (endpoints, required/optional fields, envelope, enums, gaps). Keep it in sync when a coach screen or backend contract changes; it describes the API phase, not current runtime behavior.
 - `public/` — `fonts/` (Vazirmatn) and `images/` (welcome hero).
