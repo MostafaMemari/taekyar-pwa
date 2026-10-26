@@ -1,4 +1,4 @@
-import { SessionsDirectory } from "@/components/coach/sessions-directory";
+import { SessionsDirectory } from "@/features/coach/components/sessions-directory";
 
 export const metadata = { title: "کلاس ها" };
 

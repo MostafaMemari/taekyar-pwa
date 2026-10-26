@@ -1,13 +1,13 @@
 import { Bell, ChevronLeft, LogOut, type LucideIcon, Palette, Pencil, Settings, ShieldCheck } from "lucide-react";
 import { Fragment } from "react";
-import { CoachBand, CoachSheet } from "@/components/coach/coach-band";
-import { CoachBell, SectionHeading, StatusBadge } from "@/components/coach/coach-ui";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { COACH, coachBeltLabel, GENDER_META } from "@/lib/coach/coach-data";
+import { CoachBand, CoachSheet } from "@/features/coach/components/coach-band";
+import { CoachBell, SectionHeading, StatusBadge } from "@/features/coach/components/coach-ui";
+import { COACH, coachBeltLabel, GENDER_META } from "@/features/coach/lib/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { PROVINCES } from "@/lib/provinces";
 import { getStudentBeltMeta } from "@/lib/student-belts";

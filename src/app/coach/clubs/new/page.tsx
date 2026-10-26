@@ -1,5 +1,5 @@
-import { ClubForm } from "@/components/coach/clubs/club-form";
-import { CoachPageHeader } from "@/components/coach/coach-page-header";
+import { ClubForm } from "@/features/coach/components/clubs/club-form";
+import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
 
 export const metadata = { title: "ثبت باشگاه جدید" };
 

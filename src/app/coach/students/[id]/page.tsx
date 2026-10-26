@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import { StudentDetail } from "@/components/coach/students/student-detail";
-import { getStudentProfile } from "@/lib/coach/student-profile-data";
+import { StudentDetail } from "@/features/coach/components/students/student-detail";
+import { getStudentProfile } from "@/features/coach/lib/student-profile-data";
 
 export default async function CoachStudentPage({ params }: PageProps<"/coach/students/[id]">) {
   const { id } = await params;

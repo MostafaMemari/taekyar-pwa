@@ -1,11 +1,11 @@
 import { Check, Info, Landmark, LogIn, MapPin, Pencil, Plus, Star } from "lucide-react";
 import Link from "next/link";
-import { CoachBand, CoachSheet } from "@/components/coach/coach-band";
-import { CoachBell, StatusBadge } from "@/components/coach/coach-ui";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CLUBS, GENDER_META } from "@/lib/coach/coach-data";
+import { CoachBand, CoachSheet } from "@/features/coach/components/coach-band";
+import { CoachBell, StatusBadge } from "@/features/coach/components/coach-ui";
+import { CLUBS, GENDER_META } from "@/features/coach/lib/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 

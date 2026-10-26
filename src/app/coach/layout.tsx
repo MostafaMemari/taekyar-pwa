@@ -1,4 +1,4 @@
-import { CoachTabBar } from "@/components/coach/coach-tab-bar";
+import { CoachTabBar } from "@/features/coach/components/coach-tab-bar";
 
 export default function CoachLayout({ children }: LayoutProps<"/coach">) {
   return (

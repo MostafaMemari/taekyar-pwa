@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import { SessionReport } from "@/components/coach/sessions/session-report";
-import { getSessionDetail } from "@/lib/coach/session-data";
+import { SessionReport } from "@/features/coach/components/sessions/session-report";
+import { getSessionDetail } from "@/features/coach/lib/session-data";
 
 export const metadata = { title: "گزارش جلسه" };
 

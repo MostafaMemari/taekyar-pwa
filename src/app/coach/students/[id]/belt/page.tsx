@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
-import { CoachPageHeader } from "@/components/coach/coach-page-header";
-import { StudentBeltForm } from "@/components/coach/students/student-belt-form";
-import { getStudentProfile } from "@/lib/coach/student-profile-data";
+import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
+import { StudentBeltForm } from "@/features/coach/components/students/student-belt-form";
+import { getStudentProfile } from "@/features/coach/lib/student-profile-data";
 
 export const metadata = { title: "تخصیص کمربند" };
 

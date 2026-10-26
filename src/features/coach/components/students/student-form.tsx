@@ -1,0 +1,35 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { type FormEvent, useState } from "react";
+import { FormDock } from "@/features/coach/components/coach-form";
+import { emptyStudentForm, type StudentFormState, type StudentFormUpdater, studentToForm } from "@/features/coach/lib/student-form-model";
+import type { StudentProfile } from "@/features/coach/lib/student-profile-data";
+import { StudentEnrollmentFields, StudentPersonalFields, StudentSportsFields } from "./student-form-fields";
+
+export function StudentForm({ mode, profile }: { mode: "create" | "edit"; profile?: StudentProfile }) {
+  const router = useRouter();
+  const [form, setForm] = useState<StudentFormState>(() => (profile ? studentToForm(profile) : emptyStudentForm()));
+
+  const update: StudentFormUpdater = (field, value) => {
+    setForm((current) => ({ ...current, [field]: value }));
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    router.push(profile ? `/coach/students/${profile.id}` : "/coach/students");
+  };
+
+  return (
+    <form className="mt-4 flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
+      <StudentPersonalFields form={form} onChange={update} locked={mode === "edit"} />
+      <StudentSportsFields form={form} onChange={update} mode={mode} />
+      <StudentEnrollmentFields form={form} onChange={update} showImageExpiry={mode === "edit"} />
+
+      <FormDock
+        cancelHref={profile ? `/coach/students/${profile.id}` : "/coach/students"}
+        submitLabel={mode === "edit" ? "ذخیره تغییرات" : "ثبت هنرجو"}
+      />
+    </form>
+  );
+}

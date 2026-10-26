@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
-import { ClubForm } from "@/components/coach/clubs/club-form";
-import { CoachPageHeader } from "@/components/coach/coach-page-header";
-import { getClub } from "@/lib/coach/coach-data";
+import { ClubForm } from "@/features/coach/components/clubs/club-form";
+import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
+import { getClub } from "@/features/coach/lib/coach-data";
 
 export const metadata = { title: "ویرایش باشگاه" };
 

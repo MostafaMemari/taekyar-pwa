@@ -1,8 +1,8 @@
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import { CoachPageHeader } from "@/components/coach/coach-page-header";
-import { InvitationsList } from "@/components/coach/students/invitations-list";
 import { Button } from "@/components/ui/button";
+import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
+import { InvitationsList } from "@/features/coach/components/students/invitations-list";
 
 export const metadata = { title: "دعوت نامه های من" };
 

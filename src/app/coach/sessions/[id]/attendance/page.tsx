@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import { AttendanceMarker } from "@/components/coach/sessions/attendance-marker";
-import { getSessionDetail } from "@/lib/coach/session-data";
+import { AttendanceMarker } from "@/features/coach/components/sessions/attendance-marker";
+import { getSessionDetail } from "@/features/coach/lib/session-data";
 
 export const metadata = { title: "ثبت حضور و غیاب" };
 

@@ -1,11 +1,11 @@
-import { CoachSheet } from "@/components/coach/coach-band";
-import { GymContext } from "@/components/coach/coach-ui";
-import { DashboardAttendance } from "@/components/coach/dashboard/dashboard-attendance";
-import { DashboardExams } from "@/components/coach/dashboard/dashboard-exams";
-import { DashboardHero } from "@/components/coach/dashboard/dashboard-hero";
-import { DashboardInvitations } from "@/components/coach/dashboard/dashboard-invitations";
-import { DashboardOverview } from "@/components/coach/dashboard/dashboard-overview";
-import { DashboardSessions } from "@/components/coach/dashboard/dashboard-sessions";
+import { CoachSheet } from "@/features/coach/components/coach-band";
+import { GymContext } from "@/features/coach/components/coach-ui";
+import { DashboardAttendance } from "@/features/coach/components/dashboard/dashboard-attendance";
+import { DashboardExams } from "@/features/coach/components/dashboard/dashboard-exams";
+import { DashboardHero } from "@/features/coach/components/dashboard/dashboard-hero";
+import { DashboardInvitations } from "@/features/coach/components/dashboard/dashboard-invitations";
+import { DashboardOverview } from "@/features/coach/components/dashboard/dashboard-overview";
+import { DashboardSessions } from "@/features/coach/components/dashboard/dashboard-sessions";
 
 export const metadata = { title: "داشبورد مربی" };
 

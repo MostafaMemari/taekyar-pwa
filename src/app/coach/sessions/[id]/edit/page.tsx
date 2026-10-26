@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
-import { CoachPageHeader } from "@/components/coach/coach-page-header";
-import { SessionForm } from "@/components/coach/sessions/session-form";
-import { getSession } from "@/lib/coach/session-data";
-import { sessionToForm } from "@/lib/coach/session-form-model";
+import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
+import { SessionForm } from "@/features/coach/components/sessions/session-form";
+import { getSession } from "@/features/coach/lib/session-data";
+import { sessionToForm } from "@/features/coach/lib/session-form-model";
 
 export const metadata = { title: "ویرایش کلاس" };
 

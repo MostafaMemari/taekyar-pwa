@@ -1,5 +1,5 @@
-import { CoachPageHeader } from "@/components/coach/coach-page-header";
-import { SessionForm } from "@/components/coach/sessions/session-form";
+import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
+import { SessionForm } from "@/features/coach/components/sessions/session-form";
 
 export const metadata = { title: "ثبت کلاس جدید" };
 

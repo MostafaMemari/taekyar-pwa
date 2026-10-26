@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import { StudentAttendanceReport } from "@/components/coach/students/student-attendance-report";
-import { getStudentProfile } from "@/lib/coach/student-profile-data";
+import { StudentAttendanceReport } from "@/features/coach/components/students/student-attendance-report";
+import { getStudentProfile } from "@/features/coach/lib/student-profile-data";
 
 export const metadata = { title: "گزارش حضور و غیاب" };
 

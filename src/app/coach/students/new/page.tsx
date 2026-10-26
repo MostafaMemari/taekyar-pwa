@@ -1,5 +1,5 @@
-import { CoachPageHeader } from "@/components/coach/coach-page-header";
-import { StudentForm } from "@/components/coach/students/student-form";
+import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
+import { StudentForm } from "@/features/coach/components/students/student-form";
 
 export const metadata = { title: "ثبت هنرجوی جدید" };
 

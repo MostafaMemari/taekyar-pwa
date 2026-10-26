@@ -1,5 +1,5 @@
-import { CoachPageHeader } from "@/components/coach/coach-page-header";
-import { InviteForm } from "@/components/coach/students/invite-form";
+import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
+import { InviteForm } from "@/features/coach/components/students/invite-form";
 
 export const metadata = { title: "افزودن / دعوت هنرجو" };
 

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
-import { CoachPageHeader } from "@/components/coach/coach-page-header";
-import { StudentForm } from "@/components/coach/students/student-form";
-import { getStudentProfile } from "@/lib/coach/student-profile-data";
+import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
+import { StudentForm } from "@/features/coach/components/students/student-form";
+import { getStudentProfile } from "@/features/coach/lib/student-profile-data";
 
 export const metadata = { title: "ویرایش اطلاعات هنرجو" };
 
