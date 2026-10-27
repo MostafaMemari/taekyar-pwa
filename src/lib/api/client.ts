@@ -29,8 +29,11 @@ function apiBaseUrl(): string {
 
 function toApiError(error: unknown): ApiError {
   if (isHTTPError(error)) {
+    const status = error.response.status;
+    if (status === 429) return new ApiError("درخواست ها زیاد شده است. یک دقیقه صبر کنید و دوباره تلاش کنید.", status);
+
     const body = error.data as ApiErrorBody | undefined;
-    return new ApiError(body?.message || "درخواست ناموفق بود.", error.response.status);
+    return new ApiError(body?.message || "درخواست ناموفق بود.", status);
   }
 
   if (isTimeoutError(error)) return new ApiError("سرور به موقع پاسخ نداد. دوباره تلاش کنید.");
