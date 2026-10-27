@@ -9,14 +9,16 @@ type OtpInputProps = {
   length?: number;
   value: string;
   onChange: (value: string) => void;
+  onComplete?: (value: string) => void;
 };
 
-export function OtpInput({ length = OTP_LENGTH, value, onChange }: OtpInputProps) {
+export function OtpInput({ length = OTP_LENGTH, value, onChange, onComplete }: OtpInputProps) {
   return (
     <InputOTP
       maxLength={length}
       value={toPersianDigits(value)}
       onChange={(next) => onChange(digitsOnly(next, length))}
+      onComplete={(next: string) => onComplete?.(digitsOnly(next, length))}
       inputMode="numeric"
       autoComplete="one-time-code"
       autoFocus

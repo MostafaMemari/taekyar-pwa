@@ -5,18 +5,20 @@ import { useState } from "react";
 import { verifyOtp } from "@/features/auth/api";
 import { clearPendingSignup } from "@/features/auth/pending-signup";
 import { saveSession } from "@/features/auth/session";
-import { apiErrorMessage } from "@/lib/api/client";
+import { ApiError, apiErrorMessage } from "@/lib/api/client";
 
 export const MISSING_MOBILE_MESSAGE = "شماره موبایل مشخص نیست. به صفحه ورود برگردید.";
+
+export type VerifyOtpOutcome = "success" | "rejected" | "failed";
 
 export function useVerifyOtp(mobile: string) {
   const router = useRouter();
   const [error, setError] = useState("");
 
-  const verify = async (code: string) => {
+  const verify = async (code: string): Promise<VerifyOtpOutcome> => {
     if (!mobile) {
       setError(MISSING_MOBILE_MESSAGE);
-      return;
+      return "failed";
     }
 
     setError("");
@@ -36,8 +38,10 @@ export function useVerifyOtp(mobile: string) {
       } else {
         router.replace(result.student?.id ? "/student" : "/complete-profile");
       }
+      return "success";
     } catch (requestError) {
       setError(apiErrorMessage(requestError));
+      return requestError instanceof ApiError && requestError.status !== undefined ? "rejected" : "failed";
     }
   };
 

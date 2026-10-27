@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeft, ClipboardCheck } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { AuthPageLead, AuthPageTitle } from "@/components/shared/auth-brand-header";
 import { AuthFormError } from "@/components/shared/auth-field";
@@ -12,6 +13,7 @@ import { OtpInput } from "@/components/shared/otp-input";
 import { Button } from "@/components/ui/button";
 import { ResendControl } from "@/features/auth/components/resend-control";
 import { useVerifyOtp } from "@/features/auth/hooks/use-verify-otp";
+import { clearPendingSignup } from "@/features/auth/pending-signup";
 import { type OtpForm, otpFormSchema } from "@/features/auth/schemas";
 import { formatMobileForDisplay } from "@/lib/digits";
 
@@ -22,16 +24,30 @@ export function VerifyOtpForm() {
   const role = searchParams.get("role") === "coach" ? "coach" : "student";
   const backHref = fromSignup ? `/signup/mobile?role=${role}` : mobile ? `/login?mobile=${mobile}` : "/login";
   const { verify, error, setError } = useVerifyOtp(mobile);
+  const [otpKey, setOtpKey] = useState(0);
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<OtpForm>({
     resolver: zodResolver(otpFormSchema),
     defaultValues: { code: "" },
   });
 
-  const submit = handleSubmit(({ code }) => verify(code));
+  const submit = handleSubmit(async ({ code }) => {
+    const outcome = await verify(code);
+    if (outcome === "rejected") {
+      setValue("code", "");
+      setOtpKey((key) => key + 1);
+    }
+  });
+
+  const complete = (code: string) => {
+    if (isSubmitting) return;
+    setValue("code", code);
+    void submit();
+  };
   const message = errors.code?.message ?? error;
 
   return (
@@ -52,11 +68,15 @@ export function VerifyOtpForm() {
       </AuthPageLead>
 
       <form className="mt-7" onSubmit={submit} noValidate>
-        <Controller control={control} name="code" render={({ field }) => <OtpInput value={field.value} onChange={field.onChange} />} />
+        <Controller
+          control={control}
+          name="code"
+          render={({ field }) => <OtpInput key={otpKey} value={field.value} onChange={field.onChange} onComplete={complete} />}
+        />
 
         <AuthFormError message={message} />
 
-        <div className="cta-dock cta-row mt-5 gap-3">
+        <div className="cta-dock cta-row mt-6 gap-3">
           <Button variant="outline" size="cta" render={<Link href={backHref} />} nativeButton={false}>
             بازگشت
           </Button>
@@ -67,7 +87,7 @@ export function VerifyOtpForm() {
         </div>
 
         {fromSignup ? (
-          <Link href="/" className="mt-3 block text-center text-[11.5px] font-bold text-ink-subtle">
+          <Link href="/" onClick={clearPendingSignup} className="mt-3 block text-center text-[11.5px] font-bold text-ink-subtle">
             انصراف از ثبت نام
           </Link>
         ) : (
