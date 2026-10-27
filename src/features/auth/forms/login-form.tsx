@@ -45,6 +45,7 @@ export function LoginForm() {
     <AuthScreen
       subtitle="سامانه مدیریت تکواندو"
       backHref="/"
+      showHeader={false}
       footer={
         <>
           حساب کاربری ندارید؟
@@ -61,7 +62,7 @@ export function LoginForm() {
       <AuthPageTitle>ورود به حساب</AuthPageTitle>
       <AuthPageLead>شماره موبایل خود را وارد کنید تا کد تایید برای شما ارسال شود.</AuthPageLead>
 
-      <form className="mt-7" onSubmit={submit} noValidate>
+      <form className="mt-7 flex flex-1 flex-col" onSubmit={submit} noValidate>
         <AuthField label="شماره موبایل" htmlFor="mobile" hint={`مثال: ${toPersianDigits("09121234567")}`}>
           <Controller
             control={control}
@@ -90,10 +91,15 @@ export function LoginForm() {
 
         <AuthFormError message={message} />
 
-        <Button type="submit" variant="brand" size="cta" className="mt-5 w-full" disabled={isSubmitting}>
-          <span>{isSubmitting ? "در حال ارسال..." : "دریافت کد تایید"}</span>
-          <ChevronLeft data-icon="inline-end" aria-hidden="true" />
-        </Button>
+        <div className="cta-dock cta-row mt-6 gap-3">
+          <Button variant="outline" size="cta" render={<Link href="/" />} nativeButton={false}>
+            بازگشت
+          </Button>
+          <Button type="submit" variant="brand" size="cta" disabled={isSubmitting}>
+            <span>{isSubmitting ? "در حال ارسال..." : "دریافت کد تایید"}</span>
+            <ChevronLeft data-icon="inline-end" aria-hidden="true" />
+          </Button>
+        </div>
       </form>
     </AuthScreen>
   );
