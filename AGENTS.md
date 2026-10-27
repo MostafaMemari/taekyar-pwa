@@ -10,7 +10,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # taekyar-pwa
 
-Next.js 16.4.2 App Router app (React 19.3, Tailwind v4, shadcn/ui on Base UI, Biome). Two roles: coach (`مربی`) and student (`هنرجو`). Despite the name, there is **no PWA scaffolding yet** — no web manifest, no service worker, no offline support.
+Next.js 16.4.2 App Router app (React 19.3, Tailwind v4, shadcn/ui on Base UI, SWR, Biome). Two roles: coach (`مربی`) and student (`هنرجو`). Despite the name, there is **no PWA scaffolding yet** — no web manifest, no service worker, no offline support.
 
 The project is currently a **design-to-code conversion**: the finished HTML screens in `design/reference/shared/` are being rebuilt as React pages with shadcn/ui. That scope is the single most important constraint below.
 
@@ -19,9 +19,10 @@ Everything below the managed block is project-specific; `next dev` preserves it.
 ## Scope
 
 - Auth is wired to the real backend: login, signup, OTP verification and complete-profile use the `ky` client in `src/lib/api/`, React Hook Form + Zod validation, and a stored session. Do not stub or bypass these flows.
-- Route access is client-side: `RequireSession` and `GuestOnly` in `src/features/auth/components/session-guard.tsx` wrap the auth, signup and role routes. Tokens live in `localStorage`, so `proxy.ts` cannot gate them; the `401 → refresh → retry` path in `src/features/auth/api.ts` is the real enforcement. Sign out uses `logoutSession()`, which revokes the refresh token on the backend and drops the local session even when that request fails.
-- The rest of the app (student and coach dashboards) is still a **design-to-code conversion**: screens stay visual unless an endpoint is explicitly wired. Do not invent API calls, payloads, or role rules for them.
-- Forms outside auth are visual only: local `useState`, `noValidate`, and a submit handler that navigates with `router.push(...)`. Prototype footnotes such as «نمونه رابط کاربری — بدون اعتبارسنجی» are intentional.
+- Route access is client-side: `RequireSession` in `src/features/auth/components/require-session.tsx` and `GuestOnly` in `src/features/auth/components/guest-only.tsx` wrap the auth, signup and role routes, and `HOME_BY_ROLE` in `session.ts` is the role → home map. Tokens live in `localStorage`, so `proxy.ts` cannot gate them; the `401 → refresh → retry` path in `src/features/auth/api.ts` is the real enforcement. Sign out uses `logoutSession()`, which revokes the refresh token on the backend and drops the local session even when that request fails.
+- Coach clubs are wired to the real backend through `src/features/coach/lib/club-api.ts` (`GET /club`, `GET /club/:id`, `GET /club/:id/students?take=1` for the member total, `POST /club`, `PATCH /club/:id`, `PATCH /club/:id/status`) using `authRequest`, so the access token and the `401 → refresh → retry` path are reused. Reads go through the SWR hooks in `src/features/coach/hooks/use-clubs.ts` (`useClubs`, `useClub`, `useClubStudentCount`, `useClubStudentCounts`) and writes through `use-club-mutations.ts` (`useSaveClub`, `useChangeClubStatus`), which revalidate every `["club", ...]` key; the screens hold no copy of the server data in `useState`. `clearDataCache()` in `src/lib/api/cache.ts` drops the cached private data on sign out and after a verified OTP. The create and edit forms use React Hook Form + Zod (`clubFormSchema` mirrors the DTO bounds). There is no `DELETE /club/:id`, so «حذف» is the reversible `isActive` toggle; `gender` is assigned by the server from the coach profile, and `GET /club` returns no class or member counts, so member totals cost one request per club.
+- The rest of the app (student and coach dashboards, sessions, students, attendance) is still a **design-to-code conversion**: screens stay visual unless an endpoint is explicitly wired. Do not invent API calls, payloads, or role rules for them.
+- Forms outside auth and clubs are visual only: local `useState`, `noValidate`, and a submit handler that navigates with `router.push(...)`. Prototype footnotes such as «نمونه رابط کاربری — بدون اعتبارسنجی» are intentional.
 - Implement only the small UI behaviors the designs imply (step switching, OTP countdown, theme toggle, Persian digit formatting) without adding unrelated state.
 - Reuse shared UI and layout components across roles, but keep role-specific screens separate. Don't duplicate shared UI, and don't merge unrelated role flows into one component to avoid a second file.
 
@@ -36,6 +37,7 @@ Everything below the managed block is project-specific; `next dev` preserves it.
 - Coach, student, clubs, classes and tournaments code belongs to `src/features/<domain>/`. Clubs currently lives inside `src/features/coach/components/clubs/` because it is a coach-only sub-domain; don't create a cross-feature dependency just to give it a top-level folder.
 - `src/components/ui/` holds base UI primitives (`Button`, `Input`, `Dialog`, …) only. `src/components/shared/` holds only components genuinely shared by independent areas; a component used by a single feature stays in that feature.
 - `src/lib/` holds domain-agnostic infrastructure and utilities (API client, digit helpers, Jalali dates, theme, …). Feature-specific code never goes there.
+- Client data fetching is SWR, and it belongs to the feature that owns the data: reads in `src/features/<feature>/hooks/use-*.ts`, writes with `useSWRMutation` in the same folder, requests still in the feature API file. Components take `data`, `error`, `isLoading` and `mutate` from the hook and never mirror that server state with their own `useState`. Cache keys are arrays that start with the resource name and then carry its parameters (`["club", id]`, `["club", "list", take]`), and `clearDataCache()` in `src/lib/api/cache.ts` is the logout / new-identity seam.
 
 ## Design source of truth
 
@@ -74,7 +76,7 @@ npx next typegen                 # generate route types without a full build
 
 - Prefer the plain, readable version. No abstraction until a second caller exists; no memoization, lazy loading, or micro-optimization without a measured reason.
 - Deduplicate real duplication; a little repetition beats a forced shared helper.
-- One primary responsibility per file. Feature code lives under `src/features/<feature>/`; `src/app` only wires routes. Introduce `src/components/shared` or `src/lib` only when code is genuinely shared. Avoid both oversized files and one-export-per-file sprawl.
+- **One exported component per file**, named after the file (`status-badge.tsx` exports `StatusBadge`). No bucket files: `coach-ui.tsx`, `auth-field.tsx`, `auth-brand-header.tsx`, `*-form-fields.tsx`, `students-sheets.tsx` and `session-guard.tsx` were each split into one file per component. A second component may share a file only when it is private (not exported) and only meaningful inside that screen — a skeleton row or a stat inside its own parent. `taekyar-mark.tsx` is the one deliberate exception: the brand SVG family lives together. Feature code lives under `src/features/<feature>/`; `src/app` only wires routes. Introduce `src/components/shared` or `src/lib` only when code is genuinely shared.
 - No comments by default. Add one only for a non-obvious constraint or decision the code cannot express — never to restate what the code already says.
 
 ## React & Next.js
@@ -100,7 +102,7 @@ npx next typegen                 # generate route types without a full build
 
 - shadcn/ui is initialized with the **Base UI** library and the **Nova** preset (`components.json`: `"style": "base-nova"`). Add components with the CLI instead of hand-writing primitives; don't reinitialize, change `style`/`base`, or replace the component library without approval.
 - **shadcn-first, no raw controls.** Never hand-write `<input>`, `<select>`, `<textarea>`, `<button>`, `<label>`, cards, or form layout when shadcn provides the piece. Use `Field`/`FieldGroup`/`FieldLabel`/`FieldDescription`, `Input`/`InputGroup`, `Select`, `ToggleGroup`, `InputOTP`, `Button`, `Card`, `Separator`, `Skeleton`, `Badge`, and `Alert`.
-- Shared wrappers live in `src/components/shared/`: `auth-screen` (shell/header), `auth-brand-header` (brand + titles), `auth-field` (`AuthField`, `AuthInput`, `AuthSelect`), `segmented`, `otp-input`, `stepper`, `step-one-fields`, `belt-picker`, `photo-picker`, `wheel-column`, `date-picker`, `time-picker`. Extend these instead of duplicating markup.
+- Shared wrappers live in `src/components/shared/`, one component per file: `auth-screen` (shell/header), `auth-brand-header`, `auth-page-title`, `auth-page-lead`, `auth-field`, `auth-input`, `auth-select`, `auth-form-error`, `segmented`, `otp-input`, `stepper`, `step-one-fields`, `belt-picker`, `photo-picker`, `wheel-column`, `date-picker`, `time-picker`. Extend these instead of duplicating markup.
 - `AuthInput` centers its value and placeholder. Keep that alignment when adding fields; `AuthSelect` stays start-aligned because its icon and chevron consume the edges.
 - shadcn has no stepper primitive; keep the shared semantic `<ol>` implementation in `stepper.tsx` rather than rebuilding step headers per screen.
 - Use built-in variants before custom classes — `brand`, `outline`, `cta`, `segmented` already encode the design's CTAs and segmented controls. `className` is for layout; don't restyle component colors or typography through it.
@@ -114,6 +116,7 @@ npx next typegen                 # generate route types without a full build
 - Gender starts as `MALE` in signup and complete-profile state, matching the design's preselected «مرد».
 - Inline field icons track the field's focus state with the ring token (`group-focus-within` on `InputGroup`, `group-focus-visible` on `SelectTrigger`), so the icon and border highlight together.
 - Prefer semantic tokens (`bg-primary`, `text-muted-foreground`, `text-ink-body`) over raw palette classes.
+- Loading UI is the shadcn `Skeleton` inside the component that reads (see `features/coach/components/clubs/`), never a spinner paragraph. Render it only on the true initial load (`isLoading` from the SWR hook): cached data stays on screen while SWR revalidates, and error and empty stay separate states with a retry action. There are no `loading.tsx` files on purpose: every screen reads data in the browser (tokens live in `localStorage`), so no route suspends and a route-level fallback would never render. Add one when a Server Component actually awaits data.
 - Composition uses Base UI's `render` prop, not Radix's `asChild`. When a `Button` renders a link, pass `render={<Link href="..." />}` plus `nativeButton={false}`.
 - `cn` comes from the `cn` package; `src/lib/utils.ts` re-exports it. shadcn files import `"cn"` directly, app code imports `@/lib/utils` — both are the same function.
 - VibeFarsi is optional for genuine Persian/RTL needs — not installed, so don't assume it or add it casually.
@@ -147,8 +150,8 @@ Installed under `.agents/skills/`, which is **gitignored** — they may be missi
 
 - `src/app/` — App Router. `layout.tsx` (fa/rtl shell, Vazirmatn, metadata), `globals.css` (theme tokens), `page.tsx` (welcome), plus routes `login/` (with `login/clubs/`), `verify/`, `signup/student/`, `signup/coach/`, `signup/mobile/`, `complete-profile/`, `student/`, and `coach/`.
 - `src/components/ui/` — shadcn components only, generated by the CLI. Put generic composed/wrapper UI in `src/components/shared/`. These folders hold `.tsx` components only.
-- `src/features/` — feature code; `src/app` pages only wire routes to it. `features/auth/` holds auth forms (`forms/`), hooks (`hooks/`), components (`components/`), plus `api.ts`, `schemas.ts`, `session.ts`, `pending-signup.ts`. `features/coach/{components,lib}/` holds coach screens and their prototype data/models.
-- `src/lib/` — general infrastructure: `api/` (ky client), `utils.ts` (`cn` re-export), `digits.ts` (Persian/Latin digit display helpers), `jalali.ts`, `provinces.ts`, `student-belts.ts`, `theme.ts`. No role-specific or auth-specific code.
+- `src/features/` — feature code; `src/app` pages only wire routes to it. `features/auth/` holds auth forms (`forms/`), hooks (`hooks/`), components (`components/`), plus `api.ts`, `schemas.ts`, `session.ts`, `pending-signup.ts`. `features/coach/{components,hooks,lib}/` holds coach screens, their SWR hooks and their prototype data/models.
+- `src/lib/` — general infrastructure: `api/` (ky client, `cache.ts` for clearing the SWR cache), `utils.ts` (`cn` re-export), `digits.ts` (Persian/Latin digit display helpers), `jalali.ts`, `provinces.ts`, `student-belts.ts`, `theme.ts`. No role-specific or auth-specific code.
 - `design/reference/` — the HTML designs being converted; source material, not shipping code.
 - `docs/coach-api.md` — the coach backend contract (endpoints, required/optional fields, envelope, enums, gaps). Keep it in sync when a coach screen or backend contract changes; it describes the API phase, not current runtime behavior.
 - `public/` — `fonts/` (Vazirmatn) and `images/` (welcome hero).
