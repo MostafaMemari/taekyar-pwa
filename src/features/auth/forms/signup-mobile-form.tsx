@@ -4,14 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeft, Smartphone } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { AuthPageLead, AuthPageTitle } from "@/components/shared/auth-brand-header";
 import { AuthField, AuthFormError, AuthInput } from "@/components/shared/auth-field";
 import { AuthScreen } from "@/components/shared/auth-screen";
 import { Button } from "@/components/ui/button";
 import { requestCoachSignupOtp, requestStudentSignupOtp } from "@/features/auth/api";
-import { readPendingSignup, setPendingSignupMobile } from "@/features/auth/pending-signup";
+import { clearPendingSignup, readPendingSignup, setPendingSignupMobile } from "@/features/auth/pending-signup";
 import { type MobileForm, mobileFormSchema } from "@/features/auth/schemas";
 import { apiErrorMessage } from "@/lib/api/client";
 import { digitsOnly, toPersianDigits } from "@/lib/digits";
@@ -25,11 +25,17 @@ export function SignupMobileForm() {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<MobileForm>({
     resolver: zodResolver(mobileFormSchema),
     defaultValues: { mobile: "" },
   });
+
+  useEffect(() => {
+    const mobile = readPendingSignup()?.mobile;
+    if (mobile) setValue("mobile", digitsOnly(mobile, 11));
+  }, [setValue]);
 
   const submit = handleSubmit(async ({ mobile }) => {
     setError("");
@@ -112,7 +118,7 @@ export function SignupMobileForm() {
           </Button>
         </div>
 
-        <Link href="/" className="mt-3 block text-center text-[11.5px] font-bold text-ink-subtle">
+        <Link href="/" onClick={clearPendingSignup} className="mt-3 block text-center text-[11.5px] font-bold text-ink-subtle">
           انصراف از ثبت نام
         </Link>
       </form>
