@@ -972,7 +972,7 @@ COLOR | POOM | DAN
 | `/coach/sessions/[id]/edit` | `PATCH /class-session/:id` | فرم UI؛ بدون ارسال |
 | `/coach/sessions/[id]/attendance` | `GET /attendance/class/:id/daily?date=` و `PUT /attendance/class/:id` | نمایشی |
 | `/coach/sessions/[id]/report` | `GET /attendance/class/:id?date=` | گزارش تجمیعی اختصاصی ندارد |
-| `/coach/profile` | `GET /auth/profile` و `PATCH /coach/:id` | نمایشی |
+| `/coach/profile` | `GET /auth/profile` و `PATCH /coach/:id` و `POST /auth/logout` | داده نمایشی؛ خروج از حساب وصل شده |
 
 ---
 

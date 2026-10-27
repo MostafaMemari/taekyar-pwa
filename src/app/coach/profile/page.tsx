@@ -1,10 +1,11 @@
-import { Bell, ChevronLeft, LogOut, type LucideIcon, Palette, Pencil, Settings, ShieldCheck } from "lucide-react";
+import { Bell, ChevronLeft, type LucideIcon, Palette, Pencil, Settings, ShieldCheck } from "lucide-react";
 import { Fragment } from "react";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { LogoutButton } from "@/features/auth/components/logout-button";
 import { CoachBand, CoachSheet } from "@/features/coach/components/coach-band";
 import { CoachBell, SectionHeading, StatusBadge } from "@/features/coach/components/coach-ui";
 import { COACH, coachBeltLabel, GENDER_META } from "@/features/coach/lib/coach-data";
@@ -144,14 +145,7 @@ export default function CoachProfilePage() {
           </Card>
 
           <Card className="mt-3 gap-0 p-0">
-            <Button
-              type="button"
-              variant="ghost"
-              className="h-12 w-full justify-start gap-3 rounded-none px-4 text-[12.5px] font-extrabold text-destructive hover:bg-danger-soft hover:text-danger"
-            >
-              <LogOut aria-hidden="true" />
-              خروج از حساب
-            </Button>
+            <LogoutButton />
           </Card>
         </section>
       </CoachSheet>

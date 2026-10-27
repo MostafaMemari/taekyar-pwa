@@ -140,3 +140,16 @@ export function completeStudentProfile(data: CompleteStudentProfileData) {
     apiRequest<unknown>("auth/complete-profile", { method: "post", json: data, headers: authHeaders(accessToken) }),
   );
 }
+
+export async function logoutSession() {
+  const session = getSession();
+  if (!session) return;
+
+  try {
+    await apiRequest<unknown>("auth/logout", { method: "post", json: { refreshToken: session.refreshToken } });
+  } catch {
+    // A failed revoke must not keep the user signed in locally.
+  } finally {
+    clearSession();
+  }
+}
