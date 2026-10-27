@@ -575,7 +575,7 @@ COLOR | POOM | DAN
 - `coachId` از مربی جاری پر می شود.
 - `isActive` به صورت پیش فرض `true` است.
 - هیچ فیلد دیگری برای ثبت باشگاه لازم نیست.
-- پاسخ: آبجکت `Club`.
+- پاسخ: `data.club` ( پیام به `message` پاکت منتقل می شود ).
 
 ### 6.2 `GET /club`
 
@@ -608,7 +608,8 @@ COLOR | POOM | DAN
 | `address` | string | خیر | 5 تا 200 |
 
 - جنسیت باشگاه قابل تغییر نیست (در DTO وجود ندارد).
-- پاسخ: آبجکت `Club`.
+- برای پاک کردن آدرس باید `address: null` ارسال شود؛ رشته خالی اعتبارسنجی 5 تا 200 را نمی گذراند.
+- پاسخ: `data.club` ( پیام به `message` پاکت منتقل می شود ).
 
 ### 6.5 `PATCH /club/:id/status`
 
@@ -616,7 +617,7 @@ COLOR | POOM | DAN
 |---|---|---|
 | `isActive` | boolean | بله |
 
-- پاسخ: آبجکت `Club`.
+- پاسخ: `data.club` ( پیام به `message` پاکت منتقل می شود ).
 - حذف باشگاه وجود ندارد؛ فقط غیرفعال سازی.
 
 ### 6.6 `GET /club/:id/students`
@@ -962,10 +963,10 @@ COLOR | POOM | DAN
 | `/coach/students/[id]/attendance` | `GET /attendance/student/:id` | نمایشی |
 | `/coach/students/invite` | `POST /student-coach-invitation` | فرم UI؛ بدون ارسال |
 | `/coach/invitations` | `GET /student-coach-invitation/sent` | نمایشی |
-| `/coach/clubs` | `GET /club` | نمایشی؛ تعداد کلاس و هنرجو از API نمی آید |
-| `/coach/clubs/new` | `POST /club` | فرم UI؛ بدون ارسال |
-| `/coach/clubs/[id]` | `GET /club/:id`، `GET /club/:id/students`، `GET /class-session?clubId=` | نمایشی |
-| `/coach/clubs/[id]/edit` | `PATCH /club/:id` | فرم UI؛ بدون ارسال |
+| `/coach/clubs` | `GET /club` و `GET /club/:id/students?take=1` | وصل؛ شمارش هنرجو از `meta.pager.total` و آمار کلاس حذف شد |
+| `/coach/clubs/new` | `POST /club` | وصل؛ react-hook-form و zod |
+| `/coach/clubs/[id]` | `GET /club/:id`، `GET /club/:id/students`، `PATCH /club/:id/status`، `GET /class-session?clubId=` | وصل؛ کلاس ها هنوز نمایشی است |
+| `/coach/clubs/[id]/edit` | `GET /club/:id` و `PATCH /club/:id` | وصل؛ react-hook-form و zod |
 | `/coach/sessions` | `GET /class-session` | نمایشی؛ تعداد هنرجو از API نمی آید |
 | `/coach/sessions/new` | `POST /class-session` | فرم UI؛ بدون ارسال |
 | `/coach/sessions/[id]` | `GET /class-session/:id` | نمایشی |
@@ -1006,6 +1007,7 @@ COLOR | POOM | DAN
 - `GET /club` تعداد کلاس و هنرجو را برنمی گرداند.
 - `GET /class-session` تعداد هنرجو را برنمی گرداند.
 - برای شمارش باید همه صفحات `GET /club/:id/students` و `GET /class-session?clubId=` خوانده شوند.
+- فرانت تا زمانی که این فیلد اضافه شود، برای هر باشگاه یک درخواست `GET /club/:id/students?take=1` می فرستد (N+1) و نتیجه را در یک کلید Cache نگه می دارد.
 - **پیشنهاد:** افزودن `_count` یا فیلدهای `classesCount` و `studentsCount` به پاسخ باشگاه و `studentsCount` به پاسخ کلاس.
 
 ### 11.4 آپلود تصویر وجود ندارد

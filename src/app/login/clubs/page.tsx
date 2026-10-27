@@ -1,4 +1,5 @@
-import { AuthPageLead, AuthPageTitle } from "@/components/shared/auth-brand-header";
+import { AuthPageLead } from "@/components/shared/auth-page-lead";
+import { AuthPageTitle } from "@/components/shared/auth-page-title";
 import { AuthScreen } from "@/components/shared/auth-screen";
 
 export const metadata = { title: "انتخاب باشگاه مربی" };

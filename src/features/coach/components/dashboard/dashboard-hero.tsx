@@ -1,7 +1,7 @@
 import { CalendarDays, ChevronLeft, Clock } from "lucide-react";
 import Link from "next/link";
 import { CoachBand } from "@/features/coach/components/coach-band";
-import { CoachBell } from "@/features/coach/components/coach-ui";
+import { CoachBell } from "@/features/coach/components/coach-bell";
 import { COACH, SESSIONS, sessionIsToday } from "@/features/coach/lib/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 

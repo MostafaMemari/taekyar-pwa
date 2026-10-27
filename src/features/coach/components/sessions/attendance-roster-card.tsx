@@ -3,7 +3,8 @@
 import { NotebookPen, StickyNote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { AttendanceStatusText, PersonAvatar } from "@/features/coach/components/coach-ui";
+import { AttendanceStatusText } from "@/features/coach/components/attendance-status-text";
+import { PersonAvatar } from "@/features/coach/components/person-avatar";
 import type { AttendanceStatus } from "@/features/coach/lib/coach-data";
 import type { SessionRosterEntry } from "@/features/coach/lib/session-data";
 import { AttendanceStatusControl } from "./attendance-status-control";

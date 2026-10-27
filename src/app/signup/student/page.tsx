@@ -1,4 +1,4 @@
-import { GuestOnly } from "@/features/auth/components/session-guard";
+import { GuestOnly } from "@/features/auth/components/guest-only";
 import { StudentSignupFlow } from "@/features/auth/forms/student-signup-flow";
 
 export const metadata = { title: "ثبت نام هنرجو" };

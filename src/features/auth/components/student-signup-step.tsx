@@ -3,7 +3,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import type { UseFormReturn } from "react-hook-form";
-import { AuthPageLead, AuthPageTitle } from "@/components/shared/auth-brand-header";
+import { AuthPageLead } from "@/components/shared/auth-page-lead";
+import { AuthPageTitle } from "@/components/shared/auth-page-title";
 import { AuthScreen } from "@/components/shared/auth-screen";
 import { Stepper } from "@/components/shared/stepper";
 import type { StudentSignupForm } from "@/features/auth/schemas";

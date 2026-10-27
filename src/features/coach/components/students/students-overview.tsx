@@ -1,6 +1,7 @@
 import { UserPlus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { GymContext, StatusBadge } from "@/features/coach/components/coach-ui";
+import { GymContext } from "@/features/coach/components/gym-context";
+import { StatusBadge } from "@/features/coach/components/status-badge";
 import type { InsuranceStatus } from "@/features/coach/lib/coach-data";
 import { INSURANCE_FILTERS, INSURANCE_ICONS, INSURANCE_TILE_TONES } from "@/features/coach/lib/students-options";
 import { toPersianDigits } from "@/lib/digits";

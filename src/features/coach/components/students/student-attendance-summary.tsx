@@ -1,6 +1,9 @@
 import type { ReactNode } from "react";
 import { Card } from "@/components/ui/card";
-import { AttendanceBars, type AttendanceCounts, AttendanceRing, attendanceRate } from "@/features/coach/components/attendance-summary";
+import { AttendanceBars } from "@/features/coach/components/attendance-bars";
+import { AttendanceRing } from "@/features/coach/components/attendance-ring";
+import type { AttendanceCounts } from "@/features/coach/lib/attendance-summary";
+import { attendanceRate } from "@/features/coach/lib/attendance-summary";
 
 export function StudentAttendanceSummary({ counts, footer }: { counts: AttendanceCounts; footer: ReactNode }) {
   return (

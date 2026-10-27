@@ -1,10 +1,11 @@
 import { CalendarDays, Check, Landmark, MapPin, Minus } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { StatusBadge } from "@/features/coach/components/coach-ui";
-import { type Club, GENDER_META } from "@/features/coach/lib/coach-data";
-import { toPersianDigits } from "@/lib/digits";
+import { StatusBadge } from "@/features/coach/components/status-badge";
+import type { ClubRecord } from "@/features/coach/lib/club-api";
+import { GENDER_META } from "@/features/coach/lib/coach-data";
+import { toJalaliDate } from "@/lib/jalali";
 
-export function ClubInfoCard({ club }: { club: Club }) {
+export function ClubInfoCard({ club }: { club: ClubRecord }) {
   return (
     <Card className="gap-0 overflow-hidden p-0">
       <div className="grid h-24 place-items-center bg-gradient-to-l from-brand-600 to-brand-400 text-white/90">
@@ -28,7 +29,7 @@ export function ClubInfoCard({ club }: { club: Club }) {
 
         <div className="flex items-center gap-2 text-[11px] text-ink-subtle">
           <CalendarDays className="size-3.5 shrink-0" aria-hidden="true" />
-          <span>تاریخ ثبت: {toPersianDigits(club.registeredAt)}</span>
+          <span>تاریخ ثبت: {toJalaliDate(club.createdAt)}</span>
         </div>
       </div>
     </Card>

@@ -2,7 +2,7 @@ import { Landmark } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { StatusBadge } from "@/features/coach/components/coach-ui";
+import { StatusBadge } from "@/features/coach/components/status-badge";
 import type { StudentProfile } from "@/features/coach/lib/student-profile-data";
 import { cn } from "@/lib/utils";
 

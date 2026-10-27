@@ -1,6 +1,6 @@
 import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { Card } from "@/components/ui/card";
-import { SectionHeading } from "@/features/coach/components/coach-ui";
+import { SectionHeading } from "@/features/coach/components/section-heading";
 import { GENDER_META } from "@/features/coach/lib/coach-data";
 import type { StudentProfile } from "@/features/coach/lib/student-profile-data";
 import { toPersianDigits } from "@/lib/digits";

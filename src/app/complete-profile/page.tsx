@@ -1,4 +1,4 @@
-import { RequireSession } from "@/features/auth/components/session-guard";
+import { RequireSession } from "@/features/auth/components/require-session";
 import { CompleteProfileForm } from "@/features/auth/forms/complete-profile-form";
 
 export const metadata = { title: "تکمیل پروفایل هنرجو" };

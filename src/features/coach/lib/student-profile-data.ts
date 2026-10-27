@@ -1,4 +1,4 @@
-import type { AttendanceCounts } from "@/features/coach/components/attendance-summary";
+import type { AttendanceCounts } from "@/features/coach/lib/attendance-summary";
 import {
   ACTIVE_CLUB,
   type AttendanceStatus,

@@ -1,5 +1,5 @@
 import { Sparkles } from "lucide-react";
-import type { ComponentProps, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { LogoMark, TaekyarWordmark } from "@/components/shared/taekyar-mark";
 import { cn } from "@/lib/utils";
 
@@ -23,12 +23,4 @@ export function AuthBrandHeader({ subtitle, trailing, className }: AuthHeaderPro
       {trailing ?? <span className="belt-motif w-16" aria-hidden="true" />}
     </>
   );
-}
-
-export function AuthPageTitle({ className, ...props }: ComponentProps<"h1">) {
-  return <h1 className={cn("text-[24px] font-extrabold leading-9 text-ink", className)} {...props} />;
-}
-
-export function AuthPageLead({ className, ...props }: ComponentProps<"p">) {
-  return <p className={cn("mt-2 text-[13px] font-medium leading-6 text-ink-muted", className)} {...props} />;
 }

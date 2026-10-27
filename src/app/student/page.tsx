@@ -1,6 +1,7 @@
-import { AuthPageLead, AuthPageTitle } from "@/components/shared/auth-brand-header";
+import { AuthPageLead } from "@/components/shared/auth-page-lead";
+import { AuthPageTitle } from "@/components/shared/auth-page-title";
 import { AuthScreen } from "@/components/shared/auth-screen";
-import { RequireSession } from "@/features/auth/components/session-guard";
+import { RequireSession } from "@/features/auth/components/require-session";
 
 export const metadata = { title: "خانه هنرجو" };
 

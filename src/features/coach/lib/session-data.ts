@@ -1,4 +1,4 @@
-import type { AttendanceCounts } from "@/features/coach/components/attendance-summary";
+import type { AttendanceCounts } from "@/features/coach/lib/attendance-summary";
 import { type AttendanceStatus, type ClassSession, COACH, SESSIONS, STUDENTS } from "@/features/coach/lib/coach-data";
 
 export type SessionRosterEntry = {

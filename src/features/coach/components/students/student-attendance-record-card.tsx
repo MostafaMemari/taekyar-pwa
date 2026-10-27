@@ -1,6 +1,6 @@
 import { CalendarDays } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { AttendanceStatusText } from "@/features/coach/components/coach-ui";
+import { AttendanceStatusText } from "@/features/coach/components/attendance-status-text";
 import type { StudentAttendanceRecord } from "@/features/coach/lib/student-profile-data";
 
 export function StudentAttendanceRecordCard({ record, showIcon = false }: { record: StudentAttendanceRecord; showIcon?: boolean }) {

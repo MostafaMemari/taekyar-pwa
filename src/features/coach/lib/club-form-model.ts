@@ -1,22 +1,19 @@
-import type { Club } from "@/features/coach/lib/coach-data";
+import { z } from "zod";
+import type { ClubRecord } from "@/features/coach/lib/club-api";
 
-export type ClubFormState = {
-  name: string;
-  address: string;
-};
+export const clubFormSchema = z.object({
+  name: z.string().trim().min(2, "نام باشگاه باید حداقل ۲ حرف باشد.").max(80, "نام باشگاه بیش از حد طولانی است."),
+  address: z
+    .string()
+    .trim()
+    .max(200, "آدرس بیش از حد طولانی است.")
+    .refine((value) => !value || value.length >= 5, "آدرس باید حداقل ۵ حرف باشد."),
+});
 
-export type ClubFormUpdater = <K extends keyof ClubFormState>(field: K, value: ClubFormState[K]) => void;
+export type ClubFormValues = z.infer<typeof clubFormSchema>;
 
-export function emptyClubForm(): ClubFormState {
-  return {
-    name: "",
-    address: "",
-  };
-}
+export const emptyClubForm: ClubFormValues = { name: "", address: "" };
 
-export function clubToForm(club: Club): ClubFormState {
-  return {
-    name: club.name,
-    address: club.address,
-  };
+export function clubToForm(club: ClubRecord): ClubFormValues {
+  return { name: club.name, address: club.address ?? "" };
 }

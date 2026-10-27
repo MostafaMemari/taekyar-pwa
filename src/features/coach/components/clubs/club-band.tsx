@@ -1,12 +1,24 @@
-import { CalendarDays, ChevronRight, Landmark, Users } from "lucide-react";
+import { ChevronRight, Landmark, Users } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { CoachBand } from "@/features/coach/components/coach-band";
-import { type Club, GENDER_META } from "@/features/coach/lib/coach-data";
+import type { ClubRecord } from "@/features/coach/lib/club-api";
+import { GENDER_META } from "@/features/coach/lib/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 
-export function ClubBand({ club, backHref, action }: { club: Club; backHref: string; action?: ReactNode }) {
+export function ClubBand({
+  club,
+  studentCount,
+  backHref,
+  action,
+}: {
+  club: ClubRecord;
+  studentCount?: number;
+  backHref: string;
+  action?: ReactNode;
+}) {
   return (
     <CoachBand watermark="باشگاه">
       <div className="flex items-center justify-between gap-3">
@@ -35,12 +47,8 @@ export function ClubBand({ club, backHref, action }: { club: Club; backHref: str
           <div className="mt-2 flex flex-wrap gap-1.5">
             <span className="meta-glass">{GENDER_META[club.gender].clubLabel}</span>
             <span className="meta-glass">
-              <CalendarDays aria-hidden="true" />
-              {toPersianDigits(String(club.classesCount))} کلاس
-            </span>
-            <span className="meta-glass">
               <Users aria-hidden="true" />
-              {toPersianDigits(String(club.studentsCount))} هنرجو
+              {studentCount === undefined ? <Skeleton className="h-3 w-7 bg-white/25" /> : toPersianDigits(String(studentCount))} هنرجو
             </span>
           </div>
         </div>

@@ -2,9 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
-import { FormDock } from "@/features/coach/components/coach-form";
+import { FormDock } from "@/features/coach/components/form-dock";
 import { emptySessionForm, type SessionFormState, type SessionFormUpdater } from "@/features/coach/lib/session-form-model";
-import { SessionInfoFields, SessionScheduleFields } from "./session-form-fields";
+import { SessionInfoFields } from "./session-info-fields";
+import { SessionScheduleFields } from "./session-schedule-fields";
 
 export function SessionForm({ mode, sessionId, initial }: { mode: "create" | "edit"; sessionId?: string; initial?: SessionFormState }) {
   const router = useRouter();

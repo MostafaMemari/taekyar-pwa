@@ -11,7 +11,3 @@ export function CoachBand({ watermark = "تک", className, children }: { waterma
     </header>
   );
 }
-
-export function CoachSheet({ className, children }: { className?: string; children: ReactNode }) {
-  return <div className={cn("coach-sheet", className)}>{children}</div>;
-}

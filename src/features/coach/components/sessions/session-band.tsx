@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { CoachBand } from "@/features/coach/components/coach-band";
-import { SessionTime } from "@/features/coach/components/coach-ui";
+import { SessionTime } from "@/features/coach/components/session-time";
 import { weekDayLabels } from "@/features/coach/lib/coach-data";
 import type { SessionDetail } from "@/features/coach/lib/session-data";
 

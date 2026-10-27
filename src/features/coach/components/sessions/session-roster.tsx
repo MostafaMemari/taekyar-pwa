@@ -3,7 +3,8 @@ import Link from "next/link";
 import { Fragment } from "react";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { AttendanceStatusText, PersonAvatar } from "@/features/coach/components/coach-ui";
+import { AttendanceStatusText } from "@/features/coach/components/attendance-status-text";
+import { PersonAvatar } from "@/features/coach/components/person-avatar";
 import type { SessionRosterEntry } from "@/features/coach/lib/session-data";
 import { cn } from "@/lib/utils";
 

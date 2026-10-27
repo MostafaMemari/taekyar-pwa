@@ -2,9 +2,14 @@ import { CalendarDays, ChevronLeft, ChevronRight, ClipboardCheck, Users } from "
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { AttendanceBars, AttendanceRing, attendanceRate, attendanceTotal } from "@/features/coach/components/attendance-summary";
-import { CoachSheet } from "@/features/coach/components/coach-band";
-import { GymContext, SectionHeading, SessionTime, StatusBadge } from "@/features/coach/components/coach-ui";
+import { AttendanceBars } from "@/features/coach/components/attendance-bars";
+import { AttendanceRing } from "@/features/coach/components/attendance-ring";
+import { CoachSheet } from "@/features/coach/components/coach-sheet";
+import { GymContext } from "@/features/coach/components/gym-context";
+import { SectionHeading } from "@/features/coach/components/section-heading";
+import { SessionTime } from "@/features/coach/components/session-time";
+import { StatusBadge } from "@/features/coach/components/status-badge";
+import { attendanceRate, attendanceTotal } from "@/features/coach/lib/attendance-summary";
 import { weekDayLabels } from "@/features/coach/lib/coach-data";
 import type { SessionDetail } from "@/features/coach/lib/session-data";
 import { toPersianDigits } from "@/lib/digits";

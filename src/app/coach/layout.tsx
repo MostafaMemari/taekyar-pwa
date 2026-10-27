@@ -1,4 +1,4 @@
-import { RequireSession } from "@/features/auth/components/session-guard";
+import { RequireSession } from "@/features/auth/components/require-session";
 import { CoachTabBar } from "@/features/coach/components/coach-tab-bar";
 
 export default function CoachLayout({ children }: LayoutProps<"/coach">) {

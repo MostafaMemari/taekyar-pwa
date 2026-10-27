@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
-import { SectionHeading } from "@/features/coach/components/coach-ui";
+import { SectionHeading } from "@/features/coach/components/section-heading";
 import type { StudentProfile } from "@/features/coach/lib/student-profile-data";
 
 const ACTIONS = [

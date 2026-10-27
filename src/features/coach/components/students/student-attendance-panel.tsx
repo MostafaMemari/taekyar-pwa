@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { attendanceTotal } from "@/features/coach/components/attendance-summary";
+import { attendanceTotal } from "@/features/coach/lib/attendance-summary";
 import type { StudentProfile } from "@/features/coach/lib/student-profile-data";
 import { toPersianDigits } from "@/lib/digits";
 import { StudentAttendanceRecordCard } from "./student-attendance-record-card";

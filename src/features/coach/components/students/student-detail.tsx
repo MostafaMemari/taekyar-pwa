@@ -4,7 +4,7 @@ import { EllipsisVertical } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CoachSheet } from "@/features/coach/components/coach-band";
+import { CoachSheet } from "@/features/coach/components/coach-sheet";
 import type { StudentProfile } from "@/features/coach/lib/student-profile-data";
 import { StudentAttendancePanel } from "./student-attendance-panel";
 import { StudentBand } from "./student-band";

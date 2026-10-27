@@ -5,30 +5,73 @@ import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CoachSheet } from "@/features/coach/components/coach-band";
-import { type Club, getClubSessions } from "@/features/coach/lib/coach-data";
+import { Skeleton } from "@/components/ui/skeleton";
+import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
+import { CoachSheet } from "@/features/coach/components/coach-sheet";
+import { useClub, useClubStudentCount } from "@/features/coach/hooks/use-clubs";
+import type { ClubRecord } from "@/features/coach/lib/club-api";
+import { getClubSessions } from "@/features/coach/lib/coach-data";
+import { apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
+import { toJalaliDate } from "@/lib/jalali";
 import { cn } from "@/lib/utils";
 import { ClubBand } from "./club-band";
 import { ClubClasses } from "./club-classes";
 import { ClubDetailActions } from "./club-detail-actions";
+import { ClubDetailSkeleton } from "./club-detail-skeleton";
+import { ClubErrorState } from "./club-error-state";
 import { ClubInfoCard } from "./club-info-card";
 
-export function ClubDetail({ club }: { club: Club }) {
+export function ClubDetail({ clubId }: { clubId: string }) {
+  const { data: club, error, mutate } = useClub(clubId);
+  const { data: studentCount, error: countError, mutate: mutateCount } = useClubStudentCount(clubId);
+
+  const readError = error ?? countError;
+
+  if (readError) {
+    return (
+      <main className="px-4 pt-[max(1rem,env(safe-area-inset-top))]">
+        <CoachPageHeader title="مشخصات باشگاه" backHref="/coach/clubs" />
+
+        <ClubErrorState
+          className="mt-4"
+          title="خواندن باشگاه انجام نشد"
+          message={apiErrorMessage(readError)}
+          onRetry={() => {
+            void mutate();
+            void mutateCount();
+          }}
+        />
+      </main>
+    );
+  }
+
+  if (!club) return <ClubDetailSkeleton clubId={clubId} />;
+
+  return <ClubDetailScreen club={club} studentCount={studentCount} />;
+}
+
+function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCount?: number }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const sessions = getClubSessions(club.id);
   const nextSession = sessions.find((session) => session.isActive);
   const attendanceHref = nextSession ? `/coach/sessions/${nextSession.id}/attendance` : "/coach/sessions/new";
 
   const stats = [
-    { icon: CalendarDays, value: club.classesCount, label: "کلاس فعال" },
-    { icon: Users, value: club.studentsCount, label: "هنرجو", accent: true },
+    {
+      icon: Users,
+      value: studentCount === undefined ? <Skeleton className="h-4 w-8" /> : toPersianDigits(String(studentCount)),
+      label: "هنرجو",
+      accent: true,
+    },
+    { icon: CalendarDays, value: toJalaliDate(club.createdAt), label: "تاریخ ثبت" },
   ];
 
   return (
     <main className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300">
       <ClubBand
         club={club}
+        studentCount={studentCount}
         backHref="/coach/clubs"
         action={
           <Button
@@ -70,7 +113,7 @@ export function ClubDetail({ club }: { club: Club }) {
               >
                 <stat.icon className="size-4" aria-hidden="true" />
               </span>
-              <b className="text-[17px] font-extrabold leading-none tabular-nums text-ink">{toPersianDigits(String(stat.value))}</b>
+              <b className="text-[17px] font-extrabold leading-none tabular-nums text-ink">{stat.value}</b>
               <span className="text-[9.5px] font-bold text-ink-subtle">{stat.label}</span>
             </Card>
           ))}

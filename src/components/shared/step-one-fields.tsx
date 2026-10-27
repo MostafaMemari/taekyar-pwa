@@ -2,7 +2,9 @@
 
 import { Fingerprint, MapPin, Mars, UserRound, Venus } from "lucide-react";
 import { type Control, Controller, type FieldErrors } from "react-hook-form";
-import { AuthField, AuthInput, AuthSelect } from "@/components/shared/auth-field";
+import { AuthField } from "@/components/shared/auth-field";
+import { AuthInput } from "@/components/shared/auth-input";
+import { AuthSelect } from "@/components/shared/auth-select";
 import { DatePicker } from "@/components/shared/date-picker";
 import { Segmented } from "@/components/shared/segmented";
 import { FieldGroup } from "@/components/ui/field";

@@ -116,10 +116,6 @@ export const CLUBS: Club[] = [
   },
 ];
 
-export function getClub(id: string): Club | undefined {
-  return CLUBS.find((club) => club.id === id);
-}
-
 export const STUDENTS: CoachStudent[] = [
   {
     id: "sara-mohammadi",

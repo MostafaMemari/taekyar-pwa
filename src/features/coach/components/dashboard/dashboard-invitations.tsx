@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { PersonAvatar, SectionHeading, StatusBadge } from "@/features/coach/components/coach-ui";
+import { PersonAvatar } from "@/features/coach/components/person-avatar";
+import { SectionHeading } from "@/features/coach/components/section-heading";
+import { StatusBadge } from "@/features/coach/components/status-badge";
 import { INVITATIONS } from "@/features/coach/lib/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";

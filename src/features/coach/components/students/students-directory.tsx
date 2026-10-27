@@ -7,10 +7,11 @@ import { type InsuranceStatus, STUDENTS, studentBeltLabel, studentSessionSummary
 import type { SortKey } from "@/features/coach/lib/students-options";
 import { toLatinDigits } from "@/lib/digits";
 import { beltRank, type ColorBeltKey } from "@/lib/student-belts";
+import { AddStudentSheet } from "./add-student-sheet";
+import { SortStudentsSheet } from "./sort-students-sheet";
 import { StudentsFilters } from "./students-filters";
 import { StudentsList } from "./students-list";
 import { StudentsOverview } from "./students-overview";
-import { AddStudentSheet, SortStudentsSheet } from "./students-sheets";
 import { StudentsToolbar } from "./students-toolbar";
 
 export function StudentsDirectory() {
