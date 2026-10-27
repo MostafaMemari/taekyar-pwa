@@ -1,5 +1,7 @@
+import type { CoachSignupValues, StudentSignupForm } from "@/features/auth/schemas";
 import { clearSession, getSession, type SessionRole, saveSession } from "@/features/auth/session";
 import { ApiError, apiRequest } from "@/lib/api/client";
+import { toGregorianDate } from "@/lib/jalali";
 
 export type StudentSignupData = {
   fullName: string;
@@ -59,6 +61,32 @@ export function verifyOtp(mobile: string, code: string) {
 
 export function toBeltName(value: string) {
   return value.toUpperCase().replace("-", "_");
+}
+
+export function toStudentSignupData(values: StudentSignupForm): StudentSignupData {
+  return {
+    fullName: values.fullName.trim(),
+    nationalCode: values.nationalCode,
+    gender: values.gender,
+    province: values.province,
+    birthDate: toGregorianDate(values.birthDate) ?? "",
+    belt: toBeltName(values.belt),
+    beltDate: toGregorianDate(values.beltDate) ?? "",
+    ...(values.insuranceDate ? { insuranceDate: toGregorianDate(values.insuranceDate) ?? undefined } : {}),
+    ...(values.height ? { height: Number(values.height) } : {}),
+    ...(values.weight ? { weight: Number(values.weight) } : {}),
+  };
+}
+
+export function toCoachSignupData(values: CoachSignupValues): CoachSignupData {
+  return {
+    fullName: values.fullName.trim(),
+    nationalCode: values.nationalCode,
+    gender: values.gender,
+    province: values.province,
+    ...(values.birthDate ? { birthDate: toGregorianDate(values.birthDate) ?? undefined } : {}),
+    ...(values.belt ? { belt: toBeltName(values.belt) } : {}),
+  };
 }
 
 let refreshPromise: Promise<string> | null = null;

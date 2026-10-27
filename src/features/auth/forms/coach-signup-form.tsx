@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { type Control, Controller, useForm } from "react-hook-form";
 import { AuthPageLead, AuthPageTitle } from "@/components/shared/auth-brand-header";
 import { AuthField } from "@/components/shared/auth-field";
@@ -14,10 +14,9 @@ import { PhotoPicker } from "@/components/shared/photo-picker";
 import { StepOneFields } from "@/components/shared/step-one-fields";
 import { Stepper } from "@/components/shared/stepper";
 import { Button } from "@/components/ui/button";
-import { type CoachSignupData, toBeltName } from "@/features/auth/api";
-import { savePendingSignup } from "@/features/auth/pending-signup";
+import { toCoachSignupData } from "@/features/auth/api";
+import { readSignupDraft, savePendingSignup, saveSignupDraft } from "@/features/auth/pending-signup";
 import { type CoachSignupValues, coachSignupSchema, type StepOneForm } from "@/features/auth/schemas";
-import { toGregorianDate } from "@/lib/jalali";
 
 const STEPS = [{ label: "مشخصات پایه" }, { label: "حرفه ای · اختیاری" }];
 
@@ -51,28 +50,28 @@ export function CoachSignupForm() {
 
   const goTo = (next: number) => {
     setStep(next);
+    saveSignupDraft({ kind: "coach", step: next, values: form.getValues() });
     window.scrollTo({ top: 0 });
   };
+
+  useEffect(() => {
+    const draft = readSignupDraft();
+    if (draft?.kind !== "coach") return;
+    form.reset(draft.values);
+    setStep(draft.step);
+  }, [form]);
 
   const nextStep = async () => {
     if (await form.trigger(["fullName", "nationalCode", "gender", "province"])) goTo(1);
   };
 
-  const saveSignup = (values: CoachSignupValues) => {
-    const coachData: CoachSignupData = {
-      fullName: values.fullName.trim(),
-      nationalCode: values.nationalCode,
-      gender: values.gender,
-      province: values.province,
-      ...(values.birthDate ? { birthDate: toGregorianDate(values.birthDate) ?? undefined } : {}),
-      ...(values.belt ? { belt: toBeltName(values.belt) } : {}),
-    };
-
-    savePendingSignup({ kind: "coach", coachData });
+  const finish = (values: CoachSignupValues) => {
+    saveSignupDraft({ kind: "coach", step, values });
+    savePendingSignup({ kind: "coach", coachData: toCoachSignupData(values) });
   };
 
   const submit = form.handleSubmit((values) => {
-    saveSignup(values);
+    finish(values);
     router.push("/signup/mobile?role=coach");
   });
 
@@ -139,7 +138,7 @@ export function CoachSignupForm() {
 
             <Link
               href="/signup/mobile?role=coach"
-              onClick={() => saveSignup(form.getValues())}
+              onClick={() => finish(form.getValues())}
               className="mt-3 block text-center text-[11.5px] font-bold text-ink-subtle"
             >
               رد کردن — بعداً تکمیل می کنم
