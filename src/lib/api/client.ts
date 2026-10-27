@@ -5,6 +5,14 @@ type ApiEnvelope<T> = {
   statusCode: number;
   message: string;
   data: T;
+  meta?: { pager?: PagerMeta };
+};
+
+export type PagerMeta = {
+  page: number;
+  perPage: number;
+  total: number;
+  totalPages: number;
 };
 
 type ApiErrorBody = {
@@ -42,7 +50,7 @@ function toApiError(error: unknown): ApiError {
   return new ApiError("خطای غیرمنتظره رخ داد. لطفاً دوباره تلاش کنید.");
 }
 
-export async function apiRequest<T>(path: string, options: Options = {}): Promise<T> {
+export async function apiRequestWithMeta<T>(path: string, options: Options = {}): Promise<{ data: T; pager?: PagerMeta }> {
   const baseUrl = apiBaseUrl();
 
   try {
@@ -52,10 +60,14 @@ export async function apiRequest<T>(path: string, options: Options = {}): Promis
       headers: { Accept: "application/json", ...options.headers },
     });
     const body = (await response.json()) as ApiEnvelope<T>;
-    return body.data;
+    return { data: body.data, pager: body.meta?.pager };
   } catch (error) {
     throw toApiError(error);
   }
+}
+
+export async function apiRequest<T>(path: string, options: Options = {}): Promise<T> {
+  return (await apiRequestWithMeta<T>(path, options)).data;
 }
 
 export function apiErrorMessage(error: unknown): string {

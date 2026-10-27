@@ -1,6 +1,8 @@
+import type { Options } from "ky";
 import type { CoachSignupValues, StudentSignupForm } from "@/features/auth/schemas";
 import { clearSession, getSession, type SessionRole, saveSession } from "@/features/auth/session";
-import { ApiError, apiRequest } from "@/lib/api/client";
+import { clearDataCache } from "@/lib/api/cache";
+import { ApiError, apiRequest, apiRequestWithMeta, type PagerMeta } from "@/lib/api/client";
 import { toGregorianDate } from "@/lib/jalali";
 
 export type StudentSignupData = {
@@ -135,10 +137,18 @@ function authHeaders(accessToken: string) {
   return { Authorization: `Bearer ${accessToken}` };
 }
 
-export function completeStudentProfile(data: CompleteStudentProfileData) {
+export function authRequestWithMeta<T>(path: string, options: Options = {}): Promise<{ data: T; pager?: PagerMeta }> {
   return withAccessToken((accessToken) =>
-    apiRequest<unknown>("auth/complete-profile", { method: "post", json: data, headers: authHeaders(accessToken) }),
+    apiRequestWithMeta<T>(path, { ...options, headers: { ...authHeaders(accessToken), ...options.headers } }),
   );
+}
+
+export function authRequest<T>(path: string, options: Options = {}): Promise<T> {
+  return authRequestWithMeta<T>(path, options).then((result) => result.data);
+}
+
+export function completeStudentProfile(data: CompleteStudentProfileData) {
+  return authRequest<unknown>("auth/complete-profile", { method: "post", json: data });
 }
 
 export async function logoutSession() {
@@ -151,5 +161,6 @@ export async function logoutSession() {
     // A failed revoke must not keep the user signed in locally.
   } finally {
     clearSession();
+    void clearDataCache();
   }
 }

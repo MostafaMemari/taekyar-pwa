@@ -1,5 +1,7 @@
 import { toLatinDigits } from "@/lib/digits";
 
+const jalaliFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { dateStyle: "short" });
+
 const BREAKS = [-61, 9, 38, 199, 426, 686, 756, 818, 1111, 1181, 1210, 1635, 2060, 2097, 2192, 2262, 2324, 2394, 2456, 3178];
 
 const div = (a: number, b: number) => ~~(a / b);
@@ -71,4 +73,9 @@ export function toGregorianDate(jalali: string): string | null {
   } catch {
     return null;
   }
+}
+
+export function toJalaliDate(isoDate: string): string {
+  const date = new Date(isoDate);
+  return Number.isNaN(date.getTime()) ? "" : jalaliFormatter.format(date);
 }

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { verifyOtp } from "@/features/auth/api";
 import { clearPendingSignup } from "@/features/auth/pending-signup";
 import { saveSession } from "@/features/auth/session";
+import { clearDataCache } from "@/lib/api/cache";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 
 export const MISSING_MOBILE_MESSAGE = "شماره موبایل مشخص نیست. به صفحه ورود برگردید.";
@@ -32,6 +33,7 @@ export function useVerifyOtp(mobile: string) {
         role: result.type,
       });
       clearPendingSignup();
+      void clearDataCache();
 
       if (result.type === "COACH") {
         router.replace("/coach");
