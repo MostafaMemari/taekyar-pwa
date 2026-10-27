@@ -19,6 +19,7 @@ Everything below the managed block is project-specific; `next dev` preserves it.
 ## Scope
 
 - Auth is wired to the real backend: login, signup, OTP verification and complete-profile use the `ky` client in `src/lib/api/`, React Hook Form + Zod validation, and a stored session. Do not stub or bypass these flows.
+- Route access is client-side: `RequireSession` and `GuestOnly` in `src/features/auth/components/session-guard.tsx` wrap the auth, signup and role routes. Tokens live in `localStorage`, so `proxy.ts` cannot gate them; the `401 → refresh → retry` path in `src/features/auth/api.ts` is the real enforcement. Sign out uses `logoutSession()`, which revokes the refresh token on the backend and drops the local session even when that request fails.
 - The rest of the app (student and coach dashboards) is still a **design-to-code conversion**: screens stay visual unless an endpoint is explicitly wired. Do not invent API calls, payloads, or role rules for them.
 - Forms outside auth are visual only: local `useState`, `noValidate`, and a submit handler that navigates with `router.push(...)`. Prototype footnotes such as «نمونه رابط کاربری — بدون اعتبارسنجی» are intentional.
 - Implement only the small UI behaviors the designs imply (step switching, OTP countdown, theme toggle, Persian digit formatting) without adding unrelated state.
