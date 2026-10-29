@@ -1,11 +1,11 @@
 # داکیومنت API مربی
 
-مرجع کامل قرارداد بک اند برای تمام صفحه های نقش مربی. این فایل برای مرحله اتصال API نوشته شده است. در وضعیت فعلی، فرانت فقط UI است و هیچ درخواستی به بک اند ارسال نمی کند.
+مرجع کامل قرارداد بک اند برای تمام صفحه های نقش مربی. این فایل برای مرحله اتصال API نوشته شده است. در وضعیت فعلی، احراز هویت و صفحه های باشگاه و کلاس (`/coach/clubs*` و `/coach/sessions*` به جز حضور و غیاب و گزارش) به بک اند وصل هستند؛ داشبورد، هنرجوها، دعوت نامه ها، حضور و غیاب و گزارش جلسه هنوز داده نمایشی دارند.
 
 - منبع: پروژه `taekyar-backend` (NestJS + Prisma + PostgreSQL + Redis)
 - نسخه API: `v1`
 - پیشوند مسیر: `/api/v1`
-- تاریخ بررسی: 1405/07/29 (2026-10-21)
+- تاریخ بررسی: 1405/08/07 (2026-10-29)
 
 ---
 
@@ -704,7 +704,7 @@ COLOR | POOM | DAN
 
 - پاسخ: آرایه `ClassSession` همراه `meta.pager`.
 - تعداد هنرجوها در پاسخ نیست.
-- برای فیلتر «کلاس امروز» در فرانت، `weekDay` امروز را محاسبه و ارسال کنید.
+- فرانت یک صفحه `take=100` می خواند و «کلاس امروز» و جستجو را سمت کلاینت روی همان صفحه انجام می دهد؛ ارسال `weekDay` و `search` فقط وقتی لازم است که تعداد کلاس های مربی از ۱۰۰ بیشتر شود.
 
 ### 7.3 `GET /class-session/:id`
 
@@ -965,12 +965,12 @@ COLOR | POOM | DAN
 | `/coach/invitations` | `GET /student-coach-invitation/sent` | نمایشی |
 | `/coach/clubs` | `GET /club` و `GET /club/:id/students?take=1` | وصل؛ شمارش هنرجو از `meta.pager.total` و آمار کلاس حذف شد |
 | `/coach/clubs/new` | `POST /club` | وصل؛ react-hook-form و zod |
-| `/coach/clubs/[id]` | `GET /club/:id`، `GET /club/:id/students`، `PATCH /club/:id/status`، `GET /class-session?clubId=` | وصل؛ کلاس ها هنوز نمایشی است |
+| `/coach/clubs/[id]` | `GET /club/:id`، `GET /club/:id/students`، `PATCH /club/:id/status`، `GET /class-session` | وصل؛ کلاس های باشگاه از `GET /class-session` و شمارش هنرجوی هر کلاس از `GET /class-session/:id/students?take=1` |
 | `/coach/clubs/[id]/edit` | `GET /club/:id` و `PATCH /club/:id` | وصل؛ react-hook-form و zod |
-| `/coach/sessions` | `GET /class-session` | نمایشی؛ تعداد هنرجو از API نمی آید |
-| `/coach/sessions/new` | `POST /class-session` | فرم UI؛ بدون ارسال |
-| `/coach/sessions/[id]` | `GET /class-session/:id` | نمایشی |
-| `/coach/sessions/[id]/edit` | `PATCH /class-session/:id` | فرم UI؛ بدون ارسال |
+| `/coach/sessions` | `GET /class-session` | وصل؛ نام باشگاه از `GET /club` و شمارش هنرجو از `GET /class-session/:id/students?take=1` |
+| `/coach/sessions/new` | `POST /class-session` | وصل؛ react-hook-form و zod، `clubId` از `GET /club` |
+| `/coach/sessions/[id]` | `GET /class-session/:id` | وصل؛ roster از `students[].student.fullName` در همان پاسخ؛ حضور و غیاب و گزارش هنوز نمایشی |
+| `/coach/sessions/[id]/edit` | `GET /class-session/:id` و `PATCH /class-session/:id` | وصل؛ `clubId` فقط در ساخت خوانده می شود، در ویرایش غیرفعال است |
 | `/coach/sessions/[id]/attendance` | `GET /attendance/class/:id/daily?date=` و `PUT /attendance/class/:id` | نمایشی |
 | `/coach/sessions/[id]/report` | `GET /attendance/class/:id?date=` | گزارش تجمیعی اختصاصی ندارد |
 | `/coach/profile` | `GET /auth/profile` و `PATCH /coach/:id` و `POST /auth/logout` | داده نمایشی؛ خروج از حساب وصل شده |
@@ -1007,7 +1007,7 @@ COLOR | POOM | DAN
 - `GET /club` تعداد کلاس و هنرجو را برنمی گرداند.
 - `GET /class-session` تعداد هنرجو را برنمی گرداند.
 - برای شمارش باید همه صفحات `GET /club/:id/students` و `GET /class-session?clubId=` خوانده شوند.
-- فرانت تا زمانی که این فیلد اضافه شود، برای هر باشگاه یک درخواست `GET /club/:id/students?take=1` می فرستد (N+1) و نتیجه را در یک کلید Cache نگه می دارد.
+- فرانت تا زمانی که این فیلد اضافه شود، برای هر باشگاه یک درخواست `GET /club/:id/students?take=1` و برای هر کلاس یک درخواست `GET /class-session/:id/students?take=1` می فرستد (N+1) و هر شمارش را در کلید Cache خودش نگه می دارد.
 - **پیشنهاد:** افزودن `_count` یا فیلدهای `classesCount` و `studentsCount` به پاسخ باشگاه و `studentsCount` به پاسخ کلاس.
 
 ### 11.4 آپلود تصویر وجود ندارد
