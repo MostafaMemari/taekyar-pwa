@@ -1,120 +1,64 @@
-import { TrendingUp } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { TrendingDown, TrendingUp } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { SectionHeading } from "@/features/coach/components/section-heading";
-import { StatusBadge } from "@/features/coach/components/status-badge";
 import { WEEKLY_ATTENDANCE, WEEKLY_TOTAL } from "@/features/coach/lib/coach-data";
 import { toPersianDigits } from "@/lib/digits";
-import { cn } from "@/lib/utils";
 
 export function DashboardAttendance() {
   const average = Math.round((WEEKLY_TOTAL.present / WEEKLY_TOTAL.total) * 100);
   const previousAverage = Math.round((WEEKLY_TOTAL.previousPresent / WEEKLY_TOTAL.previousTotal) * 100);
   const delta = average - previousAverage;
-  const sign = delta >= 0 ? "+" : "−";
-  const strongDays = WEEKLY_ATTENDANCE.filter((item) => item.value >= 80).length;
+  const isUp = delta >= 0;
 
   return (
     <section>
-      <SectionHeading
-        title="حضور این هفته"
-        action={
-          <StatusBadge tone={delta >= 0 ? "success" : "danger"} className="gap-1">
-            <TrendingUp className="size-3" aria-hidden="true" />
-            {toPersianDigits(String(Math.abs(delta)))}٪ {sign === "+" ? "بیشتر" : "کمتر"}
-          </StatusBadge>
-        }
-      />
+      <SectionHeading title="حضور این هفته" />
       <Card className="gap-0 p-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <span className="text-[10px] font-bold text-ink-subtle">میانگین حضور</span>
-            <div className="mt-1 flex items-baseline gap-2">
-              <b className="text-[28px] font-extrabold leading-none tabular-nums text-ink">{toPersianDigits(String(average))}٪</b>
-              <span className={cn("text-[10px] font-extrabold", delta >= 0 ? "text-success" : "text-danger")}>
-                {sign}
-                {toPersianDigits(String(Math.abs(delta)))}٪
-              </span>
+        <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
+          <div className="flex items-baseline gap-2">
+            <b className="text-2xl font-extrabold tabular-nums text-ink">{toPersianDigits(String(average))}٪</b>
+            <span className="flex items-center gap-1 text-xs font-bold text-ink">
+              {isUp ? (
+                <TrendingUp className="size-3.5 text-success" aria-hidden="true" />
+              ) : (
+                <TrendingDown className="size-3.5 text-danger" aria-hidden="true" />
+              )}
+              {isUp ? "+" : "−"}
+              {toPersianDigits(String(Math.abs(delta)))}٪ نسبت به هفته قبل
+            </span>
+          </div>
+          <span className="text-xs font-medium text-ink-muted">
+            {toPersianDigits(`${WEEKLY_TOTAL.present} حاضر از ${WEEKLY_TOTAL.total} رکورد`)}
+          </span>
+        </div>
+
+        <div className="mt-3 flex items-center gap-3 text-xs font-medium text-ink-muted">
+          <span className="flex items-center gap-1.5">
+            <span className="size-2.5 rounded-sm bg-brand-600" aria-hidden="true" />
+            این هفته
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="size-2.5 rounded-sm bg-ink-muted" aria-hidden="true" />
+            هفته قبل
+          </span>
+        </div>
+
+        <div aria-hidden="true" className="mt-3 grid h-28 grid-cols-7 gap-1.5 border-b border-ink-muted/50">
+          {WEEKLY_ATTENDANCE.map((item) => (
+            <div key={item.day} className="flex items-end justify-center gap-1">
+              <span className="w-3 rounded-t-sm bg-brand-600" style={{ height: `${item.value}%` }} />
+              <span className="w-3 rounded-t-sm bg-ink-muted" style={{ height: `${item.previous}%` }} />
             </div>
-            <span className="mt-1.5 block text-[10px] font-medium text-ink-subtle">
-              {toPersianDigits(`${WEEKLY_TOTAL.present} حاضر از ${WEEKLY_TOTAL.total} رکورد`)}
-            </span>
-          </div>
-
-          <div className="flex flex-col items-end gap-1.5 pt-0.5 text-[9px] font-bold text-ink-subtle">
-            <span className="flex items-center gap-1">
-              <span className="size-2 rounded-full bg-brand-500" aria-hidden="true" />
-              این هفته
-            </span>
-            <span className="flex items-center gap-1">
-              <span className="size-2 rounded-full bg-border" aria-hidden="true" />
-              هفته قبل
-            </span>
-            <span className="flex items-center gap-1">
-              <span className="h-0 w-4 border-t border-dashed border-brand-400/70" aria-hidden="true" />
-              هدف ۹۰٪
-            </span>
-          </div>
+          ))}
         </div>
 
-        <div
-          role="img"
-          aria-label={`حضور روزانه این هفته در برابر هفته قبل، میانگین ${toPersianDigits(String(average))} درصد`}
-          className="relative mt-5 h-[124px]"
-        >
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-[100px]">
-            <div className="absolute inset-x-0 top-0 border-t border-dashed border-border" />
-            <div className="absolute inset-x-0 top-[10%] border-t border-dashed border-brand-400/50" />
-            <div className="absolute inset-x-0 top-1/2 border-t border-dashed border-border/70" />
-            <div className="absolute inset-x-0 bottom-0 border-t border-border" />
-          </div>
-
-          <div className="absolute inset-x-0 top-0 flex h-[100px] items-end gap-1.5">
-            {WEEKLY_ATTENDANCE.map((item, index) => (
-              <div key={item.day} className="relative flex h-full flex-1 items-end justify-center gap-[3px]">
-                <span
-                  className="w-[10px] rounded-t-full bg-border/70"
-                  style={{ height: `${item.previous}%` }}
-                  title={`${item.day} هفته قبل: ${toPersianDigits(String(item.previous))} درصد`}
-                />
-                <span
-                  className={cn(
-                    "w-[13px] rounded-t-full bg-gradient-to-t",
-                    index === 0 ? "from-brand-600 to-brand-400" : "from-brand-600 to-brand-500",
-                  )}
-                  style={{ height: `${item.value}%` }}
-                  title={`${item.day} این هفته: ${toPersianDigits(String(item.value))} درصد`}
-                />
-              </div>
-            ))}
-          </div>
-
-          <div className="absolute inset-x-0 bottom-0 flex gap-1.5">
-            {WEEKLY_ATTENDANCE.map((item, index) => (
-              <span key={item.day} className="flex flex-1 flex-col items-center gap-0.5">
-                <span className={cn("text-[9.5px] font-extrabold leading-3", index === 0 ? "text-accent-ink" : "text-ink-subtle")}>
-                  {item.day}
-                </span>
-                <span className="text-[8.5px] font-medium leading-3 tabular-nums text-ink-subtle">
-                  {toPersianDigits(String(item.value))}
-                </span>
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-2 flex items-center justify-between border-t border-[var(--line-2)] pt-2.5">
-          <span className="text-[10px] font-bold text-ink-subtle">{toPersianDigits(String(strongDays))} روز بالای ۸۰٪ حضور</span>
-          <Button
-            variant="link"
-            size="sm"
-            className="h-auto p-0 text-[10px] font-extrabold text-accent-ink"
-            render={<Link href="/coach/sessions" />}
-            nativeButton={false}
-          >
-            گزارش کامل
-          </Button>
+        <div className="mt-1.5 grid grid-cols-7 gap-1.5">
+          {WEEKLY_ATTENDANCE.map((item) => (
+            <div key={item.day} className="flex flex-col items-center">
+              <b className="text-xs font-extrabold tabular-nums text-ink">{toPersianDigits(String(item.value))}٪</b>
+              <span className="text-xs text-ink-muted">{item.day}</span>
+            </div>
+          ))}
         </div>
       </Card>
     </section>

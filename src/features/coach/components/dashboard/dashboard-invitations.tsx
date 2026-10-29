@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { PersonAvatar } from "@/features/coach/components/person-avatar";
 import { SectionHeading } from "@/features/coach/components/section-heading";
-import { StatusBadge } from "@/features/coach/components/status-badge";
 import { INVITATIONS } from "@/features/coach/lib/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
@@ -19,32 +18,28 @@ export function DashboardInvitations() {
           <Button
             variant="link"
             size="sm"
-            className="h-auto p-0 text-[10.5px] font-extrabold text-accent-ink"
+            className="h-9 text-sm font-bold text-accent-ink"
             render={<Link href="/coach/invitations" />}
             nativeButton={false}
           >
-            مشاهده همه
+            همه دعوت نامه ها
           </Button>
         }
       />
       <Card className="gap-0 p-0">
         {pending.length > 0 ? (
           pending.map((invitation, index) => (
-            <div key={invitation.id} className={cn("flex items-center gap-3 p-4", index > 0 && "border-t border-[var(--line-2)]")}>
-              <PersonAvatar name={invitation.studentName ?? invitation.nationalCode} className="size-9" fallbackClassName="text-[12px]" />
+            <div key={invitation.id} className={cn("flex items-center gap-3 px-4 py-3", index > 0 && "border-t border-[var(--line-2)]")}>
+              <PersonAvatar name={invitation.studentName ?? invitation.nationalCode} />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-[13px] font-extrabold text-ink">{invitation.studentName ?? "هنرجوی بدون حساب"}</p>
-                <p className="mt-1 truncate text-[10.5px] font-medium text-ink-subtle">
-                  کد ملی {toPersianDigits(invitation.nationalCode)} · ارسال: {invitation.sentAt}
-                </p>
+                <p className="truncate text-sm font-bold text-ink">{invitation.studentName ?? "هنرجوی بدون حساب"}</p>
+                <p className="mt-1 truncate text-xs text-ink-muted">کد ملی {toPersianDigits(invitation.nationalCode)}</p>
               </div>
-              <StatusBadge tone="warning" className="shrink-0">
-                در انتظار پاسخ
-              </StatusBadge>
+              <span className="shrink-0 text-xs font-medium text-ink-muted">{invitation.sentAt}</span>
             </div>
           ))
         ) : (
-          <p className="p-4 text-center text-[11px] font-semibold text-ink-subtle">دعوت نامه در انتظاری وجود ندارد.</p>
+          <p className="p-4 text-center text-sm font-semibold text-ink-muted">دعوت نامه در انتظاری وجود ندارد.</p>
         )}
       </Card>
     </section>
