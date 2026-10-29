@@ -8,13 +8,14 @@ type AuthSelectProps = {
   placeholder: string;
   options: readonly { value: string; label: string }[];
   icon?: LucideIcon;
+  disabled?: boolean;
 };
 
-export function AuthSelect({ id, value, onValueChange, placeholder, options, icon: Icon }: AuthSelectProps) {
+export function AuthSelect({ id, value, onValueChange, placeholder, options, icon: Icon, disabled }: AuthSelectProps) {
   const items = [{ label: placeholder, value: null }, ...options];
 
   return (
-    <Select items={items} value={value} onValueChange={onValueChange}>
+    <Select items={items} value={value} onValueChange={onValueChange} disabled={disabled}>
       <SelectTrigger id={id} className="relative h-12 w-full rounded-xl ps-11 pe-3.5 text-sm">
         {Icon ? (
           <Icon
