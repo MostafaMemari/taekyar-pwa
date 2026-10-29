@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDays, ClipboardCheck, EllipsisVertical, Pencil, Plus, Users } from "lucide-react";
+import { CalendarDays, EllipsisVertical, Pencil, Plus, Users } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -8,18 +8,19 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
+import { ErrorState } from "@/features/coach/components/error-state";
 import { useClub, useClubStudentCount } from "@/features/coach/hooks/use-clubs";
+import { useSessionStudentCounts, useSessions } from "@/features/coach/hooks/use-sessions";
 import type { ClubRecord } from "@/features/coach/lib/club-api";
-import { getClubSessions } from "@/features/coach/lib/coach-data";
 import { apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
 import { cn } from "@/lib/utils";
 import { ClubBand } from "./club-band";
 import { ClubClasses } from "./club-classes";
+import { ClubClassesSkeleton } from "./club-classes-skeleton";
 import { ClubDetailActions } from "./club-detail-actions";
 import { ClubDetailSkeleton } from "./club-detail-skeleton";
-import { ClubErrorState } from "./club-error-state";
 import { ClubInfoCard } from "./club-info-card";
 
 export function ClubDetail({ clubId }: { clubId: string }) {
@@ -33,7 +34,7 @@ export function ClubDetail({ clubId }: { clubId: string }) {
       <main className="px-4 pt-[max(1rem,env(safe-area-inset-top))]">
         <CoachPageHeader title="مشخصات باشگاه" backHref="/coach/clubs" />
 
-        <ClubErrorState
+        <ErrorState
           className="mt-4"
           title="خواندن باشگاه انجام نشد"
           message={apiErrorMessage(readError)}
@@ -46,16 +47,16 @@ export function ClubDetail({ clubId }: { clubId: string }) {
     );
   }
 
-  if (!club) return <ClubDetailSkeleton clubId={clubId} />;
+  if (!club) return <ClubDetailSkeleton />;
 
   return <ClubDetailScreen club={club} studentCount={studentCount} />;
 }
 
 function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCount?: number }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const sessions = getClubSessions(club.id);
-  const nextSession = sessions.find((session) => session.isActive);
-  const attendanceHref = nextSession ? `/coach/sessions/${nextSession.id}/attendance` : "/coach/sessions/new";
+  const { data: sessionData, error: sessionError, isLoading: sessionsLoading, mutate: mutateSessions } = useSessions();
+  const sessions = (sessionData?.sessions ?? []).filter((session) => session.clubId === club.id);
+  const { data: memberCounts } = useSessionStudentCounts(sessions.map((session) => session.id));
 
   const stats = [
     {
@@ -92,11 +93,11 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
         <Button
           variant="brand"
           className="h-12 w-full rounded-xl text-[12.5px] font-extrabold"
-          render={<Link href={attendanceHref} />}
+          render={<Link href="/coach/sessions/new" />}
           nativeButton={false}
         >
-          <ClipboardCheck data-icon="inline-start" aria-hidden="true" />
-          ثبت حضور و غیاب این باشگاه
+          <Plus data-icon="inline-start" aria-hidden="true" />
+          کلاس جدید
         </Button>
 
         <div className="grid grid-cols-2 gap-3">
@@ -119,7 +120,13 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
           ))}
         </div>
 
-        <ClubClasses sessions={sessions} />
+        {sessionError ? (
+          <ErrorState title="خواندن کلاس ها انجام نشد" message={apiErrorMessage(sessionError)} onRetry={() => void mutateSessions()} />
+        ) : sessionsLoading ? (
+          <ClubClassesSkeleton />
+        ) : (
+          <ClubClasses sessions={sessions} memberCounts={memberCounts} />
+        )}
 
         <div className="grid grid-cols-2 gap-3">
           <Button
@@ -134,11 +141,11 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
           <Button
             variant="brand"
             className="h-12 rounded-xl text-[12px] font-extrabold"
-            render={<Link href="/coach/sessions/new" />}
+            render={<Link href="/coach/sessions" />}
             nativeButton={false}
           >
-            <Plus data-icon="inline-start" aria-hidden="true" />
-            کلاس جدید
+            <CalendarDays data-icon="inline-start" aria-hidden="true" />
+            همه کلاس ها
           </Button>
         </div>
       </CoachSheet>

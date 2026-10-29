@@ -3,14 +3,16 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { Skeleton } from "@/components/ui/skeleton";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { SessionTime } from "@/features/coach/components/session-time";
 import { StatusBadge } from "@/features/coach/components/status-badge";
-import { type ClassSession, weekDayLabels } from "@/features/coach/lib/coach-data";
+import { weekDayLabels } from "@/features/coach/lib/coach-data";
+import type { ClassSessionRecord } from "@/features/coach/lib/session-api";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
-export function ClubClasses({ sessions }: { sessions: ClassSession[] }) {
+export function ClubClasses({ sessions, memberCounts }: { sessions: ClassSessionRecord[]; memberCounts?: Record<string, number> }) {
   return (
     <section>
       <SectionHeading title="کلاس های باشگاه" action={<StatusBadge>{toPersianDigits(String(sessions.length))} کلاس</StatusBadge>} />
@@ -26,7 +28,7 @@ export function ClubClasses({ sessions }: { sessions: ClassSession[] }) {
                     session.isActive ? "bg-brand-50 text-accent-ink" : "bg-muted text-ink-subtle",
                   )}
                 >
-                  <session.icon className="size-5" aria-hidden="true" />
+                  <CalendarDays className="size-5" aria-hidden="true" />
                 </span>
 
                 <span className="min-w-0 flex-1">
@@ -44,11 +46,15 @@ export function ClubClasses({ sessions }: { sessions: ClassSession[] }) {
                       <StatusBadge key={day}>{day}</StatusBadge>
                     ))}
                     <StatusBadge>
-                      <SessionTime start={session.start} end={session.end} />
+                      <SessionTime start={session.startTime} end={session.endTime} />
                     </StatusBadge>
                     <StatusBadge tone="brand">
                       <Users aria-hidden="true" />
-                      {toPersianDigits(String(session.studentIds.length))} هنرجو
+                      {memberCounts?.[session.id] === undefined ? (
+                        <Skeleton className="h-3 w-7" />
+                      ) : (
+                        `${toPersianDigits(String(memberCounts[session.id]))} هنرجو`
+                      )}
                     </StatusBadge>
                   </span>
                 </span>

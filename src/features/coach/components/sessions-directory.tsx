@@ -8,12 +8,17 @@ import { Card } from "@/components/ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { GymContext } from "@/features/coach/components/gym-context";
+import { ErrorState } from "@/features/coach/components/error-state";
 import { SessionTime } from "@/features/coach/components/session-time";
 import { StatusBadge } from "@/features/coach/components/status-badge";
-import { ACTIVE_CLUB, type ClassSession, SESSIONS, sessionIsToday, weekDayLabels } from "@/features/coach/lib/coach-data";
+import { useClubs } from "@/features/coach/hooks/use-clubs";
+import { useSessionStudentCounts, useSessions } from "@/features/coach/hooks/use-sessions";
+import { sessionIsToday, weekDayLabels } from "@/features/coach/lib/coach-data";
+import type { ClassSessionRecord } from "@/features/coach/lib/session-api";
+import { apiErrorMessage } from "@/lib/api/client";
 import { toLatinDigits, toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
+import { SessionsSkeleton } from "./sessions/sessions-skeleton";
 
 type Period = "all" | "today";
 
@@ -22,7 +27,7 @@ const PERIODS: { value: Period; label: string }[] = [
   { value: "today", label: "امروز" },
 ];
 
-function SessionCard({ session }: { session: ClassSession }) {
+function SessionCard({ session, clubName, memberCount }: { session: ClassSessionRecord; clubName: string; memberCount?: number }) {
   return (
     <Link href={`/coach/sessions/${session.id}`} className="block rounded-xl transition duration-150 active:scale-[0.995]">
       <Card className="gap-0 p-4">
@@ -33,7 +38,7 @@ function SessionCard({ session }: { session: ClassSession }) {
               session.isActive ? "bg-brand-50 text-accent-ink" : "bg-muted text-ink-subtle",
             )}
           >
-            <session.icon className="size-5" aria-hidden="true" />
+            <CalendarDays className="size-5" aria-hidden="true" />
           </span>
 
           <div className="min-w-0 flex-1">
@@ -44,7 +49,7 @@ function SessionCard({ session }: { session: ClassSession }) {
                 {session.isActive ? "فعال" : "غیرفعال"}
               </StatusBadge>
             </div>
-            <p className="mt-1 truncate text-[11px] text-ink-subtle">{session.club}</p>
+            <p className="mt-1 truncate text-[11px] text-ink-subtle">{clubName}</p>
 
             <div className="mt-2 flex flex-wrap items-center gap-1.5">
               {weekDayLabels(session.weekDays).map((day) => (
@@ -53,11 +58,11 @@ function SessionCard({ session }: { session: ClassSession }) {
                 </StatusBadge>
               ))}
               <StatusBadge className="text-[10px]">
-                <SessionTime start={session.start} end={session.end} />
+                <SessionTime start={session.startTime} end={session.endTime} />
               </StatusBadge>
               <StatusBadge tone="brand" className="text-[10px]">
                 <Users aria-hidden="true" />
-                {toPersianDigits(String(session.studentIds.length))} هنرجو
+                {memberCount === undefined ? <span className="tabular-nums">—</span> : `${toPersianDigits(String(memberCount))} هنرجو`}
               </StatusBadge>
             </div>
           </div>
@@ -73,15 +78,22 @@ export function SessionsDirectory() {
   const [query, setQuery] = useState("");
   const [period, setPeriod] = useState<Period>("all");
 
-  const clubSessions = SESSIONS.filter((session) => session.clubId === ACTIVE_CLUB.id);
+  const { data, error, isLoading, mutate } = useSessions();
+  const { data: clubData } = useClubs();
+  const sessions = data?.sessions ?? [];
+  const { data: counts, error: countsError, mutate: mutateCounts } = useSessionStudentCounts(sessions.map((session) => session.id));
+
+  const readError = error ?? countsError;
+  const isReady = Boolean(data) && !readError;
+  const clubNames = new Map((clubData?.clubs ?? []).map((club) => [club.id, club.name]));
+
   const normalizedQuery = toLatinDigits(query).trim().toLowerCase();
-  const visible = clubSessions.filter((session) => {
-    const matchesPeriod = period === "all" || sessionIsToday(session.weekDays);
-    if (!matchesPeriod) return false;
+  const visible = sessions.filter((session) => {
+    if (period !== "all" && !sessionIsToday(session.weekDays)) return false;
     if (!normalizedQuery) return true;
 
     const haystack = toLatinDigits(
-      `${session.name} ${session.club} ${weekDayLabels(session.weekDays).join(" ")} ${session.start} ${session.end}`,
+      `${session.name} ${clubNames.get(session.clubId) ?? ""} ${weekDayLabels(session.weekDays).join(" ")} ${session.startTime} ${session.endTime}`,
     ).toLowerCase();
 
     return haystack.includes(normalizedQuery);
@@ -92,18 +104,23 @@ export function SessionsDirectory() {
     setPeriod("all");
   };
 
+  const retry = () => {
+    void mutate();
+    void mutateCounts();
+  };
+
   return (
     <>
       <header className="flex items-center gap-2">
         <h1 className="text-[22px] font-extrabold text-ink">کلاس ها</h1>
-        <StatusBadge tone="neutral" className="mt-0.5">
-          {visible.length === clubSessions.length
-            ? `${toPersianDigits(String(clubSessions.length))} کلاس`
-            : `${toPersianDigits(String(visible.length))} کلاس یافت شد`}
-        </StatusBadge>
+        {data && !readError ? (
+          <StatusBadge tone="neutral" className="mt-0.5">
+            {visible.length === sessions.length
+              ? `${toPersianDigits(String(sessions.length))} کلاس`
+              : `${toPersianDigits(String(visible.length))} کلاس یافت شد`}
+          </StatusBadge>
+        ) : null}
       </header>
-
-      <GymContext className="mt-4" subtitle="کلاس بندی و حضور و غیاب این باشگاه" actionLabel="تغییر باشگاه" />
 
       <div className="sticky top-0 z-20 -mx-4 mt-4 border-b border-[var(--line-2)] bg-[var(--canvas)]/95 px-4 pb-3 pt-2 backdrop-blur">
         <InputGroup className="h-11 rounded-xl">
@@ -138,13 +155,46 @@ export function SessionsDirectory() {
         </ToggleGroup>
       </div>
 
-      {visible.length > 0 ? (
+      {isLoading && !readError ? <SessionsSkeleton /> : null}
+
+      {readError ? (
+        <ErrorState className="mt-6" title="خواندن کلاس ها انجام نشد" message={apiErrorMessage(readError)} onRetry={retry} />
+      ) : null}
+
+      {isReady && sessions.length === 0 ? (
+        <Empty className="mt-4 border-none bg-transparent p-6">
+          <EmptyHeader>
+            <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
+              <CalendarDays aria-hidden="true" />
+            </EmptyMedia>
+            <EmptyTitle className="text-[13px] font-extrabold text-ink">هنوز کلاسی ثبت نشده</EmptyTitle>
+            <EmptyDescription className="text-[11.5px] leading-5 text-ink-subtle">
+              برای هر باشگاه، یک کلاس با روزها و ساعت برگزاری بسازید.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button variant="outline" size="sm" className="rounded-lg" render={<Link href="/coach/sessions/new" />} nativeButton={false}>
+              <Plus data-icon="inline-start" aria-hidden="true" />
+              کلاس جدید
+            </Button>
+          </EmptyContent>
+        </Empty>
+      ) : null}
+
+      {isReady && visible.length > 0 ? (
         <div className="mt-3 flex flex-col gap-3">
           {visible.map((session) => (
-            <SessionCard key={session.id} session={session} />
+            <SessionCard
+              key={session.id}
+              session={session}
+              clubName={clubNames.get(session.clubId) ?? "باشگاه حذف شده"}
+              memberCount={counts?.[session.id]}
+            />
           ))}
         </div>
-      ) : (
+      ) : null}
+
+      {isReady && sessions.length > 0 && visible.length === 0 ? (
         <Empty className="mt-4 border-none bg-transparent p-6">
           <EmptyHeader>
             <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
@@ -161,7 +211,7 @@ export function SessionsDirectory() {
             </Button>
           </EmptyContent>
         </Empty>
-      )}
+      ) : null}
 
       <div className="pointer-events-none fixed inset-x-0 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-40 mx-auto flex max-w-[var(--app-max-width)] justify-end px-5">
         <Button

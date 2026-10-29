@@ -10,11 +10,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CoachBand } from "@/features/coach/components/coach-band";
 import { CoachBell } from "@/features/coach/components/coach-bell";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
+import { ErrorState } from "@/features/coach/components/error-state";
 import { useClubStudentCounts, useClubs } from "@/features/coach/hooks/use-clubs";
 import { apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
 import { ClubCard } from "./club-card";
-import { ClubErrorState } from "./club-error-state";
 import { ClubsSkeleton } from "./clubs-skeleton";
 
 function GlassStat({ value, label }: { value: ReactNode; label: string }) {
@@ -71,7 +71,7 @@ export function ClubsDirectory() {
         {isLoading && !readError ? <ClubsSkeleton /> : null}
 
         {readError ? (
-          <ClubErrorState className="mt-6" title="خواندن باشگاه ها انجام نشد" message={apiErrorMessage(readError)} onRetry={retry} />
+          <ErrorState className="mt-6" title="خواندن باشگاه ها انجام نشد" message={apiErrorMessage(readError)} onRetry={retry} />
         ) : null}
 
         {isReady && clubs.length === 0 ? (

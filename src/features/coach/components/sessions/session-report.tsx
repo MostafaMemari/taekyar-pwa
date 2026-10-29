@@ -26,7 +26,11 @@ export function SessionReport({ detail }: { detail: SessionDetail }) {
   return (
     <main className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300">
       <SessionBand
-        detail={detail}
+        name={detail.name}
+        clubName={detail.club}
+        weekDays={detail.weekDays}
+        start={detail.start}
+        end={detail.end}
         backHref={`/coach/sessions/${detail.id}`}
         watermark="گزارش"
         chip="گزارش جلسه"

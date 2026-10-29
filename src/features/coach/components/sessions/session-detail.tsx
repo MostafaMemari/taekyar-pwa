@@ -1,21 +1,24 @@
 "use client";
 
-import { Check, ChevronLeft, ClipboardCheck, EllipsisVertical, FileBarChart, Minus, Users } from "lucide-react";
-import Link from "next/link";
+import { CalendarDays, Check, EllipsisVertical, Info, Minus, Users } from "lucide-react";
 import { type ReactNode, useState } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { AttendanceBars } from "@/features/coach/components/attendance-bars";
+import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
+import { ErrorState } from "@/features/coach/components/error-state";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { SessionTime } from "@/features/coach/components/session-time";
 import { StatusBadge } from "@/features/coach/components/status-badge";
-import { attendanceRate, attendanceTotal } from "@/features/coach/lib/attendance-summary";
+import { useSession } from "@/features/coach/hooks/use-sessions";
 import { weekDayLabels } from "@/features/coach/lib/coach-data";
-import { getSessionDetail } from "@/features/coach/lib/session-data";
+import type { ClassSessionRecord } from "@/features/coach/lib/session-api";
+import { apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
 import { SessionBand } from "./session-band";
 import { SessionDetailActions } from "./session-detail-actions";
+import { SessionDetailSkeleton } from "./session-detail-skeleton";
 import { SessionRoster } from "./session-roster";
 
 function InfoRow({ label, children }: { label: string; children: ReactNode }) {
@@ -28,19 +31,38 @@ function InfoRow({ label, children }: { label: string; children: ReactNode }) {
 }
 
 export function SessionDetailView({ sessionId }: { sessionId: string }) {
+  const { data: session, error, mutate } = useSession(sessionId);
+
+  if (error) {
+    return (
+      <main className="px-4 pt-[max(1rem,env(safe-area-inset-top))]">
+        <CoachPageHeader title="مشخصات کلاس" backHref="/coach/sessions" />
+        <ErrorState className="mt-4" title="خواندن کلاس انجام نشد" message={apiErrorMessage(error)} onRetry={() => void mutate()} />
+      </main>
+    );
+  }
+
+  if (!session) return <SessionDetailSkeleton />;
+
+  return <SessionDetailScreen session={session} />;
+}
+
+function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const detail = getSessionDetail(sessionId);
-
-  if (!detail) return null;
-
-  const rate = attendanceRate(detail.lastSession.counts);
-  const total = attendanceTotal(detail.lastSession.counts);
-  const reportStudent = detail.roster[0];
+  const clubName = session.club?.name ?? "باشگاه حذف شده";
+  const members = (session.students ?? []).map((membership) => ({
+    studentId: membership.studentId,
+    name: membership.student.fullName,
+  }));
 
   return (
     <main className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300">
       <SessionBand
-        detail={detail}
+        name={session.name}
+        clubName={clubName}
+        weekDays={session.weekDays}
+        start={session.startTime}
+        end={session.endTime}
         backHref="/coach/sessions"
         action={
           <Button
@@ -59,70 +81,39 @@ export function SessionDetailView({ sessionId }: { sessionId: string }) {
         <Card className="gap-0 p-4">
           <div className="flex items-start gap-3">
             <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-brand-50 text-accent-ink">
-              <detail.icon className="size-5" aria-hidden="true" />
+              <CalendarDays className="size-5" aria-hidden="true" />
             </span>
             <div className="min-w-0 flex-1">
-              <h2 className="truncate text-[15px] font-extrabold text-ink">{detail.name}</h2>
-              <p className="mt-1 truncate text-[12px] text-ink-muted">{detail.club}</p>
+              <h2 className="truncate text-[15px] font-extrabold text-ink">{session.name}</h2>
+              <p className="mt-1 truncate text-[12px] text-ink-muted">{clubName}</p>
             </div>
-            <StatusBadge tone={detail.isActive ? "success" : "neutral"} className="shrink-0">
-              {detail.isActive ? <Check aria-hidden="true" /> : <Minus aria-hidden="true" />}
-              {detail.isActive ? "فعال" : "غیرفعال"}
+            <StatusBadge tone={session.isActive ? "success" : "neutral"} className="shrink-0">
+              {session.isActive ? <Check aria-hidden="true" /> : <Minus aria-hidden="true" />}
+              {session.isActive ? "فعال" : "غیرفعال"}
             </StatusBadge>
           </div>
 
           <dl className="mt-4 border-t border-[var(--line-1)] pt-2">
             <InfoRow label="روزهای برگزاری">
               <span className="flex flex-wrap justify-end gap-1">
-                {weekDayLabels(detail.weekDays).map((day) => (
+                {weekDayLabels(session.weekDays).map((day) => (
                   <StatusBadge key={day}>{day}</StatusBadge>
                 ))}
               </span>
             </InfoRow>
             <InfoRow label="ساعت برگزاری">
-              <SessionTime start={detail.start} end={detail.end} />
+              <SessionTime start={session.startTime} end={session.endTime} />
             </InfoRow>
-            <InfoRow label="تعداد هنرجو">{toPersianDigits(String(detail.memberCount))} نفر</InfoRow>
+            <InfoRow label="تعداد هنرجو">{toPersianDigits(String(members.length))} نفر</InfoRow>
           </dl>
         </Card>
 
-        <Card className="gap-3 p-4">
-          <SectionHeading title="خلاصه جلسه اخیر" className="mb-0" action={<StatusBadge>{detail.lastSession.date}</StatusBadge>} />
-          <AttendanceBars counts={detail.lastSession.counts} />
-          <div className="flex items-center justify-between gap-2 border-t border-[var(--line-1)] pt-2.5">
-            <span className="text-[10.5px] font-semibold text-ink-subtle">
-              از مجموع {toPersianDigits(String(total))} هنرجو · نرخ حضور {toPersianDigits(String(rate))}٪
-            </span>
-            <Link
-              href={`/coach/sessions/${detail.id}/report`}
-              className="inline-flex items-center gap-0.5 text-[10.5px] font-extrabold text-accent-ink"
-            >
-              گزارش جلسه
-              <ChevronLeft className="size-3" aria-hidden="true" />
-            </Link>
-          </div>
-        </Card>
-
-        <div className="grid grid-cols-2 gap-3">
-          <Button
-            variant="brand"
-            className="h-12 rounded-xl text-[12px] font-extrabold"
-            render={<Link href={`/coach/sessions/${detail.id}/attendance`} />}
-            nativeButton={false}
-          >
-            <ClipboardCheck data-icon="inline-start" aria-hidden="true" />
-            ثبت حضور
-          </Button>
-          <Button
-            variant="outline"
-            className="h-12 rounded-xl text-[12px] font-extrabold"
-            render={<Link href={reportStudent ? `/coach/students/${reportStudent.studentId}/attendance` : "/coach/students"} />}
-            nativeButton={false}
-          >
-            <FileBarChart data-icon="inline-start" aria-hidden="true" />
-            گزارش هنرجو
-          </Button>
-        </div>
+        <Alert className="rounded-xl border-none bg-info-soft/60 p-3 text-start">
+          <Info className="text-info" aria-hidden="true" />
+          <AlertDescription className="text-[11px] leading-5 text-ink-muted">
+            حضور و غیاب، گزارش جلسه و افزودن هنرجو به کلاس در این نسخه از سامانه فعال نشده است.
+          </AlertDescription>
+        </Alert>
 
         <section>
           <SectionHeading
@@ -130,18 +121,22 @@ export function SessionDetailView({ sessionId }: { sessionId: string }) {
             action={
               <StatusBadge>
                 <Users aria-hidden="true" />
-                {toPersianDigits(String(detail.memberCount))} نفر
+                {toPersianDigits(String(members.length))} نفر
               </StatusBadge>
             }
           />
-          <SessionRoster entries={detail.roster} lastSessionDate={detail.lastSession.date} linkStudents />
-          <p className="mt-3 text-center text-[10.5px] font-semibold text-ink-subtle">
-            نمایش {toPersianDigits(String(detail.roster.length))} هنرجو از {toPersianDigits(String(detail.memberCount))} نفر
-          </p>
+
+          {members.length > 0 ? (
+            <SessionRoster entries={members} />
+          ) : (
+            <p className="rounded-xl bg-muted/60 p-3 text-center text-[11px] font-semibold leading-5 text-ink-subtle">
+              هنوز هنرجویی در این کلاس ثبت نشده است.
+            </p>
+          )}
         </section>
       </CoachSheet>
 
-      <SessionDetailActions detail={detail} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
+      <SessionDetailActions session={session} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
     </main>
   );
 }

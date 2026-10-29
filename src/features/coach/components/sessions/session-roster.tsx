@@ -5,8 +5,10 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { AttendanceStatusText } from "@/features/coach/components/attendance-status-text";
 import { PersonAvatar } from "@/features/coach/components/person-avatar";
-import type { SessionRosterEntry } from "@/features/coach/lib/session-data";
+import type { AttendanceStatus } from "@/features/coach/lib/coach-data";
 import { cn } from "@/lib/utils";
+
+type RosterEntry = { studentId: string; name: string; status?: AttendanceStatus; note?: string };
 
 export function SessionRoster({
   entries,
@@ -15,7 +17,7 @@ export function SessionRoster({
   linkStudents = false,
   className,
 }: {
-  entries: SessionRosterEntry[];
+  entries: RosterEntry[];
   lastSessionDate?: string;
   showNotes?: boolean;
   linkStudents?: boolean;
@@ -32,7 +34,7 @@ export function SessionRoster({
               <b className="block truncate text-[12.5px] font-extrabold text-ink-body">{entry.name}</b>
               {subline ? <span className="mt-0.5 block truncate text-[10px] font-semibold text-ink-subtle">{subline}</span> : null}
             </span>
-            <AttendanceStatusText status={entry.status} />
+            {entry.status ? <AttendanceStatusText status={entry.status} /> : null}
             {linkStudents ? <ChevronLeft className="size-4 shrink-0 text-ink-faint" aria-hidden="true" /> : null}
           </div>
         );

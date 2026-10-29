@@ -5,12 +5,9 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CoachBand } from "@/features/coach/components/coach-band";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
-import { getClubSessions } from "@/features/coach/lib/coach-data";
-import { ClubClasses } from "./club-classes";
+import { ClubClassesSkeleton } from "./club-classes-skeleton";
 
-export function ClubDetailSkeleton({ clubId }: { clubId: string }) {
-  const sessions = getClubSessions(clubId);
-
+export function ClubDetailSkeleton() {
   return (
     <main>
       <CoachBand watermark="باشگاه">
@@ -68,7 +65,7 @@ export function ClubDetailSkeleton({ clubId }: { clubId: string }) {
             ))}
           </div>
 
-          <ClubClasses sessions={sessions} />
+          <ClubClassesSkeleton />
 
           <div className="grid grid-cols-2 gap-3">
             <Skeleton className="h-12 rounded-xl" />

@@ -1,14 +1,18 @@
-import { ChevronRight, Landmark } from "lucide-react";
+import { CalendarDays, ChevronRight, Landmark } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { CoachBand } from "@/features/coach/components/coach-band";
 import { SessionTime } from "@/features/coach/components/session-time";
+import type { WeekDay } from "@/features/coach/lib/coach-data";
 import { weekDayLabels } from "@/features/coach/lib/coach-data";
-import type { SessionDetail } from "@/features/coach/lib/session-data";
 
 export function SessionBand({
-  detail,
+  name,
+  clubName,
+  weekDays,
+  start,
+  end,
   backHref,
   watermark = "کلاس",
   chip,
@@ -16,7 +20,11 @@ export function SessionBand({
   meta,
   action,
 }: {
-  detail: SessionDetail;
+  name: string;
+  clubName: string;
+  weekDays: WeekDay[];
+  start: string;
+  end: string;
   backHref: string;
   watermark?: string;
   chip?: ReactNode;
@@ -44,24 +52,24 @@ export function SessionBand({
 
       <div className="mt-3 flex items-center gap-3.5">
         <span className="grid size-16 shrink-0 place-items-center rounded-2xl border border-white/20 bg-white/15 ring-2 ring-white/25">
-          <detail.icon className="size-7" aria-hidden="true" />
+          <CalendarDays className="size-7" aria-hidden="true" />
         </span>
 
         <div className="min-w-0 flex-1">
-          <h1 className="truncate text-[20px] font-extrabold leading-7">{detail.name}</h1>
+          <h1 className="truncate text-[20px] font-extrabold leading-7">{name}</h1>
           <p className="mt-1 truncate text-[11px] font-semibold text-white/65">
-            {subtitle ?? `${detail.club} · ${weekDayLabels(detail.weekDays).join(" و ")}`}
+            {subtitle ?? `${clubName} · ${weekDayLabels(weekDays).join(" و ")}`}
           </p>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {meta ?? (
               <>
                 <span className="meta-glass">
                   <Landmark aria-hidden="true" />
-                  {detail.club}
+                  {clubName}
                 </span>
-                <span className="meta-glass">{weekDayLabels(detail.weekDays).join(" و ")}</span>
+                <span className="meta-glass">{weekDayLabels(weekDays).join(" و ")}</span>
                 <span className="meta-glass">
-                  <SessionTime start={detail.start} end={detail.end} />
+                  <SessionTime start={start} end={end} />
                 </span>
               </>
             )}
