@@ -1,11 +1,11 @@
 # داکیومنت API مربی
 
-مرجع کامل قرارداد بک اند برای تمام صفحه های نقش مربی. این فایل برای مرحله اتصال API نوشته شده است. در وضعیت فعلی، احراز هویت و صفحه های باشگاه و کلاس (`/coach/clubs*` و `/coach/sessions*` به جز حضور و غیاب و گزارش) به بک اند وصل هستند؛ داشبورد، هنرجوها، دعوت نامه ها، حضور و غیاب و گزارش جلسه هنوز داده نمایشی دارند.
+مرجع کامل قرارداد بک اند برای تمام صفحه های نقش مربی. این فایل برای مرحله اتصال API نوشته شده است. در وضعیت فعلی، احراز هویت، باشگاه ها، کلاس ها، فهرست، ثبت و پرونده هنرجو، ثبت حضور و غیاب و گزارش جلسه (`/coach/clubs*`، `/coach/sessions*`، `/coach/students`، `/coach/students/new`، `/coach/students/[id]` و `/coach/students/[id]/attendance`) به بک اند وصل هستند؛ داشبورد، پروفایل مربی، ویرایش و تخصیص کمربند هنرجو و دعوت نامه ها هنوز داده نمایشی دارند.
 
 - منبع: پروژه `taekyar-backend` (NestJS + Prisma + PostgreSQL + Redis)
 - نسخه API: `v1`
 - پیشوند مسیر: `/api/v1`
-- تاریخ بررسی: 1405/08/07 (2026-10-29)
+- تاریخ بررسی: 1405/08/08 (2026-10-30)
 
 ---
 
@@ -504,7 +504,7 @@ COLOR | POOM | DAN
 { "message": "دعوت نامه با موفقیت ارسال شد", "invitation": { "...": "" } }
 ```
 
-نکته UI: فرم «ثبت هنرجوی جدید» فعلی از `POST /student` استفاده خواهد کرد. این مسیر برای سناریوی «افزودن سریع با کد ملی» مناسب است و در طراحی فعلی استفاده نمی شود.
+نکته UI: فرم «ثبت هنرجوی جدید» (`/coach/students/new`) از `POST /student` استفاده می کند و تاریخ های شمسی را پیش از ارسال به میلادی تبدیل می کند. این مسیر برای سناریوی «افزودن سریع با کد ملی» مناسب است و در طراحی فعلی استفاده نمی شود.
 
 ### 4.8 `DELETE /coach/students/:studentId`
 
@@ -805,6 +805,8 @@ COLOR | POOM | DAN
 - هنرجوهای تکراری در لیست ورودی نادیده گرفته می شوند.
 - پاسخ: پیام موفقیت و آرایه عضویت ها همراه `student`.
 
+نکته UI: چون عضویت باشگاه پیش شرط این مسیر است، شیت «افزودن هنرجو به کلاس» در صفحه جزئیات کلاس برای هر هنرجوی انتخاب شده اول `POST /club/:id/students` را صدا می زند (و `409` یعنی «قبلا عضو است» را نادیده می گیرد) و بعد `POST /class-session/:id/students` را. حضور و غیاب هم فقط هنرجوهای عضو کلاس را نشان می دهد، پس تخصیص به کلاس همان مسیر اضافه شدن به لیست حضور است.
+
 ### 7.9 `DELETE /class-session/:id/students/:studentId`
 
 - عضویت هنرجو در کلاس حذف می شود.
@@ -858,10 +860,11 @@ COLOR | POOM | DAN
 | `items` | array | بله | آرایه غیرخالی |
 | `items[].studentId` | uuid | بله | باید عضو کلاس باشد |
 | `items[].status` | enum | بله | `PRESENT`، `LATE`، `ABSENT`، `EXCUSED` |
-| `items[].note` | string | خیر | حداکثر 500 کاراکتر |
+| `items[].note` | string یا null | خیر | حداکثر 500 کاراکتر |
 
 - اگر یکی از هنرجوها عضو کلاس نباشد: `403`.
 - بعد از ذخیره، رکوردهای همان کلید یکتا (`classSessionId + studentId + sessionDate`) به روز می شوند.
+- اگر `note` در یک آیتم نیاید، توضیح قبلی همان رکورد دست نمی خورد؛ برای پاک کردن توضیح باید `note: null` فرستاده شود. فرانت همین کار را می کند و توضیح خالی را `null` می فرستد.
 - پاسخ: پیام «حضور و غیاب با موفقیت ثبت شد» و آرایه رکوردهای ذخیره شده.
 
 ### 8.4 `GET /attendance/student/:studentId`
@@ -985,12 +988,12 @@ COLOR | POOM | DAN
 | صفحه | مسیر API | وضعیت داده فعلی |
 |---|---|---|
 | `/coach` داشبورد | `GET /class-session?weekDay=...`، `GET /student-coach-invitation/sent?status=PENDING` | نمایشی؛ آمار تجمیعی ندارد |
-| `/coach/students` | `GET /student` | نمایشی؛ کمربند و کلاس از داده نمایشی |
-| `/coach/students/new` | `POST /student` | فرم UI؛ بدون ارسال |
-| `/coach/students/[id]` | `GET /student/:id`، `GET /attendance/student/:id/summary`، `GET /club/by-student/:id` | نمایشی |
+| `/coach/students` | `GET /student` و `GET /student/stats` | وصل؛ فیلتر و مرتب سازی در URL و آمار کارت ها از `GET /student/stats` |
+| `/coach/students/new` | `POST /student` | وصل؛ react-hook-form و zod، تبدیل تاریخ شمسی به میلادی |
+| `/coach/students/[id]` | `GET /student/:id`، `GET /student?search=&take=1`، `GET /attendance/student/:id/summary`، `GET /attendance/student/:id?page=1&take=100`، `GET /club/by-student/:id`، `DELETE /student/:id` | وصل؛ کمربند و قد/وزن از آیتم لیست با همان کد ملی خوانده می شود (بخش 11.1)؛ «حذف» واقعی است و `403` حساب فعال را با پیام سرور نشان می دهد |
 | `/coach/students/[id]/edit` | `PATCH /student/:id` | فرم UI؛ بدون ارسال |
 | `/coach/students/[id]/belt` | `GET /belt` و `PATCH /student/:id/belt` | فرم UI؛ بدون ارسال |
-| `/coach/students/[id]/attendance` | `GET /attendance/student/:id` | نمایشی |
+| `/coach/students/[id]/attendance` | `GET /attendance/student/:id/summary` و `GET /attendance/student/:id?page=1&take=100` | وصل؛ خلاصه از `summary` و رکوردها یک صفحه ۱۰۰ تایی، گروه بندی ماهانه و فیلتر وضعیت سمت کلاینت |
 | `/coach/students/invite` | `POST /student-coach-invitation` | فرم UI؛ بدون ارسال |
 | `/coach/invitations` | `GET /student-coach-invitation/sent` | نمایشی |
 | `/coach/clubs` | `GET /club` و `GET /club/:id/students?take=1` | وصل؛ شمارش هنرجو از `meta.pager.total` و آمار کلاس حذف شد |
@@ -999,10 +1002,10 @@ COLOR | POOM | DAN
 | `/coach/clubs/[id]/edit` | `GET /club/:id` و `PATCH /club/:id` | وصل؛ react-hook-form و zod |
 | `/coach/sessions` | `GET /class-session` | وصل؛ نام باشگاه از `GET /club` و شمارش هنرجو از `GET /class-session/:id/students?take=1` |
 | `/coach/sessions/new` | `POST /class-session` | وصل؛ react-hook-form و zod، `clubId` از `GET /club` |
-| `/coach/sessions/[id]` | `GET /class-session/:id` | وصل؛ roster از `students[].student.fullName` در همان پاسخ؛ حضور و غیاب و گزارش هنوز نمایشی |
+| `/coach/sessions/[id]` | `GET /class-session/:id`، `POST /club/:id/students` و `POST /class-session/:id/students` | وصل؛ roster از `students[].student.fullName` در همان پاسخ؛ دکمه «افزودن» با شیت انتخاب هنرجو اول عضویت باشگاه و بعد عضویت کلاس را می نویسد |
 | `/coach/sessions/[id]/edit` | `GET /class-session/:id` و `PATCH /class-session/:id` | وصل؛ `clubId` فقط در ساخت خوانده می شود، در ویرایش غیرفعال است |
-| `/coach/sessions/[id]/attendance` | `GET /attendance/class/:id/daily?date=` و `PUT /attendance/class/:id` | نمایشی |
-| `/coach/sessions/[id]/report` | `GET /attendance/class/:id?date=` | گزارش تجمیعی اختصاصی ندارد |
+| `/coach/sessions/[id]/attendance` | `GET /attendance/class/:id/daily?date=`، `GET /class-session/:id` و `PUT /attendance/class/:id` | وصل؛ تاریخ پیش فرض امروز و وضعیت/توضیح هر هنرجو از رکورد همان تاریخ؛ ذخیره با `note: null` برای توضیح پاک شده |
+| `/coach/sessions/[id]/report` | `GET /attendance/class/:id?date=` و `GET /class-session/:id` | وصل؛ تاریخ از `?date=` و آمار روی رکوردهای ذخیره شده همان تاریخ |
 | `/coach/profile` | `GET /auth/profile` و `PATCH /coach/:id` و `POST /auth/logout` | داده نمایشی؛ خروج از حساب وصل شده |
 
 ---
@@ -1016,7 +1019,8 @@ COLOR | POOM | DAN
 - `GET /student` اکنون `currentBelt.belt` و آخرین `metrics` را برمی گرداند (بخش 4.2).
 - `GET /student/:id` همچنان فقط ستون های جدول `Student` را برمی گرداند؛ `currentBelt`، `metrics`، `beltHistory` و `clubMemberships` در آن نیستند.
 - هیچ مسیر `GET` برای تاریخچه کمربند یا متریک ها وجود ندارد.
-- **اثر:** پروفایل هنرجو و فرم ویرایش نمی توانند کمربند، قد، وزن و تاریخ کمربند را از API بگیرند.
+- **اثر:** تاریخچه کمربند در دسترس نیست و فرم ویرایش هم نمی تواند کمربند یا قد/وزن را از `GET /student/:id` بخواند.
+- **وضعیت فرانت (تست شده):** صفحه پرونده هنرجو برای پوشش همین شکاف دو درخواست می زند: `GET /student/:id` برای ستون ها و `GET /student?search=&take=1` با کد ملی همان هنرجو (یکتا و تحت نظر مربی) برای `currentBelt` (نام و `beltDate`) و آخرین `metrics`. قد و وزن `Decimal` سرور هستند و ممکن است رشته یا عدد برسند؛ مقدار نامعتبر در UI «ثبت نشده» می شود.
 - **پیشنهاد:** همان `include` لیست را به `findOneById` هم اضافه کنید، یا `GET /student/:id/belt` و `GET /student/:id/metrics` بسازید.
 
 ### 11.2 آمار داشبورد وجود ندارد
