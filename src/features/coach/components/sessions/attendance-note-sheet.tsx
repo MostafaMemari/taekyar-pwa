@@ -85,6 +85,7 @@ export function AttendanceNoteSheet({
             <Textarea
               id="attendance-note"
               rows={3}
+              maxLength={500}
               value={value}
               onChange={(event) => setValue(event.target.value)}
               placeholder="مثلا: ۱۵ دقیقه دیر رسید و بخش گرم کردن را از دست داد"
@@ -101,10 +102,6 @@ export function AttendanceNoteSheet({
             حذف
           </Button>
         </div>
-
-        <p className="text-center text-[10px] leading-5 text-ink-faint">
-          نمونه رابط کاربری — توضیح ها فقط در همین صفحه نمایش داده می شوند.
-        </p>
       </div>
     </SheetFrame>
   );

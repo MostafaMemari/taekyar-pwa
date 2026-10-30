@@ -1,17 +1,15 @@
-import { notFound } from "next/navigation";
 import { AttendanceMarker } from "@/features/coach/components/sessions/attendance-marker";
-import { getSessionDetail } from "@/features/coach/lib/session-data";
 
 export const metadata = { title: "ثبت حضور و غیاب" };
 
-export default async function SessionAttendancePage({ params }: PageProps<"/coach/sessions/[id]/attendance">) {
+export default async function SessionAttendancePage({ params, searchParams }: PageProps<"/coach/sessions/[id]/attendance">) {
   const { id } = await params;
-
-  if (!getSessionDetail(id)) notFound();
+  const query = await searchParams;
+  const initialDate = typeof query.date === "string" ? query.date : "";
 
   return (
     <main className="min-h-dvh px-4 pb-44 pt-[max(1rem,env(safe-area-inset-top))] motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300">
-      <AttendanceMarker key={id} sessionId={id} />
+      <AttendanceMarker sessionId={id} initialDate={initialDate} />
     </main>
   );
 }

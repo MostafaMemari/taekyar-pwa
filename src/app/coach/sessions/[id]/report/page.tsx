@@ -1,14 +1,14 @@
-import { notFound } from "next/navigation";
-import { SessionReport } from "@/features/coach/components/sessions/session-report";
-import { getSessionDetail } from "@/features/coach/lib/session-data";
+import { SessionReportView } from "@/features/coach/components/sessions/session-report-view";
+import { todayJalali, toGregorianDate } from "@/lib/jalali";
 
 export const metadata = { title: "گزارش جلسه" };
 
-export default async function SessionReportPage({ params }: PageProps<"/coach/sessions/[id]/report">) {
+export default async function SessionReportPage({ params, searchParams }: PageProps<"/coach/sessions/[id]/report">) {
   const { id } = await params;
-  const detail = getSessionDetail(id);
+  const query = await searchParams;
 
-  if (!detail) notFound();
+  const requested = typeof query.date === "string" ? query.date : "";
+  const date = requested || toGregorianDate(todayJalali()) || "";
 
-  return <SessionReport detail={detail} />;
+  return <SessionReportView sessionId={id} initialDate={date} />;
 }

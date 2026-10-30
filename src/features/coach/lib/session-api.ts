@@ -71,3 +71,7 @@ export function changeSessionStatus(id: string, isActive: boolean): Promise<Clas
     (result) => result.classSession,
   );
 }
+
+export function addStudentsToSession(id: string, studentIds: string[]): Promise<void> {
+  return authRequest<unknown>(`class-session/${id}/students`, { method: "post", json: { studentIds } }).then(() => undefined);
+}

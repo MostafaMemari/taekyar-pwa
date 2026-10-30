@@ -1,8 +1,8 @@
 "use client";
 
-import { CalendarDays, Check, EllipsisVertical, Info, Minus, Users } from "lucide-react";
+import { CalendarDays, Check, ClipboardCheck, ClipboardList, EllipsisVertical, Minus, Plus, Users } from "lucide-react";
+import Link from "next/link";
 import { type ReactNode, useState } from "react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
@@ -16,6 +16,7 @@ import { weekDayLabels } from "@/features/coach/lib/coach-data";
 import type { ClassSessionRecord } from "@/features/coach/lib/session-api";
 import { apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
+import { AddClassStudentsSheet } from "./add-class-students-sheet";
 import { SessionBand } from "./session-band";
 import { SessionDetailActions } from "./session-detail-actions";
 import { SessionDetailSkeleton } from "./session-detail-skeleton";
@@ -49,6 +50,7 @@ export function SessionDetailView({ sessionId }: { sessionId: string }) {
 
 function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [addOpen, setAddOpen] = useState(false);
   const clubName = session.club?.name ?? "باشگاه حذف شده";
   const members = (session.students ?? []).map((membership) => ({
     studentId: membership.studentId,
@@ -108,26 +110,51 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
           </dl>
         </Card>
 
-        <Alert className="rounded-xl border-none bg-info-soft/60 p-3 text-start">
-          <Info className="text-info" aria-hidden="true" />
-          <AlertDescription className="text-[11px] leading-5 text-ink-muted">
-            حضور و غیاب، گزارش جلسه و افزودن هنرجو به کلاس در این نسخه از سامانه فعال نشده است.
-          </AlertDescription>
-        </Alert>
+        <div className="grid grid-cols-2 gap-3">
+          <Button
+            variant="brand"
+            className="h-11 rounded-xl text-[12px] font-extrabold"
+            render={<Link href={`/coach/sessions/${session.id}/attendance`} />}
+            nativeButton={false}
+          >
+            <ClipboardCheck data-icon="inline-start" aria-hidden="true" />
+            ثبت حضور و غیاب
+          </Button>
+          <Button
+            variant="outline"
+            className="h-11 rounded-xl text-[12px] font-extrabold"
+            render={<Link href={`/coach/sessions/${session.id}/report`} />}
+            nativeButton={false}
+          >
+            <ClipboardList data-icon="inline-start" aria-hidden="true" />
+            گزارش جلسه
+          </Button>
+        </div>
 
         <section>
           <SectionHeading
             title="هنرجویان کلاس"
             action={
-              <StatusBadge>
-                <Users aria-hidden="true" />
-                {toPersianDigits(String(members.length))} نفر
-              </StatusBadge>
+              <div className="flex items-center gap-2">
+                <StatusBadge>
+                  <Users aria-hidden="true" />
+                  {toPersianDigits(String(members.length))} نفر
+                </StatusBadge>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-8 rounded-lg px-2.5 text-[11px] font-bold"
+                  onClick={() => setAddOpen(true)}
+                >
+                  <Plus data-icon="inline-start" aria-hidden="true" />
+                  افزودن
+                </Button>
+              </div>
             }
           />
 
           {members.length > 0 ? (
-            <SessionRoster entries={members} />
+            <SessionRoster entries={members} linkStudents />
           ) : (
             <p className="rounded-xl bg-muted/60 p-3 text-center text-[11px] font-semibold leading-5 text-ink-subtle">
               هنوز هنرجویی در این کلاس ثبت نشده است.
@@ -137,6 +164,15 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
       </CoachSheet>
 
       <SessionDetailActions session={session} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
+
+      <AddClassStudentsSheet
+        open={addOpen}
+        onOpenChange={setAddOpen}
+        sessionId={session.id}
+        clubId={session.clubId}
+        clubGender={session.club?.gender}
+        existingStudentIds={members.map((member) => member.studentId)}
+      />
     </main>
   );
 }

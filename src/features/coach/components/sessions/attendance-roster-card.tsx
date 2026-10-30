@@ -6,17 +6,16 @@ import { Card } from "@/components/ui/card";
 import { AttendanceStatusText } from "@/features/coach/components/attendance-status-text";
 import { PersonAvatar } from "@/features/coach/components/person-avatar";
 import type { AttendanceStatus } from "@/features/coach/lib/coach-data";
-import type { SessionRosterEntry } from "@/features/coach/lib/session-data";
 import { AttendanceStatusControl } from "./attendance-status-control";
 
 export function AttendanceRosterCard({
-  entry,
+  name,
   status,
   note,
   onStatusChange,
   onNoteOpen,
 }: {
-  entry: SessionRosterEntry;
+  name: string;
   status: AttendanceStatus;
   note?: string;
   onStatusChange: (status: AttendanceStatus) => void;
@@ -25,12 +24,12 @@ export function AttendanceRosterCard({
   return (
     <Card className="gap-0 p-3.5">
       <div className="flex items-center gap-3">
-        <PersonAvatar name={entry.name} className="size-9" fallbackClassName="text-[12px]" />
-        <b className="min-w-0 flex-1 truncate text-[13px] font-extrabold text-ink-body">{entry.name}</b>
+        <PersonAvatar name={name} className="size-9" fallbackClassName="text-[12px]" />
+        <b className="min-w-0 flex-1 truncate text-[13px] font-extrabold text-ink-body">{name}</b>
         <AttendanceStatusText status={status} />
       </div>
 
-      <AttendanceStatusControl name={entry.name} value={status} onChange={onStatusChange} />
+      <AttendanceStatusControl name={name} value={status} onChange={onStatusChange} />
 
       <div className="mt-2.5 flex items-center gap-2 border-t border-[var(--line-1)] pt-2.5">
         <Button
