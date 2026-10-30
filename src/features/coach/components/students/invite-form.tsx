@@ -79,7 +79,7 @@ export function InviteForm() {
             <Button
               variant="link"
               size="sm"
-              className="h-auto p-0 text-[10.5px] font-extrabold text-accent-ink"
+              className="h-auto p-0 text-[10px] font-extrabold text-accent-ink"
               render={<Link href="/coach/invitations" />}
               nativeButton={false}
             >
@@ -100,7 +100,7 @@ export function InviteForm() {
                 <PersonAvatar name={invitation.studentName ?? invitation.nationalCode} />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-[13px] font-extrabold text-ink">{invitation.studentName ?? "هنرجوی بدون حساب"}</p>
-                  <p className="mt-0.5 truncate text-[10.5px] font-medium text-ink-subtle">
+                  <p className="mt-0.5 truncate text-[10px] font-medium text-ink-subtle">
                     کد ملی <span dir="ltr">{toPersianDigits(invitation.nationalCode)}</span> · ارسال: {invitation.sentAt}
                   </p>
                 </div>
@@ -135,7 +135,7 @@ export function InviteForm() {
       </Button>
 
       <ActionDock>
-        <Button type="submit" variant="brand" className="h-12 w-full rounded-xl text-[12.5px] font-extrabold">
+        <Button type="submit" variant="brand" className="h-12 w-full rounded-xl text-[12px] font-extrabold">
           <Send data-icon="inline-start" aria-hidden="true" />
           ارسال دعوت نامه
         </Button>

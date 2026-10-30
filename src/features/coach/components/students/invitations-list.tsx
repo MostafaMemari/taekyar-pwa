@@ -71,7 +71,7 @@ export function InvitationsList() {
         دعوت نامه جدید
       </Button>
 
-      <p className="text-center text-[10.5px] font-medium leading-5 text-ink-subtle">
+      <p className="text-center text-[10px] font-medium leading-5 text-ink-subtle">
         برای دعوت مجدد هنرجویی که دعوت نامه اش رد شده، همان کد ملی را دوباره ثبت کنید.
       </p>
     </div>

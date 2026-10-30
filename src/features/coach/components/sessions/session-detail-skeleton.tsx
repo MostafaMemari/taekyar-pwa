@@ -49,7 +49,7 @@ export function SessionDetailSkeleton() {
               <Skeleton className="h-5 w-14 rounded-full" />
             </div>
 
-            <div className="mt-4 flex flex-col gap-3 border-t border-[var(--line-1)] pt-3">
+            <div className="mt-4 flex flex-col gap-3 border-t border-[var(--line-2)] pt-3">
               <Skeleton className="h-5 w-full" />
               <Skeleton className="h-5 w-3/5" />
               <Skeleton className="h-5 w-2/5" />

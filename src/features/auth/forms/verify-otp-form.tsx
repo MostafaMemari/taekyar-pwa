@@ -88,14 +88,14 @@ export function VerifyOtpForm() {
         </div>
 
         {fromSignup ? (
-          <Link href="/" onClick={clearPendingSignup} className="mt-3 block text-center text-[11.5px] font-bold text-ink-subtle">
+          <Link href="/" onClick={clearPendingSignup} className="mt-3 block text-center text-[11px] font-bold text-ink-subtle">
             انصراف از ثبت نام
           </Link>
         ) : (
           <Button
             variant="outline"
             size="cta"
-            className="mt-2.5 w-full rounded-xl py-3 text-[12.5px]"
+            className="mt-2.5 w-full rounded-xl py-3 text-[12px]"
             render={<Link href="/login/clubs" />}
             nativeButton={false}
           >

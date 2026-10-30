@@ -31,11 +31,11 @@ export function AttendanceRosterCard({
 
       <AttendanceStatusControl name={name} value={status} onChange={onStatusChange} />
 
-      <div className="mt-2.5 flex items-center gap-2 border-t border-[var(--line-1)] pt-2.5">
+      <div className="mt-2.5 flex items-center gap-2 border-t border-[var(--line-2)] pt-2.5">
         <Button
           type="button"
           variant="ghost"
-          className="h-8 shrink-0 gap-1.5 rounded-full bg-muted px-3 text-[10.5px] font-extrabold text-ink-muted hover:bg-muted"
+          className="h-8 shrink-0 gap-1.5 rounded-full bg-muted px-3 text-[10px] font-extrabold text-ink-muted hover:bg-muted"
           onClick={onNoteOpen}
         >
           <StickyNote data-icon="inline-start" aria-hidden="true" />

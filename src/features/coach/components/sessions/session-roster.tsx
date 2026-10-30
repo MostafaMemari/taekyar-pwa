@@ -31,7 +31,7 @@ export function SessionRoster({
           <div className="flex items-center gap-3 py-2.5">
             <PersonAvatar name={entry.name} className="size-9" fallbackClassName="text-[12px]" />
             <span className="min-w-0 flex-1">
-              <b className="block truncate text-[12.5px] font-extrabold text-ink-body">{entry.name}</b>
+              <b className="block truncate text-[12px] font-extrabold text-ink-body">{entry.name}</b>
               {subline ? <span className="mt-0.5 block truncate text-[10px] font-semibold text-ink-subtle">{subline}</span> : null}
             </span>
             {entry.status ? <AttendanceStatusText status={entry.status} /> : null}

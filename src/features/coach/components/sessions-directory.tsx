@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDays, Check, ChevronLeft, Minus, Plus, Search, Users } from "lucide-react";
+import { CalendarClock, CalendarDays, Check, ChevronLeft, ClipboardCheck, Clock, Minus, Plus, Search, Users } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -29,8 +29,11 @@ const PERIODS: { value: Period; label: string }[] = [
 
 function SessionCard({ session, clubName, memberCount }: { session: ClassSessionRecord; clubName: string; memberCount?: number }) {
   return (
-    <Link href={`/coach/sessions/${session.id}`} className="block rounded-xl transition duration-150 active:scale-[0.995]">
-      <Card className="gap-0 p-4">
+    <Card className="gap-0 p-0">
+      <Link
+        href={`/coach/sessions/${session.id}`}
+        className="block rounded-t-xl px-4 pb-3 pt-3.5 transition duration-150 active:bg-muted/40"
+      >
         <div className="flex items-start gap-3">
           <span
             className={cn(
@@ -49,28 +52,41 @@ function SessionCard({ session, clubName, memberCount }: { session: ClassSession
                 {session.isActive ? "فعال" : "غیرفعال"}
               </StatusBadge>
             </div>
-            <p className="mt-1 truncate text-[11px] text-ink-subtle">{clubName}</p>
+            <p className="mt-0.5 truncate text-[11px] text-ink-subtle">{clubName}</p>
 
-            <div className="mt-2 flex flex-wrap items-center gap-1.5">
-              {weekDayLabels(session.weekDays).map((day) => (
-                <StatusBadge key={day} className="text-[10px]">
-                  {day}
-                </StatusBadge>
-              ))}
-              <StatusBadge className="text-[10px]">
+            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-semibold text-ink-muted">
+              <span className="flex items-center gap-1">
+                <CalendarClock className="size-3.5 shrink-0 text-ink-subtle" aria-hidden="true" />
+                {weekDayLabels(session.weekDays).join(" · ")}
+              </span>
+              <span className="flex items-center gap-1 tabular-nums">
+                <Clock className="size-3.5 shrink-0 text-ink-subtle" aria-hidden="true" />
                 <SessionTime start={session.startTime} end={session.endTime} />
-              </StatusBadge>
-              <StatusBadge tone="brand" className="text-[10px]">
-                <Users aria-hidden="true" />
-                {memberCount === undefined ? <span className="tabular-nums">—</span> : `${toPersianDigits(String(memberCount))} هنرجو`}
-              </StatusBadge>
+              </span>
+              <span className="flex items-center gap-1 tabular-nums">
+                <Users className="size-3.5 shrink-0 text-ink-subtle" aria-hidden="true" />
+                {memberCount === undefined ? "—" : `${toPersianDigits(String(memberCount))} هنرجو`}
+              </span>
             </div>
           </div>
 
           <ChevronLeft className="mt-1 size-4 shrink-0 text-ink-faint" aria-hidden="true" />
         </div>
-      </Card>
-    </Link>
+      </Link>
+
+      <div className="border-t border-[var(--line-2)] px-2 py-1.5">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-10 gap-2 rounded-lg px-2 text-[11px] font-extrabold text-accent-ink"
+          render={<Link href={`/coach/sessions/${session.id}/attendance`} />}
+          nativeButton={false}
+        >
+          <ClipboardCheck data-icon="inline-start" aria-hidden="true" />
+          حضور و غیاب
+        </Button>
+      </div>
+    </Card>
   );
 }
 
@@ -168,7 +184,7 @@ export function SessionsDirectory() {
               <CalendarDays aria-hidden="true" />
             </EmptyMedia>
             <EmptyTitle className="text-[13px] font-extrabold text-ink">هنوز کلاسی ثبت نشده</EmptyTitle>
-            <EmptyDescription className="text-[11.5px] leading-5 text-ink-subtle">
+            <EmptyDescription className="text-[11px] leading-5 text-ink-subtle">
               برای هر باشگاه، یک کلاس با روزها و ساعت برگزاری بسازید.
             </EmptyDescription>
           </EmptyHeader>
@@ -201,9 +217,7 @@ export function SessionsDirectory() {
               <CalendarDays aria-hidden="true" />
             </EmptyMedia>
             <EmptyTitle className="text-[13px] font-extrabold text-ink">کلاسی یافت نشد</EmptyTitle>
-            <EmptyDescription className="text-[11.5px] leading-5 text-ink-subtle">
-              عبارت جستجو یا بازه زمانی را تغییر دهید.
-            </EmptyDescription>
+            <EmptyDescription className="text-[11px] leading-5 text-ink-subtle">عبارت جستجو یا بازه زمانی را تغییر دهید.</EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
             <Button type="button" variant="outline" size="sm" className="rounded-lg" onClick={reset}>

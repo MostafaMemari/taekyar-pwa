@@ -24,8 +24,8 @@ import { SessionRoster } from "./session-roster";
 
 function InfoRow({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-3 border-b border-[var(--line-1)] py-2.5 last:border-b-0">
-      <dt className="shrink-0 text-[11.5px] font-medium text-ink-subtle">{label}</dt>
+    <div className="flex items-center justify-between gap-3 border-b border-[var(--line-2)] py-2.5 last:border-b-0">
+      <dt className="shrink-0 text-[11px] font-medium text-ink-subtle">{label}</dt>
       <dd className="min-w-0 text-end text-[12px] font-extrabold text-ink">{children}</dd>
     </div>
   );
@@ -95,7 +95,7 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
             </StatusBadge>
           </div>
 
-          <dl className="mt-4 border-t border-[var(--line-1)] pt-2">
+          <dl className="mt-4 border-t border-[var(--line-2)] pt-2">
             <InfoRow label="روزهای برگزاری">
               <span className="flex flex-wrap justify-end gap-1">
                 {weekDayLabels(session.weekDays).map((day) => (

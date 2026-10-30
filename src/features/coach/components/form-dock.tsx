@@ -20,7 +20,7 @@ export function FormDock({
         <Button variant="outline" className="h-11 flex-1 rounded-xl" render={<Link href={cancelHref} />} nativeButton={false}>
           انصراف
         </Button>
-        <Button type="submit" variant="brand" className="h-11 flex-[2] rounded-xl text-[12.5px]" disabled={pending}>
+        <Button type="submit" variant="brand" className="h-11 flex-[2] rounded-xl text-[12px]" disabled={pending}>
           {Icon ? <Icon data-icon="inline-start" aria-hidden="true" /> : null}
           {pending ? "در حال ذخیره..." : submitLabel}
         </Button>

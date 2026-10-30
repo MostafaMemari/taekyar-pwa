@@ -17,7 +17,7 @@ export function StatusBadge({ tone = "neutral", className, children }: { tone?: 
   return (
     <Badge
       variant="secondary"
-      className={cn("h-auto gap-1 rounded-full px-2 py-0.5 text-[9.5px] font-bold leading-4", STATUS_TONES[tone], className)}
+      className={cn("h-auto gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold leading-4", STATUS_TONES[tone], className)}
     >
       {children}
     </Badge>

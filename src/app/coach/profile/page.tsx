@@ -31,7 +31,7 @@ function MenuRow({ icon: Icon, label, badge }: { icon: LucideIcon; label: string
     <Button
       type="button"
       variant="ghost"
-      className="h-12 w-full justify-start gap-3 rounded-none px-4 text-[12.5px] font-extrabold text-ink-body hover:bg-muted/50"
+      className="h-12 w-full justify-start gap-3 rounded-none px-4 text-[12px] font-extrabold text-ink-body hover:bg-muted/50"
     >
       <Icon className="text-ink-muted" aria-hidden="true" />
       <span className="flex-1 text-start">{label}</span>
@@ -107,9 +107,9 @@ export default function CoachProfilePage() {
             {infoRows.map((row) => (
               <div
                 key={row.label}
-                className="flex items-center justify-between gap-3 border-b border-[var(--line-1)] py-2.5 last:border-b-0"
+                className="flex items-center justify-between gap-3 border-b border-[var(--line-2)] py-2.5 last:border-b-0"
               >
-                <dt className="text-[11.5px] font-medium text-ink-subtle">{row.label}</dt>
+                <dt className="text-[11px] font-medium text-ink-subtle">{row.label}</dt>
                 <dd className="flex items-center gap-1.5 text-[12px] font-extrabold text-ink" dir={row.ltr ? "ltr" : undefined}>
                   {row.belt ? (
                     <>

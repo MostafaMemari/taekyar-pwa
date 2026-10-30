@@ -23,7 +23,7 @@ export function AttendanceBars({ counts, className }: { counts: AttendanceCounts
             <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-sunken">
               <span className="block h-full rounded-full" style={{ width: `${width}%`, background: item.color }} />
             </span>
-            <b className="w-7 shrink-0 text-end text-[10.5px] font-extrabold tabular-nums text-ink-body">
+            <b className="w-7 shrink-0 text-end text-[10px] font-extrabold tabular-nums text-ink-body">
               {toPersianDigits(String(item.value))}
             </b>
           </div>

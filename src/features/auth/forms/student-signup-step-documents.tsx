@@ -110,11 +110,7 @@ export function StudentSignupStepDocuments({ form, onBack, onSubmit, onSkip }: S
           </Button>
         </div>
 
-        <Link
-          href="/signup/mobile?role=student"
-          onClick={onSkip}
-          className="mt-3 block text-center text-[11.5px] font-bold text-ink-subtle"
-        >
+        <Link href="/signup/mobile?role=student" onClick={onSkip} className="mt-3 block text-center text-[11px] font-bold text-ink-subtle">
           رد کردن — بعداً تکمیل می کنم
         </Link>
       </form>

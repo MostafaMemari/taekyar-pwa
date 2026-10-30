@@ -27,7 +27,7 @@ export function StudentsList({
           <EmptyTitle className="text-[13px] font-extrabold text-ink">
             {hasFilters ? "هنرجویی با این فیلترها پیدا نشد" : "هنوز هنرجویی ثبت نشده"}
           </EmptyTitle>
-          <EmptyDescription className="text-[11.5px] leading-5 text-ink-subtle">
+          <EmptyDescription className="text-[11px] leading-5 text-ink-subtle">
             {hasFilters ? "ترکیب فیلترها یا عبارت جستجو را تغییر دهید." : "اولین هنرجو را با فرم ثبت نام یا ارسال دعوت نامه اضافه کنید."}
           </EmptyDescription>
         </EmptyHeader>

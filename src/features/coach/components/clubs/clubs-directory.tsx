@@ -46,7 +46,7 @@ export function ClubsDirectory() {
       <CoachBand>
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <h1 className="truncate text-[21px] font-extrabold leading-7">باشگاه های من</h1>
+            <h1 className="truncate text-[20px] font-extrabold leading-7">باشگاه های من</h1>
             <p className="mt-1 text-[11px] font-semibold text-white/55">هر باشگاه، حضور و غیاب و کلاس بندی مستقل خودش را دارد</p>
           </div>
           <CoachBell />
@@ -81,7 +81,7 @@ export function ClubsDirectory() {
                 <Landmark aria-hidden="true" />
               </EmptyMedia>
               <EmptyTitle className="text-[13px] font-extrabold text-ink">هنوز باشگاهی ثبت نشده</EmptyTitle>
-              <EmptyDescription className="text-[11.5px] leading-5 text-ink-subtle">
+              <EmptyDescription className="text-[11px] leading-5 text-ink-subtle">
                 اولین باشگاه خود را بسازید تا کلاس بندی و حضور و غیاب شروع شود.
               </EmptyDescription>
             </EmptyHeader>
@@ -108,14 +108,14 @@ export function ClubsDirectory() {
               <Plus className="size-5" aria-hidden="true" />
             </span>
             <span className="text-[13px] font-extrabold text-ink">ثبت باشگاه جدید</span>
-            <span className="text-[10.5px] font-medium leading-5 text-ink-subtle">هر تعداد باشگاه که داشته باشید، همین جا اضافه کنید</span>
+            <span className="text-[10px] font-medium leading-5 text-ink-subtle">هر تعداد باشگاه که داشته باشید، همین جا اضافه کنید</span>
           </Button>
         ) : null}
 
         <Alert className="mt-5 rounded-2xl border-[var(--ak-tint-line)] bg-accent p-3.5 text-start">
           <Info className="text-accent-ink" aria-hidden="true" />
-          <AlertTitle className="text-[12.5px] font-extrabold text-accent-ink">اینجا چطور کار می کند؟</AlertTitle>
-          <AlertDescription className="text-[11.5px] leading-5 text-ink-muted">
+          <AlertTitle className="text-[12px] font-extrabold text-accent-ink">اینجا چطور کار می کند؟</AlertTitle>
+          <AlertDescription className="text-[11px] leading-5 text-ink-muted">
             اول باشگاه را انتخاب و وارد می شوید؛ حضور و غیاب، کلاس بندی و هنرجویان همان باشگاه را می بینید. با «تغییر باشگاه» هر لحظه می
             توانید فضای کاری را عوض کنید.
           </AlertDescription>

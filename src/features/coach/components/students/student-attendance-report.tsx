@@ -126,7 +126,7 @@ export function StudentAttendanceReport({ studentId }: { studentId: string }) {
             <ToggleGroupItem
               key={option.value}
               value={option.value}
-              className="h-8 rounded-full px-3.5 text-[10.5px] font-bold aria-pressed:border-primary/35 aria-pressed:bg-brand-50 aria-pressed:text-accent-ink"
+              className="h-8 rounded-full px-3.5 text-[10px] font-bold aria-pressed:border-primary/35 aria-pressed:bg-brand-50 aria-pressed:text-accent-ink"
             >
               {option.label}
             </ToggleGroupItem>
@@ -137,7 +137,7 @@ export function StudentAttendanceReport({ studentId }: { studentId: string }) {
           <div className="flex flex-col gap-2.5">
             {groups.map((group) => (
               <section key={group.month}>
-                <h2 className="mb-2 mt-1 text-[12.5px] font-extrabold text-ink-muted">{group.month}</h2>
+                <h2 className="mb-2 mt-1 text-[12px] font-extrabold text-ink-muted">{group.month}</h2>
                 <div className="flex flex-col gap-2.5">
                   {group.records.map((record) => (
                     <StudentAttendanceRecordCard
@@ -161,7 +161,7 @@ export function StudentAttendanceReport({ studentId }: { studentId: string }) {
                 <CalendarCheck2 aria-hidden="true" />
               </EmptyMedia>
               <EmptyTitle className="text-[13px] font-extrabold text-ink">رکوردی با این وضعیت یافت نشد</EmptyTitle>
-              <EmptyDescription className="text-[11.5px] leading-5 text-ink-subtle">وضعیت دیگری را انتخاب کنید.</EmptyDescription>
+              <EmptyDescription className="text-[11px] leading-5 text-ink-subtle">وضعیت دیگری را انتخاب کنید.</EmptyDescription>
             </EmptyHeader>
           </Empty>
         )}

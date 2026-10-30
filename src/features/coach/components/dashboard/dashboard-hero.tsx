@@ -1,11 +1,12 @@
 "use client";
 
-import { CalendarDays, ChevronLeft, Users } from "lucide-react";
+import { CalendarDays, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { CoachBand } from "@/features/coach/components/coach-band";
 import { CoachBell } from "@/features/coach/components/coach-bell";
-import { COACH, SESSIONS, sessionIsToday, todayWeekDay, WEEK_DAY_META } from "@/features/coach/lib/coach-data";
+import { useSessions } from "@/features/coach/hooks/use-sessions";
+import { COACH, sessionIsToday, todayWeekDay, WEEK_DAY_META } from "@/features/coach/lib/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
 
@@ -24,10 +25,13 @@ function untilLabel(minutes: number) {
 
 export function DashboardHero() {
   const [now] = useState(() => new Date());
-  const today = SESSIONS.filter((session) => sessionIsToday(session.weekDays)).sort((a, b) => a.start.localeCompare(b.start));
+  const { data } = useSessions();
+  const today = (data?.sessions ?? [])
+    .filter((session) => sessionIsToday(session.weekDays))
+    .sort((a, b) => a.startTime.localeCompare(b.startTime));
   const nowMinutes = now.getHours() * 60 + now.getMinutes();
-  const next = today.find((session) => minutesOfDay(session.end) > nowMinutes);
-  const isUpcoming = next !== undefined && minutesOfDay(next.start) > nowMinutes;
+  const next = today.find((session) => minutesOfDay(session.endTime) > nowMinutes);
+  const isUpcoming = next !== undefined && minutesOfDay(next.startTime) > nowMinutes;
 
   return (
     <CoachBand>
@@ -41,33 +45,29 @@ export function DashboardHero() {
         <CoachBell />
       </div>
 
-      <Link href="/coach/sessions" className="mt-4 flex items-center gap-3 border-t border-white/20 pt-3.5">
+      <Link
+        href={next ? `/coach/sessions/${next.id}` : "/coach/sessions"}
+        className="mt-4 flex items-center gap-3 border-t border-white/20 pt-3.5"
+      >
         {next ? (
           <>
             <span className="min-w-0 flex-1">
               <span className="block text-xs font-bold text-white">
-                {isUpcoming ? `کلاس بعدی · ${untilLabel(minutesOfDay(next.start) - nowMinutes)}` : "کلاس در جریان"}
+                {isUpcoming ? `کلاس بعدی · ${untilLabel(minutesOfDay(next.startTime) - nowMinutes)}` : "کلاس در جریان"}
               </span>
               <span className="mt-1 block truncate text-sm font-extrabold">{next.name}</span>
-              <span className="mt-1 flex items-center gap-1 text-xs text-white">
-                <Users className="size-3.5 shrink-0" aria-hidden="true" />
-                <span className="truncate">
-                  {next.club} · {toPersianDigits(String(next.studentIds.length))} هنرجو
-                </span>
-              </span>
             </span>
             <span className="shrink-0 text-end">
-              <b className="block text-xl leading-6 font-extrabold tabular-nums">{toPersianDigits(next.start)}</b>
-              <span className="block text-xs tabular-nums text-white">تا {toPersianDigits(next.end)}</span>
+              <b className="block text-xl leading-6 font-extrabold tabular-nums">{toPersianDigits(next.startTime)}</b>
+              <span className="block text-xs tabular-nums text-white">تا {toPersianDigits(next.endTime)}</span>
             </span>
           </>
         ) : (
           <>
             <CalendarDays className="size-5 shrink-0 text-white" aria-hidden="true" />
             <span className="min-w-0 flex-1 text-sm font-bold">
-              {today.length > 0 ? "کلاس های امروز پایان یافت" : "امروز کلاسی ثبت نشده است"}
+              {today.length > 0 ? "کلاس های امروز پایان یافت" : "برنامه هفتگی کلاس ها"}
             </span>
-            <span className="shrink-0 text-xs font-semibold text-white">برنامه هفتگی</span>
             <ChevronLeft className="size-4 shrink-0 text-white" aria-hidden="true" />
           </>
         )}

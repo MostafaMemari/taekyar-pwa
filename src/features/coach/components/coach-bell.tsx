@@ -13,7 +13,7 @@ export function CoachBell({ className }: { className?: string }) {
       className={cn("relative size-10 rounded-full border border-white/20 bg-white/10 text-white hover:bg-white/20", className)}
     >
       <Bell aria-hidden="true" />
-      <Badge className="absolute -end-1 -top-1 size-[18px] justify-center rounded-full border-2 border-brand-600 bg-white p-0 text-[8.5px] font-extrabold text-accent-ink">
+      <Badge className="absolute -end-1 -top-1 size-[18px] justify-center rounded-full border-2 border-brand-600 bg-white p-0 text-[9px] font-extrabold text-accent-ink">
         ۲
       </Badge>
     </Button>

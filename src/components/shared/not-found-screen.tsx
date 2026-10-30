@@ -26,7 +26,7 @@ export function NotFoundScreen({
           <SearchX className="size-6" aria-hidden="true" />
         </EmptyMedia>
         <EmptyTitle className="text-[15px] font-extrabold text-ink">{title}</EmptyTitle>
-        <EmptyDescription className="text-[11.5px] leading-5 text-ink-subtle">{description}</EmptyDescription>
+        <EmptyDescription className="text-[11px] leading-5 text-ink-subtle">{description}</EmptyDescription>
       </EmptyHeader>
 
       <EmptyContent>

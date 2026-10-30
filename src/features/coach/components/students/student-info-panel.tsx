@@ -14,8 +14,8 @@ const INSURANCE_EXPIRING_DAYS = 30;
 
 function InfoRow({ label, value, ltr }: { label: string; value: string; ltr?: boolean }) {
   return (
-    <div className="flex items-center justify-between gap-3 border-b border-[var(--line-1)] py-2.5 last:border-b-0">
-      <dt className="shrink-0 text-[11.5px] font-medium text-ink-subtle">{label}</dt>
+    <div className="flex items-center justify-between gap-3 border-b border-[var(--line-2)] py-2.5 last:border-b-0">
+      <dt className="shrink-0 text-[11px] font-medium text-ink-subtle">{label}</dt>
       <dd className="min-w-0 truncate text-[12px] font-extrabold text-ink" dir={ltr ? "ltr" : undefined}>
         {value}
       </dd>
@@ -77,10 +77,10 @@ export function StudentInfoPanel({ student }: { student: StudentDetailRecord }) 
             </div>
           </div>
         ) : (
-          <p className="text-[11.5px] leading-5 text-ink-subtle">هنوز کمربندی برای این هنرجو ثبت نشده است.</p>
+          <p className="text-[11px] leading-5 text-ink-subtle">هنوز کمربندی برای این هنرجو ثبت نشده است.</p>
         )}
 
-        <p className="mt-3 border-t border-[var(--line-1)] pt-2.5 text-[11px] leading-5 text-ink-muted">
+        <p className="mt-3 border-t border-[var(--line-2)] pt-2.5 text-[11px] leading-5 text-ink-muted">
           برای تغییر کمربند از گزینه «تخصیص کمربند» در پرونده هنرجو استفاده کنید.
         </p>
       </Card>

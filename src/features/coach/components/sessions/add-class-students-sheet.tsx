@@ -42,7 +42,7 @@ export function AddClassStudentsSheet({
   const students = data?.students ?? [];
   const existing = new Set(existingStudentIds);
   const term = search.trim();
-  const visible = students.filter((student) => !term || student.fullName.includes(term));
+  const visible = students.filter((student) => !existing.has(student.id) && (!term || student.fullName.includes(term)));
 
   const close = () => {
     setSearch("");
@@ -95,15 +95,16 @@ export function AddClassStudentsSheet({
           ) : error ? (
             <ErrorState title="خواندن هنرجویان انجام نشد" message={apiErrorMessage(error)} onRetry={() => void mutate()} />
           ) : students.length === 0 ? (
-            <p className="rounded-xl bg-muted/60 p-4 text-center text-[11.5px] font-semibold leading-5 text-ink-subtle">
+            <p className="rounded-xl bg-muted/60 p-4 text-center text-[11px] font-semibold leading-5 text-ink-subtle">
               هنوز هنرجویی ثبت نشده است. ابتدا در بخش هنرجویان یک پرونده بسازید، بعد او را به این کلاس اضافه کنید.
             </p>
           ) : visible.length === 0 ? (
-            <p className="p-4 text-center text-[11.5px] font-semibold text-ink-subtle">هنرجویی با این نام پیدا نشد.</p>
+            <p className="rounded-xl bg-muted/60 p-4 text-center text-[11px] font-semibold leading-5 text-ink-subtle">
+              {term ? "هنرجویی با این نام پیدا نشد." : "هنرجوی دیگری برای افزودن نمانده است."}
+            </p>
           ) : (
             <div className="flex flex-col gap-2">
               {visible.map((student) => {
-                const inClass = existing.has(student.id);
                 const isSelected = selected.includes(student.id);
                 const belt = student.currentBelt ? studentBeltLabel(beltKeyOf(student.currentBelt.belt.name)) : null;
 
@@ -112,7 +113,6 @@ export function AddClassStudentsSheet({
                     key={student.id}
                     type="button"
                     variant="field"
-                    disabled={inClass}
                     aria-pressed={isSelected}
                     onClick={() => toggle(student.id)}
                     className={cn("h-auto w-full justify-start gap-3 rounded-xl px-3 py-2.5", isSelected && "border-primary bg-primary/5")}
@@ -126,10 +126,8 @@ export function AddClassStudentsSheet({
                       <UserPlus className="size-4" aria-hidden="true" />
                     </span>
                     <span className="min-w-0 flex-1 text-start">
-                      <b className="block truncate text-[12.5px] font-extrabold text-ink">{student.fullName}</b>
-                      <span className="text-[10.5px] font-medium text-ink-subtle">
-                        {inClass ? "در این کلاس ثبت شده" : (belt ?? "بدون کمربند")}
-                      </span>
+                      <b className="block truncate text-[12px] font-extrabold text-ink">{student.fullName}</b>
+                      <span className="text-[10px] font-medium text-ink-subtle">{belt ?? "بدون کمربند"}</span>
                     </span>
                     {isSelected ? <Check className="text-primary" aria-hidden="true" /> : null}
                   </Button>

@@ -92,13 +92,13 @@ export function SessionReport({
             }}
           />
 
-          <div className="mt-4 flex items-center gap-4 border-t border-[var(--line-1)] pt-4">
+          <div className="mt-4 flex items-center gap-4 border-t border-[var(--line-2)] pt-4">
             <AttendanceRing percent={rate} />
             <div className="min-w-0 flex-1">
               <AttendanceBars counts={counts} />
             </div>
           </div>
-          <p className="mt-3 border-t border-[var(--line-1)] pt-2.5 text-center text-[10.5px] font-semibold text-ink-subtle">
+          <p className="mt-3 border-t border-[var(--line-2)] pt-2.5 text-center text-[10px] font-semibold text-ink-subtle">
             {toPersianDigits(String(marked))} از {toPersianDigits(String(entries.length))} هنرجو برای این تاریخ ثبت شده
           </p>
         </Card>
@@ -112,7 +112,7 @@ export function SessionReport({
             <Button
               variant="brand"
               size="sm"
-              className="mt-2 rounded-lg text-[11.5px] font-extrabold"
+              className="mt-2 rounded-lg text-[11px] font-extrabold"
               render={<Link href={`/coach/sessions/${session.id}/attendance?date=${date}`} />}
               nativeButton={false}
             >
@@ -144,7 +144,7 @@ export function SessionReport({
             action={
               <Link
                 href={reportStudent ? `/coach/students/${reportStudent.studentId}/attendance` : "/coach/students"}
-                className="inline-flex items-center gap-0.5 text-[10.5px] font-extrabold text-accent-ink"
+                className="inline-flex items-center gap-0.5 text-[10px] font-extrabold text-accent-ink"
               >
                 گزارش تک هنرجو
                 <ChevronLeft className="size-3" aria-hidden="true" />

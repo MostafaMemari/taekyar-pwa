@@ -21,7 +21,7 @@ export function StudentsPagination({
 
   return (
     <div className="mt-4 flex items-center justify-between gap-3">
-      <span className="text-[10.5px] font-bold text-ink-subtle tabular-nums">
+      <span className="text-[10px] font-bold text-ink-subtle tabular-nums">
         نمایش {toPersianDigits(String(from))}–{toPersianDigits(String(to))} از {toPersianDigits(String(total))}
       </span>
 

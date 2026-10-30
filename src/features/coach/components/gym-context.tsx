@@ -27,7 +27,7 @@ export function GymContext({
       </span>
       <span className="min-w-0 flex-1">
         <b className="block truncate text-[13px] font-extrabold text-ink">{name}</b>
-        <span className="mt-0.5 block truncate text-[10.5px] font-medium text-ink-subtle">{subtitle}</span>
+        <span className="mt-0.5 block truncate text-[10px] font-medium text-ink-subtle">{subtitle}</span>
       </span>
       <span className="shrink-0 rounded-full bg-brand-50 px-2.5 py-1 text-[10px] font-extrabold text-accent-ink transition-colors group-hover:bg-brand-100">
         {actionLabel}

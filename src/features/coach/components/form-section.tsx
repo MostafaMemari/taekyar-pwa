@@ -25,7 +25,7 @@ export function FormSection({
 }) {
   return (
     <Card className="gap-4 p-4">
-      <h2 className="flex items-center gap-2 text-[13.5px] font-extrabold text-ink">
+      <h2 className="flex items-center gap-2 text-[13px] font-extrabold text-ink">
         <span className={cn("grid size-7 shrink-0 place-items-center rounded-lg", SECTION_TONES[tone])}>
           <Icon className="size-4" aria-hidden="true" />
         </span>

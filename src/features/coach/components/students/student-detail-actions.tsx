@@ -59,7 +59,7 @@ export function StudentDetailActions({
               {index > 0 ? <Separator /> : null}
               <Button
                 variant="ghost"
-                className="h-12 w-full justify-start gap-3 rounded-none px-4 text-[12.5px] font-extrabold text-ink-body hover:bg-muted/50"
+                className="h-12 w-full justify-start gap-3 rounded-none px-4 text-[12px] font-extrabold text-ink-body hover:bg-muted/50"
                 render={<Link href={action.href(studentId)} />}
                 nativeButton={false}
               >
@@ -95,7 +95,7 @@ export function StudentDetailActions({
             <Button
               key={action.label}
               variant="ghost"
-              className="h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12.5px] font-extrabold text-ink-body"
+              className="h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-extrabold text-ink-body"
               onClick={() => {
                 onMenuOpenChange(false);
                 router.push(action.href(studentId));
@@ -107,7 +107,7 @@ export function StudentDetailActions({
           ))}
           <Button
             variant="ghost"
-            className="h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12.5px] font-extrabold text-destructive hover:bg-danger-soft hover:text-danger"
+            className="h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-extrabold text-destructive hover:bg-danger-soft hover:text-danger"
             onClick={openDelete}
           >
             <Trash2 aria-hidden="true" />
@@ -127,7 +127,7 @@ export function StudentDetailActions({
           </Button>
           <Button
             variant="destructive"
-            className="h-11 flex-[2] rounded-xl text-[12.5px] font-extrabold"
+            className="h-11 flex-[2] rounded-xl text-[12px] font-extrabold"
             disabled={remove.isMutating}
             onClick={() => void confirmDelete()}
           >

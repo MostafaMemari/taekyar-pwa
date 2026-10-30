@@ -26,7 +26,7 @@ export function ClubCard({ club, studentCount }: { club: ClubRecord; studentCoun
           <Landmark className="size-5" aria-hidden="true" />
         </span>
         <div className="min-w-0 flex-1">
-          <b className="block truncate text-[14.5px] font-extrabold text-ink">{club.name}</b>
+          <b className="block truncate text-[14px] font-extrabold text-ink">{club.name}</b>
           <div className="mt-1 flex flex-wrap gap-1.5">
             <StatusBadge tone={club.isActive ? "success" : "neutral"}>
               {club.isActive ? <Check aria-hidden="true" /> : null}
@@ -58,7 +58,7 @@ export function ClubCard({ club, studentCount }: { club: ClubRecord; studentCoun
         <Button
           variant="brand"
           size="sm"
-          className="h-9 flex-1 rounded-xl text-[11.5px] font-extrabold"
+          className="h-9 flex-1 rounded-xl text-[11px] font-extrabold"
           render={<Link href="/coach" />}
           nativeButton={false}
         >

@@ -33,7 +33,7 @@ export function StudentsOverview({
           type="button"
           variant="brand"
           size="sm"
-          className="ms-auto h-8 gap-1.5 rounded-xl px-3.5 text-[11px] font-bold has-data-[icon=inline-start]:pl-3.5"
+          className="ms-auto h-8 gap-1.5 rounded-xl px-3.5 text-[11px] font-bold"
           onClick={onAdd}
         >
           <UserPlus data-icon="inline-start" aria-hidden="true" />
@@ -68,7 +68,7 @@ export function StudentsOverview({
               ) : (
                 <b className="text-[14px] leading-none font-extrabold tabular-nums text-ink">{toPersianDigits(String(count))}</b>
               )}
-              <span className="text-[8.5px] font-bold leading-[11px] text-ink-muted">{meta.shortLabel}</span>
+              <span className="text-[9px] font-bold leading-[11px] text-ink-muted">{meta.shortLabel}</span>
             </Button>
           );
         })}

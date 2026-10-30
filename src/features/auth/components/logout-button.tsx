@@ -22,7 +22,7 @@ export function LogoutButton() {
       variant="ghost"
       disabled={pending}
       onClick={onClick}
-      className="h-12 w-full justify-start gap-3 rounded-none px-4 text-[12.5px] font-extrabold text-destructive hover:bg-danger-soft hover:text-danger"
+      className="h-12 w-full justify-start gap-3 rounded-none px-4 text-[12px] font-extrabold text-destructive hover:bg-danger-soft hover:text-danger"
     >
       <LogOut aria-hidden="true" />
       <span>{pending ? "در حال خروج..." : "خروج از حساب"}</span>

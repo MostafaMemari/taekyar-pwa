@@ -7,7 +7,7 @@ export function AttendanceStatusText({ status, className }: { status: Attendance
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 items-center gap-1.5 text-[10.5px] font-extrabold",
+        "inline-flex shrink-0 items-center gap-1.5 text-[10px] font-extrabold",
         status === "PRESENT" && "text-success",
         status === "LATE" && "text-warning",
         status === "ABSENT" && "text-danger",

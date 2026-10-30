@@ -66,7 +66,7 @@ export function AttendanceForm({
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-2">
             <span className="text-[11px] font-extrabold text-ink-body">پیشرفت علامت گذاری</span>
-            <span className="text-[10.5px] font-bold text-ink-subtle">
+            <span className="text-[10px] font-bold text-ink-subtle">
               {toPersianDigits(String(reviewed.size))} از {toPersianDigits(String(total))} هنرجو
             </span>
           </div>
@@ -87,7 +87,7 @@ export function AttendanceForm({
         <Button
           type="button"
           variant="outline"
-          className="h-9 shrink-0 rounded-xl px-3 text-[10.5px] font-extrabold"
+          className="h-9 shrink-0 rounded-xl px-3 text-[10px] font-extrabold"
           onClick={markAllPresent}
         >
           <Check data-icon="inline-start" aria-hidden="true" />

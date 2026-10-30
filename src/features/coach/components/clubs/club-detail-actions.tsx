@@ -48,7 +48,7 @@ export function ClubDetailActions({
         <div className="flex flex-col gap-1 py-1">
           <Button
             variant="ghost"
-            className="h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12.5px] font-extrabold text-ink-body"
+            className="h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-extrabold text-ink-body"
             onClick={() => {
               onMenuOpenChange(false);
               router.push(`/coach/clubs/${club.id}/edit`);
@@ -61,8 +61,8 @@ export function ClubDetailActions({
             variant="ghost"
             className={
               isActive
-                ? "h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12.5px] font-extrabold text-destructive hover:bg-danger-soft hover:text-danger"
-                : "h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12.5px] font-extrabold text-ink-body"
+                ? "h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-extrabold text-destructive hover:bg-danger-soft hover:text-danger"
+                : "h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-extrabold text-ink-body"
             }
             onClick={openConfirm}
           >
@@ -92,7 +92,7 @@ export function ClubDetailActions({
           </Button>
           <Button
             variant={isActive ? "destructive" : "brand"}
-            className="h-11 flex-[2] rounded-xl text-[12.5px] font-extrabold"
+            className="h-11 flex-[2] rounded-xl text-[12px] font-extrabold"
             onClick={applyStatus}
             disabled={pending}
           >

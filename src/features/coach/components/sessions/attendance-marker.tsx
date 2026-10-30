@@ -98,7 +98,7 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
             <Zap className="size-[18px]" aria-hidden="true" />
           </span>
           <div className="min-w-0 flex-1">
-            <b className="block truncate text-[13.5px] font-extrabold text-ink">{session.data.name}</b>
+            <b className="block truncate text-[13px] font-extrabold text-ink">{session.data.name}</b>
             <p className="mt-0.5 truncate text-[11px] text-ink-subtle">
               {clubName} · <SessionTime start={session.data.startTime} end={session.data.endTime} />
             </p>
@@ -109,7 +109,7 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
           </StatusBadge>
         </div>
 
-        <div className="mt-3 border-t border-[var(--line-1)] pt-3">
+        <div className="mt-3 border-t border-[var(--line-2)] pt-3">
           <span className="mb-1.5 flex items-center gap-1.5 text-[11px] font-bold text-ink-subtle">
             <CalendarDays className="size-3.5" aria-hidden="true" />
             تاریخ جلسه

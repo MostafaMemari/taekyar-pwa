@@ -92,7 +92,7 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
 
         <Button
           variant="brand"
-          className="h-12 w-full rounded-xl text-[12.5px] font-extrabold"
+          className="h-12 w-full rounded-xl text-[12px] font-extrabold"
           render={<Link href="/coach/sessions/new" />}
           nativeButton={false}
         >
@@ -115,7 +115,7 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
                 <stat.icon className="size-4" aria-hidden="true" />
               </span>
               <b className="text-[17px] font-extrabold leading-none tabular-nums text-ink">{stat.value}</b>
-              <span className="text-[9.5px] font-bold text-ink-subtle">{stat.label}</span>
+              <span className="text-[9px] font-bold text-ink-subtle">{stat.label}</span>
             </Card>
           ))}
         </div>

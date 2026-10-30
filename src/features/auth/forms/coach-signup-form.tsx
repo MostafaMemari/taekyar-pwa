@@ -140,7 +140,7 @@ export function CoachSignupForm() {
             <Link
               href="/signup/mobile?role=coach"
               onClick={() => finish(form.getValues())}
-              className="mt-3 block text-center text-[11.5px] font-bold text-ink-subtle"
+              className="mt-3 block text-center text-[11px] font-bold text-ink-subtle"
             >
               رد کردن — بعداً تکمیل می کنم
             </Link>

@@ -46,7 +46,7 @@ export function StudentsToolbar({
         >
           <ListFilter aria-hidden="true" />
           {filterCount > 0 ? (
-            <span className="absolute -top-1 -end-1 grid min-w-[16px] place-items-center rounded-full bg-brand-500 px-1 text-[8.5px] font-extrabold leading-4 text-white tabular-nums">
+            <span className="absolute -top-1 -end-1 grid min-w-[16px] place-items-center rounded-full bg-brand-500 px-1 text-[9px] font-extrabold leading-4 text-white tabular-nums">
               {toPersianDigits(String(filterCount))}
             </span>
           ) : null}

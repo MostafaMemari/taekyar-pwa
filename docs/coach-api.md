@@ -1,6 +1,6 @@
 # داکیومنت API مربی
 
-مرجع کامل قرارداد بک اند برای تمام صفحه های نقش مربی. این فایل برای مرحله اتصال API نوشته شده است. در وضعیت فعلی، احراز هویت، باشگاه ها، کلاس ها، فهرست، ثبت و پرونده هنرجو، ثبت حضور و غیاب و گزارش جلسه (`/coach/clubs*`، `/coach/sessions*`، `/coach/students`، `/coach/students/new`، `/coach/students/[id]` و `/coach/students/[id]/attendance`) به بک اند وصل هستند؛ داشبورد، پروفایل مربی، ویرایش و تخصیص کمربند هنرجو و دعوت نامه ها هنوز داده نمایشی دارند.
+مرجع کامل قرارداد بک اند برای تمام صفحه های نقش مربی. این فایل برای مرحله اتصال API نوشته شده است. در وضعیت فعلی، احراز هویت، باشگاه ها، کلاس ها، فهرست، ثبت و پرونده هنرجو، ثبت حضور و غیاب، گزارش جلسه و کلاس های امروز داشبورد (`/coach/clubs*`، `/coach/sessions*`، `/coach/students`، `/coach/students/new`، `/coach/students/[id]`، `/coach/students/[id]/attendance` و بخش کلاس های `/coach`) به بک اند وصل هستند؛ بقیه داشبورد (نمودار حضور، دعوت نامه ها، آزمون ها)، پروفایل مربی، ویرایش و تخصیص کمربند هنرجو و دعوت نامه ها هنوز داده نمایشی دارند.
 
 - منبع: پروژه `taekyar-backend` (NestJS + Prisma + PostgreSQL + Redis)
 - نسخه API: `v1`
@@ -987,7 +987,7 @@ COLOR | POOM | DAN
 
 | صفحه | مسیر API | وضعیت داده فعلی |
 |---|---|---|
-| `/coach` داشبورد | `GET /class-session?weekDay=...`، `GET /student-coach-invitation/sent?status=PENDING` | نمایشی؛ آمار تجمیعی ندارد |
+| `/coach` داشبورد | `GET /class-session?page=1&take=100` (شمارش هر کلاس امروز از `GET /class-session/:id/students?take=1`)، `GET /club` و `GET /student/stats` | کلاس های امروز، کارت «کلاس بعدی» و کاشی های «هنرجویان»/«کلاس های ثبت شده» وصل؛ نمودار حضور، دعوت نامه ها و آزمون ها نمایشی |
 | `/coach/students` | `GET /student` و `GET /student/stats` | وصل؛ فیلتر و مرتب سازی در URL و آمار کارت ها از `GET /student/stats` |
 | `/coach/students/new` | `POST /student` | وصل؛ react-hook-form و zod، تبدیل تاریخ شمسی به میلادی |
 | `/coach/students/[id]` | `GET /student/:id`، `GET /student?search=&take=1`، `GET /attendance/student/:id/summary`، `GET /attendance/student/:id?page=1&take=100`، `GET /club/by-student/:id`، `DELETE /student/:id` | وصل؛ کمربند و قد/وزن از آیتم لیست با همان کد ملی خوانده می شود (بخش 11.1)؛ «حذف» واقعی است و `403` حساب فعال را با پیام سرور نشان می دهد |
@@ -1035,6 +1035,8 @@ COLOR | POOM | DAN
 - خلاصه دعوت نامه های در انتظار
 
 **پیشنهاد:** یک مسیر تجمیعی مثل `GET /coach/dashboard` یا استفاده از چند درخواست لیست و محاسبه در فرانت. برای نمودار حضور، `GET /attendance/student/:id/summary` فقط یک هنرجو را پوشش می دهد و خلاصه کل مربی را نمی دهد.
+
+- **وضعیت فرانت (تست شده):** کلاس های امروز از `GET /class-session` فیلتر می شوند، کاشی «کلاس های ثبت شده» از `meta.pager.total` همان پاسخ و «هنرجویان» از `GET /student/stats` می آید. درصد حضور هفتگی، دعوت نامه ها و آزمون ها همچنان نمایشی هستند.
 
 ### 11.3 شمارش کلاس و هنرجوی باشگاه
 
