@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { ThemeProvider } from "@/components/shared/theme-provider";
 import { THEME_INIT_SOURCE } from "@/lib/theme";
 import "./globals.css";
@@ -25,7 +26,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full antialiased">
         {/* biome-ignore lint/security/noDangerouslySetInnerHtml: static constant that restores theme before paint */}
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SOURCE }} />
-        <ThemeProvider>{children}</ThemeProvider>
+        <NuqsAdapter>
+          <ThemeProvider>{children}</ThemeProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );

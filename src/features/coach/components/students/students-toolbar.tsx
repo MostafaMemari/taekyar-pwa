@@ -1,18 +1,21 @@
-import { ArrowUpDown, Search } from "lucide-react";
+import { ArrowUpDown, ListFilter, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import { toPersianDigits } from "@/lib/digits";
 
 export function StudentsToolbar({
   query,
   onQueryChange,
+  filterCount,
+  onOpenFilters,
   sortActive,
-  sortOpen,
   onOpenSort,
 }: {
   query: string;
   onQueryChange: (value: string) => void;
+  filterCount: number;
+  onOpenFilters: () => void;
   sortActive: boolean;
-  sortOpen: boolean;
   onOpenSort: () => void;
 }) {
   return (
@@ -21,7 +24,7 @@ export function StudentsToolbar({
         <InputGroup className="h-11 min-w-0 flex-1 rounded-xl">
           <InputGroupInput
             type="search"
-            placeholder="جستجو بر اساس نام، کد ملی یا کلاس..."
+            placeholder="جستجو با نام یا کد ملی..."
             aria-label="جستجوی هنرجو"
             className="text-[13px]"
             value={query}
@@ -36,9 +39,25 @@ export function StudentsToolbar({
           type="button"
           variant="field"
           size="icon"
+          aria-label="فیلترها"
+          aria-haspopup="dialog"
+          className="relative size-11 shrink-0 rounded-xl"
+          onClick={onOpenFilters}
+        >
+          <ListFilter aria-hidden="true" />
+          {filterCount > 0 ? (
+            <span className="absolute -top-1 -end-1 grid min-w-[16px] place-items-center rounded-full bg-brand-500 px-1 text-[8.5px] font-extrabold leading-4 text-white tabular-nums">
+              {toPersianDigits(String(filterCount))}
+            </span>
+          ) : null}
+        </Button>
+
+        <Button
+          type="button"
+          variant="field"
+          size="icon"
           aria-label="مرتب سازی"
           aria-haspopup="dialog"
-          aria-expanded={sortOpen}
           className="relative size-11 shrink-0 rounded-xl"
           onClick={onOpenSort}
         >

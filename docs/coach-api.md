@@ -389,12 +389,42 @@ COLOR | POOM | DAN
 | `page` | number | خیر | پیش فرض 1 |
 | `take` | number | خیر | پیش فرض 20، حداکثر 100 |
 | `search` | string | خیر | جستجو در نام (contains) یا برابری کد ملی |
-| `sortBy` | enum | خیر | `createdAt`، `updatedAt`، `fullName` |
+| `belt` | enum[] | خیر | یک یا چند `BeltName` |
+| `ageCategory` | enum[] | خیر | یک یا چند رده سنی: `BLOSSOM`، `YOUTH`، `CADET`، `JUNIOR`، `YOUNG`، `SENIOR`، `ULTRA` |
+| `insurance` | enum[] | خیر | `valid`، `expiring`، `expired`، `none` |
+| `gender` | enum | خیر | `MALE` یا `FEMALE` |
+| `sortBy` | enum | خیر | `createdAt`، `updatedAt`، `fullName`، `belt`، `insurance` |
 | `sortDirection` | enum | خیر | `asc` یا `desc` (پیش فرض `desc`) |
 
-پاسخ: آرایه `Student` همراه `meta.pager`.
+پارامترهای آرایه ای هم به شکل تکرار کلید (`?belt=WHITE&belt=YELLOW`) و هم با کاما (`?belt=WHITE,YELLOW`) پذیرفته می شوند. مقدار نامعتبر در هر کدام `400` می دهد.
 
-نکته مهم: این پاسخ **کمربند، کلاس، باشگاه، وضعیت بیمه محاسبه شده و قد و وزن را شامل نمی شود**. برای لیست هنرجوها یا باید این اطلاعات از مسیرهای دیگر گرفته شود یا بک اند گسترش یابد (بخش 11).
+قواعد فیلتر:
+
+- `belt`: تطابق با کمربند فعلی (`currentBelt.belt.name`). هنرجوی بدون کمربند در هیچ فیلتر کمربندی نمی آید.
+- `ageCategory`: بازه تولد همان رده در جدول `AgeCategory` روی `birthDate` اعمال می شود (`startDate` تا یک روز بعد از `endDate`). این دو تاریخ میلادی هستند و مرجع اصلی رده اند.
+- `insurance` روی `sportsInsuranceDate` (تاریخ انقضا) کار می کند: خالی → `none`، قبل از امروز → `expired`، امروز تا 30 روز آینده → `expiring`، بعد از آن → `valid`.
+- همه فیلترها با `search` و هم دیگر ترکیب می شوند (AND).
+
+پاسخ: آرایه `Student` همراه `meta.pager`، به علاوه دو رابطه:
+
+- `currentBelt` با `belt` کامل (`name`، `label`، `level`، رنگ ها)
+- `metrics` با آخرین رکورد (`take: 1`، مرتب بر `recordedAt` نزولی)
+
+مرتب سازی `belt` روی `currentBelt.belt.level` و `insurance` روی `sportsInsuranceDate` با `nulls: last` انجام می شود؛ در `sortDirection=desc` هنرجویان بدون کمربند اول می آیند (محدودیت ترتیب NULL در Postgres برای رابطه).
+
+#### `GET /student/stats`
+
+همان محدوده مربی، بدون پارامتر. برای کارت های خلاصه فهرست.
+
+```json
+{
+  "total": 34,
+  "byInsurance": { "valid": 20, "expiring": 4, "expired": 6, "none": 4 },
+  "expiringDays": 30
+}
+```
+
+این مسیر قبل از `GET /student/:id` تعریف شده تا با شناسه تداخل نکند. نقش `COACH` یا `ADMIN`.
 
 ### 4.3 `GET /student/:id`
 
@@ -981,13 +1011,13 @@ COLOR | POOM | DAN
 
 موارد زیر در بک اند فعلی وجود ندارند یا برای UI کافی نیستند. تا قبل از رفع آن ها، صفحه های مربوطه باید داده نمایشی داشته باشند یا از ترکیب چند درخواست ساخته شوند.
 
-### 11.1 کمربند و متریک هنرجو خوانده نمی شود
+### 11.1 کمربند و متریک هنرجو در پاسخ جزئیات
 
-- `GET /student` و `GET /student/:id` فقط ستون های جدول `Student` را برمی گردانند.
-- `currentBelt`، `metrics`، `beltHistory` و `clubMemberships` در پاسخ نیستند.
-- هیچ مسیر `GET` برای کمربند فعلی یا تاریخ متریک ها وجود ندارد.
-- **اثر:** لیست هنرجوها، پروفایل هنرجو و فرم ویرایش نمی توانند کمربند، قد، وزن و تاریخ کمربند را از API بگیرند.
-- **پیشنهاد:** گسترش `findOneById` و `getAll` با `include` برای `currentBelt.belt` و آخرین `metrics`، یا افزودن `GET /student/:id/belt` و `GET /student/:id/metrics`.
+- `GET /student` اکنون `currentBelt.belt` و آخرین `metrics` را برمی گرداند (بخش 4.2).
+- `GET /student/:id` همچنان فقط ستون های جدول `Student` را برمی گرداند؛ `currentBelt`، `metrics`، `beltHistory` و `clubMemberships` در آن نیستند.
+- هیچ مسیر `GET` برای تاریخچه کمربند یا متریک ها وجود ندارد.
+- **اثر:** پروفایل هنرجو و فرم ویرایش نمی توانند کمربند، قد، وزن و تاریخ کمربند را از API بگیرند.
+- **پیشنهاد:** همان `include` لیست را به `findOneById` هم اضافه کنید، یا `GET /student/:id/belt` و `GET /student/:id/metrics` بسازید.
 
 ### 11.2 آمار داشبورد وجود ندارد
 
@@ -1030,15 +1060,12 @@ COLOR | POOM | DAN
 
 ### 11.7 فیلترهای لیست هنرجو
 
-`GET /student` فقط `search` و مرتب سازی دارد. فیلترهای زیر وجود ندارند:
+کمربند، رده سنی، وضعیت بیمه و جنسیت در `GET /student` اضافه شدند (بخش 4.2). فیلترهای زیر همچنان وجود ندارند:
 
-- کمربند
-- جنسیت
-- وضعیت بیمه
 - باشگاه
 - کلاس
 
-**اثر:** فیلترهای صفحه لیست هنرجو در فرانت باید سمت کلاینت انجام شوند یا به API اضافه شوند.
+همچنین مرتب سازی روی روابط، در حالت `desc` هنرجویان بدون مقدار (کمربند یا بیمه) را اول می آورد.
 
 ### 11.8 تداخل زمانی کلاس
 

@@ -1,94 +1,144 @@
 "use client";
 
-import { Plus } from "lucide-react";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { type InsuranceStatus, STUDENTS, studentBeltLabel, studentSessionSummary } from "@/features/coach/lib/coach-data";
-import type { SortKey } from "@/features/coach/lib/students-options";
-import { toLatinDigits } from "@/lib/digits";
-import { beltRank, type ColorBeltKey } from "@/lib/student-belts";
+import { useQueryStates } from "nuqs";
+import { useEffect, useState } from "react";
+import { ErrorState } from "@/features/coach/components/error-state";
+import { useAgeCategories } from "@/features/coach/hooks/use-age-categories";
+import { useStudentStats } from "@/features/coach/hooks/use-student-stats";
+import { useStudents } from "@/features/coach/hooks/use-students";
+import { activeFilterCount, studentFilterParsers, toggleValue, toStudentQuery } from "@/features/coach/lib/student-filters";
+import { type StudentSortKey, sortPreset } from "@/features/coach/lib/students-options";
+import { apiErrorMessage } from "@/lib/api/client";
 import { AddStudentSheet } from "./add-student-sheet";
 import { SortStudentsSheet } from "./sort-students-sheet";
-import { StudentsFilters } from "./students-filters";
+import { StudentsActiveFilters } from "./students-active-filters";
+import { StudentsFiltersSheet } from "./students-filters-sheet";
 import { StudentsList } from "./students-list";
 import { StudentsOverview } from "./students-overview";
+import { StudentsPagination } from "./students-pagination";
+import { StudentsSkeleton } from "./students-skeleton";
 import { StudentsToolbar } from "./students-toolbar";
 
+const SEARCH_DEBOUNCE_MS = 300;
+
 export function StudentsDirectory() {
-  const [query, setQuery] = useState("");
-  const [belts, setBelts] = useState<ColorBeltKey[]>([]);
-  const [insurance, setInsurance] = useState<InsuranceStatus | null>(null);
-  const [sort, setSort] = useState<SortKey>("default");
+  const [filters, setFilters] = useQueryStates(studentFilterParsers);
+  const [searchTerm, setSearchTerm] = useState(filters.q);
   const [addOpen, setAddOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const normalizedQuery = toLatinDigits(query).trim().toLowerCase();
+  // The URL keeps every keystroke; the request waits for a pause so the list does not refetch per character.
+  useEffect(() => {
+    const timer = setTimeout(() => setSearchTerm(filters.q), SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
+  }, [filters.q]);
 
-  const visible = STUDENTS.filter((student) => {
-    if (belts.length > 0 && !belts.includes(student.belt as ColorBeltKey)) return false;
-    if (insurance && student.insurance !== insurance) return false;
-    if (!normalizedQuery) return true;
+  const { data, error, isLoading, mutate } = useStudents(toStudentQuery(filters, searchTerm));
+  const { data: stats } = useStudentStats();
+  const { data: ageCategories } = useAgeCategories();
 
-    const haystack = toLatinDigits(
-      `${student.name} ${student.nationalCode} ${studentBeltLabel(student)} ${studentSessionSummary(student.id)}`,
-    ).toLowerCase();
+  const pager = data?.pager;
 
-    return haystack.includes(normalizedQuery);
-  });
+  useEffect(() => {
+    if (pager && pager.totalPages > 0 && filters.page > pager.totalPages) void setFilters({ page: pager.totalPages });
+  }, [pager, filters.page, setFilters]);
 
-  const sorted = [...visible].sort((a, b) => {
-    if (sort === "name") return a.name.localeCompare(b.name, "fa");
-    if (sort === "belt") return beltRank(b.belt) - beltRank(a.belt);
-    if (sort === "ins") return a.insuranceDays - b.insuranceDays;
-    return 0;
-  });
+  const filterCount = activeFilterCount(filters);
+  const isDirty = filterCount > 0 || filters.q.trim().length > 0;
+  const sortActive = filters.sort !== "createdAt" || filters.dir !== "desc";
 
-  const filterCount = belts.length + (insurance ? 1 : 0);
-  const isDirty = filterCount > 0 || query.trim().length > 0;
+  const clearFilters = () => void setFilters({ q: "", belt: [], age: [], ins: [], page: 1 });
 
-  const clearFilters = () => {
-    setQuery("");
-    setBelts([]);
-    setInsurance(null);
+  const changeSort = (key: StudentSortKey) => {
+    const preset = sortPreset(key);
+    void setFilters({ sort: preset.sortBy, dir: preset.sortDirection, page: 1 });
+    setSortOpen(false);
   };
 
   return (
     <>
-      <StudentsOverview count={sorted.length} insurance={insurance} onInsuranceChange={setInsurance} onAdd={() => setAddOpen(true)} />
+      <StudentsOverview
+        total={stats?.total}
+        stats={stats?.byInsurance}
+        active={filters.ins}
+        onToggle={(value) => void setFilters({ ins: toggleValue(filters.ins, value), page: 1 })}
+        onAdd={() => setAddOpen(true)}
+      />
 
       <StudentsToolbar
-        query={query}
-        onQueryChange={setQuery}
-        sortActive={sort !== "default"}
-        sortOpen={sortOpen}
+        query={filters.q}
+        onQueryChange={(value) => void setFilters({ q: value, page: 1 })}
+        filterCount={filterCount}
+        onOpenFilters={() => setFiltersOpen(true)}
+        sortActive={sortActive}
         onOpenSort={() => setSortOpen(true)}
       />
 
-      <StudentsFilters belts={belts} filterCount={filterCount} isDirty={isDirty} onBeltsChange={setBelts} onClear={clearFilters} />
+      <StudentsActiveFilters
+        belts={filters.belt}
+        ages={filters.age}
+        insurances={filters.ins}
+        onRemoveBelt={(value) => void setFilters({ belt: filters.belt.filter((item) => item !== value), page: 1 })}
+        onRemoveAge={(value) => void setFilters({ age: filters.age.filter((item) => item !== value), page: 1 })}
+        onRemoveInsurance={(value) => void setFilters({ ins: filters.ins.filter((item) => item !== value), page: 1 })}
+        onClear={clearFilters}
+      />
 
-      <StudentsList students={sorted} onClear={clearFilters} />
+      {isLoading && !data ? <StudentsSkeleton /> : null}
 
-      <div className="fixed inset-x-0 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-[var(--app-max-width)] px-4">
-        <Button
-          type="button"
-          variant="field"
-          className="h-auto w-full justify-start gap-3 rounded-2xl border-[var(--card-line)] bg-card/95 px-3 py-2.5 whitespace-normal shadow-[var(--card-shadow)] backdrop-blur transition active:scale-[0.99]"
-          onClick={() => setAddOpen(true)}
-        >
-          <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-accent-ink">
-            <Plus className="size-5" aria-hidden="true" />
-          </span>
-          <span className="min-w-0 flex-1 text-start">
-            <b className="block text-[13px] font-extrabold text-ink">افزودن هنرجوی جدید</b>
-            <span className="mt-0.5 block text-[10.5px] font-medium text-ink-subtle">با فرم ثبت نام یا ارسال دعوت نامه</span>
-          </span>
-          <span className="shrink-0 rounded-full bg-brand-50 px-2 py-1 text-[9.5px] font-extrabold text-accent-ink">۲ روش</span>
-        </Button>
-      </div>
+      {error && !data ? (
+        <ErrorState
+          className="mt-4"
+          title="خواندن فهرست هنرجویان انجام نشد"
+          message={apiErrorMessage(error)}
+          onRetry={() => void mutate()}
+        />
+      ) : null}
+
+      {data ? (
+        <>
+          <StudentsList
+            students={data.students}
+            ageCategories={ageCategories ?? []}
+            expiringDays={stats?.expiringDays ?? 30}
+            hasFilters={isDirty}
+            onClear={clearFilters}
+          />
+          {pager ? (
+            <StudentsPagination
+              page={pager.page}
+              perPage={pager.perPage}
+              total={pager.total}
+              onPageChange={(value) => void setFilters({ page: value })}
+            />
+          ) : null}
+        </>
+      ) : null}
 
       <AddStudentSheet open={addOpen} onOpenChange={setAddOpen} />
 
-      <SortStudentsSheet open={sortOpen} onOpenChange={setSortOpen} sort={sort} onSortChange={setSort} />
+      <SortStudentsSheet
+        open={sortOpen}
+        onOpenChange={setSortOpen}
+        sortBy={filters.sort}
+        sortDirection={filters.dir}
+        onChange={changeSort}
+      />
+
+      <StudentsFiltersSheet
+        open={filtersOpen}
+        onOpenChange={setFiltersOpen}
+        belts={filters.belt}
+        ages={filters.age}
+        insurances={filters.ins}
+        ageCategories={ageCategories}
+        resultCount={pager?.total}
+        onBeltsChange={(value) => void setFilters({ belt: value, page: 1 })}
+        onAgesChange={(value) => void setFilters({ age: value, page: 1 })}
+        onInsurancesChange={(value) => void setFilters({ ins: value, page: 1 })}
+        onClear={clearFilters}
+      />
     </>
   );
 }

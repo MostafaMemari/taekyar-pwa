@@ -1,61 +1,158 @@
-import { ListOrdered, type LucideIcon, Medal, ShieldAlert, ShieldCheck, ShieldX, Type } from "lucide-react";
-import { INSURANCE_META, type InsuranceStatus, STUDENTS } from "@/features/coach/lib/coach-data";
-import type { ColorBeltKey } from "@/lib/student-belts";
+import { ListOrdered, type LucideIcon, Medal, ShieldAlert, ShieldCheck, ShieldOff, ShieldX, Type } from "lucide-react";
+import type { AgeCategoryRecord } from "@/features/coach/lib/student-api";
+import { toLatinDigits } from "@/lib/digits";
+import { toJalaliDate } from "@/lib/jalali";
+import type { StudentBeltKey } from "@/lib/student-belts";
 
-export type SortKey = "default" | "name" | "belt" | "ins";
+export type StudentInsuranceStatus = "valid" | "expiring" | "expired" | "none";
+export type StudentSortKey = "default" | "name" | "belt" | "ins";
 
-export const BELT_ORDER: ColorBeltKey[] = ["white", "yellow", "green", "blue", "red"];
+export const INSURANCE_STATUSES = ["valid", "expiring", "expired", "none"] as const;
 
-export const INSURANCE_ICONS: Record<InsuranceStatus, LucideIcon> = {
-  ok: ShieldCheck,
-  soon: ShieldAlert,
-  none: ShieldX,
+export const INSURANCE_META: Record<
+  StudentInsuranceStatus,
+  { label: string; shortLabel: string; tone: "success" | "warning" | "danger" | "neutral"; icon: LucideIcon; tile: string }
+> = {
+  valid: { label: "بیمه معتبر", shortLabel: "معتبر", tone: "success", icon: ShieldCheck, tile: "bg-success-soft text-success" },
+  expiring: { label: "نزدیک انقضا", shortLabel: "نزدیک انقضا", tone: "warning", icon: ShieldAlert, tile: "bg-warning-soft text-warning" },
+  expired: { label: "بیمه منقضی", shortLabel: "منقضی", tone: "danger", icon: ShieldX, tile: "bg-danger-soft text-danger" },
+  none: { label: "بدون بیمه", shortLabel: "بدون بیمه", tone: "neutral", icon: ShieldOff, tile: "bg-muted text-ink-muted" },
 };
 
-export const INSURANCE_TILE_TONES: Record<InsuranceStatus, string> = {
-  ok: "bg-success-soft text-success",
-  soon: "bg-warning-soft text-warning",
-  none: "bg-danger-soft text-danger",
+const DAY_MS = 86_400_000;
+
+export function insuranceStatusOf(expiryDate: string | null, expiringDays: number): StudentInsuranceStatus {
+  if (!expiryDate) return "none";
+
+  const expiry = new Date(expiryDate).getTime();
+  if (Number.isNaN(expiry)) return "none";
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (expiry < today.getTime()) return "expired";
+  return expiry < today.getTime() + expiringDays * DAY_MS ? "expiring" : "valid";
+}
+
+export const BELT_API_NAMES = [
+  "WHITE",
+  "YELLOW",
+  "GREEN",
+  "BLUE",
+  "RED",
+  "POOM_1",
+  "POOM_2",
+  "POOM_3",
+  "POOM_4",
+  "DAN_1",
+  "DAN_2",
+  "DAN_3",
+  "DAN_4",
+  "DAN_5",
+  "DAN_6",
+  "DAN_7",
+  "DAN_8",
+  "DAN_9",
+  "DAN_10",
+] as const;
+
+export type StudentBeltApiName = (typeof BELT_API_NAMES)[number];
+
+export function beltApiName(key: StudentBeltKey): StudentBeltApiName {
+  return key.toUpperCase().replace("-", "_") as StudentBeltApiName;
+}
+
+export function beltKeyOf(name: string): StudentBeltKey {
+  return name.toLowerCase().replace("_", "-") as StudentBeltKey;
+}
+
+export const AGE_CATEGORY_NAMES = ["BLOSSOM", "YOUTH", "CADET", "JUNIOR", "YOUNG", "SENIOR", "ULTRA"] as const;
+
+export type AgeCategoryName = (typeof AGE_CATEGORY_NAMES)[number];
+
+export const AGE_CATEGORY_LABELS: Record<AgeCategoryName, string> = {
+  BLOSSOM: "شکوفه",
+  YOUTH: "نونهال",
+  CADET: "نوجوان",
+  JUNIOR: "جوان",
+  YOUNG: "امید",
+  SENIOR: "بزرگسال",
+  ULTRA: "پیشکسوت",
 };
 
-export const INSURANCE_FILTERS = (["ok", "soon", "none"] as const).map((value) => ({
-  value,
-  label: INSURANCE_META[value].label,
-  count: STUDENTS.filter((student) => student.insurance === value).length,
-}));
+export function ageCategoryOf(birthDate: string | null, categories: AgeCategoryRecord[]): AgeCategoryName | null {
+  if (!birthDate) return null;
 
-export const SORT_OPTIONS: { value: SortKey; label: string; description: string; icon: LucideIcon; tile: string }[] = [
+  const [year] = toLatinDigits(toJalaliDate(birthDate)).split("/");
+  if (!year) return null;
+
+  const birthYear = Number(year);
+  const match = categories.find(
+    (category) =>
+      category.birthYearStart !== null &&
+      category.birthYearEnd !== null &&
+      birthYear >= category.birthYearStart &&
+      birthYear <= category.birthYearEnd,
+  );
+
+  return (match?.name as AgeCategoryName | undefined) ?? null;
+}
+
+export const SORT_FIELDS = ["createdAt", "updatedAt", "fullName", "belt", "insurance"] as const;
+export type StudentSortField = (typeof SORT_FIELDS)[number];
+export type StudentSortDirection = "asc" | "desc";
+
+export const SORT_PRESETS: {
+  key: StudentSortKey;
+  label: string;
+  description: string;
+  icon: LucideIcon;
+  tile: string;
+  sortBy: StudentSortField;
+  sortDirection: StudentSortDirection;
+}[] = [
   {
-    value: "default",
+    key: "default",
     label: "ترتیب ثبت نام",
-    description: "همان ترتیب پیش فرض لیست",
+    description: "جدیدترین هنرجوها اول",
     icon: ListOrdered,
     tile: "bg-muted text-ink-muted",
+    sortBy: "createdAt",
+    sortDirection: "desc",
   },
   {
-    value: "name",
+    key: "name",
     label: "نام و نام خانوادگی",
     description: "بر اساس حروف الفبا",
     icon: Type,
     tile: "bg-brand-50 text-accent-ink",
+    sortBy: "fullName",
+    sortDirection: "asc",
   },
   {
-    value: "belt",
+    key: "belt",
     label: "رتبه کمربند",
     description: "از بالاترین به پایین ترین",
     icon: Medal,
     tile: "bg-warning-soft text-warning",
+    sortBy: "belt",
+    sortDirection: "desc",
   },
   {
-    value: "ins",
+    key: "ins",
     label: "تاریخ بیمه",
     description: "نزدیک ترین انقضا در بالا",
     icon: ShieldAlert,
     tile: "bg-danger-soft text-danger",
+    sortBy: "insurance",
+    sortDirection: "asc",
   },
 ];
 
-export function normalizeMulti<T extends string>(next: readonly string[], current: readonly T[]): T[] {
-  const specific = next.filter((value) => value !== "all") as T[];
-  return next.includes("all") && current.length > 0 ? [] : specific;
+export function sortPresetKey(sortBy: StudentSortField, sortDirection: StudentSortDirection): StudentSortKey | "" {
+  return SORT_PRESETS.find((preset) => preset.sortBy === sortBy && preset.sortDirection === sortDirection)?.key ?? "";
+}
+
+export function sortPreset(key: StudentSortKey) {
+  return SORT_PRESETS.find((preset) => preset.key === key) ?? SORT_PRESETS[0];
 }

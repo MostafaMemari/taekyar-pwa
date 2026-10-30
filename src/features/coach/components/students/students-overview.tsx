@@ -1,21 +1,23 @@
 import { UserPlus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { GymContext } from "@/features/coach/components/gym-context";
+import { Skeleton } from "@/components/ui/skeleton";
 import { StatusBadge } from "@/features/coach/components/status-badge";
-import type { InsuranceStatus } from "@/features/coach/lib/coach-data";
-import { INSURANCE_FILTERS, INSURANCE_ICONS, INSURANCE_TILE_TONES } from "@/features/coach/lib/students-options";
+import type { StudentInsuranceSummary } from "@/features/coach/lib/student-api";
+import { INSURANCE_META, INSURANCE_STATUSES, type StudentInsuranceStatus } from "@/features/coach/lib/students-options";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
 export function StudentsOverview({
-  count,
-  insurance,
-  onInsuranceChange,
+  total,
+  stats,
+  active,
+  onToggle,
   onAdd,
 }: {
-  count: number;
-  insurance: InsuranceStatus | null;
-  onInsuranceChange: (value: InsuranceStatus | null) => void;
+  total?: number;
+  stats?: StudentInsuranceSummary;
+  active: StudentInsuranceStatus[];
+  onToggle: (value: StudentInsuranceStatus) => void;
   onAdd: () => void;
 }) {
   return (
@@ -24,7 +26,7 @@ export function StudentsOverview({
         <h1 className="text-[22px] font-extrabold text-ink">هنرجویان</h1>
         <StatusBadge tone="neutral" className="mt-0.5">
           <Users aria-hidden="true" />
-          <b className="tabular-nums">{toPersianDigits(String(count))}</b>
+          {total === undefined ? <Skeleton className="h-3 w-5" /> : <b className="tabular-nums">{toPersianDigits(String(total))}</b>}
           <span>هنرجو</span>
         </StatusBadge>
         <Button
@@ -39,34 +41,38 @@ export function StudentsOverview({
         </Button>
       </header>
 
-      <div className="mt-4 grid grid-cols-3 gap-2">
-        {INSURANCE_FILTERS.map((option) => {
-          const Icon = INSURANCE_ICONS[option.value];
-          const active = insurance === option.value;
+      <div className="mt-4 grid grid-cols-4 gap-1.5">
+        {INSURANCE_STATUSES.map((value) => {
+          const meta = INSURANCE_META[value];
+          const Icon = meta.icon;
+          const isActive = active.includes(value);
+          const count = stats?.[value];
 
           return (
             <Button
-              key={option.value}
+              key={value}
               type="button"
               variant="field"
-              aria-pressed={active}
-              onClick={() => onInsuranceChange(active ? null : option.value)}
+              aria-pressed={isActive}
+              onClick={() => onToggle(value)}
               className={cn(
-                "h-auto flex-col gap-1.5 rounded-2xl px-2 py-2.5 whitespace-normal",
-                active && "border-primary/35 bg-brand-50/60 ring-2 ring-primary/15",
+                "h-auto flex-col gap-1 rounded-2xl px-1 py-2 whitespace-nowrap",
+                isActive && "border-primary/35 bg-brand-50/60 ring-2 ring-primary/15",
               )}
             >
-              <span className={cn("grid size-8 place-items-center rounded-xl", INSURANCE_TILE_TONES[option.value])}>
-                <Icon aria-hidden="true" />
+              <span className={cn("grid size-7 place-items-center rounded-lg", meta.tile)}>
+                <Icon className="size-4" aria-hidden="true" />
               </span>
-              <b className="text-[15px] leading-none font-extrabold tabular-nums text-ink">{toPersianDigits(String(option.count))}</b>
-              <span className="text-[9px] leading-none font-bold text-ink-muted">{option.label}</span>
+              {count === undefined ? (
+                <Skeleton className="h-3.5 w-6" />
+              ) : (
+                <b className="text-[14px] leading-none font-extrabold tabular-nums text-ink">{toPersianDigits(String(count))}</b>
+              )}
+              <span className="text-[8.5px] font-bold leading-[11px] text-ink-muted">{meta.shortLabel}</span>
             </Button>
           );
         })}
       </div>
-
-      <GymContext className="mt-3" subtitle="لیست هنرجویان این باشگاه" actionLabel="تغییر باشگاه" />
     </>
   );
 }
