@@ -1,6 +1,8 @@
 import { toLatinDigits } from "@/lib/digits";
 
 const jalaliFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { dateStyle: "short" });
+const jalaliDayFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { weekday: "long", day: "numeric", month: "long" });
+const jalaliMonthFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { month: "long", year: "numeric" });
 
 const BREAKS = [-61, 9, 38, 199, 426, 686, 756, 818, 1111, 1181, 1210, 1635, 2060, 2097, 2192, 2262, 2324, 2394, 2456, 3178];
 
@@ -78,4 +80,18 @@ export function toGregorianDate(jalali: string): string | null {
 export function toJalaliDate(isoDate: string): string {
   const date = new Date(isoDate);
   return Number.isNaN(date.getTime()) ? "" : jalaliFormatter.format(date);
+}
+
+export function toJalaliDay(isoDate: string): string {
+  const date = new Date(isoDate);
+  return Number.isNaN(date.getTime()) ? "" : jalaliDayFormatter.format(date);
+}
+
+export function toJalaliMonth(isoDate: string): string {
+  const date = new Date(isoDate);
+  return Number.isNaN(date.getTime()) ? "" : jalaliMonthFormatter.format(date);
+}
+
+export function todayJalali(): string {
+  return jalaliFormatter.format(new Date());
 }

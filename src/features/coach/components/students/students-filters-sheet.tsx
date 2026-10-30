@@ -20,6 +20,7 @@ import {
   type StudentInsuranceStatus,
 } from "@/features/coach/lib/students-options";
 import { toPersianDigits } from "@/lib/digits";
+import { toJalaliDate } from "@/lib/jalali";
 import { STUDENT_BELT_GROUPS, type StudentBeltKey } from "@/lib/student-belts";
 
 function SectionTitle({ icon, children }: { icon: ReactNode; children: ReactNode }) {
@@ -148,10 +149,9 @@ export function StudentsFiltersSheet({
           >
             {AGE_CATEGORY_NAMES.map((name) => {
               const category = ageCategories?.find((item) => item.name === name);
-              const range =
-                category?.birthYearStart != null && category.birthYearEnd != null
-                  ? `${toPersianDigits(String(category.birthYearStart))} تا ${toPersianDigits(String(category.birthYearEnd))}`
-                  : null;
+              const range = category
+                ? `${toJalaliDate(category.startDate).split("/")[0]} تا ${toJalaliDate(category.endDate).split("/")[0]}`
+                : null;
 
               return (
                 <ToggleGroupItem

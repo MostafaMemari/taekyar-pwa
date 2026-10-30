@@ -4,12 +4,14 @@ import { BarChart3, ChevronLeft, Medal, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
+import { AuthFormError } from "@/components/shared/auth-form-error";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { SectionHeading } from "@/features/coach/components/section-heading";
-import type { StudentProfile } from "@/features/coach/lib/student-profile-data";
+import { useDeleteStudent } from "@/features/coach/hooks/use-student-mutations";
+import { ApiError, apiErrorMessage } from "@/lib/api/client";
 
 const ACTIONS = [
   { icon: Pencil, label: "ویرایش اطلاعات هنرجو", href: (id: string) => `/coach/students/${id}/edit` },
@@ -18,20 +20,33 @@ const ACTIONS = [
 ];
 
 export function StudentDetailActions({
-  profile,
+  studentId,
+  fullName,
   menuOpen,
   onMenuOpenChange,
 }: {
-  profile: StudentProfile;
+  studentId: string;
+  fullName: string;
   menuOpen: boolean;
   onMenuOpenChange: (open: boolean) => void;
 }) {
   const router = useRouter();
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const remove = useDeleteStudent();
 
   const openDelete = () => {
     onMenuOpenChange(false);
     setDeleteOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await remove.trigger(studentId);
+      setDeleteOpen(false);
+      router.push("/coach/students");
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 401) router.replace("/login");
+    }
   };
 
   return (
@@ -45,7 +60,7 @@ export function StudentDetailActions({
               <Button
                 variant="ghost"
                 className="h-12 w-full justify-start gap-3 rounded-none px-4 text-[12.5px] font-extrabold text-ink-body hover:bg-muted/50"
-                render={<Link href={action.href(profile.id)} />}
+                render={<Link href={action.href(studentId)} />}
                 nativeButton={false}
               >
                 <action.icon className="text-ink-muted" aria-hidden="true" />
@@ -74,12 +89,7 @@ export function StudentDetailActions({
         </div>
       </section>
 
-      <SheetFrame
-        open={menuOpen}
-        onOpenChange={onMenuOpenChange}
-        title="عملیات"
-        description={`عملیات قابل انجام برای پرونده ${profile.name}`}
-      >
+      <SheetFrame open={menuOpen} onOpenChange={onMenuOpenChange} title="عملیات" description={`عملیات قابل انجام برای پرونده ${fullName}`}>
         <div className="flex flex-col gap-1 py-1">
           {ACTIONS.map((action) => (
             <Button
@@ -88,7 +98,7 @@ export function StudentDetailActions({
               className="h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12.5px] font-extrabold text-ink-body"
               onClick={() => {
                 onMenuOpenChange(false);
-                router.push(action.href(profile.id));
+                router.push(action.href(studentId));
               }}
             >
               <action.icon className="text-ink-muted" aria-hidden="true" />
@@ -108,8 +118,9 @@ export function StudentDetailActions({
 
       <SheetFrame open={deleteOpen} onOpenChange={setDeleteOpen} title="حذف پروفایل" description="تایید حذف پروفایل هنرجو">
         <p className="rounded-xl bg-danger-soft/60 p-3 text-[11px] leading-5 text-ink-muted">
-          با حذف پروفایل {profile.name}، تمام سابقه حضور و غیاب و کمربند او نیز حذف می شود. این کار قابل بازگشت نیست.
+          با حذف پروفایل {fullName}، تمام سابقه حضور و غیاب و کمربند او نیز حذف می شود. این کار قابل بازگشت نیست.
         </p>
+        <AuthFormError message={remove.error ? apiErrorMessage(remove.error) : ""} />
         <div className="flex gap-2 pt-1">
           <Button variant="outline" className="h-11 flex-1 rounded-xl" onClick={() => setDeleteOpen(false)}>
             انصراف
@@ -117,12 +128,10 @@ export function StudentDetailActions({
           <Button
             variant="destructive"
             className="h-11 flex-[2] rounded-xl text-[12.5px] font-extrabold"
-            onClick={() => {
-              setDeleteOpen(false);
-              router.push("/coach/students");
-            }}
+            disabled={remove.isMutating}
+            onClick={() => void confirmDelete()}
           >
-            حذف پروفایل
+            {remove.isMutating ? "در حال حذف..." : "حذف پروفایل"}
           </Button>
         </div>
       </SheetFrame>

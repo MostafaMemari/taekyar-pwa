@@ -3,12 +3,20 @@
 import { CalendarCheck2 } from "lucide-react";
 import { useState } from "react";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
+import { ErrorState } from "@/features/coach/components/error-state";
+import { useStudentAttendance } from "@/features/coach/hooks/use-attendance";
+import { useStudentClubs } from "@/features/coach/hooks/use-clubs";
+import { useStudent } from "@/features/coach/hooks/use-student";
+import type { StudentAttendanceEntry } from "@/features/coach/lib/attendance-api";
 import { attendanceTotal } from "@/features/coach/lib/attendance-summary";
 import { ATTENDANCE_META, type AttendanceStatus } from "@/features/coach/lib/coach-data";
-import { groupAttendanceByMonth, type StudentProfile } from "@/features/coach/lib/student-profile-data";
+import { beltKeyOf } from "@/features/coach/lib/students-options";
+import { apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
+import { toJalaliDay, toJalaliMonth } from "@/lib/jalali";
 import { StudentAttendanceRecordCard } from "./student-attendance-record-card";
 import { StudentAttendanceSummary } from "./student-attendance-summary";
 import { StudentBand } from "./student-band";
@@ -23,18 +31,67 @@ const FILTERS: { value: AttendanceFilter; label: string }[] = [
   { value: "EXCUSED", label: ATTENDANCE_META.EXCUSED.label },
 ];
 
-export function StudentAttendanceReport({ profile }: { profile: StudentProfile }) {
-  const [filter, setFilter] = useState<AttendanceFilter>("ALL");
-  const { counts } = profile.attendance;
+function groupByMonth(records: StudentAttendanceEntry[]) {
+  const groups: { month: string; records: StudentAttendanceEntry[] }[] = [];
 
-  const records = filter === "ALL" ? profile.attendance.records : profile.attendance.records.filter((record) => record.status === filter);
-  const groups = groupAttendanceByMonth(records);
+  for (const record of records) {
+    const month = toJalaliMonth(record.sessionDate);
+    const last = groups[groups.length - 1];
+    if (last?.month === month) last.records.push(record);
+    else groups.push({ month, records: [record] });
+  }
+
+  return groups;
+}
+
+export function StudentAttendanceReport({ studentId }: { studentId: string }) {
+  const [filter, setFilter] = useState<AttendanceFilter>("ALL");
+  const student = useStudent(studentId);
+  const attendance = useStudentAttendance(studentId);
+  const clubs = useStudentClubs(studentId);
+
+  const error = student.error ?? attendance.error;
+
+  if (error) {
+    return (
+      <CoachSheet className="flex flex-col gap-3">
+        <ErrorState
+          title="خواندن گزارش حضور و غیاب انجام نشد"
+          message={apiErrorMessage(error)}
+          onRetry={() => {
+            void student.mutate();
+            void attendance.mutate();
+          }}
+        />
+      </CoachSheet>
+    );
+  }
+
+  if (!student.data || !attendance.data) {
+    return (
+      <CoachSheet className="flex flex-col gap-3">
+        <Skeleton className="h-28 w-full rounded-2xl" />
+        {[0, 1, 2].map((row) => (
+          <Skeleton key={row} className="h-16 w-full rounded-xl" />
+        ))}
+      </CoachSheet>
+    );
+  }
+
+  const profile = student.data;
+  const { counts, records } = attendance.data;
+  const belt = profile.currentBelt ? beltKeyOf(profile.currentBelt.belt.name) : null;
+  const visible = filter === "ALL" ? records : records.filter((record) => record.status === filter);
+  const groups = groupByMonth(visible);
+  const lastSession = records[0] ? toJalaliDay(records[0].sessionDate) : "";
 
   return (
     <main className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300">
       <StudentBand
-        profile={profile}
-        backHref={`/coach/students/${profile.id}`}
+        fullName={profile.fullName}
+        belt={belt}
+        clubName={clubs.data?.[0]?.club.name ?? null}
+        backHref={`/coach/students/${studentId}`}
         watermark="گزارش"
         chip="گزارش حضور و غیاب"
         meta={
@@ -47,7 +104,11 @@ export function StudentAttendanceReport({ profile }: { profile: StudentProfile }
       <CoachSheet className="flex flex-col gap-3">
         <StudentAttendanceSummary
           counts={counts}
-          footer={<>مجموع: {toPersianDigits(String(attendanceTotal(counts)))} جلسه — از ابتدای عضویت تا شنبه ۲۴ آبان</>}
+          footer={
+            <>
+              مجموع: {toPersianDigits(String(attendanceTotal(counts)))} جلسه — از ابتدای عضویت{lastSession ? ` تا ${lastSession}` : ""}
+            </>
+          }
         />
 
         <ToggleGroup
@@ -79,7 +140,15 @@ export function StudentAttendanceReport({ profile }: { profile: StudentProfile }
                 <h2 className="mb-2 mt-1 text-[12.5px] font-extrabold text-ink-muted">{group.month}</h2>
                 <div className="flex flex-col gap-2.5">
                   {group.records.map((record) => (
-                    <StudentAttendanceRecordCard key={record.id} record={record} showIcon />
+                    <StudentAttendanceRecordCard
+                      key={record.id}
+                      sessionName={record.classSession.name}
+                      clubName={record.classSession.club.name}
+                      date={toJalaliDay(record.sessionDate)}
+                      status={record.status}
+                      note={record.note}
+                      showIcon
+                    />
                   ))}
                 </div>
               </section>

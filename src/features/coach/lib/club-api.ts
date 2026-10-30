@@ -33,6 +33,20 @@ export function fetchClub(id: string): Promise<ClubRecord> {
   return authRequest<ClubRecord>(`club/${id}`);
 }
 
+export type ClubMembershipRecord = {
+  id: string;
+  clubId: string;
+  studentId: string;
+  joinedAt: string;
+  isActive: boolean;
+  removedAt: string | null;
+  club: ClubRecord;
+};
+
+export function fetchStudentClubs(studentId: string): Promise<ClubMembershipRecord[]> {
+  return authRequest<ClubMembershipRecord[]>(`club/by-student/${studentId}`);
+}
+
 export function fetchClubStudentCount(id: string): Promise<number> {
   return authRequestWithMeta<unknown[]>(`club/${id}/students?page=1&take=1&isActive=true`).then(
     ({ pager, data }) => pager?.total ?? data.length,
@@ -54,4 +68,8 @@ export function updateClub(id: string, input: ClubInput): Promise<ClubRecord> {
 
 export function changeClubStatus(id: string, isActive: boolean): Promise<ClubRecord> {
   return authRequest<ClubResponse>(`club/${id}/status`, { method: "patch", json: { isActive } }).then((result) => result.club);
+}
+
+export function addStudentToClub(id: string, studentId: string): Promise<void> {
+  return authRequest<unknown>(`club/${id}/students`, { method: "post", json: { studentId } }).then(() => undefined);
 }

@@ -208,15 +208,3 @@ export function studentAge(birthDate: string) {
   const currentYear = Number(parts.find((part) => part.type === "year")?.value ?? 0);
   return currentYear > birthYear ? currentYear - birthYear : 0;
 }
-
-export function groupAttendanceByMonth(records: StudentAttendanceRecord[]) {
-  const groups: { month: string; records: StudentAttendanceRecord[] }[] = [];
-
-  for (const record of records) {
-    const last = groups[groups.length - 1];
-    if (last?.month === record.month) last.records.push(record);
-    else groups.push({ month: record.month, records: [record] });
-  }
-
-  return groups;
-}

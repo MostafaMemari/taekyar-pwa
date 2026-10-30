@@ -1,7 +1,5 @@
 import { ListOrdered, type LucideIcon, Medal, ShieldAlert, ShieldCheck, ShieldOff, ShieldX, Type } from "lucide-react";
 import type { AgeCategoryRecord } from "@/features/coach/lib/student-api";
-import { toLatinDigits } from "@/lib/digits";
-import { toJalaliDate } from "@/lib/jalali";
 import type { StudentBeltKey } from "@/lib/student-belts";
 
 export type StudentInsuranceStatus = "valid" | "expiring" | "expired" | "none";
@@ -83,16 +81,11 @@ export const AGE_CATEGORY_LABELS: Record<AgeCategoryName, string> = {
 export function ageCategoryOf(birthDate: string | null, categories: AgeCategoryRecord[]): AgeCategoryName | null {
   if (!birthDate) return null;
 
-  const [year] = toLatinDigits(toJalaliDate(birthDate)).split("/");
-  if (!year) return null;
+  const birth = new Date(birthDate).getTime();
+  if (Number.isNaN(birth)) return null;
 
-  const birthYear = Number(year);
   const match = categories.find(
-    (category) =>
-      category.birthYearStart !== null &&
-      category.birthYearEnd !== null &&
-      birthYear >= category.birthYearStart &&
-      birthYear <= category.birthYearEnd,
+    (category) => birth >= new Date(category.startDate).getTime() && birth <= new Date(category.endDate).getTime(),
   );
 
   return (match?.name as AgeCategoryName | undefined) ?? null;

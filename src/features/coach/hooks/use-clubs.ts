@@ -1,5 +1,12 @@
 import useSWR from "swr";
-import { CLUBS_PAGE_SIZE, fetchClub, fetchClubStudentCount, fetchClubStudentTotals, fetchClubs } from "@/features/coach/lib/club-api";
+import {
+  CLUBS_PAGE_SIZE,
+  fetchClub,
+  fetchClubStudentCount,
+  fetchClubStudentTotals,
+  fetchClubs,
+  fetchStudentClubs,
+} from "@/features/coach/lib/club-api";
 import { swrReadOptions } from "@/lib/api/swr";
 
 // Index 0 is always "club" so one filter revalidates the whole branch; index 1 is the club id or a list/counts sentinel.
@@ -7,6 +14,7 @@ const clubKeys = {
   list: ["club", "list", CLUBS_PAGE_SIZE] as const,
   detail: (id: string) => ["club", id] as const,
   students: (id: string) => ["club", id, "students"] as const,
+  byStudent: (id: string) => ["club", "by-student", id] as const,
   counts: (ids: string[]) => ["club", "counts", ids.join(",")] as const,
 };
 
@@ -16,6 +24,10 @@ export function useClubs() {
 
 export function useClub(id?: string) {
   return useSWR(id ? clubKeys.detail(id) : null, ([, clubId]) => fetchClub(clubId), swrReadOptions);
+}
+
+export function useStudentClubs(studentId: string) {
+  return useSWR(clubKeys.byStudent(studentId), ([, , id]) => fetchStudentClubs(id), swrReadOptions);
 }
 
 export function useClubStudentCount(id: string) {
