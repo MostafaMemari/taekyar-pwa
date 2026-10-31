@@ -1,6 +1,13 @@
 import { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
-import { type CreateStudentInput, createStudent, deleteStudent } from "@/features/coach/lib/student-api";
+import {
+  assignStudentBelt,
+  type CreateStudentInput,
+  createStudent,
+  deleteStudent,
+  type UpdateStudentInput,
+  updateStudent,
+} from "@/features/coach/lib/student-api";
 
 // A new student changes the list, the stats and every picker fed by them, so the whole student branch is revalidated.
 const revalidateStudents = () => mutate((key) => Array.isArray(key) && key[0] === "student");
@@ -10,6 +17,26 @@ export function useCreateStudent() {
     await createStudent(arg);
     await revalidateStudents();
   });
+}
+
+export function useUpdateStudent() {
+  return useSWRMutation(
+    ["student", "update"] as const,
+    async (_key: unknown, { arg }: { arg: { id: string; input: UpdateStudentInput } }) => {
+      await updateStudent(arg.id, arg.input);
+      await revalidateStudents();
+    },
+  );
+}
+
+export function useAssignStudentBelt() {
+  return useSWRMutation(
+    ["student", "belt"] as const,
+    async (_key: unknown, { arg }: { arg: { id: string; beltId: string; beltDate: string } }) => {
+      await assignStudentBelt(arg.id, arg.beltId, arg.beltDate);
+      await revalidateStudents();
+    },
+  );
 }
 
 export function useDeleteStudent() {

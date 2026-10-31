@@ -44,8 +44,18 @@ export type StudentAttendanceEntry = {
 
 export type StudentAttendance = { counts: StudentAttendanceSummaryRecord; records: StudentAttendanceEntry[] };
 
+export type CoachWeeklyAttendanceSummary = {
+  thisWeek: { present: number; total: number };
+  lastWeek: { present: number; total: number };
+  days: Array<{ weekDay: string; present: number; total: number; previousPresent: number; previousTotal: number }>;
+};
+
 export function fetchClassAttendance(classSessionId: string, date: string): Promise<ClassAttendanceEntry[]> {
   return authRequest<ClassAttendanceEntry[]>(`attendance/class/${classSessionId}/daily?date=${date}`);
+}
+
+export function fetchCoachWeeklySummary(): Promise<CoachWeeklyAttendanceSummary> {
+  return authRequest<CoachWeeklyAttendanceSummary>("attendance/coach/summary");
 }
 
 // shortcut: one page of 100 sessions feeds both the file panel and the report screen; add pagination when a student outgrows it.

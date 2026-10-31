@@ -1,8 +1,8 @@
 import { z } from "zod";
-import type { CreateStudentInput } from "@/features/coach/lib/student-api";
-import type { StudentProfile } from "@/features/coach/lib/student-profile-data";
-import { beltApiName } from "@/features/coach/lib/students-options";
-import { toGregorianDate } from "@/lib/jalali";
+import type { CreateStudentInput, StudentDetailRecord, UpdateStudentInput } from "@/features/coach/lib/student-api";
+import { beltApiName, beltKeyOf } from "@/features/coach/lib/students-options";
+import { toLatinDigits } from "@/lib/digits";
+import { toGregorianDate, toJalaliDate } from "@/lib/jalali";
 import type { StudentBeltKey } from "@/lib/student-belts";
 
 const JALALI_PATTERN = /^\d{4}\/\d{1,2}\/\d{1,2}$/;
@@ -46,6 +46,9 @@ export const studentFormSchema = z.object({
 
 export type StudentFormValues = z.infer<typeof studentFormSchema>;
 
+// Belt and belt date are create-only: the backend PATCH ignores them, so edit must not block on them.
+export const studentEditFormSchema = studentFormSchema.extend({ belt: z.string(), beltDate: z.string() });
+
 export const emptyStudentForm: StudentFormValues = {
   fullName: "",
   nationalCode: "",
@@ -64,23 +67,41 @@ export const emptyStudentForm: StudentFormValues = {
   expireImageDate: "",
 };
 
-export function studentToForm(profile: StudentProfile): StudentFormValues {
+export function studentDetailToForm(student: StudentDetailRecord): StudentFormValues {
+  const toDateInput = (iso: string | null) => (iso ? toLatinDigits(toJalaliDate(iso)) : "");
+
   return {
-    fullName: profile.name,
-    nationalCode: profile.nationalCode,
-    gender: profile.gender,
-    birthDate: profile.birthDate,
-    fatherName: profile.fatherName,
-    phone: profile.phone,
-    landline: profile.landline,
-    province: profile.province,
-    belt: profile.belt,
-    beltDate: profile.beltDate,
-    height: profile.height,
-    weight: profile.weight,
-    membershipYear: profile.membershipYear,
-    insuranceDate: profile.insuranceDate ?? "",
-    expireImageDate: profile.expireImageDate,
+    fullName: student.fullName,
+    nationalCode: student.nationalCode,
+    gender: student.gender,
+    birthDate: toDateInput(student.birthDate),
+    fatherName: student.fatherName ?? "",
+    phone: student.phoneNumber ?? "",
+    landline: student.landlineNumber ?? "",
+    province: student.province ?? "",
+    belt: student.currentBelt ? beltKeyOf(student.currentBelt.belt.name) : "",
+    beltDate: student.currentBelt ? toDateInput(student.currentBelt.beltDate) : "",
+    height: student.height ?? "",
+    weight: student.weight ?? "",
+    membershipYear: student.membershipYear ? String(student.membershipYear) : "",
+    insuranceDate: toDateInput(student.sportsInsuranceDate),
+    expireImageDate: toDateInput(student.expireImageDate),
+  };
+}
+
+export function studentFormToUpdateInput(values: StudentFormValues): UpdateStudentInput {
+  return {
+    fullName: values.fullName.trim(),
+    nationalCode: values.nationalCode,
+    gender: values.gender,
+    birthDate: toGregorianDate(values.birthDate) ?? "",
+    province: values.province,
+    fatherName: values.fatherName.trim() || null,
+    phoneNumber: values.phone || null,
+    landlineNumber: values.landline || null,
+    membershipYear: values.membershipYear ? Number(values.membershipYear) : null,
+    sportsInsuranceDate: values.insuranceDate ? toGregorianDate(values.insuranceDate) : null,
+    expireImageDate: values.expireImageDate ? toGregorianDate(values.expireImageDate) : null,
   };
 }
 

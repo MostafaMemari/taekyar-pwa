@@ -4,16 +4,19 @@ import { CalendarDays, Clock, Send, UserPlus, Users } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useInvitations } from "@/features/coach/hooks/use-invitations";
 import { useSessions } from "@/features/coach/hooks/use-sessions";
 import { useStudentStats } from "@/features/coach/hooks/use-student-stats";
-import { INVITATIONS } from "@/features/coach/lib/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
 export function DashboardOverview() {
   const { data: sessions } = useSessions();
   const { data: studentStats } = useStudentStats();
-  const pendingInvitations = INVITATIONS.filter((invitation) => invitation.status === "PENDING").length;
+  const { data: invitations } = useInvitations();
+  const pendingInvitations = invitations
+    ? invitations.invitations.filter((invitation) => invitation.status === "PENDING").length
+    : undefined;
 
   const stats = [
     { href: "/coach/students", label: "هنرجویان", value: studentStats?.total, icon: Users },

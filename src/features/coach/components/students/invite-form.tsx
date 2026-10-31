@@ -5,16 +5,22 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import { AuthField } from "@/components/shared/auth-field";
+import { AuthFormError } from "@/components/shared/auth-form-error";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ActionDock } from "@/features/coach/components/action-dock";
 import { FormSection } from "@/features/coach/components/form-section";
 import { PersonAvatar } from "@/features/coach/components/person-avatar";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { StatusBadge } from "@/features/coach/components/status-badge";
-import { INVITATION_STATUS_META, INVITATIONS } from "@/features/coach/lib/coach-data";
+import { useSendInvitation } from "@/features/coach/hooks/use-invitation-mutations";
+import { useInvitations } from "@/features/coach/hooks/use-invitations";
+import { INVITATION_STATUS_META } from "@/features/coach/lib/coach-data";
+import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { digitsOnly, toPersianDigits } from "@/lib/digits";
+import { toJalaliDate } from "@/lib/jalali";
 import { cn } from "@/lib/utils";
 
 const FLOW_NOTES = [
@@ -43,11 +49,29 @@ const FLOW_NOTES = [
 export function InviteForm() {
   const router = useRouter();
   const [nationalCode, setNationalCode] = useState("");
+  const [formError, setFormError] = useState("");
+  const send = useSendInvitation();
+  const recent = useInvitations();
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    router.push("/coach/invitations");
+    setFormError("");
+
+    if (nationalCode.length !== 10) {
+      setFormError("کد ملی باید ۱۰ رقم باشد.");
+      return;
+    }
+
+    try {
+      await send.trigger(nationalCode);
+      router.push("/coach/invitations");
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 401) router.replace("/login");
+    }
   };
+
+  const recentInvitations = (recent.data?.invitations ?? []).slice(0, 3);
+  const message = formError || (send.error ? apiErrorMessage(send.error) : "");
 
   return (
     <form className="mt-4 flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
@@ -88,29 +112,38 @@ export function InviteForm() {
           }
         />
         <Card className="gap-0 p-0">
-          {INVITATIONS.slice(0, 3).map((invitation, index) => {
-            const meta = INVITATION_STATUS_META[invitation.status];
-            const Icon = meta.icon;
+          {recent.isLoading && !recent.data ? (
+            <div className="flex flex-col gap-2 p-4">
+              <Skeleton className="h-10 rounded-xl" />
+              <Skeleton className="h-10 rounded-xl" />
+            </div>
+          ) : recentInvitations.length === 0 ? (
+            <p className="p-4 text-center text-[12px] font-semibold text-ink-muted">هنوز دعوت نامه ای ارسال نکرده اید.</p>
+          ) : (
+            recentInvitations.map((invitation, index) => {
+              const meta = INVITATION_STATUS_META[invitation.status];
+              const Icon = meta.icon;
 
-            return (
-              <div
-                key={invitation.id}
-                className={index > 0 ? "flex items-center gap-3 border-t border-[var(--line-2)] p-4" : "flex items-center gap-3 p-4"}
-              >
-                <PersonAvatar name={invitation.studentName ?? invitation.nationalCode} />
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-[13px] font-extrabold text-ink">{invitation.studentName ?? "هنرجوی بدون حساب"}</p>
-                  <p className="mt-0.5 truncate text-[10px] font-medium text-ink-subtle">
-                    کد ملی <span dir="ltr">{toPersianDigits(invitation.nationalCode)}</span> · ارسال: {invitation.sentAt}
-                  </p>
+              return (
+                <div
+                  key={invitation.id}
+                  className={index > 0 ? "flex items-center gap-3 border-t border-[var(--line-2)] p-4" : "flex items-center gap-3 p-4"}
+                >
+                  <PersonAvatar name={invitation.student?.fullName ?? invitation.nationalCode} />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[13px] font-extrabold text-ink">{invitation.student?.fullName ?? "هنرجوی بدون حساب"}</p>
+                    <p className="mt-0.5 truncate text-[10px] font-medium text-ink-subtle">
+                      کد ملی <span dir="ltr">{toPersianDigits(invitation.nationalCode)}</span> · ارسال: {toJalaliDate(invitation.createdAt)}
+                    </p>
+                  </div>
+                  <StatusBadge tone={meta.tone} className="shrink-0">
+                    <Icon aria-hidden="true" />
+                    {meta.label}
+                  </StatusBadge>
                 </div>
-                <StatusBadge tone={meta.tone} className="shrink-0">
-                  <Icon aria-hidden="true" />
-                  {meta.label}
-                </StatusBadge>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </Card>
       </section>
 
@@ -134,10 +167,12 @@ export function InviteForm() {
         ثبت مستقیم پروفایل هنرجو
       </Button>
 
+      <AuthFormError message={message} />
+
       <ActionDock>
-        <Button type="submit" variant="brand" className="h-12 w-full rounded-xl text-[12px] font-extrabold">
+        <Button type="submit" variant="brand" className="h-12 w-full rounded-xl text-[12px] font-extrabold" disabled={send.isMutating}>
           <Send data-icon="inline-start" aria-hidden="true" />
-          ارسال دعوت نامه
+          {send.isMutating ? "در حال ارسال..." : "ارسال دعوت نامه"}
         </Button>
       </ActionDock>
     </form>

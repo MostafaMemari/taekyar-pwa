@@ -63,7 +63,7 @@ export function BeltPicker({
     <Field>
       <FieldLabel className="text-[13px] font-semibold text-ink-body">
         {label}
-        {required ? <span className="text-accent-ink"> *</span> : null}
+        {required && !optional ? <span className="text-accent-ink"> *</span> : null}
         {optional ? <span className="text-[9px] font-bold text-ink-subtle"> (اختیاری)</span> : null}
       </FieldLabel>
       {groups ? (

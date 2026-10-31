@@ -74,6 +74,20 @@ export type CreateStudentInput = {
   weight?: number;
 };
 
+export type UpdateStudentInput = {
+  fullName: string;
+  nationalCode: string;
+  gender: Gender;
+  birthDate: string;
+  province: string;
+  fatherName: string | null;
+  phoneNumber: string | null;
+  landlineNumber: string | null;
+  membershipYear: number | null;
+  sportsInsuranceDate: string | null;
+  expireImageDate: string | null;
+};
+
 export type StudentInsuranceSummary = { valid: number; expiring: number; expired: number; none: number };
 
 export type StudentStats = { total: number; byInsurance: StudentInsuranceSummary; expiringDays: number };
@@ -107,6 +121,20 @@ export function fetchStudents(query: StudentQuery): Promise<{ students: StudentR
 
 export function createStudent(input: CreateStudentInput): Promise<void> {
   return authRequest<unknown>("student", { method: "post", json: input }).then(() => undefined);
+}
+
+export function updateStudent(id: string, input: UpdateStudentInput): Promise<void> {
+  return authRequest<unknown>(`student/${id}`, { method: "patch", json: input }).then(() => undefined);
+}
+
+export function assignStudentBelt(id: string, beltId: string, beltDate: string): Promise<void> {
+  return authRequest<unknown>(`student/${id}/belt`, { method: "patch", json: { beltId, beltDate } }).then(() => undefined);
+}
+
+export type BeltRecord = { id: string; name: string; level: number };
+
+export function fetchBelts(): Promise<BeltRecord[]> {
+  return authRequestWithMeta<BeltRecord[]>("belt?page=1&take=100&sortBy=level&sortDirection=asc").then(({ data }) => data);
 }
 
 export function deleteStudent(id: string): Promise<void> {

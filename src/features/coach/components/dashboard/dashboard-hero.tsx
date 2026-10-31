@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { CoachBand } from "@/features/coach/components/coach-band";
 import { CoachBell } from "@/features/coach/components/coach-bell";
+import { useCoachProfile } from "@/features/coach/hooks/use-coach-profile";
 import { useSessions } from "@/features/coach/hooks/use-sessions";
-import { COACH, sessionIsToday, todayWeekDay, WEEK_DAY_META } from "@/features/coach/lib/coach-data";
+import { sessionIsToday, todayWeekDay, WEEK_DAY_META } from "@/features/coach/lib/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
 
@@ -25,6 +26,7 @@ function untilLabel(minutes: number) {
 
 export function DashboardHero() {
   const [now] = useState(() => new Date());
+  const { data: profile } = useCoachProfile();
   const { data } = useSessions();
   const today = (data?.sessions ?? [])
     .filter((session) => sessionIsToday(session.weekDays))
@@ -37,7 +39,7 @@ export function DashboardHero() {
     <CoachBand>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <h1 className="truncate text-xl font-extrabold leading-7">سلام، مربی {COACH.name}</h1>
+          <h1 className="truncate text-xl font-extrabold leading-7">سلام{profile ? `، مربی ${profile.fullName}` : ""}</h1>
           <p className="mt-1 text-xs font-semibold text-white">
             {WEEK_DAY_META[todayWeekDay()].label} {toPersianDigits(toJalaliDate(now.toISOString()))}
           </p>

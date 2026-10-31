@@ -1,6 +1,6 @@
 # داکیومنت API مربی
 
-مرجع کامل قرارداد بک اند برای تمام صفحه های نقش مربی. این فایل برای مرحله اتصال API نوشته شده است. در وضعیت فعلی، احراز هویت، باشگاه ها، کلاس ها، فهرست، ثبت و پرونده هنرجو، ثبت حضور و غیاب، گزارش جلسه و کلاس های امروز داشبورد (`/coach/clubs*`، `/coach/sessions*`، `/coach/students`، `/coach/students/new`، `/coach/students/[id]`، `/coach/students/[id]/attendance` و بخش کلاس های `/coach`) به بک اند وصل هستند؛ بقیه داشبورد (نمودار حضور، دعوت نامه ها، آزمون ها)، پروفایل مربی، ویرایش و تخصیص کمربند هنرجو و دعوت نامه ها هنوز داده نمایشی دارند.
+مرجع کامل قرارداد بک اند برای تمام صفحه های نقش مربی. این فایل برای مرحله اتصال API نوشته شده است. در وضعیت فعلی، همه صفحه های مربی به بک اند وصل هستند: احراز هویت، باشگاه ها، کلاس ها، فهرست، ثبت، پرونده، ویرایش و تخصیص کمربند هنرجو، ثبت حضور و غیاب، گزارش جلسه، دعوت نامه ها، داشبورد (کلاس های امروز، آمار، نمودار حضور، دعوت نامه ها و آزمون ها)، پروفایل مربی و زنگ اعلان.
 
 - منبع: پروژه `taekyar-backend` (NestJS + Prisma + PostgreSQL + Redis)
 - نسخه API: `v1`
@@ -275,12 +275,14 @@ COLOR | POOM | DAN
   "birthDate": "1987-03-21T00:00:00.000Z",
   "imageKey": null,
   "belt": "DAN_8",
+  "mobile": "09121112233",
   "createdAt": "...",
   "updatedAt": "..."
 }
 ```
 
 - اگر پروفایل هنوز ساخته نشده باشد، مقدار `data` برابر `null` است.
+- `mobile` روی رکورد `User` است و در همین پاسخ به آبجکت نقش اضافه می شود؛ پروفایل مربی تنها آن را ندارد.
 - این مسیر برای صفحه `/coach/profile` کافی است.
 - برای دسترسی به `id` مربی در سایر صفحات، از همین پاسخ یا از `GET /coach/:id` استفاده شود.
 
@@ -906,6 +908,26 @@ COLOR | POOM | DAN
 - این مسیر برای کارت خلاصه حضور در پروفایل هنرجو مناسب است.
 - درصد حضور توسط فرانت از `present / total` محاسبه می شود؛ سرور درصد نمی دهد.
 
+### 8.6 `GET /attendance/coach/summary`
+
+خلاصه حضور هفتگی همه کلاس های مربی جاری. نقش `COACH` لازم است و پارامتری ندارد.
+
+هفته از شنبه شروع می شود و هفته جاری با هفته قبل مقایسه می شود. «حاضر» شامل `PRESENT` و `LATE` است.
+
+```json
+{
+  "thisWeek": { "present": 32, "total": 40 },
+  "lastWeek": { "present": 28, "total": 38 },
+  "days": [
+    { "weekDay": "SATURDAY", "present": 8, "total": 10, "previousPresent": 7, "previousTotal": 10 },
+    { "weekDay": "SUNDAY", "present": 0, "total": 0, "previousPresent": 0, "previousTotal": 0 }
+  ]
+}
+```
+
+- `days` همیشه هفت عضو از شنبه تا جمعه دارد؛ روزهای بدون رکورد مقدار صفر دارند.
+- این مسیر جای `GET /attendance/student/:id/summary` را در سطح مربی می گیرد و برای نمودار و درصد حضور داشبورد استفاده می شود.
+
 ---
 
 ## 9. کمربندها و آزمون های کمربند
@@ -948,7 +970,7 @@ COLOR | POOM | DAN
 - فرم تخصیص کمربند (`/coach/students/[id]/belt`) باید `beltId` را از همین مسیر بگیرد.
 - این فرم فقط کمربند بعدی هنرجو را نشان می دهد و لیست 19تایی `BeltName` را نمایش نمی دهد.
 - زنجیره ارتقا در فرانت (`nextStudentBelt`): سفید → زرد → سبز → آبی → قرمز؛ قرمز → پوم 1 برای 15 سال و کمتر یا دان 1 برای بالای 15 سال؛ پوم و دان هر یک درجه بالاتر؛ پوم 4 به دان 4 تبدیل می شود و دان 10 پایان زنجیره است.
-- توجه: سید فعلی `nextBeltId` را به صورت خطی و متناوب بین پوم و دان پر می کند (مثلا دان 2 → پوم 3). اگر بک اند همین زنجیره را مبنا می گیرد، برای هنرجوی بزرگسال باید `nextBeltId` اصلاح شود؛ در غیر این صورت فرانت باید مثل `nextStudentBelt` از `rankType` و `level` استفاده کند.
+- توجه: سید فعلی `nextBeltId` را به صورت خطی و متناوب بین پوم و دان پر می کند (مثلا دان 2 → پوم 3). به همین دلیل فرانت `nextBeltId` را مبنا نمی گیرد و مثل `nextStudentBelt` از کمربند فعلی و سن هنرجو استفاده می کند؛ لیست `GET /belt` فقط برای تبدیل نام کمربند به `beltId` خوانده می شود.
 
 ### 9.2 `GET /belt/:id`
 
@@ -961,7 +983,9 @@ COLOR | POOM | DAN
 پارامترها: `page`، `take`، `name`، `genders` (آرایه)، `eventPlaces` (آرایه)، `registerDate`، `eventDate`، `beltIds` (آرایه uuid)، `includeBelt` (بولین)، `sortBy` (`registerDate`، `eventDate`، `createdAt`، `updatedAt`)، `sortDirection`.
 
 - این مسیر برای کارت «آزمون های کمربند» در داشبورد قابل استفاده است.
-- در UI فعلی داده آزمون نمایشی است و به API وصل نیست.
+- `eventDate` و `registerDate` فیلتر تساوی دقیق هستند و فیلتر بازه (از تاریخ) ندارند؛ پس آزمون های گذشته با پارامتر حذف نمی شوند.
+- **وضعیت فرانت:** داشبورد ۲۰ آزمون جدیدتر را با `sortBy=eventDate&sortDirection=desc` می خواند، آزمون های امروز به بعد را در فرانت نگه می دارد، صعودی مرتب می کند و سه مورد اول را نشان می دهد.
+- **محدودیت:** اگر بیش از ۲۰ آزمون آینده ثبت شود، نزدیک ترین آزمون ها ممکن است در صفحه اول نباشند.
 
 ### 9.4 `GET /belt-exam/:id`
 
@@ -987,15 +1011,15 @@ COLOR | POOM | DAN
 
 | صفحه | مسیر API | وضعیت داده فعلی |
 |---|---|---|
-| `/coach` داشبورد | `GET /class-session?page=1&take=100` (شمارش هر کلاس امروز از `GET /class-session/:id/students?take=1`)، `GET /club` و `GET /student/stats` | کلاس های امروز، کارت «کلاس بعدی» و کاشی های «هنرجویان»/«کلاس های ثبت شده» وصل؛ نمودار حضور، دعوت نامه ها و آزمون ها نمایشی |
+| `/coach` داشبورد | `GET /class-session?page=1&take=100` (شمارش هر کلاس امروز از `GET /class-session/:id/students?take=1`)، `GET /club`، `GET /student/stats`، `GET /attendance/coach/summary`، `GET /student-coach-invitation/sent` و `GET /belt-exam` | وصل؛ کلاس های امروز، کاشی ها، درصد و نمودار حضور دو هفته، دعوت نامه های در انتظار و آزمون های نزدیک از سرور |
 | `/coach/students` | `GET /student` و `GET /student/stats` | وصل؛ فیلتر و مرتب سازی در URL و آمار کارت ها از `GET /student/stats` |
 | `/coach/students/new` | `POST /student` | وصل؛ react-hook-form و zod، تبدیل تاریخ شمسی به میلادی |
 | `/coach/students/[id]` | `GET /student/:id`، `GET /student?search=&take=1`، `GET /attendance/student/:id/summary`، `GET /attendance/student/:id?page=1&take=100`، `GET /club/by-student/:id`، `DELETE /student/:id` | وصل؛ کمربند و قد/وزن از آیتم لیست با همان کد ملی خوانده می شود (بخش 11.1)؛ «حذف» واقعی است و `403` حساب فعال را با پیام سرور نشان می دهد |
-| `/coach/students/[id]/edit` | `PATCH /student/:id` | فرم UI؛ بدون ارسال |
-| `/coach/students/[id]/belt` | `GET /belt` و `PATCH /student/:id/belt` | فرم UI؛ بدون ارسال |
+| `/coach/students/[id]/edit` | `GET /student/:id` و `PATCH /student/:id` | وصل؛ مقادیر از پرونده واقعی پر می شود و کمربند/تاریخ کمربند/قد/وزن در ویرایش نمایش داده نمی شوند چون `PATCH` آن ها را نمی پذیرد |
+| `/coach/students/[id]/belt` | `GET /student/:id`، `GET /belt?page=1&take=100&sortBy=level&sortDirection=asc` و `PATCH /student/:id/belt` | وصل؛ کمربند بعدی از قاعده سنی `nextStudentBelt` و شناسه آن از لیست کمربندها؛ تاریخ شمسی به میلادی تبدیل می شود |
 | `/coach/students/[id]/attendance` | `GET /attendance/student/:id/summary` و `GET /attendance/student/:id?page=1&take=100` | وصل؛ خلاصه از `summary` و رکوردها یک صفحه ۱۰۰ تایی، گروه بندی ماهانه و فیلتر وضعیت سمت کلاینت |
-| `/coach/students/invite` | `POST /student-coach-invitation` | فرم UI؛ بدون ارسال |
-| `/coach/invitations` | `GET /student-coach-invitation/sent` | نمایشی |
+| `/coach/students/invite` | `POST /student-coach-invitation` | وصل؛ ارسال با کد ملی و فهرست دعوت نامه های اخیر از `GET /student-coach-invitation/sent` |
+| `/coach/invitations` | `GET /student-coach-invitation/sent` | وصل؛ آمار و ردیف ها از سرور |
 | `/coach/clubs` | `GET /club` و `GET /club/:id/students?take=1` | وصل؛ شمارش هنرجو از `meta.pager.total` و آمار کلاس حذف شد |
 | `/coach/clubs/new` | `POST /club` | وصل؛ react-hook-form و zod |
 | `/coach/clubs/[id]` | `GET /club/:id`، `GET /club/:id/students`، `PATCH /club/:id/status`، `GET /class-session` | وصل؛ کلاس های باشگاه از `GET /class-session` و شمارش هنرجوی هر کلاس از `GET /class-session/:id/students?take=1` |
@@ -1006,7 +1030,8 @@ COLOR | POOM | DAN
 | `/coach/sessions/[id]/edit` | `GET /class-session/:id` و `PATCH /class-session/:id` | وصل؛ `clubId` فقط در ساخت خوانده می شود، در ویرایش غیرفعال است |
 | `/coach/sessions/[id]/attendance` | `GET /attendance/class/:id/daily?date=`، `GET /class-session/:id` و `PUT /attendance/class/:id` | وصل؛ تاریخ پیش فرض امروز و وضعیت/توضیح هر هنرجو از رکورد همان تاریخ؛ ذخیره با `note: null` برای توضیح پاک شده |
 | `/coach/sessions/[id]/report` | `GET /attendance/class/:id?date=` و `GET /class-session/:id` | وصل؛ تاریخ از `?date=` و آمار روی رکوردهای ذخیره شده همان تاریخ |
-| `/coach/profile` | `GET /auth/profile` و `PATCH /coach/:id` و `POST /auth/logout` | داده نمایشی؛ خروج از حساب وصل شده |
+| `/coach/profile` | `GET /auth/profile`، `GET /notifications/unread-count` و `POST /auth/logout` | وصل؛ اطلاعات، موبایل، کمربند و شمارنده اعلان از سرور |
+| `/coach/profile/edit` | `GET /auth/profile` و `PATCH /coach/:id` | وصل؛ react-hook-form و zod؛ تغییر جنسیت غیرفعال است چون با داشتن باشگاه یا هنرجو `400` می دهد |
 
 ---
 
@@ -1023,20 +1048,17 @@ COLOR | POOM | DAN
 - **وضعیت فرانت (تست شده):** صفحه پرونده هنرجو برای پوشش همین شکاف دو درخواست می زند: `GET /student/:id` برای ستون ها و `GET /student?search=&take=1` با کد ملی همان هنرجو (یکتا و تحت نظر مربی) برای `currentBelt` (نام و `beltDate`) و آخرین `metrics`. قد و وزن `Decimal` سرور هستند و ممکن است رشته یا عدد برسند؛ مقدار نامعتبر در UI «ثبت نشده» می شود.
 - **پیشنهاد:** همان `include` لیست را به `findOneById` هم اضافه کنید، یا `GET /student/:id/belt` و `GET /student/:id/metrics` بسازید.
 
-### 11.2 آمار داشبورد وجود ندارد
+### 11.2 آمار داشبورد
 
-هیچ مسیری برای موارد زیر نیست:
+بیشتر کارت های داشبورد با ترکیب مسیرهای موجود ساخته می شوند و مسیر تجمیعی لازم نیست:
 
-- تعداد کلاس های امروز
-- تعداد هنرجوهای فعال
-- درصد حضور هفتگی
-- روند حضور هفته های قبل
-- آزمون های کمربند نزدیک
-- خلاصه دعوت نامه های در انتظار
+- تعداد کلاس های امروز: `GET /class-session` و فیلتر `weekDays` در فرانت
+- تعداد هنرجوهای فعال: `GET /student/stats`
+- درصد و روند حضور هفتگی: `GET /attendance/coach/summary` (بخش 8.6)
+- آزمون های کمربند نزدیک: `GET /belt-exam`
+- خلاصه دعوت نامه های در انتظار: `GET /student-coach-invitation/sent`
 
-**پیشنهاد:** یک مسیر تجمیعی مثل `GET /coach/dashboard` یا استفاده از چند درخواست لیست و محاسبه در فرانت. برای نمودار حضور، `GET /attendance/student/:id/summary` فقط یک هنرجو را پوشش می دهد و خلاصه کل مربی را نمی دهد.
-
-- **وضعیت فرانت (تست شده):** کلاس های امروز از `GET /class-session` فیلتر می شوند، کاشی «کلاس های ثبت شده» از `meta.pager.total` همان پاسخ و «هنرجویان» از `GET /student/stats` می آید. درصد حضور هفتگی، دعوت نامه ها و آزمون ها همچنان نمایشی هستند.
+- **وضعیت فرانت:** همه موارد بالا وصل هستند. تنها هزینه باقی مانده، چند درخواست موازی در بارگذاری داشبورد و شمارش هنرجوی هر کلاس با `?take=1` است.
 
 ### 11.3 شمارش کلاس و هنرجوی باشگاه
 

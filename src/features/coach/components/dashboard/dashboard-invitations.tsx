@@ -1,14 +1,19 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { PersonAvatar } from "@/features/coach/components/person-avatar";
 import { SectionHeading } from "@/features/coach/components/section-heading";
-import { INVITATIONS } from "@/features/coach/lib/coach-data";
+import { useInvitations } from "@/features/coach/hooks/use-invitations";
 import { toPersianDigits } from "@/lib/digits";
+import { toJalaliDate } from "@/lib/jalali";
 import { cn } from "@/lib/utils";
 
 export function DashboardInvitations() {
-  const pending = INVITATIONS.filter((invitation) => invitation.status === "PENDING");
+  const { data, isLoading } = useInvitations();
+  const pending = (data?.invitations ?? []).filter((invitation) => invitation.status === "PENDING");
 
   return (
     <section>
@@ -27,15 +32,20 @@ export function DashboardInvitations() {
         }
       />
       <Card className="gap-0 p-0">
-        {pending.length > 0 ? (
+        {isLoading && !data ? (
+          <div className="flex flex-col gap-2 p-4">
+            <Skeleton className="h-10 rounded-xl" />
+            <Skeleton className="h-10 rounded-xl" />
+          </div>
+        ) : pending.length > 0 ? (
           pending.map((invitation, index) => (
             <div key={invitation.id} className={cn("flex items-center gap-3 px-4 py-3", index > 0 && "border-t border-[var(--line-2)]")}>
-              <PersonAvatar name={invitation.studentName ?? invitation.nationalCode} />
+              <PersonAvatar name={invitation.student?.fullName ?? invitation.nationalCode} />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-bold text-ink">{invitation.studentName ?? "هنرجوی بدون حساب"}</p>
+                <p className="truncate text-sm font-bold text-ink">{invitation.student?.fullName ?? "هنرجوی بدون حساب"}</p>
                 <p className="mt-1 truncate text-xs text-ink-muted">کد ملی {toPersianDigits(invitation.nationalCode)}</p>
               </div>
-              <span className="shrink-0 text-xs font-medium text-ink-muted">{invitation.sentAt}</span>
+              <span className="shrink-0 text-xs font-medium text-ink-muted">{toJalaliDate(invitation.createdAt)}</span>
             </div>
           ))
         ) : (

@@ -4,6 +4,7 @@ const FORM_ROUTES = [
   /^\/coach\/students\/[^/]+\/(?:edit|belt)$/,
   /^\/coach\/clubs\/new$/,
   /^\/coach\/clubs\/[^/]+\/edit$/,
+  /^\/coach\/profile\/edit$/,
   /^\/coach\/sessions\/new$/,
   /^\/coach\/sessions\/[^/]+\/(?:edit|attendance)$/,
 ];
