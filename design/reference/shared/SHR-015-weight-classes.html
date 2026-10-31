@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — رده‌های سنی و وزنی</title>
+    
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap content-form">
+        <header class="masthead app-bar">
+          <button type="button" class="icon-btn" data-back aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">رده‌های سنی و وزنی</h1>
+          </div>
+        </header>
+
+        <!-- ══════════ finder ══════════ -->
+        <section class="card mt-5">
+          <h2 class="section-title mb-4 flex items-center gap-2.5"><span class="section-tick"></span>یافتن رده وزنی</h2>
+          <div class="grid gap-4">
+            <div>
+              <label class="form-label" for="age-sel">رده سنی <b class="text-brand-600">*</b></label>
+              <div class="select-wrap">
+                <select id="age-sel">
+                  <option value="">انتخاب رده سنی</option>
+                  <option value="blossom">شکوفه</option>
+                  <option value="youth">نوجوان</option>
+                  <option value="cadet">کادت</option>
+                  <option value="junior">جوان</option>
+                  <option value="young">جوانان</option>
+                  <option value="senior">بزرگسال</option>
+                  <option value="ultra">اولترا</option>
+                </select>
+                <span class="select-caret"><i data-lucide="chevron-down" class="size-4"></i></span>
+              </div>
+            </div>
+            <div>
+              <label class="form-label">جنسیت</label>
+              <div class="seg" data-seg id="gender-seg">
+                <button type="button" class="seg-item" data-value="F">زن</button>
+                <button type="button" class="seg-item is-active" data-value="M">مرد</button>
+              </div>
+            </div>
+            <div>
+              <label class="form-label" for="weight">وزن (کیلوگرم) <b class="text-brand-600">*</b></label>
+              <input id="weight" inputmode="decimal" dir="ltr" class="input-field input-ltr text-center" placeholder="مثال: ۵۸" />
+            </div>
+            <button type="button" id="calc" class="btn btn-primary w-full !py-3.5">
+              <span>محاسبه رده وزنی</span>
+            </button>
+            <div id="result" class="hidden"></div>
+          </div>
+        </section>
+
+        <!-- ══════════ reference sections ══════════ -->
+        <h2 class="section-title mb-2 mt-7 flex items-center gap-2.5 px-1"><span class="section-tick"></span>رده‌های سنی و وزنی</h2>
+        <div class="space-y-3">
+          <!-- بزرگسال -->
+          <article class="card !p-0 overflow-hidden">
+            <div class="flex items-center gap-3 p-4">
+              <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-400"><i data-lucide="calendar-range" class="size-4"></i></span>
+              <div class="min-w-0 flex-1">
+                <p class="text-[13px] font-extrabold text-gray-900">بزرگسال</p>
+                <p class="mt-0.5 text-[10px] text-gray-400">سال تولد: ۱۳۶۸ تا ۱۳۸۵ (شمسی)</p>
+              </div>
+              <span class="count-chip">۱۱ رده</span>
+            </div>
+            <div class="space-y-4 border-t border-gray-50 p-4">
+              <div>
+                <p class="mb-2 flex items-center gap-1.5 text-[11px] font-extrabold text-gray-500"><span class="belt-dot" style="background:#0284C7"></span>مردان</p>
+                <div class="space-y-1.5">
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۱</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن اول (−۵۴ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۴۰ تا ۵۴</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۲</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن دوم (−۵۸ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۵۴ تا ۵۸</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۳</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن سوم (−۶۸ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۵۸ تا ۶۸</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۴</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن چهارم (−۸۰ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۶۸ تا ۸۰</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۵</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن پنجم (+۸۰ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۸۰ و بالاتر</span></div>
+                </div>
+              </div>
+              <div>
+                <p class="mb-2 flex items-center gap-1.5 text-[11px] font-extrabold text-gray-500"><span class="belt-dot" style="background:#CE004F"></span>زنان</p>
+                <div class="space-y-1.5">
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۱</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن اول (−۴۶ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۳۸ تا ۴۶</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۲</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن دوم (−۴۹ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۴۶ تا ۴۹</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۳</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن سوم (−۵۳ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۴۹ تا ۵۳</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۴</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن چهارم (−۵۷ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۵۳ تا ۵۷</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۵</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن پنجم (−۶۷ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۵۷ تا ۶۷</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۶</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن ششم (+۶۷ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۶۷ و بالاتر</span></div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- جوان -->
+          <article class="card !p-0 overflow-hidden">
+            <div class="flex items-center gap-3 p-4">
+              <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-400"><i data-lucide="calendar-range" class="size-4"></i></span>
+              <div class="min-w-0 flex-1">
+                <p class="text-[13px] font-extrabold text-gray-900">جوان</p>
+                <p class="mt-0.5 text-[10px] text-gray-400">سال تولد: ۱۳۸۷ تا ۱۳۸۸ (شمسی)</p>
+              </div>
+              <span class="count-chip">۱۲ رده</span>
+            </div>
+            <div class="space-y-4 border-t border-gray-50 p-4">
+              <div>
+                <p class="mb-2 flex items-center gap-1.5 text-[11px] font-extrabold text-gray-500"><span class="belt-dot" style="background:#0284C7"></span>مردان</p>
+                <div class="space-y-1.5">
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۱</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن اول (−۴۵ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۳۶ تا ۴۵</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۲</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن دوم (−۴۸ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۴۵ تا ۴۸</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۳</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن سوم (−۵۱ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۴۸ تا ۵۱</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۴</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن چهارم (−۵۵ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۵۱ تا ۵۵</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۵</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن پنجم (−۵۹ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۵۵ تا ۵۹</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۶</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن ششم (+۵۹ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۵۹ و بالاتر</span></div>
+                </div>
+              </div>
+              <div>
+                <p class="mb-2 flex items-center gap-1.5 text-[11px] font-extrabold text-gray-500"><span class="belt-dot" style="background:#CE004F"></span>زنان</p>
+                <div class="space-y-1.5">
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۱</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن اول (−۴۲ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۳۴ تا ۴۲</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۲</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن دوم (−۴۴ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۴۲ تا ۴۴</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۳</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن سوم (−۴۶ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۴۴ تا ۴۶</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۴</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن چهارم (−۴۹ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۴۶ تا ۴۹</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۵</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن پنجم (−۵۲ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۴۹ تا ۵۲</span></div>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۶</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن ششم (+۵۲ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۵۲ و بالاتر</span></div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- کادت -->
+          <article class="card !p-0 overflow-hidden">
+            <div class="flex items-center gap-3 p-4">
+              <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-400"><i data-lucide="calendar-range" class="size-4"></i></span>
+              <div class="min-w-0 flex-1">
+                <p class="text-[13px] font-extrabold text-gray-900">کادت</p>
+                <p class="mt-0.5 text-[10px] text-gray-400">سال تولد: ۱۳۸۹ تا ۱۳۹۰ (شمسی)</p>
+              </div>
+              <span class="count-chip">۵ رده</span>
+            </div>
+            <div class="border-t border-gray-50 p-4">
+              <p class="mb-2 flex items-center gap-1.5 text-[11px] font-extrabold text-gray-500"><span class="belt-dot" style="background:#0284C7"></span>مردان</p>
+              <div class="space-y-1.5">
+                <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۱</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن اول (−۳۳ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۲۸ تا ۳۳</span></div>
+                <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۲</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن دوم (−۳۷ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۳۳ تا ۳۷</span></div>
+                <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۳</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن سوم (−۴۱ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۳۷ تا ۴۱</span></div>
+                <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۴</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن چهارم (−۴۵ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۴۱ تا ۴۵</span></div>
+                <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۵</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن پنجم (+۴۵ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۴۵ و بالاتر</span></div>
+              </div>
+              <div class="empty-state mt-3 !py-5">
+                <span class="empty-icon !size-9"><i data-lucide="scale" class="size-4"></i></span>
+                <p class="empty-hint !max-w-none">رده وزنی زنان این رده سنی هنوز اعلام نشده است.</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- شکوفه -->
+          <article class="card !p-0 overflow-hidden">
+            <div class="flex items-center gap-3 p-4">
+              <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-400"><i data-lucide="calendar-range" class="size-4"></i></span>
+              <div class="min-w-0 flex-1">
+                <p class="text-[13px] font-extrabold text-gray-900">شکوفه</p>
+                <p class="mt-0.5 text-[10px] text-gray-400">سال تولد: ۱۳۹۷ تا ۱۳۹۸ (شمسی)</p>
+              </div>
+              <span class="count-chip">۳ رده</span>
+            </div>
+            <div class="border-t border-gray-50 p-4">
+              <p class="mb-2 flex items-center gap-1.5 text-[11px] font-extrabold text-gray-500"><span class="belt-dot" style="background:#0284C7"></span>مردان</p>
+              <div class="space-y-1.5">
+                <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۱</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن اول (−۲۳ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۱۸ تا ۲۳</span></div>
+                <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۲</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن دوم (−۲۶ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۲۳ تا ۲۶</span></div>
+                <div class="flex items-center gap-2.5 rounded-xl bg-gray-50/70 px-3 py-2.5"><span class="grid size-6 shrink-0 place-items-center rounded-lg bg-white text-[10px] font-extrabold text-gray-400 ring-1 ring-gray-100">۳</span><b class="min-w-0 flex-1 truncate text-[12px] text-gray-800">وزن سوم (+۲۶ کیلوگرم)</b><span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">۲۶ و بالاتر</span></div>
+              </div>
+              <div class="empty-state mt-3 !py-5">
+                <span class="empty-icon !size-9"><i data-lucide="scale" class="size-4"></i></span>
+                <p class="empty-hint !max-w-none">رده وزنی زنان این رده سنی هنوز اعلام نشده است.</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- نوجوان -->
+          <article class="card !p-0 overflow-hidden">
+            <div class="flex items-center gap-3 p-4">
+              <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-400"><i data-lucide="calendar-range" class="size-4"></i></span>
+              <div class="min-w-0 flex-1">
+                <p class="text-[13px] font-extrabold text-gray-900">نوجوان</p>
+                <p class="mt-0.5 text-[10px] text-gray-400">سال تولد: ۱۳۹۱ تا ۱۳۹۲ (شمسی)</p>
+              </div>
+            </div>
+            <div class="border-t border-gray-50 p-4">
+              <div class="empty-state">
+                <span class="empty-icon"><i data-lucide="scale" class="size-5"></i></span>
+                <p class="empty-title">رده وزنی ثبت نشده است</p>
+                <p class="empty-hint">رده‌های وزنی این رده سنی توسط فدراسیون اعلام نشده است.</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- جوانان -->
+          <article class="card !p-0 overflow-hidden">
+            <div class="flex items-center gap-3 p-4">
+              <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-400"><i data-lucide="calendar-range" class="size-4"></i></span>
+              <div class="min-w-0 flex-1">
+                <p class="text-[13px] font-extrabold text-gray-900">جوانان</p>
+                <p class="mt-0.5 text-[10px] text-gray-400">سال تولد: ۱۳۸۵ تا ۱۳۸۶ (شمسی)</p>
+              </div>
+            </div>
+            <div class="border-t border-gray-50 p-4">
+              <div class="empty-state">
+                <span class="empty-icon"><i data-lucide="scale" class="size-5"></i></span>
+                <p class="empty-title">رده وزنی ثبت نشده است</p>
+                <p class="empty-hint">رده‌های وزنی این رده سنی توسط فدراسیون اعلام نشده است.</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- اولترا -->
+          <article class="card !p-0 overflow-hidden">
+            <div class="flex items-center gap-3 p-4">
+              <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-400"><i data-lucide="calendar-range" class="size-4"></i></span>
+              <div class="min-w-0 flex-1">
+                <p class="text-[13px] font-extrabold text-gray-900">اولترا</p>
+                <p class="mt-0.5 text-[10px] text-gray-400">سال تولد: ۱۳۵۸ تا ۱۳۶۸ (شمسی)</p>
+              </div>
+            </div>
+            <div class="border-t border-gray-50 p-4">
+              <div class="empty-state">
+                <span class="empty-icon"><i data-lucide="scale" class="size-5"></i></span>
+                <p class="empty-title">رده وزنی ثبت نشده است</p>
+                <p class="empty-hint">رده‌های وزنی این رده سنی توسط فدراسیون اعلام نشده است.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </main>
+
+    
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+    <script>
+      /* demo weight-class finder — local sample data, no backend */
+      (function () {
+        var DATA = {
+          blossom: { M: [["وزن اول (−۲۳ کیلوگرم)", 23], ["وزن دوم (−۲۶ کیلوگرم)", 26], ["وزن سوم (+۲۶ کیلوگرم)", 60]], F: [] },
+          youth: { M: [], F: [] },
+          cadet: { M: [["وزن اول (−۳۳ کیلوگرم)", 33], ["وزن دوم (−۳۷ کیلوگرم)", 37], ["وزن سوم (−۴۱ کیلوگرم)", 41], ["وزن چهارم (−۴۵ کیلوگرم)", 45], ["وزن پنجم (+۴۵ کیلوگرم)", 90]], F: [] },
+          junior: { M: [["وزن اول (−۴۵ کیلوگرم)", 45], ["وزن دوم (−۴۸ کیلوگرم)", 48], ["وزن سوم (−۵۱ کیلوگرم)", 51], ["وزن چهارم (−۵۵ کیلوگرم)", 55], ["وزن پنجم (−۵۹ کیلوگرم)", 59], ["وزن ششم (+۵۹ کیلوگرم)", 110]], F: [["وزن اول (−۴۲ کیلوگرم)", 42], ["وزن دوم (−۴۴ کیلوگرم)", 44], ["وزن سوم (−۴۶ کیلوگرم)", 46], ["وزن چهارم (−۴۹ کیلوگرم)", 49], ["وزن پنجم (−۵۲ کیلوگرم)", 52], ["وزن ششم (+۵۲ کیلوگرم)", 100]] },
+          young: { M: [], F: [] },
+          senior: { M: [["وزن اول (−۵۴ کیلوگرم)", 54], ["وزن دوم (−۵۸ کیلوگرم)", 58], ["وزن سوم (−۶۸ کیلوگرم)", 68], ["وزن چهارم (−۸۰ کیلوگرم)", 80], ["وزن پنجم (+۸۰ کیلوگرم)", 130]], F: [["وزن اول (−۴۶ کیلوگرم)", 46], ["وزن دوم (−۴۹ کیلوگرم)", 49], ["وزن سوم (−۵۳ کیلوگرم)", 53], ["وزن چهارم (−۵۷ کیلوگرم)", 57], ["وزن پنجم (−۶۷ کیلوگرم)", 67], ["وزن ششم (+۶۷ کیلوگرم)", 120]] },
+          ultra: { M: [], F: [] },
+        };
+        var gender = "M";
+        var fa = function (n) { return String(n).replace(/\d/g, function (d) { return "۰۱۲۳۴۵۶۷۸۹"[d]; }); };
+        document.getElementById("gender-seg").addEventListener("seg:change", function (e) { gender = e.detail.value; });
+        document.getElementById("calc").addEventListener("click", function () {
+          var box = document.getElementById("result");
+          var age = document.getElementById("age-sel").value;
+          if (!age) { window.tkToast("رده سنی را انتخاب کنید", "info"); return; }
+          var w = parseFloat((document.getElementById("weight").value || "").replace(/[۰-۹]/g, function (d) { return "۰۱۲۳۴۵۶۷۸۹".indexOf(d); }).replace("٫", "."));
+          if (isNaN(w) || w <= 0) { window.tkToast("وزن را وارد کنید", "info"); return; }
+          var rows = DATA[age] && DATA[age][gender] ? DATA[age][gender] : [];
+          var hit = null;
+          for (var i = 0; i < rows.length; i++) { if (w <= rows[i][1]) { hit = rows[i][0]; break; } }
+          if (hit) {
+            box.innerHTML = '<div class="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4"><p class="flex items-center gap-1.5 text-[13px] font-extrabold text-emerald-700"><i data-lucide="circle-check" class="size-4"></i>' + hit + '</p><p class="mt-1.5 text-[11px] font-bold text-emerald-700/90">وزن اعلام‌شده: ' + fa(w) + ' کیلوگرم</p></div>';
+          } else {
+            box.innerHTML = '<div class="rounded-2xl border border-sky-100 bg-sky-50/70 p-4"><p class="flex items-center gap-1.5 text-[12px] font-extrabold text-sky-700"><i data-lucide="info" class="size-4"></i>رده وزنی منطبقی یافت نشد</p></div>';
+          }
+          box.classList.remove("hidden");
+          if (window.refreshIcons) window.refreshIcons();
+        });
+      })();
+    </script>
+</body>
+</html>

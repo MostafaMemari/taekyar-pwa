@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — ثبت‌نام هنرجو · کمربند</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="auth-shell app-frame">
+      <section class="flex w-full flex-1 flex-col px-5 pb-8 pt-7">
+        <!-- stepper -->
+        <div class="stepper mt-3" aria-label="مراحل ثبت‌نام">
+          <div class="stp is-done">
+            <span class="stp-dot"><i data-lucide="check" class="size-3.5"></i></span>
+            <span class="stp-label">اطلاعات پایه</span>
+          </div>
+          <div class="stp is-active">
+            <span class="stp-line"></span>
+            <span class="stp-dot">۲</span>
+            <span class="stp-label">کمربند</span>
+          </div>
+          <div class="stp">
+            <span class="stp-line"></span>
+            <span class="stp-dot">۳</span>
+            <span class="stp-label">مدارک</span>
+          </div>
+        </div>
+
+        <section class="mt-7 flex flex-1 flex-col">
+          <h1 class="auth-title !text-[22px]">کمربند فعلی</h1>
+          <p class="auth-lead">کمربند فعلی خود را انتخاب کنید و تاریخ دریافت آن را وارد کنید؛ <b class="font-extrabold text-gray-700">هر دو مورد اجباری</b> است.</p>
+
+                                                  <!-- belt picker — minimal -->
+          <div class="belt-grid mt-5" data-belt-picker>
+            <button type="button" class="belt-card" data-belt data-belt-name="کمربند سفید" aria-label="کمربند سفید">
+              <span class="belt-check"><i data-lucide="check" class="size-3"></i></span>
+              <svg viewBox="0 0 88 26" class="belt-strip" aria-hidden="true"><rect x="1" y="5" width="87" height="9" rx="3" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1.2"/><rect x="69.5" y="13" width="4.6" height="11.5" rx="2.2" fill="#E5E7EB" stroke="#D1D5DB" stroke-width="1.2" transform="rotate(12 71.8 13)"/><rect x="64" y="2.5" width="12" height="12" rx="3" fill="#E5E7EB" stroke="#D1D5DB" stroke-width="1.2"/></svg>
+              <span class="belt-name">سفید</span>
+            </button>
+            <button type="button" class="belt-card" data-belt data-belt-name="کمربند زرد" aria-label="کمربند زرد">
+              <span class="belt-check"><i data-lucide="check" class="size-3"></i></span>
+              <svg viewBox="0 0 88 26" class="belt-strip" aria-hidden="true"><rect x="1" y="5" width="87" height="9" rx="3" fill="#FBBF24"/><rect x="69.5" y="13" width="4.6" height="11.5" rx="2.2" fill="#D97706" transform="rotate(12 71.8 13)"/><rect x="64" y="2.5" width="12" height="12" rx="3" fill="#D97706"/></svg>
+              <span class="belt-name">زرد</span>
+            </button>
+            <button type="button" class="belt-card is-active" data-belt data-belt-name="کمربند سبز" aria-label="کمربند سبز">
+              <span class="belt-check"><i data-lucide="check" class="size-3"></i></span>
+              <svg viewBox="0 0 88 26" class="belt-strip" aria-hidden="true"><rect x="1" y="5" width="87" height="9" rx="3" fill="#22C55E"/><rect x="69.5" y="13" width="4.6" height="11.5" rx="2.2" fill="#16A34A" transform="rotate(12 71.8 13)"/><rect x="64" y="2.5" width="12" height="12" rx="3" fill="#16A34A"/></svg>
+              <span class="belt-name">سبز</span>
+            </button>
+            <button type="button" class="belt-card" data-belt data-belt-name="کمربند آبی" aria-label="کمربند آبی">
+              <span class="belt-check"><i data-lucide="check" class="size-3"></i></span>
+              <svg viewBox="0 0 88 26" class="belt-strip" aria-hidden="true"><rect x="1" y="5" width="87" height="9" rx="3" fill="#3B82F6"/><rect x="69.5" y="13" width="4.6" height="11.5" rx="2.2" fill="#2563EB" transform="rotate(12 71.8 13)"/><rect x="64" y="2.5" width="12" height="12" rx="3" fill="#2563EB"/></svg>
+              <span class="belt-name">آبی</span>
+            </button>
+            <button type="button" class="belt-card" data-belt data-belt-name="کمربند قرمز" aria-label="کمربند قرمز">
+              <span class="belt-check"><i data-lucide="check" class="size-3"></i></span>
+              <svg viewBox="0 0 88 26" class="belt-strip" aria-hidden="true"><rect x="1" y="5" width="87" height="9" rx="3" fill="#EF4444"/><rect x="69.5" y="13" width="4.6" height="11.5" rx="2.2" fill="#DC2626" transform="rotate(12 71.8 13)"/><rect x="64" y="2.5" width="12" height="12" rx="3" fill="#DC2626"/></svg>
+              <span class="belt-name">قرمز</span>
+            </button>
+            <button type="button" class="belt-card" data-belt data-belt-name="کمربند مشکی — پوم / دان ۱" aria-label="کمربند مشکی — پوم / دان ۱">
+              <span class="belt-check"><i data-lucide="check" class="size-3"></i></span>
+              <svg viewBox="0 0 88 26" class="belt-strip" aria-hidden="true"><rect x="1" y="5" width="87" height="9" rx="3" fill="#1F2937"/><rect x="7.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="69.5" y="13" width="4.6" height="11.5" rx="2.2" fill="#111827" transform="rotate(12 71.8 13)"/><rect x="64" y="2.5" width="12" height="12" rx="3" fill="#111827"/></svg>
+              <span class="belt-name">پوم / دان ۱</span>
+            </button>
+            <button type="button" class="belt-card" data-belt data-belt-name="کمربند مشکی — پوم / دان ۲" aria-label="کمربند مشکی — پوم / دان ۲">
+              <span class="belt-check"><i data-lucide="check" class="size-3"></i></span>
+              <svg viewBox="0 0 88 26" class="belt-strip" aria-hidden="true"><rect x="1" y="5" width="87" height="9" rx="3" fill="#1F2937"/><rect x="7.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="13.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="69.5" y="13" width="4.6" height="11.5" rx="2.2" fill="#111827" transform="rotate(12 71.8 13)"/><rect x="64" y="2.5" width="12" height="12" rx="3" fill="#111827"/></svg>
+              <span class="belt-name">پوم / دان ۲</span>
+            </button>
+            <button type="button" class="belt-card" data-belt data-belt-name="کمربند مشکی — پوم / دان ۳" aria-label="کمربند مشکی — پوم / دان ۳">
+              <span class="belt-check"><i data-lucide="check" class="size-3"></i></span>
+              <svg viewBox="0 0 88 26" class="belt-strip" aria-hidden="true"><rect x="1" y="5" width="87" height="9" rx="3" fill="#1F2937"/><rect x="7.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="13.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="19.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="69.5" y="13" width="4.6" height="11.5" rx="2.2" fill="#111827" transform="rotate(12 71.8 13)"/><rect x="64" y="2.5" width="12" height="12" rx="3" fill="#111827"/></svg>
+              <span class="belt-name">پوم / دان ۳</span>
+            </button>
+            <button type="button" class="belt-card col-span-2" data-belt data-belt-name="کمربند مشکی — پوم / دان ۴" aria-label="کمربند مشکی — پوم / دان ۴">
+              <span class="belt-check"><i data-lucide="check" class="size-3"></i></span>
+              <svg viewBox="0 0 88 26" class="belt-strip" aria-hidden="true"><rect x="1" y="5" width="87" height="9" rx="3" fill="#1F2937"/><rect x="7.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="13.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="19.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="25.5" y="8" width="3.1" height="3" rx="0.7" fill="#FBBF24"/><rect x="69.5" y="13" width="4.6" height="11.5" rx="2.2" fill="#111827" transform="rotate(12 71.8 13)"/><rect x="64" y="2.5" width="12" height="12" rx="3" fill="#111827"/></svg>
+              <span class="belt-name">پوم / دان ۴</span>
+            </button>
+          </div>
+
+          <div class="mt-5">
+            <label class="form-label" for="beltDate">تاریخ دریافت کمربند فعلی <span class="text-brand-600">*</span></label>
+            <div class="relative"><span class="field-ico"><i data-lucide="calendar" class="size-[18px]"></i></span><input id="beltDate" class="input-field !ps-11" placeholder="۱۴۰۳/۱۰/۰۲"  data-date /></div>
+            <p class="field-hint">تاریخ آزمونی که این کمربند را دریافت کرده‌اید؛ زمان آزمون بعدی بر همین اساس تخمین زده می‌شود.</p>
+          </div>
+
+          <div class="cta-dock mt-6 flex gap-3">
+            <a href="SHR-004-student-signup.html" class="btn btn-outline !py-3.5">بازگشت</a>
+            <a href="SHR-023-student-profile.html" class="btn btn-primary flex-1 !py-3.5">
+              <span>مرحله بعد</span>
+              <i data-lucide="chevron-left" class="size-4"></i>
+            </a>
+          </div>
+        </section>
+
+        <p class="mt-auto pt-10 text-center text-[12px] text-gray-400">
+          قبلاً ثبت‌نام کرده‌اید؟
+          <a href="SHR-002-login.html" class="font-bold text-brand-600">ورود</a>
+        </p>
+      </section>
+    </main>
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

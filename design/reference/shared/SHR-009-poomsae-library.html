@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — پومسه‌ها</title>
+    
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap">
+        <header class="masthead app-bar">
+          <button type="button" class="icon-btn" data-back aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">پومسه‌ها</h1>
+          </div>
+          <div class="mast-actions">
+            <a href="SHR-013-belts-reference.html" class="icon-btn" aria-label="راهنمای کمربندها"><i data-lucide="medal" class="size-5"></i></a>
+          </div>
+        </header>
+
+        <!-- belt filter chips -->
+        <div id="belt-chips" class="mt-5 flex flex-wrap gap-2" data-chips>
+          <button type="button" class="filter-chip is-active" data-id="">همه</button>
+          <button type="button" class="filter-chip shrink-0"><span class="belt-dot" style="background:#FBBF24"></span>زرد</button>
+          <button type="button" class="filter-chip shrink-0"><span class="belt-dot" style="background:#22C55E"></span>سبز</button>
+          <button type="button" class="filter-chip shrink-0"><span class="belt-dot" style="background:#3B82F6"></span>آبی</button>
+          <button type="button" class="filter-chip shrink-0"><span class="belt-dot" style="background:#EF4444"></span>قرمز</button>
+          <button type="button" class="filter-chip shrink-0"><span class="belt-dot" style="background:#9F1239"></span>پوم</button>
+          <button type="button" class="filter-chip shrink-0"><span class="belt-dot" style="background:#1F2937"></span>دان</button>
+        </div>
+
+        <!-- sticky search toolbar -->
+        <div class="toolbar">
+          <div class="relative">
+            <span class="pointer-events-none absolute inset-y-0 start-3.5 grid place-items-center text-gray-400"><i data-lucide="search" class="size-4"></i></span>
+            <input type="search" class="input-field !ps-10" placeholder="جستجوی نام پومسه…" autocomplete="off" data-filter-input data-filter-scope="#grid" />
+          </div>
+        </div>
+
+        <!-- grid -->
+        <div id="grid" class="mt-1">
+          <div class="grid grid-cols-2 gap-3">
+            <a href="SHR-010-poomsae-detail.html" data-filter-item data-filter-text="تائگوک ایل جانگ taegeuk il jang سطح ۱ زرد" class="card group relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-[0_2px_4px_rgba(16,18,26,0.04),0_20px_44px_-18px_rgba(16,18,26,0.18)]">
+              <div class="relative mb-3 flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2.5 ring-1 ring-gray-100">
+                <span class="select-none text-2xl font-extrabold text-brand-600" aria-hidden="true">☰</span>
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">سطح ۱</span>
+              </div>
+              <p class="truncate text-[13.5px] font-extrabold text-gray-900">تائگوک ایل جانگ</p>
+              <p class="mt-0.5 truncate text-[10px] font-semibold text-gray-400" dir="ltr">Taegeuk Il Jang</p>
+              <div class="mt-3 flex flex-wrap gap-1.5">
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]"><span class="belt-dot" style="background:#FBBF24"></span>زرد <b class="text-brand-600">الزامی</b></span>
+              </div>
+              <div class="mt-3 flex items-center gap-3 border-t border-gray-50 pt-3 text-[10px] font-bold text-gray-400">
+                <span class="flex items-center gap-1"><i data-lucide="clipboard-list" class="size-3.5"></i>۱۸ حرکت</span>
+                <span class="ms-auto flex items-center gap-0.5 text-brand-600">مشاهده<i data-lucide="chevron-left" class="size-3.5"></i></span>
+              </div>
+            </a>
+
+            <a href="SHR-010-poomsae-detail.html" data-filter-item data-filter-text="تائگوک ای جانگ taegeuk ee jang سطح ۲ زرد" class="card group relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-[0_2px_4px_rgba(16,18,26,0.04),0_20px_44px_-18px_rgba(16,18,26,0.18)]">
+              <div class="relative mb-3 flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2.5 ring-1 ring-gray-100">
+                <span class="select-none text-2xl font-extrabold text-brand-600" aria-hidden="true">☱</span>
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">سطح ۲</span>
+              </div>
+              <p class="truncate text-[13.5px] font-extrabold text-gray-900">تائگوک ای جانگ</p>
+              <p class="mt-0.5 truncate text-[10px] font-semibold text-gray-400" dir="ltr">Taegeuk Ee Jang</p>
+              <div class="mt-3 flex flex-wrap gap-1.5">
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]"><span class="belt-dot" style="background:#FBBF24"></span>زرد <b class="text-brand-600">الزامی</b></span>
+              </div>
+              <div class="mt-3 flex items-center gap-3 border-t border-gray-50 pt-3 text-[10px] font-bold text-gray-400">
+                <span class="flex items-center gap-1"><i data-lucide="clipboard-list" class="size-3.5"></i>۱۸ حرکت</span>
+                <span class="ms-auto flex items-center gap-0.5 text-brand-600">مشاهده<i data-lucide="chevron-left" class="size-3.5"></i></span>
+              </div>
+            </a>
+
+            <a href="SHR-010-poomsae-detail.html" data-filter-item data-filter-text="تائگوک سام جانگ taegeuk sam jang سطح ۳ سبز" class="card group relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-[0_2px_4px_rgba(16,18,26,0.04),0_20px_44px_-18px_rgba(16,18,26,0.18)]">
+              <div class="relative mb-3 flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2.5 ring-1 ring-gray-100">
+                <span class="select-none text-2xl font-extrabold text-brand-600" aria-hidden="true">☲</span>
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">سطح ۳</span>
+              </div>
+              <p class="truncate text-[13.5px] font-extrabold text-gray-900">تائگوک سام جانگ</p>
+              <p class="mt-0.5 truncate text-[10px] font-semibold text-gray-400" dir="ltr">Taegeuk Sam Jang</p>
+              <div class="mt-3 flex flex-wrap gap-1.5">
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]"><span class="belt-dot" style="background:#22C55E"></span>سبز <b class="text-brand-600">الزامی</b></span>
+              </div>
+              <div class="mt-3 flex items-center gap-3 border-t border-gray-50 pt-3 text-[10px] font-bold text-gray-400">
+                <span class="flex items-center gap-1"><i data-lucide="clipboard-list" class="size-3.5"></i>۲۰ حرکت</span>
+                <span class="ms-auto flex items-center gap-0.5 text-brand-600">مشاهده<i data-lucide="chevron-left" class="size-3.5"></i></span>
+              </div>
+            </a>
+
+            <a href="SHR-010-poomsae-detail.html" data-filter-item data-filter-text="تائگوک سا جانگ taegeuk sa jang سطح ۴ سبز" class="card group relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-[0_2px_4px_rgba(16,18,26,0.04),0_20px_44px_-18px_rgba(16,18,26,0.18)]">
+              <div class="relative mb-3 flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2.5 ring-1 ring-gray-100">
+                <span class="select-none text-2xl font-extrabold text-brand-600" aria-hidden="true">☴</span>
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">سطح ۴</span>
+              </div>
+              <p class="truncate text-[13.5px] font-extrabold text-gray-900">تائگوک سا جانگ</p>
+              <p class="mt-0.5 truncate text-[10px] font-semibold text-gray-400" dir="ltr">Taegeuk Sa Jang</p>
+              <div class="mt-3 flex flex-wrap gap-1.5">
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]"><span class="belt-dot" style="background:#22C55E"></span>سبز <b class="text-brand-600">الزامی</b></span>
+              </div>
+              <div class="mt-3 flex items-center gap-3 border-t border-gray-50 pt-3 text-[10px] font-bold text-gray-400">
+                <span class="flex items-center gap-1"><i data-lucide="clipboard-list" class="size-3.5"></i>۲۰ حرکت</span>
+                <span class="ms-auto flex items-center gap-0.5 text-brand-600">مشاهده<i data-lucide="chevron-left" class="size-3.5"></i></span>
+              </div>
+            </a>
+
+            <a href="SHR-010-poomsae-detail.html" data-filter-item data-filter-text="تائگوک اوه جانگ taegeuk o jang سطح ۵ آبی" class="card group relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-[0_2px_4px_rgba(16,18,26,0.04),0_20px_44px_-18px_rgba(16,18,26,0.18)]">
+              <div class="relative mb-3 flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2.5 ring-1 ring-gray-100">
+                <span class="select-none text-2xl font-extrabold text-brand-600" aria-hidden="true">☳</span>
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">سطح ۵</span>
+              </div>
+              <p class="truncate text-[13.5px] font-extrabold text-gray-900">تائگوک اوه جانگ</p>
+              <p class="mt-0.5 truncate text-[10px] font-semibold text-gray-400" dir="ltr">Taegeuk O Jang</p>
+              <div class="mt-3 flex flex-wrap gap-1.5">
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]"><span class="belt-dot" style="background:#3B82F6"></span>آبی <b class="text-brand-600">الزامی</b></span>
+              </div>
+              <div class="mt-3 flex items-center gap-3 border-t border-gray-50 pt-3 text-[10px] font-bold text-gray-400">
+                <span class="flex items-center gap-1"><i data-lucide="clipboard-list" class="size-3.5"></i>۲۰ حرکت</span>
+                <span class="ms-auto flex items-center gap-0.5 text-brand-600">مشاهده<i data-lucide="chevron-left" class="size-3.5"></i></span>
+              </div>
+            </a>
+
+            <a href="SHR-010-poomsae-detail.html" data-filter-item data-filter-text="تائگوک یوک جانگ taegeuk yuk jang سطح ۶ آبی" class="card group relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-[0_2px_4px_rgba(16,18,26,0.04),0_20px_44px_-18px_rgba(16,18,26,0.18)]">
+              <div class="relative mb-3 flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2.5 ring-1 ring-gray-100">
+                <span class="select-none text-2xl font-extrabold text-brand-600" aria-hidden="true">☵</span>
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">سطح ۶</span>
+              </div>
+              <p class="truncate text-[13.5px] font-extrabold text-gray-900">تائگوک یوک جانگ</p>
+              <p class="mt-0.5 truncate text-[10px] font-semibold text-gray-400" dir="ltr">Taegeuk Yuk Jang</p>
+              <div class="mt-3 flex flex-wrap gap-1.5">
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]"><span class="belt-dot" style="background:#3B82F6"></span>آبی <b class="text-brand-600">الزامی</b></span>
+              </div>
+              <div class="mt-3 flex items-center gap-3 border-t border-gray-50 pt-3 text-[10px] font-bold text-gray-400">
+                <span class="flex items-center gap-1"><i data-lucide="clipboard-list" class="size-3.5"></i>۱۹ حرکت</span>
+                <span class="ms-auto flex items-center gap-0.5 text-brand-600">مشاهده<i data-lucide="chevron-left" class="size-3.5"></i></span>
+              </div>
+            </a>
+
+            <a href="SHR-010-poomsae-detail.html" data-filter-item data-filter-text="تائگوک چیل جانگ taegeuk chil jang سطح ۷ قرمز" class="card group relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-[0_2px_4px_rgba(16,18,26,0.04),0_20px_44px_-18px_rgba(16,18,26,0.18)]">
+              <div class="relative mb-3 flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2.5 ring-1 ring-gray-100">
+                <span class="select-none text-2xl font-extrabold text-brand-600" aria-hidden="true">☶</span>
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">سطح ۷</span>
+              </div>
+              <p class="truncate text-[13.5px] font-extrabold text-gray-900">تائگوک چیل جانگ</p>
+              <p class="mt-0.5 truncate text-[10px] font-semibold text-gray-400" dir="ltr">Taegeuk Chil Jang</p>
+              <div class="mt-3 flex flex-wrap gap-1.5">
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]"><span class="belt-dot" style="background:#EF4444"></span>قرمز <b class="text-brand-600">الزامی</b></span>
+              </div>
+              <div class="mt-3 flex items-center gap-3 border-t border-gray-50 pt-3 text-[10px] font-bold text-gray-400">
+                <span class="flex items-center gap-1"><i data-lucide="clipboard-list" class="size-3.5"></i>۲۵ حرکت</span>
+                <span class="ms-auto flex items-center gap-0.5 text-brand-600">مشاهده<i data-lucide="chevron-left" class="size-3.5"></i></span>
+              </div>
+            </a>
+
+            <a href="SHR-010-poomsae-detail.html" data-filter-item data-filter-text="تائگوک پال جانگ taegeuk pal jang سطح ۸ قرمز" class="card group relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-[0_2px_4px_rgba(16,18,26,0.04),0_20px_44px_-18px_rgba(16,18,26,0.18)]">
+              <div class="relative mb-3 flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2.5 ring-1 ring-gray-100">
+                <span class="select-none text-2xl font-extrabold text-brand-600" aria-hidden="true">☷</span>
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">سطح ۸</span>
+              </div>
+              <p class="truncate text-[13.5px] font-extrabold text-gray-900">تائگوک پال جانگ</p>
+              <p class="mt-0.5 truncate text-[10px] font-semibold text-gray-400" dir="ltr">Taegeuk Pal Jang</p>
+              <div class="mt-3 flex flex-wrap gap-1.5">
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]"><span class="belt-dot" style="background:#EF4444"></span>قرمز <b class="text-brand-600">الزامی</b></span>
+              </div>
+              <div class="mt-3 flex items-center gap-3 border-t border-gray-50 pt-3 text-[10px] font-bold text-gray-400">
+                <span class="flex items-center gap-1"><i data-lucide="clipboard-list" class="size-3.5"></i>۲۷ حرکت</span>
+                <span class="ms-auto flex items-center gap-0.5 text-brand-600">مشاهده<i data-lucide="chevron-left" class="size-3.5"></i></span>
+              </div>
+            </a>
+
+            <a href="SHR-010-poomsae-detail.html" data-filter-item data-filter-text="کوریو koryo سطح ۹ دان" class="card group relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-[0_2px_4px_rgba(16,18,26,0.04),0_20px_44px_-18px_rgba(16,18,26,0.18)]">
+              <div class="relative mb-3 flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2.5 ring-1 ring-gray-100">
+                <span class="grid size-8 place-items-center rounded-lg bg-brand-50 text-brand-600"><i data-lucide="medal" class="size-4"></i></span>
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">سطح ۹</span>
+              </div>
+              <p class="truncate text-[13.5px] font-extrabold text-gray-900">کوریو</p>
+              <p class="mt-0.5 truncate text-[10px] font-semibold text-gray-400" dir="ltr">Koryo</p>
+              <div class="mt-3 flex flex-wrap gap-1.5">
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]"><span class="belt-dot" style="background:#1F2937"></span>دان ۱ <b class="text-brand-600">الزامی</b></span>
+              </div>
+              <div class="mt-3 flex items-center gap-3 border-t border-gray-50 pt-3 text-[10px] font-bold text-gray-400">
+                <span class="flex items-center gap-1"><i data-lucide="clipboard-list" class="size-3.5"></i>۳۰ حرکت</span>
+                <span class="ms-auto flex items-center gap-0.5 text-brand-600">مشاهده<i data-lucide="chevron-left" class="size-3.5"></i></span>
+              </div>
+            </a>
+
+            <a href="SHR-010-poomsae-detail.html" data-filter-item data-filter-text="کوم‌گانگ keumgang سطح ۱۰ دان" class="card group relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-[0_2px_4px_rgba(16,18,26,0.04),0_20px_44px_-18px_rgba(16,18,26,0.18)]">
+              <div class="relative mb-3 flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2.5 ring-1 ring-gray-100">
+                <span class="select-none text-2xl font-extrabold text-brand-600" aria-hidden="true">◆</span>
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]">سطح ۱۰</span>
+              </div>
+              <p class="truncate text-[13.5px] font-extrabold text-gray-900">کوم‌گانگ</p>
+              <p class="mt-0.5 truncate text-[10px] font-semibold text-gray-400" dir="ltr">Keumgang</p>
+              <div class="mt-3 flex flex-wrap gap-1.5">
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[9px]"><span class="belt-dot" style="background:#1F2937"></span>دان ۲</span>
+              </div>
+              <div class="mt-3 flex items-center gap-3 border-t border-gray-50 pt-3 text-[10px] font-bold text-gray-400">
+                <span class="flex items-center gap-1"><i data-lucide="clipboard-list" class="size-3.5"></i>۲۵ حرکت</span>
+                <span class="ms-auto flex items-center gap-0.5 text-brand-600">مشاهده<i data-lucide="chevron-left" class="size-3.5"></i></span>
+              </div>
+            </a>
+          </div>
+
+          <!-- empty state -->
+          <div class="empty-state mt-4 hidden" data-empty>
+            <span class="empty-icon"><i data-lucide="search" class="size-5"></i></span>
+            <p class="empty-title">پومسه‌ای یافت نشد</p>
+            <p class="empty-hint">عبارت جستجو را تغییر دهید یا فیلتر کمربندها را بردارید.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

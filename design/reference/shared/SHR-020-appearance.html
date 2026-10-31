@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — نمایش و رنگ</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap !pb-28">
+        <header class="masthead app-bar">
+          <button type="button" class="icon-btn" data-back aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">نمایش و رنگ</h1>
+          </div>
+        </header>
+
+        <!-- ════════ live preview ════════ -->
+        <section class="mt-5">
+          <div class="overflow-hidden rounded-[22px]" style="border: 1px solid var(--card-line); box-shadow: var(--card-shadow); background: var(--surface)">
+            <div class="relative overflow-hidden px-4 pt-4 pb-5" style="background-image: linear-gradient(160deg, var(--ak-500) 0%, var(--ak-600) 52%, var(--ak-700) 100%)">
+              <span class="absolute -bottom-4 -start-3 select-none text-[64px] font-extrabold leading-none text-white/[0.07]">تک</span>
+              <span class="text-[9px] font-bold tracking-[0.08em] text-white/65">پیش‌نمایش زنده</span>
+              <div class="mt-1 flex items-center justify-between gap-3">
+                <b class="text-[15px] font-extrabold text-white">سلام، تک‌یار</b>
+                <span class="grid size-7 place-items-center rounded-full bg-white/15 text-white"><i data-lucide="bell" class="size-3.5"></i></span>
+              </div>
+              <div class="mt-3 flex items-center gap-2">
+                <span class="stat-glass flex-1"><b>۸۵٪</b><span>حضور</span></span>
+                <span class="stat-glass flex-1"><b>۱۲</b><span>جلسه ماه</span></span>
+              </div>
+            </div>
+            <div class="p-4">
+              <div class="flex items-center gap-2.5">
+                <span class="lead-ico !size-9 !rounded-xl"><i data-lucide="medal" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <b class="block text-[12.5px] font-extrabold" style="color: var(--ink-1)">آزمون کمربند سبز</b>
+                  <span class="mt-0.5 block text-[10px] font-semibold" style="color: var(--ink-6)">۲۵ آبان — باشگاه شهدای گمنام</span>
+                </div>
+                <button type="button" class="btn btn-primary btn-sm" data-demo="نمونه پیش‌نمایش است">ادامه</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ════════ display mode ════════ -->
+        <section class="mt-7">
+          <div class="section-head">
+            <span class="section-tick"></span>
+            <h2 class="section-title">حالت نمایش</h2>
+          </div>
+          <div class="flex gap-3">
+            <button type="button" class="theme-opt" data-theme-mode="light">
+              <span class="th-ico"><i data-lucide="sun" class="size-5"></i></span>
+              <span>روشن</span>
+            </button>
+            <button type="button" class="theme-opt" data-theme-mode="dark">
+              <span class="th-ico"><i data-lucide="moon" class="size-5"></i></span>
+              <span>تاریک</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- ════════ accent color ════════ -->
+        <section class="mt-7">
+          <div class="section-head">
+            <span class="section-tick"></span>
+            <h2 class="section-title">رنگ اصلی</h2>
+            <span class="count-chip">۵ رنگ</span>
+          </div>
+          <div class="grid grid-cols-3 gap-3">
+            <button type="button" class="accent-swatch is-active" data-accent-set="crimson">
+              <span class="sw-check"><i data-lucide="check" class="size-2.5"></i></span>
+              <span class="sw-dot" style="background: linear-gradient(135deg, #e92e6f, #ce004f)"></span>
+              <span>سرخابی</span>
+            </button>
+            <button type="button" class="accent-swatch" data-accent-set="orange">
+              <span class="sw-check"><i data-lucide="check" class="size-2.5"></i></span>
+              <span class="sw-dot" style="background: linear-gradient(135deg, #f97316, #ea580c)"></span>
+              <span>نارنجی</span>
+            </button>
+            <button type="button" class="accent-swatch" data-accent-set="gold">
+              <span class="sw-check"><i data-lucide="check" class="size-2.5"></i></span>
+              <span class="sw-dot" style="background: linear-gradient(135deg, #f59e0b, #d97706)"></span>
+              <span>طلایی</span>
+            </button>
+            <button type="button" class="accent-swatch" data-accent-set="emerald">
+              <span class="sw-check"><i data-lucide="check" class="size-2.5"></i></span>
+              <span class="sw-dot" style="background: linear-gradient(135deg, #10b981, #059669)"></span>
+              <span>زمردی</span>
+            </button>
+            <button type="button" class="accent-swatch" data-accent-set="blue">
+              <span class="sw-check"><i data-lucide="check" class="size-2.5"></i></span>
+              <span class="sw-dot" style="background: linear-gradient(135deg, #3b82f6, #2563eb)"></span>
+              <span>آبی</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- ════════ note ════════ -->
+        <div class="card-tint mt-7 flex items-start gap-3">
+          <span class="lead-ico !size-9 !rounded-xl" style="background:var(--surface)"><i data-lucide="info" class="size-4"></i></span>
+          <div class="min-w-0 flex-1">
+            <b class="block text-[12.5px] font-extrabold" style="color: var(--ak-ink-strong)">ذخیره‌سازی محلی</b>
+            <p class="mt-1 text-[11.5px] leading-5" style="color: var(--ak-ink-deep)">انتخاب شما روی همین دستگاه نگه داشته می‌شود و در همهٔ صفحات اعمال می‌شود — این یک نمونهٔ رابط کاربری است.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — آزمون‌های کمربند</title>
+    
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap content-form">
+        <header class="masthead app-bar">
+          <button type="button" class="icon-btn" data-back aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">آزمون‌های کمربند</h1>
+          </div>
+        </header>
+
+        <!-- filters -->
+        <div class="toolbar">
+          <div class="flex flex-wrap gap-2" data-chips-single id="sort-chips">
+            <button type="button" class="filter-chip is-active" data-value="reg">نزدیک‌ترین ثبت‌نام</button>
+            <button type="button" class="filter-chip" data-value="new">جدیدترین</button>
+          </div>
+          <div class="mt-3 flex flex-wrap gap-2" data-chips-single id="gender-chips">
+            <button type="button" class="filter-chip is-active" data-value="">همه</button>
+            <button type="button" class="filter-chip" data-value="MALE">مردان</button>
+            <button type="button" class="filter-chip" data-value="FEMALE">زنان</button>
+          </div>
+        </div>
+
+        <div id="list" class="mt-1 space-y-3">
+          <!-- ══════════ دوره ۲۹۱ — در حال ثبت‌نام ══════════ -->
+          <article class="exam-card w-full !pe-5">
+            <div class="exam-date">
+              <b>۲۸</b>
+              <span>آبان</span>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="chip chip-brand">دوره ۲۹۱</span>
+                <span class="chip chip-amber"><i data-lucide="clock" class="size-3"></i>در حال ثبت‌نام</span>
+              </div>
+              <p class="mt-1.5 truncate text-[13px] font-extrabold text-gray-900">آزمون کمربند دوره ۲۹۱</p>
+              <div class="mt-1.5 space-y-1 text-[11px]">
+                <p class="text-amber-600">ثبت‌نام: ۲۸ آبان ۱۴۰۴</p>
+                <p class="text-gray-400">برگزاری: ۱۴ آذر ۱۴۰۴</p>
+              </div>
+              <div class="mt-2 flex flex-wrap items-center gap-1.5">
+                <span class="chip chip-blue !px-2.5">هر دو</span>
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[10px]"><span class="belt-dot" style="background:#FBBF24"></span>زرد</span>
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[10px]"><span class="belt-dot" style="background:#22C55E"></span>سبز</span>
+              </div>
+              <p class="mt-2 flex flex-wrap items-center gap-1 text-[10px] font-semibold text-gray-400">
+                <i data-lucide="map-pin" class="size-3 shrink-0"></i>سالن ورزشی آزادی — تهران · سالن انقلاب — کرج
+              </p>
+              <div class="mt-2.5">
+                <p class="flex items-center justify-between text-[10px] font-bold text-gray-400"><span>ظرفیت ثبت‌نام</span><span>۳۴ از ۵۰</span></p>
+                <div class="step-track mt-1"><span class="step-fill" style="width:68%"></span></div>
+              </div>
+              <button type="button" class="btn btn-primary btn-sm mt-3 w-full" data-demo="ثبت‌نام از طریق مربی باشگاه انجام می‌شود — نمونه نمایشی">ثبت‌نام در آزمون</button>
+            </div>
+          </article>
+
+          <!-- ══════════ دوره ۲۹۲ — به‌زودی ══════════ -->
+          <article class="exam-card w-full !pe-5">
+            <div class="exam-date">
+              <b>۱۹</b>
+              <span>آذر</span>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="chip chip-brand">دوره ۲۹۲</span>
+                <span class="chip chip-gray"><i data-lucide="calendar-clock" class="size-3"></i>ثبت‌نام به‌زودی</span>
+              </div>
+              <p class="mt-1.5 truncate text-[13px] font-extrabold text-gray-900">آزمون کمربند دوره ۲۹۲</p>
+              <div class="mt-1.5 space-y-1 text-[11px]">
+                <p class="text-gray-500">ثبت‌نام: ۱۹ آذر ۱۴۰۴</p>
+                <p class="text-gray-400">برگزاری: ۴ دی ۱۴۰۴</p>
+              </div>
+              <div class="mt-2 flex flex-wrap items-center gap-1.5">
+                <span class="chip chip-blue !px-2.5">مردان</span>
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[10px]"><span class="belt-dot" style="background:#3B82F6"></span>آبی</span>
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[10px]"><span class="belt-dot" style="background:#EF4444"></span>قرمز</span>
+              </div>
+              <p class="mt-2 flex flex-wrap items-center gap-1 text-[10px] font-semibold text-gray-400">
+                <i data-lucide="map-pin" class="size-3 shrink-0"></i>خانه تکواندو — مشهد
+              </p>
+              <div class="mt-2.5">
+                <p class="flex items-center justify-between text-[10px] font-bold text-gray-400"><span>ظرفیت ثبت‌نام</span><span>۱۲ از ۴۰</span></p>
+                <div class="step-track mt-1"><span class="step-fill !bg-sky-500" style="width:30%"></span></div>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm mt-3 w-full" data-demo="ثبت‌نام از ۱۹ آذر آغاز می‌شود — نمونه نمایشی">اطلاع‌رسانی بعدی</button>
+            </div>
+          </article>
+
+          <!-- ══════════ دوره ۲۹۰ — پایان یافته ══════════ -->
+          <article class="exam-card w-full !pe-5 opacity-90">
+            <div class="exam-date">
+              <b>۱۳</b>
+              <span>آبان</span>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="chip chip-gray">دوره ۲۹۰</span>
+                <span class="chip chip-gray"><i data-lucide="x" class="size-3"></i>ثبت‌نام پایان یافته</span>
+              </div>
+              <p class="mt-1.5 truncate text-[13px] font-extrabold text-gray-900">آزمون پوم دوره ۲۹۰</p>
+              <div class="mt-1.5 space-y-1 text-[11px]">
+                <p class="text-gray-400">ثبت‌نام: ۱۳ آبان ۱۴۰۴</p>
+                <p class="text-gray-400">برگزاری: ۲۳ آبان ۱۴۰۴</p>
+              </div>
+              <div class="mt-2 flex flex-wrap items-center gap-1.5">
+                <span class="chip chip-blue !px-2.5">زنان</span>
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[10px]"><span class="belt-dot" style="background:#9F1239"></span>پوم ۱</span>
+                <span class="chip chip-gray !px-2 !py-0.5 !text-[10px]"><span class="belt-dot" style="background:#9F1239"></span>پوم ۲</span>
+              </div>
+              <p class="mt-2 flex flex-wrap items-center gap-1 text-[10px] font-semibold text-gray-400">
+                <i data-lucide="map-pin" class="size-3 shrink-0"></i>سالن شهید کاظمی — اصفهان
+              </p>
+              <div class="mt-2.5">
+                <p class="flex items-center justify-between text-[10px] font-bold text-gray-400"><span>ظرفیت ثبت‌نام</span><span>تکمیل — ۵۰ از ۵۰</span></p>
+                <div class="step-track mt-1"><span class="step-fill !bg-gray-400" style="width:100%"></span></div>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm mt-3 w-full opacity-70" data-demo="مهلت ثبت‌نام این دوره پایان یافته است — نمونه نمایشی">مشاهده جزئیات</button>
+            </div>
+          </article>
+        </div>
+
+        <!-- note -->
+        <div class="card-tint mt-4 flex items-start gap-1.5 !p-3">
+          <i data-lucide="info" class="mt-0.5 size-3.5 shrink-0"></i>
+          <span class="text-[11px] font-bold leading-5 text-brand-700">ثبت‌نام آزمون‌ها فقط از طریق باشگاه یا مربی شما انجام می‌شود.</span>
+        </div>
+      </div>
+    </main>
+
+    
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

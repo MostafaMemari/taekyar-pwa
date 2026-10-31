@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — فنون و نشست‌ها</title>
+    
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap">
+        <header class="masthead app-bar">
+          <button type="button" class="icon-btn" data-back aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">فنون و نشست‌ها</h1>
+          </div>
+          <span class="count-chip mt-1" id="mv-count">۳۵ فن</span>
+        </header>
+
+        <!-- search + filters -->
+        <div class="toolbar">
+          <div class="relative">
+            <span class="pointer-events-none absolute inset-y-0 start-3.5 grid place-items-center text-gray-400"><i data-lucide="search" class="size-4"></i></span>
+            <input id="search" type="search" class="input-field !ps-10" placeholder="جستجوی نام فن یا نشست…" autocomplete="off" />
+          </div>
+
+          <!-- type seg -->
+          <div class="seg mt-3" data-seg id="type-seg">
+            <button type="button" class="seg-item is-active" data-value="">همه</button>
+            <button type="button" class="seg-item" data-value="TECHNIQUE">ضربات و دفاع‌ها</button>
+            <button type="button" class="seg-item" data-value="STANCE">نشست‌ها</button>
+          </div>
+
+          <!-- category chips -->
+          <div id="cat-chips" class="mt-3 flex flex-wrap gap-2" data-chips>
+            <button type="button" class="filter-chip shrink-0 is-active" data-cat="">همه</button>
+            <button type="button" class="filter-chip shrink-0" data-cat="seogi"><span class="belt-dot" style="background:#2563EB"></span>نشست‌ها</button>
+            <button type="button" class="filter-chip shrink-0" data-cat="makgi"><span class="belt-dot" style="background:#16A34A"></span>دفاع‌ها</button>
+            <button type="button" class="filter-chip shrink-0" data-cat="jirugi"><span class="belt-dot" style="background:#D97706"></span>ضربات مشت</button>
+            <button type="button" class="filter-chip shrink-0" data-cat="chigi"><span class="belt-dot" style="background:#DC2626"></span>ضربات دست</button>
+            <button type="button" class="filter-chip shrink-0" data-cat="chagi"><span class="belt-dot" style="background:#CE004F"></span>ضربات پا</button>
+          </div>
+        </div>
+
+        <div id="list" class="mt-1 space-y-3">
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="STANCE" data-cat="seogi" data-search="آپ سوگی ap-seogi نشست کوتاه پاها به فاصله یک‌قدم وزن متوسط"
+            data-name="آپ سوگی" data-latin="Ap-seogi" data-cat-name="نشست‌ها" data-color="#2563EB" data-type-label="نشست" data-desc="نشست کوتاه — پاها به فاصله یک‌قدم، وزن متوسط.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="circle-dot" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">آپ سوگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Ap-seogi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#2563EB"></span>نشست‌ها</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">نشست</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="STANCE" data-cat="seogi" data-search="آپ کوبی ap-kubi نشست بلند پیش‌رو زانوی جلو خم پای عقب کشیده"
+            data-name="آپ کوبی" data-latin="Ap-kubi" data-cat-name="نشست‌ها" data-color="#2563EB" data-type-label="نشست" data-desc="نشست بلند پیش‌رو — زانوی جلو خم، پای عقب کشیده.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="circle-dot" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">آپ کوبی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Ap-kubi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#2563EB"></span>نشست‌ها</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">نشست</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="STANCE" data-cat="seogi" data-search="دیوت کوبی dwit-kubi نشست عقب‌نشینی وزن روی پای عقب"
+            data-name="دیوت کوبی" data-latin="Dwit-kubi" data-cat-name="نشست‌ها" data-color="#2563EB" data-type-label="نشست" data-desc="نشست عقب‌نشینی — وزن روی پای عقب (۷۰-۳۰).">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="circle-dot" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">دیوت کوبی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Dwit-kubi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#2563EB"></span>نشست‌ها</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">نشست</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="STANCE" data-cat="seogi" data-search="جوچوم سوگی juchum-seogi نشست اسب‌سواری پاها موازی و باز"
+            data-name="جوچوم سوگی" data-latin="Juchum-seogi" data-cat-name="نشست‌ها" data-color="#2563EB" data-type-label="نشست" data-desc="نشست اسب‌سواری — پاها موازی و باز.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="circle-dot" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">جوچوم سوگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Juchum-seogi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#2563EB"></span>نشست‌ها</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">نشست</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="STANCE" data-cat="seogi" data-search="موآ سوگی moa-seogi نشست بسته پاها کنار هم"
+            data-name="موآ سوگی" data-latin="Moa-seogi" data-cat-name="نشست‌ها" data-color="#2563EB" data-type-label="نشست" data-desc="نشست بسته — پاها کنار هم.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="circle-dot" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">موآ سوگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Moa-seogi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#2563EB"></span>نشست‌ها</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">نشست</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="STANCE" data-cat="seogi" data-search="پیون‌هی سوگی pyonhi-seogi نشست آزاد و طبیعی حالت استراحت"
+            data-name="پیون‌هی سوگی" data-latin="Pyonhi-seogi" data-cat-name="نشست‌ها" data-color="#2563EB" data-type-label="نشست" data-desc="نشست آزاد و طبیعی — حالت استراحت.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="circle-dot" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">پیون‌هی سوگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Pyonhi-seogi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#2563EB"></span>نشست‌ها</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">نشست</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="STANCE" data-cat="seogi" data-search="کوا سوگی koa-seogi نشست ضربدری یک پا روی زانوی پای دیگر"
+            data-name="کوا سوگی" data-latin="Koa-seogi" data-cat-name="نشست‌ها" data-color="#2563EB" data-type-label="نشست" data-desc="نشست ضربدری — یک پا روی زانوی پای دیگر.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="circle-dot" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">کوا سوگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Koa-seogi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#2563EB"></span>نشست‌ها</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">نشست</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="STANCE" data-cat="seogi" data-search="ناران‌هی سوگی naranhi-seogi نشست موازی پاها به عرض شانه"
+            data-name="ناران‌هی سوگی" data-latin="Naranhi-seogi" data-cat-name="نشست‌ها" data-color="#2563EB" data-type-label="نشست" data-desc="نشست موازی — پاها به عرض شانه.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="circle-dot" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">ناران‌هی سوگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Naranhi-seogi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#2563EB"></span>نشست‌ها</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">نشست</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="makgi" data-search="آره ماکی arae-makgi دفاع پایین ساعد از بالا به پایین"
+            data-name="آره ماکی" data-latin="Arae-makgi" data-cat-name="دفاع‌ها" data-color="#16A34A" data-type-label="فن" data-desc="دفاع پایین — ساعد از بالا به پایین.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">آره ماکی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Arae-makgi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#16A34A"></span>دفاع‌ها</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="makgi" data-search="موم‌تون ماکی momtong-makgi دفاع میانه ساعد در برابر تنه"
+            data-name="موم‌تون ماکی" data-latin="Momtong-makgi" data-cat-name="دفاع‌ها" data-color="#16A34A" data-type-label="فن" data-desc="دفاع میانه — ساعد در برابر تنه.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">موم‌تون ماکی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Momtong-makgi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#16A34A"></span>دفاع‌ها</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="makgi" data-search="اولگول ماکی olgul-makgi دفاع بالا ساعد در برابر صورت"
+            data-name="اولگول ماکی" data-latin="Olgul-makgi" data-cat-name="دفاع‌ها" data-color="#16A34A" data-type-label="فن" data-desc="دفاع بالا — ساعد در برابر صورت.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">اولگول ماکی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Olgul-makgi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#16A34A"></span>دفاع‌ها</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="makgi" data-search="گودرو ماکی godro-makgi دفاع ضربدری برش‌دهنده"
+            data-name="گودرو ماکی" data-latin="Godro-makgi" data-cat-name="دفاع‌ها" data-color="#16A34A" data-type-label="فن" data-desc="دفاع ضربدری برش‌دهنده.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">گودرو ماکی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Godro-makgi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#16A34A"></span>دفاع‌ها</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="makgi" data-search="بی‌تورو ماکی bituro-makgi دفاع چرخشی هدایت ضربه به کنار"
+            data-name="بی‌تورو ماکی" data-latin="Bituro-makgi" data-cat-name="دفاع‌ها" data-color="#16A34A" data-type-label="فن" data-desc="دفاع چرخشی — هدایت ضربه به کنار.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">بی‌تورو ماکی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Bituro-makgi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#16A34A"></span>دفاع‌ها</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="makgi" data-search="هچو ماکی hechyo-makgi دفاع بازشونده با دو دست"
+            data-name="هچو ماکی" data-latin="Hechyo-makgi" data-cat-name="دفاع‌ها" data-color="#16A34A" data-type-label="فن" data-desc="دفاع بازشونده با دو دست.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">هچو ماکی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Hechyo-makgi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#16A34A"></span>دفاع‌ها</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="makgi" data-search="آناک ماکی an-makgi دفاع داخلی از بیرون به داخل"
+            data-name="آناک ماکی" data-latin="An-makgi" data-cat-name="دفاع‌ها" data-color="#16A34A" data-type-label="فن" data-desc="دفاع داخلی — از بیرون به داخل.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">آناک ماکی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">An-makgi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#16A34A"></span>دفاع‌ها</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="makgi" data-search="پاکات ماکی bakkat-makgi دفاع بیرونی از داخل به بیرون"
+            data-name="پاکات ماکی" data-latin="Bakkat-makgi" data-cat-name="دفاع‌ها" data-color="#16A34A" data-type-label="فن" data-desc="دفاع بیرونی — از داخل به بیرون.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">پاکات ماکی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Bakkat-makgi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#16A34A"></span>دفاع‌ها</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="jirugi" data-search="بانده جیروگی bandae-jireugi ضربه مشت دست مخالف"
+            data-name="بانده جیروگی" data-latin="Bandae-jireugi" data-cat-name="ضربات مشت" data-color="#D97706" data-type-label="فن" data-desc="ضربه مشت دست مخالف.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">بانده جیروگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Bandae-jireugi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#D97706"></span>ضربات مشت</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="jirugi" data-search="بارو جیروگی baro-jireugi ضربه مشت دست هم‌سمت"
+            data-name="بارو جیروگی" data-latin="Baro-jireugi" data-cat-name="ضربات مشت" data-color="#D97706" data-type-label="فن" data-desc="ضربه مشت دست هم‌سمت.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">بارو جیروگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Baro-jireugi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#D97706"></span>ضربات مشت</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="jirugi" data-search="دوبون جیروگی dubon-jireugi ضربه مشت دو مرحله‌ای"
+            data-name="دوبون جیروگی" data-latin="Dubon-jireugi" data-cat-name="ضربات مشت" data-color="#D97706" data-type-label="فن" data-desc="ضربه مشت دو مرحله‌ای.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">دوبون جیروگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Dubon-jireugi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#D97706"></span>ضربات مشت</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="jirugi" data-search="سئون جیروگی seon-jireugi ضربه مشت متوالی با دو دست"
+            data-name="سئون جیروگی" data-latin="Seon-jireugi" data-cat-name="ضربات مشت" data-color="#D97706" data-type-label="فن" data-desc="ضربه مشت متوالی با دو دست.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">سئون جیروگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Seon-jireugi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#D97706"></span>ضربات مشت</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="jirugi" data-search="میرو جیروگی miro-jireugi ضربه هُل‌دهنده با کف دست"
+            data-name="میرو جیروگی" data-latin="Miro-jireugi" data-cat-name="ضربات مشت" data-color="#D97706" data-type-label="فن" data-desc="ضربه هُل‌دهنده با کف دست.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">میرو جیروگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Miro-jireugi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#D97706"></span>ضربات مشت</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="chigi" data-search="پالکوپ چیگی palkup-chigi ضربه آرنج از بغل به جلو"
+            data-name="پالکوپ چیگی" data-latin="Palkup-chigi" data-cat-name="ضربات دست" data-color="#DC2626" data-type-label="فن" data-desc="ضربه آرنج — از بغل به جلو.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">پالکوپ چیگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Palkup-chigi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#DC2626"></span>ضربات دست</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="chigi" data-search="سونال چیگی sonnal-chigi ضربه با لبه کف دست"
+            data-name="سونال چیگی" data-latin="Sonnal-chigi" data-cat-name="ضربات دست" data-color="#DC2626" data-type-label="فن" data-desc="ضربه با لبه کف دست.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">سونال چیگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Sonnal-chigi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#DC2626"></span>ضربات دست</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="chigi" data-search="مئ‌جوموک چیگی me-jumeok-chigi ضربه با پشت مشت"
+            data-name="مئ‌جوموک چیگی" data-latin="Me-jumeok-chigi" data-cat-name="ضربات دست" data-color="#DC2626" data-type-label="فن" data-desc="ضربه با پشت مشت.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">مئ‌جوموک چیگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Me-jumeok-chigi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#DC2626"></span>ضربات دست</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="chigi" data-search="پیسون کوئت چیگی pison-kut-chigi ضربه با نوک انگشتان"
+            data-name="پیسون کوئت چیگی" data-latin="Pison-kut-chigi" data-cat-name="ضربات دست" data-color="#DC2626" data-type-label="فن" data-desc="ضربه با نوک انگشتان.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">پیسون کوئت چیگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Pison-kut-chigi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#DC2626"></span>ضربات دست</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="chigi" data-search="هانداسون چیگی handason-chigi ضربه با کف دست باز"
+            data-name="هانداسون چیگی" data-latin="Handason-chigi" data-cat-name="ضربات دست" data-color="#DC2626" data-type-label="فن" data-desc="ضربه با کف دست باز.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">هانداسون چیگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Handason-chigi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#DC2626"></span>ضربات دست</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="chigi" data-search="دو باندال چیگی du-bandal-chigi ضربه هم‌زمان با دو لبه دست"
+            data-name="دو باندال چیگی" data-latin="Du-bandal-chigi" data-cat-name="ضربات دست" data-color="#DC2626" data-type-label="فن" data-desc="ضربه هم‌زمان با دو لبه دست.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">دو باندال چیگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Du-bandal-chigi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#DC2626"></span>ضربات دست</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="chagi" data-search="آپ چیگی ap-chagi ضربه پا مستقیم به جلو"
+            data-name="آپ چیگی" data-latin="Ap-chagi" data-cat-name="ضربات پا" data-color="#CE004F" data-type-label="فن" data-desc="ضربه پا مستقیم به جلو.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="footprints" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">آپ چیگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Ap-chagi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#CE004F"></span>ضربات پا</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="chagi" data-search="دولیو چیگی dollyo-chagi ضربه پا چرخشی راند"
+            data-name="دولیو چیگی" data-latin="Dollyo-chagi" data-cat-name="ضربات پا" data-color="#CE004F" data-type-label="فن" data-desc="ضربه پا چرخشی (راند).">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="footprints" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">دولیو چیگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Dollyo-chagi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#CE004F"></span>ضربات پا</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="chagi" data-search="یوپ چیگی yop-chagi ضربه پا جانبی"
+            data-name="یوپ چیگی" data-latin="Yop-chagi" data-cat-name="ضربات پا" data-color="#CE004F" data-type-label="فن" data-desc="ضربه پا جانبی.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="footprints" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">یوپ چیگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Yop-chagi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#CE004F"></span>ضربات پا</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="chagi" data-search="دیوت چیگی dwit-chagi ضربه پا به عقب"
+            data-name="دیوت چیگی" data-latin="Dwit-chagi" data-cat-name="ضربات پا" data-color="#CE004F" data-type-label="فن" data-desc="ضربه پا به عقب.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="footprints" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">دیوت چیگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Dwit-chagi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#CE004F"></span>ضربات پا</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="chagi" data-search="هریو چیگی huryeo-chagi ضربه پا قوس‌رو به پایین"
+            data-name="هریو چیگی" data-latin="Huryeo-chagi" data-cat-name="ضربات پا" data-color="#CE004F" data-type-label="فن" data-desc="ضربه پا قوس‌رو به پایین.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="footprints" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">هریو چیگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Huryeo-chagi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#CE004F"></span>ضربات پا</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="chagi" data-search="نریو چیگی naeryeo-chagi ضربه پا پایین‌رونده"
+            data-name="نریو چیگی" data-latin="Naeryeo-chagi" data-cat-name="ضربات پا" data-color="#CE004F" data-type-label="فن" data-desc="ضربه پا پایین‌رونده.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="footprints" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">نریو چیگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Naeryeo-chagi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#CE004F"></span>ضربات پا</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="chagi" data-search="بالدال چیگی bandal-chagi ضربه پا هلالی"
+            data-name="بالدال چیگی" data-latin="Bandal-chagi" data-cat-name="ضربات پا" data-color="#CE004F" data-type-label="فن" data-desc="ضربه پا هلالی.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="footprints" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">بالدال چیگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Bandal-chagi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#CE004F"></span>ضربات پا</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <button type="button" class="card-flat flex w-full items-center gap-3 !p-3.5 text-start" data-mv data-sheet="mv-sheet" data-type="TECHNIQUE" data-cat="chagi" data-search="میرو چیگی miro-chagi ضربه پا هُل‌دهنده به جلو"
+            data-name="میرو چیگی" data-latin="Miro-chagi" data-cat-name="ضربات پا" data-color="#CE004F" data-type-label="فن" data-desc="ضربه پا هُل‌دهنده به جلو.">
+            <span class="grid size-16 shrink-0 place-items-center rounded-xl bg-gray-50 text-gray-300"><i data-lucide="footprints" class="size-6"></i></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[13px] font-extrabold text-gray-900">میرو چیگی</span>
+              <span dir="ltr" class="mt-0.5 block truncate text-[11px] font-semibold text-gray-400">Miro-chagi</span>
+              <span class="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-gray-400"><span class="belt-dot" style="background:#CE004F"></span>ضربات پا</span>
+            </span>
+            <span class="chip chip-gray shrink-0 !px-2.5">فن</span>
+          </button>
+
+          <!-- empty state -->
+          <div class="empty-state hidden" data-empty>
+            <span class="empty-icon"><i data-lucide="search" class="size-5"></i></span>
+            <p class="empty-title">نتیجه‌ای یافت نشد</p>
+            <p class="empty-hint">عبارت جستجو یا فیلترها را تغییر دهید.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- detail sheet -->
+    <div class="overlay hidden" id="mv-sheet" role="dialog" aria-modal="true">
+      <div class="sheet">
+        <div class="sheet-head">
+          <span class="sheet-grab"></span>
+          <p class="modal-title">جزئیات فن</p>
+          <button type="button" class="icon-btn !size-8" data-close aria-label="بستن"><i data-lucide="x" class="size-4"></i></button>
+        </div>
+        <div class="sheet-body">
+          <div class="flex items-center gap-3">
+            <span class="grid size-14 shrink-0 place-items-center rounded-2xl bg-gray-50 text-gray-300"><i data-lucide="dumbbell" class="size-6"></i></span>
+            <div class="min-w-0 flex-1">
+              <p class="text-[15px] font-extrabold text-gray-900" data-s-name>—</p>
+              <p dir="ltr" class="mt-0.5 text-[12px] font-semibold text-gray-400" data-s-latin>—</p>
+            </div>
+          </div>
+          <div class="mt-3 flex flex-wrap gap-1.5">
+            <span class="chip chip-gray" data-s-type>فن</span>
+            <span class="chip chip-gray"><span class="belt-dot" data-s-dot style="background:#9CA3AF"></span><span data-s-cat>—</span></span>
+          </div>
+          <div class="mt-4">
+            <p class="section-title mb-1">توضیحات</p>
+            <p class="text-[12px] leading-6 text-gray-600" data-s-desc>—</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+    <script>
+      /* combined demo filter: search + type seg + category chips + count + empty */
+      (function () {
+        var input = document.getElementById("search");
+        var rows = Array.prototype.slice.call(document.querySelectorAll("#list [data-mv]"));
+        var empty = document.querySelector("#list [data-empty]");
+        var count = document.getElementById("mv-count");
+        var type = "";
+        var cat = "";
+        var fa = function (n) { return String(n).replace(/\d/g, function (d) { return "۰۱۲۳۴۵۶۷۸۹"[d]; }); };
+        function apply() {
+          var q = (input.value || "").trim().toLowerCase();
+          var shown = 0;
+          rows.forEach(function (r) {
+            var ok = (!q || (r.getAttribute("data-search") || "").toLowerCase().indexOf(q) !== -1)
+              && (!type || r.getAttribute("data-type") === type)
+              && (!cat || r.getAttribute("data-cat") === cat);
+            r.classList.toggle("hidden", !ok);
+            if (ok) shown++;
+          });
+          empty.classList.toggle("hidden", shown > 0);
+          count.textContent = fa(shown) + " فن";
+        }
+        input.addEventListener("input", apply);
+        document.getElementById("type-seg").addEventListener("seg:change", function (e) { type = e.detail.value; apply(); });
+        document.getElementById("cat-chips").addEventListener("chips:change", function () {
+          var active = document.querySelector("#cat-chips .filter-chip.is-active");
+          cat = active ? (active.getAttribute("data-cat") || "") : "";
+          apply();
+        });
+        /* fill detail sheet from row data (app.js opens the overlay via data-sheet) */
+        document.addEventListener("click", function (e) {
+          var row = e.target.closest("[data-mv]");
+          if (!row) return;
+          var set = function (sel, v) { var el = document.querySelector(sel); if (el) el.textContent = v; };
+          set("[data-s-name]", row.getAttribute("data-name") || "—");
+          set("[data-s-latin]", row.getAttribute("data-latin") || "—");
+          set("[data-s-cat]", row.getAttribute("data-cat-name") || "—");
+          set("[data-s-type]", row.getAttribute("data-type-label") || "فن");
+          set("[data-s-desc]", row.getAttribute("data-desc") || "—");
+          var dot = document.querySelector("[data-s-dot]");
+          if (dot) dot.style.background = row.getAttribute("data-color") || "#9CA3AF";
+        });
+      })();
+    </script>
+</body>
+</html>

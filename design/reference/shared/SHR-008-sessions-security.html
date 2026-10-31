@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — نشست‌ها و امنیت</title>
+    
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap">
+        <header class="masthead app-bar">
+          <button type="button" class="icon-btn" data-back aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">نشست‌ها و دستگاه‌ها</h1>
+          </div>
+        </header>
+
+        <div id="page" class="mt-5">
+          <!-- ══════════ نشست فعلی ══════════ -->
+          <section>
+            <h2 class="section-title mb-2 flex items-center gap-2.5 px-1"><span class="section-tick"></span>نشست فعلی</h2>
+            <div class="card !border-brand-200 !bg-brand-50/50">
+              <div class="flex items-center gap-3">
+                <span class="session-ico"><i data-lucide="monitor" class="size-5"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <p class="truncate text-[13px] font-extrabold text-gray-900">کروم — ویندوز</p>
+                    <span class="chip chip-brand"><i data-lucide="shield-check" class="size-3"></i>نشست فعلی</span>
+                  </div>
+                  <div class="mt-2 space-y-1 text-[11px] text-gray-400">
+                    <p class="flex items-center gap-1.5"><span class="shrink-0 font-semibold text-gray-500">پلتفرم:</span><span class="font-bold text-gray-600">وب</span></p>
+                    <p class="flex items-center gap-1.5"><span class="shrink-0 font-semibold text-gray-500">IP:</span><span dir="ltr">188.121.110.24</span></p>
+                    <p>آخرین فعالیت: امروز، ۲۵ آبان ساعت ۱۴:۳۰</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ══════════ سایر نشست‌ها ══════════ -->
+          <section class="mt-5">
+            <h2 class="section-title mb-2 flex items-center gap-2.5 px-1"><span class="section-tick"></span>سایر نشست‌ها</h2>
+            <div class="space-y-3">
+              <!-- اندروید — فعال -->
+              <div class="card-flat flex items-start gap-3">
+                <span class="session-ico"><i data-lucide="smartphone" class="size-5"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <p class="truncate text-[13px] font-bold text-gray-800">کروم — اندروید</p>
+                    <span class="chip chip-green"><i data-lucide="check" class="size-3"></i>فعال</span>
+                  </div>
+                  <div class="mt-2 space-y-1 text-[11px] text-gray-400">
+                    <p class="flex items-center gap-1.5"><span class="shrink-0 font-semibold text-gray-500">پلتفرم:</span><span class="font-bold text-gray-600">اندروید</span></p>
+                    <p class="flex items-center gap-1.5"><span class="shrink-0 font-semibold text-gray-500">IP:</span><span dir="ltr">5.120.44.19</span></p>
+                    <p>آخرین فعالیت: ۲۲ آبان ساعت ۲۱:۰۰</p>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-outline btn-sm shrink-0 !border-red-200 !text-red-600 hover:!border-red-300 hover:!bg-red-50" data-demo="خروج از نشست انجام شد — نمونه نمایشی">خروج از نشست</button>
+              </div>
+
+              <!-- iOS — لغو شده -->
+              <div class="card-flat flex items-start gap-3 opacity-80">
+                <span class="session-ico"><i data-lucide="smartphone" class="size-5"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <p class="truncate text-[13px] font-bold text-gray-800">سافاری — آیفون</p>
+                    <span class="chip chip-gray"><i data-lucide="x" class="size-3"></i>لغو شده</span>
+                  </div>
+                  <div class="mt-2 space-y-1 text-[11px] text-gray-400">
+                    <p class="flex items-center gap-1.5"><span class="shrink-0 font-semibold text-gray-500">پلتفرم:</span><span class="font-bold text-gray-600">iOS</span></p>
+                    <p class="flex items-center gap-1.5"><span class="shrink-0 font-semibold text-gray-500">IP:</span><span dir="ltr">31.7.98.140</span></p>
+                    <p>آخرین فعالیت: ۳۰ مهر ساعت ۰۹:۱۵</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ══════════ منطقه خطر ══════════ -->
+          <section class="mt-8 rounded-2xl border border-red-100 bg-red-50/40 p-4">
+            <h2 class="flex items-center gap-2 text-[13px] font-extrabold text-red-600"><i data-lucide="alert-triangle" class="size-4"></i>منطقه خطر</h2>
+            <p class="mt-1 text-[11px] leading-5 text-red-500/90">با لغو همه نشست‌ها از همه دستگاه‌ها خارج می‌شوید و باید مجدداً وارد شوید.</p>
+            <button type="button" class="btn btn-danger mt-3 w-full !py-3" style="background:#dc2626;color:#fff" data-demo="همه نشست‌های دیگر لغو شد — نمونه نمایشی">لغو همه نشست‌های دیگر</button>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — اعلان‌ها</title>
+    
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap">
+        <header class="masthead">
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">اعلان‌ها</h1>
+          </div>
+          <div class="mast-actions">
+            <button type="button" class="icon-btn" data-mark-read aria-label="علامت‌گذاری همه به‌عنوان خوانده‌شده" title="علامت‌گذاری همه به‌عنوان خوانده‌شده">
+              <i data-lucide="check" class="size-5"></i>
+            </button>
+          </div>
+        </header>
+
+        <!-- filter chips -->
+        <div class="mt-5 flex flex-wrap gap-2" data-chips-single id="filter-chips">
+          <button type="button" class="filter-chip is-active" data-value="">همه</button>
+          <button type="button" class="filter-chip" data-value="unread">خوانده‌نشده</button>
+          <button type="button" class="filter-chip" data-value="INSURANCE_EXPIRING">بیمه ورزشی</button>
+          <button type="button" class="filter-chip" data-value="PHOTO_EXPIRING">عکس پرونده</button>
+          <button type="button" class="filter-chip" data-value="BELT_UPGRADE_DUE">ارتقاء کمربند</button>
+          <button type="button" class="filter-chip" data-value="BELT_PROMOTION">ارتقاء کمربند (تبریک)</button>
+          <button type="button" class="filter-chip" data-value="GENERAL">عمومی</button>
+        </div>
+
+        <div id="list" class="mt-4 space-y-3">
+          <!-- unread: insurance -->
+          <article data-unread-row class="relative overflow-hidden rounded-[20px] border border-white bg-white p-4 shadow-[0_1px_2px_rgba(16,18,26,0.04),0_12px_32px_-16px_rgba(16,18,26,0.10)]">
+            <span class="absolute inset-y-0 end-0 w-1 bg-amber-400" aria-hidden="true"></span>
+            <div class="flex items-start gap-3">
+              <span class="lead-ico !bg-amber-50 !text-amber-600"><i data-lucide="shield-check" class="size-[18px]"></i></span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                  <b class="truncate text-[13px] font-extrabold text-gray-900">بیمه ورزشی به‌زودی منقضی می‌شود</b>
+                  <span class="unread-dot size-2 shrink-0 rounded-full bg-brand-600"></span>
+                </div>
+                <p class="mt-1 text-[11.5px] leading-5 text-gray-500">بیمه ورزشی شما تا ۱۴ روز دیگر منقضی می‌شود؛ برای تمدید به دفتر باشگاه مراجعه کنید.</p>
+                <p class="mt-1.5 text-[10px] font-semibold text-gray-300">۲ ساعت پیش</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- unread: photo -->
+          <article data-unread-row class="relative overflow-hidden rounded-[20px] border border-white bg-white p-4 shadow-[0_1px_2px_rgba(16,18,26,0.04),0_12px_32px_-16px_rgba(16,18,26,0.10)]">
+            <span class="absolute inset-y-0 end-0 w-1 bg-sky-400" aria-hidden="true"></span>
+            <div class="flex items-start gap-3">
+              <span class="lead-ico !bg-sky-50 !text-sky-600"><i data-lucide="camera" class="size-[18px]"></i></span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                  <b class="truncate text-[13px] font-extrabold text-gray-900">عکس پرونده نیاز به به‌روزرسانی دارد</b>
+                  <span class="unread-dot size-2 shrink-0 rounded-full bg-brand-600"></span>
+                </div>
+                <p class="mt-1 text-[11.5px] leading-5 text-gray-500">طبق قوانین فدراسیون، عکس پرونده هر سال به‌روز می‌شود.</p>
+                <p class="mt-1.5 text-[10px] font-semibold text-gray-300">۵ ساعت پیش</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- unread: belt exam -->
+          <article data-unread-row class="relative overflow-hidden rounded-[20px] border border-white bg-white p-4 shadow-[0_1px_2px_rgba(16,18,26,0.04),0_12px_32px_-16px_rgba(16,18,26,0.10)]">
+            <span class="absolute inset-y-0 end-0 w-1 bg-brand-600" aria-hidden="true"></span>
+            <div class="flex items-start gap-3">
+              <span class="lead-ico"><i data-lucide="medal" class="size-[18px]"></i></span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                  <b class="truncate text-[13px] font-extrabold text-gray-900">ثبت‌نام آزمون کمربند سبز آغاز شد</b>
+                  <span class="unread-dot size-2 shrink-0 rounded-full bg-brand-600"></span>
+                </div>
+                <p class="mt-1 text-[11.5px] leading-5 text-gray-500">آزمون ۱۴۰۴/۰۸/۲۵ در باشگاه شهدای گمنام برگزار می‌شود؛ تا ۱۴۰۴/۰۸/۱۵ ثبت‌نام کنید.</p>
+                <p class="mt-1.5 text-[10px] font-semibold text-gray-300">دیروز</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- read: promotion congrats -->
+          <article class="relative overflow-hidden rounded-[20px] border border-white bg-white p-4 opacity-80 shadow-[0_1px_2px_rgba(16,18,26,0.04),0_12px_32px_-16px_rgba(16,18,26,0.10)]">
+            <div class="flex items-start gap-3">
+              <span class="lead-ico !bg-emerald-50 !text-emerald-600"><i data-lucide="trophy" class="size-[18px]"></i></span>
+              <div class="min-w-0 flex-1">
+                <b class="block truncate text-[13px] font-extrabold text-gray-900">ارتقاء به کمربند سبز تبریک!</b>
+                <p class="mt-1 text-[11.5px] leading-5 text-gray-500">با احترام، مسیر تکواندوی شما ادامه دارد — مربی محمود کریمی.</p>
+                <p class="mt-1.5 text-[10px] font-semibold text-gray-300">۳ روز پیش</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- read: general -->
+          <article class="relative overflow-hidden rounded-[20px] border border-white bg-white p-4 opacity-80 shadow-[0_1px_2px_rgba(16,18,26,0.04),0_12px_32px_-16px_rgba(16,18,26,0.10)]">
+            <div class="flex items-start gap-3">
+              <span class="lead-ico !bg-gray-100 !text-gray-500"><i data-lucide="info" class="size-[18px]"></i></span>
+              <div class="min-w-0 flex-1">
+                <b class="block truncate text-[13px] font-extrabold text-gray-900">تعطیلی جلسه جمعه</b>
+                <p class="mt-1 text-[11.5px] leading-5 text-gray-500">جلسه روز جمعه به دلیل مسابقات استانی برگزار نمی‌شود.</p>
+                <p class="mt-1.5 text-[10px] font-semibold text-gray-300">۱ هفته پیش</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </main>
+
+    
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+    <nav class="bottom-nav" aria-label="ناوبری اصلی"><a href="../student/STU-001-dashboard.html" class="nav-item" aria-label="خانه"><span class="nav-ico relative"><i data-lucide="home" class="size-[18px]"></i></span><span>خانه</span></a><a href="SHR-017-chat-list.html" class="nav-item" aria-label="گفتگو"><span class="nav-ico relative"><i data-lucide="message-square-text" class="size-[18px]"></i></span><span>گفتگو</span></a><a href="SHR-009-poomsae-library.html" class="nav-item" aria-label="آموزش"><span class="nav-ico relative"><i data-lucide="book-open" class="size-[18px]"></i></span><span>آموزش</span></a><a href="SHR-007-notifications.html" class="nav-item is-active" aria-label="اعلان‌ها"><span class="nav-ico relative"><i data-lucide="bell" class="size-[18px]"></i></span><span>اعلان‌ها</span></a><a href="../student/STU-002-my-profile.html" class="nav-item" aria-label="پروفایل"><span class="nav-ico relative"><i data-lucide="user" class="size-[18px]"></i></span><span>پروفایل</span></a></nav>
+</body>
+</html>

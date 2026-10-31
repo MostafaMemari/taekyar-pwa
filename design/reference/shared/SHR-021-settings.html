@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — تنظیمات</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap !pb-28">
+        <header class="masthead app-bar">
+          <button type="button" class="icon-btn" data-back aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">تنظیمات</h1>
+          </div>
+        </header>
+
+        <!-- ════════ appearance quick controls (theme lives here, in settings) ════════ -->
+        <section class="mt-5">
+          <div class="section-head">
+            <span class="section-tick"></span>
+            <h2 class="section-title">نمایش و رنگ</h2>
+            <a href="SHR-020-appearance.html" class="link-more">تنظیمات کامل<i data-lucide="chevron-left" class="ms-0.5 inline size-3"></i></a>
+          </div>
+          <div class="card">
+            <div class="seg" data-seg>
+              <button type="button" class="seg-item is-active" data-theme-mode="light"><span class="inline-flex items-center gap-1.5"><i data-lucide="sun" class="size-4"></i>روشن</span></button>
+              <button type="button" class="seg-item" data-theme-mode="dark"><span class="inline-flex items-center gap-1.5"><i data-lucide="moon" class="size-4"></i>تاریک</span></button>
+            </div>
+            <div class="mt-3.5 flex items-center justify-between gap-2 border-t border-gray-50 pt-3.5">
+              <span class="text-[11px] font-bold text-gray-400">رنگ اصلی</span>
+              <div class="flex items-center gap-2">
+                <button type="button" class="accent-dot is-active" data-accent-set="crimson" aria-label="سرخابی"><span class="sw-dot" style="background: linear-gradient(135deg, #e92e6f, #ce004f)"></span></button>
+                <button type="button" class="accent-dot" data-accent-set="orange" aria-label="نارنجی"><span class="sw-dot" style="background: linear-gradient(135deg, #f97316, #ea580c)"></span></button>
+                <button type="button" class="accent-dot" data-accent-set="gold" aria-label="طلایی"><span class="sw-dot" style="background: linear-gradient(135deg, #f59e0b, #d97706)"></span></button>
+                <button type="button" class="accent-dot" data-accent-set="emerald" aria-label="زمردی"><span class="sw-dot" style="background: linear-gradient(135deg, #10b981, #059669)"></span></button>
+                <button type="button" class="accent-dot" data-accent-set="blue" aria-label="آبی"><span class="sw-dot" style="background: linear-gradient(135deg, #3b82f6, #2563eb)"></span></button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ════════ account & security ════════ -->
+        <section class="mt-6">
+          <div class="section-head">
+            <span class="section-tick"></span>
+            <h2 class="section-title">حساب و امنیت</h2>
+          </div>
+          <div class="card !p-0">
+            <a href="SHR-008-sessions-security.html" class="menu-item rounded-t-[20px]"><i data-lucide="shield-check" class="size-4"></i><span class="flex-1">نشست‌ها و امنیت</span><i data-lucide="chevron-left" class="size-4 text-gray-300"></i></a>
+            <a href="SHR-007-notifications.html" class="menu-item"><i data-lucide="bell" class="size-4"></i><span class="flex-1">اعلان‌ها</span><span class="count-chip">۲ خوانده‌نشده</span><i data-lucide="chevron-left" class="size-4 text-gray-300"></i></a>
+            <button type="button" class="menu-item w-full text-start" data-demo="مدیریت حساب در نسخه نمایشی فعال نیست"><i data-lucide="user-cog" class="size-4"></i><span class="flex-1">مدیریت حساب</span><i data-lucide="chevron-left" class="size-4 text-gray-300"></i></button>
+            <button type="button" class="menu-item w-full rounded-b-[20px] text-start" data-modal="aboutModal"><i data-lucide="info" class="size-4"></i><span class="flex-1">درباره تک‌یار</span><span class="count-chip" dir="ltr">v3.2</span><i data-lucide="chevron-left" class="size-4 text-gray-300"></i></button>
+          </div>
+        </section>
+
+        <!-- ════════ language & region ════════ -->
+        <section class="mt-6">
+          <div class="section-head">
+            <span class="section-tick"></span>
+            <h2 class="section-title">زبان و منطقه</h2>
+          </div>
+          <div class="card !p-0">
+            <button type="button" class="menu-item w-full rounded-t-[20px] text-start" data-demo="فارسی تنها زبان نسخه نمایشی است"><i data-lucide="languages" class="size-4"></i><span class="flex-1">زبان برنامه</span><span class="chip chip-green">فارسی</span><i data-lucide="chevron-left" class="size-4 text-gray-300"></i></button>
+            <button type="button" class="menu-item w-full text-start" data-demo="تقویم و تاریخ نمونه است"><i data-lucide="calendar-days" class="size-4"></i><span class="flex-1">تقویم</span><span class="chip chip-brand">هجری شمسی</span><i data-lucide="chevron-left" class="size-4 text-gray-300"></i></button>
+            <button type="button" class="menu-item w-full rounded-b-[20px] text-start" data-demo="منطقه زمانی نمونه است"><i data-lucide="clock" class="size-4"></i><span class="flex-1">ساعت رسمی</span><span class="chip chip-gray">ایران — <span dir="ltr">UTC+3:30</span></span><i data-lucide="chevron-left" class="size-4 text-gray-300"></i></button>
+          </div>
+        </section>
+
+        <!-- ════════ support ════════ -->
+        <section class="mt-6">
+          <div class="section-head">
+            <span class="section-tick"></span>
+            <h2 class="section-title">پشتیبانی</h2>
+          </div>
+          <div class="card !p-0">
+            <button type="button" class="menu-item w-full rounded-t-[20px] text-start" data-demo="پرسش‌های متداول در نسخه نمایشی موجود نیست"><i data-lucide="circle-help" class="size-4"></i><span class="flex-1">پرسش‌های متداول</span><i data-lucide="chevron-left" class="size-4 text-gray-300"></i></button>
+            <button type="button" class="menu-item w-full rounded-b-[20px] text-start" data-demo="گفتگو با پشتیبانی در نسخه نمایشی فعال نیست"><i data-lucide="headset" class="size-4"></i><span class="flex-1">گفتگو با پشتیبانی</span><i data-lucide="chevron-left" class="size-4 text-gray-300"></i></button>
+          </div>
+        </section>
+
+        <!-- ════════ logout ════════ -->
+        <div class="card !p-0 mt-6">
+          <button type="button" class="menu-item menu-item-danger w-full" data-modal="logoutModal"><i data-lucide="log-out" class="size-4"></i>خروج از حساب</button>
+        </div>
+
+        <p class="mt-5 text-center text-[10px] font-semibold text-gray-300">تک‌یار — نسخهٔ نمایشی رابط کاربری · <span dir="ltr">v3.2</span></p>
+      </div>
+    </main>
+
+    <!-- about modal -->
+    <div id="aboutModal" class="overlay hidden">
+      <div class="modal">
+        <div class="modal-head">
+          <b class="modal-title">درباره تک‌یار</b>
+          <button type="button" class="icon-btn !size-9" data-close aria-label="بستن"><i data-lucide="x" class="size-4"></i></button>
+        </div>
+        <div class="flex flex-col items-center gap-3 py-2 text-center">
+          <span class="logo-mark !size-14 !rounded-[20px]"><i data-lucide="medal" class="size-6"></i></span>
+          <div>
+            <b class="block text-[15px] font-extrabold text-gray-900">تک‌یار</b>
+            <span class="mt-0.5 block text-[11px] font-semibold text-gray-400">همیار تمرین تکواندو — هنرجو، مربی، باشگاه</span>
+          </div>
+          <div class="flex flex-wrap justify-center gap-1.5">
+            <span class="chip chip-gray">نسخه <span dir="ltr">3.2.0</span></span>
+            <span class="chip chip-brand">نمونهٔ رابط کاربری</span>
+          </div>
+          <p class="text-[11.5px] leading-6 text-gray-500">این بسته یک نمونهٔ طراحی است؛ بدون سرور، دیتابیس و اعتبارسنجی. همهٔ داده‌ها نمونه و محلی هستند.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- logout confirm modal -->
+    <div id="logoutModal" class="overlay hidden">
+      <div class="modal">
+        <div class="flex flex-col items-center gap-2 pb-1 text-center">
+          <span class="grid size-12 place-items-center rounded-2xl" style="background:var(--st-red-bg);color:var(--st-red)"><i data-lucide="log-out" class="size-5"></i></span>
+          <b class="mt-1 block text-[15px] font-extrabold text-gray-900">خروج از حساب؟</b>
+          <p class="max-w-[240px] text-[11.5px] leading-6 text-gray-500">برای استفادهٔ مجدد باید دوباره وارد شوید. داده‌های نمونهٔ این دستگاه باقی می‌مانند.</p>
+        </div>
+        <div class="mt-4 flex items-center gap-2">
+          <button type="button" class="btn btn-outline flex-1" data-close>انصراف</button>
+          <button type="button" class="btn btn-danger flex-1" data-demo="خروج در نسخه نمایشی فعال نیست">خروج</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — تکمیل پروفایل مربی</title>
+    
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap content-form !pb-40">
+        <header class="masthead mb-6 app-bar">
+          <button type="button" class="icon-btn" data-back aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">تکمیل پروفایل مربی</h1>
+          </div>
+        </header>
+
+        <form id="form" class="space-y-4">
+          <!-- ══════════ اطلاعات هویتی ══════════ -->
+          <section class="card">
+            <div class="form-sec-head !mb-4">
+              <span class="form-sec-tick"></span>
+              <h2 class="form-sec-title">اطلاعات هویتی</h2>
+            </div>
+            <div class="grid gap-4">
+              <div>
+                <label class="form-label" for="fullName">نام و نام خانوادگی <b class="text-brand-600">*</b></label>
+                <input id="fullName" class="input-field" autocomplete="name" value="محمود کریمی" />
+              </div>
+              <div>
+                <label class="form-label" for="nationalCode">کد ملی <b class="text-brand-600">*</b></label>
+                <input id="nationalCode" dir="ltr" inputmode="numeric" maxlength="10" class="input-field input-ltr text-center tracking-widest" value="۰۰۷۹۴۵۸۲۱۳" />
+                <p class="field-hint">کد ملی ۱۰ رقمی و بدون خط تیره.</p>
+              </div>
+              <div>
+                <label class="form-label">جنسیت <b class="text-brand-600">*</b></label>
+                <div class="seg" data-seg id="gender-seg">
+                  <button type="button" class="seg-item" data-value="FEMALE">زن</button>
+                  <button type="button" class="seg-item is-active" data-value="MALE">مرد</button>
+                </div>
+                <p class="field-hint">جنسیت پس از ثبت باشگاه یا هنرجو قابل تغییر نیست.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ══════════ مشخصات تکمیلی ══════════ -->
+          <section class="card">
+            <div class="form-sec-head !mb-4">
+              <span class="form-sec-tick"></span>
+              <h2 class="form-sec-title">مشخصات تکمیلی</h2>
+            </div>
+            <div class="grid gap-4">
+              <div>
+                <label class="form-label" for="province">استان <b class="text-brand-600">*</b></label>
+                <div class="select-wrap">
+                  <select id="province">
+                    <option value="">انتخاب استان</option>
+                    <option>آذربایجان شرقی</option>
+                    <option>اصفهان</option>
+                    <option>البرز</option>
+                    <option selected>تهران</option>
+                    <option>خراسان رضوی</option>
+                    <option>فارس</option>
+                    <option>گیلان</option>
+                    <option>مازندران</option>
+                    <option>هرمزگان</option>
+                    <option>یزد</option>
+                  </select>
+                  <span class="select-caret"><i data-lucide="chevron-down" class="size-4"></i></span>
+                </div>
+              </div>
+              <div>
+                <label class="form-label" for="birthDate">تاریخ تولد</label>
+                <input id="birthDate" class="input-field" value="۱۳۶۶/۰۱/۰۱" />
+                <p class="field-hint">تاریخ تولد بر پایه تقویم شمسی — اختیاری.</p>
+              </div>
+              <div>
+                <label class="form-label" for="belt">کمربند مربی</label>
+                <div class="select-wrap">
+                  <select id="belt">
+                    <option value="">انتخاب کمربند (اختیاری)</option>
+                    <option>دان ۳</option>
+                    <option selected>دان ۴</option>
+                    <option>دان ۵</option>
+                    <option>دان ۶</option>
+                    <option>دان ۷</option>
+                    <option>دان ۸</option>
+                    <option>دان ۹</option>
+                  </select>
+                  <span class="select-caret"><i data-lucide="chevron-down" class="size-4"></i></span>
+                </div>
+                <p class="field-hint">کمربند مربی باید دان ۳ یا بالاتر باشد.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ══════════ تصویر پروفایل ══════════ -->
+          <section class="card">
+            <div class="form-sec-head !mb-4">
+              <span class="form-sec-tick"></span>
+              <h2 class="form-sec-title">تصویر پروفایل</h2>
+            </div>
+            <button type="button" class="add-dashed" data-demo="انتخاب تصویر پروفایل — نمونه نمایشی"><i data-lucide="camera" class="size-4"></i>افزودن تصویر</button>
+            <p class="field-hint">تصویر با فرمت JPG یا PNG و حداکثر حجم ۲ مگابایت.</p>
+          </section>
+        </form>
+      </div>
+
+      <!-- sticky footer -->
+      <div class="save-bar flex items-center gap-3">
+        <button type="button" class="btn btn-outline flex-1 !py-3" data-back>انصراف</button>
+        <button type="button" id="submit" class="btn btn-primary flex-[2] !py-3" data-demo="پروفایل مربی ذخیره شد — نمونه نمایشی">
+          <span>ذخیره اطلاعات</span>
+        </button>
+      </div>
+    </main>
+
+    
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

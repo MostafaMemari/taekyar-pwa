@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — واژه‌نامه تکواندو</title>
+    
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap">
+        <header class="masthead app-bar">
+          <button type="button" class="icon-btn" data-back aria-label="بازگشت"><i data-lucide="chevron-right" class="size-5"></i></button>
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">واژه‌نامه تکواندو</h1>
+          </div>
+          <span class="count-chip mt-1" id="word-count">۲۸ واژه</span>
+        </header>
+
+        <!-- search + chips -->
+        <div class="toolbar">
+          <div class="relative">
+            <span class="pointer-events-none absolute inset-y-0 start-3.5 grid place-items-center text-gray-400"><i data-lucide="search" class="size-4"></i></span>
+            <input id="search" type="search" class="input-field !ps-10" placeholder="جستجو در واژه‌ها…" autocomplete="off" />
+          </div>
+
+          <!-- category chips -->
+          <div id="cat-chips" class="mt-3 flex flex-wrap gap-2" data-chips-single>
+            <button type="button" class="filter-chip shrink-0 is-active" data-cat="">همه</button>
+            <button type="button" class="filter-chip shrink-0" data-cat="general"><span class="belt-dot" style="background:#CE004F"></span>عمومی</button>
+            <button type="button" class="filter-chip shrink-0" data-cat="numbers"><span class="belt-dot" style="background:#2563EB"></span>اعداد</button>
+            <button type="button" class="filter-chip shrink-0" data-cat="body"><span class="belt-dot" style="background:#16A34A"></span>بدن</button>
+            <button type="button" class="filter-chip shrink-0" data-cat="stances"><span class="belt-dot" style="background:#D97706"></span>نشست‌ها</button>
+            <button type="button" class="filter-chip shrink-0" data-cat="attacks"><span class="belt-dot" style="background:#DC2626"></span>حملات</button>
+          </div>
+        </div>
+
+        <div id="list" class="mt-1">
+          <!-- ══════════ اصطلاحات عمومی ══════════ -->
+          <section data-group="general">
+            <h2 class="list-group-title" style="position:static">اصطلاحات عمومی</h2>
+            <div class="card !p-0 divide-y divide-gray-50 overflow-hidden">
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="چاریوت charyeot احترام حالت آماده‌باش با پاهای کنار هم">
+                <span class="lead-ico !size-9"><i data-lucide="flag" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">چاریوت</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Charyeot</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">احترام — حالت آماده‌باش با پاهای کنار هم.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="کیونگ‌نه kyung-nye تعظیم ادای احترام به مربی و سالن">
+                <span class="lead-ico !size-9"><i data-lucide="flag" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">کیونگ‌نه</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Kyung-nye</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">تعظیم — ادای احترام به مربی و سالن.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="جونبی junbi آماده حالت آماده‌باش پیش از شروع">
+                <span class="lead-ico !size-9"><i data-lucide="flag" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">جونبی</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Junbi</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">آماده — حالت آماده‌باش پیش از شروع.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="سیژاک sijak شروع فرمان آغاز اجرا">
+                <span class="lead-ico !size-9"><i data-lucide="flag" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">سیژاک</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Sijak</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">شروع — فرمان آغاز اجرا.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="کومان keuman پایان فرمان توقف اجرا">
+                <span class="lead-ico !size-9"><i data-lucide="flag" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">کومان</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Keuman</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">پایان — فرمان توقف اجرا.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="کیهاپ kihap فریاد قدرت انفجار هوای دیافراگمی">
+                <span class="lead-ico !size-9"><i data-lucide="flag" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">کیهاپ</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Kihap</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">فریاد قدرت — انفجار هوای دیافراگمی.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="دورا dora برگرد چرخش به جهت شروع">
+                <span class="lead-ico !size-9"><i data-lucide="flag" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">دورا</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Dora</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">برگرد — چرخش به جهت شروع.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="بارو baro به جای خود بازگشت به موقعیت اول">
+                <span class="lead-ico !size-9"><i data-lucide="flag" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">بارو</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Baro</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">به جای خود — بازگشت به موقعیت اول.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="شیو shi-eo استراحت فرمان ریلکس">
+                <span class="lead-ico !size-9"><i data-lucide="flag" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">شیو</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Shi-eo</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">استراحت — فرمان ریلکس.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ══════════ اعداد کره‌ای ══════════ -->
+          <section data-group="numbers">
+            <h2 class="list-group-title" style="position:static">اعداد کره‌ای</h2>
+            <div class="card !p-0 divide-y divide-gray-50 overflow-hidden">
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="هانا hana یک ۱">
+                <span class="lead-ico !size-9"><i data-lucide="hash" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">هانا</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Hana</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">یک.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="دول dul دو ۲">
+                <span class="lead-ico !size-9"><i data-lucide="hash" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">دول</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Dul</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">دو.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="ست set سه ۳">
+                <span class="lead-ico !size-9"><i data-lucide="hash" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">ست</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Set</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">سه.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="نه net چهار ۴">
+                <span class="lead-ico !size-9"><i data-lucide="hash" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">نه</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Net</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">چهار.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="داست daseot پنج ۵">
+                <span class="lead-ico !size-9"><i data-lucide="hash" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">داست</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Daseot</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">پنج.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="یاست yeoseot شش ۶">
+                <span class="lead-ico !size-9"><i data-lucide="hash" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">یاست</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Yeoseot</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">شش.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ══════════ اعضای بدن ══════════ -->
+          <section data-group="body">
+            <h2 class="list-group-title" style="position:static">اعضای بدن</h2>
+            <div class="card !p-0 divide-y divide-gray-50 overflow-hidden">
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="موروپ mureup زانو">
+                <span class="lead-ico !size-9"><i data-lucide="person-standing" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">موروپ</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Mureup</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">زانو.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="پال pal بازو">
+                <span class="lead-ico !size-9"><i data-lucide="person-standing" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">پال</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Pal</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">بازو.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="سون son دست">
+                <span class="lead-ico !size-9"><i data-lucide="person-standing" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">سون</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Son</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">دست.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="اری eori کمر">
+                <span class="lead-ico !size-9"><i data-lucide="person-standing" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">اری</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Eori</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">کمر.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="موم‌تون momtong تنه از شانه تا کمر">
+                <span class="lead-ico !size-9"><i data-lucide="person-standing" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">موم‌تون</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Momtong</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">تنه — از شانه تا کمر.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="اولگول olgul صورت و سر">
+                <span class="lead-ico !size-9"><i data-lucide="person-standing" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">اولگول</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Olgul</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">صورت و سر.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="بالدال baldal کف پا">
+                <span class="lead-ico !size-9"><i data-lucide="person-standing" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">بالدال</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Baldal</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">کف پا.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ══════════ نشست‌ها و دفاع‌ها ══════════ -->
+          <section data-group="stances">
+            <h2 class="list-group-title" style="position:static">نشست‌ها و دفاع‌ها</h2>
+            <div class="card !p-0 divide-y divide-gray-50 overflow-hidden">
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="ماکی makgi دفاع بلوکه کردن حمله">
+                <span class="lead-ico !size-9"><i data-lucide="shield" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">ماکی</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Makgi</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">دفاع — بلوکه کردن حمله.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="سوگی seogi نشست وضعیت پاها">
+                <span class="lead-ico !size-9"><i data-lucide="shield" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">سوگی</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Seogi</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">نشست — وضعیت پاها.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ══════════ حملات و ضربات پا ══════════ -->
+          <section data-group="attacks">
+            <h2 class="list-group-title" style="position:static">حملات و ضربات پا</h2>
+            <div class="card !p-0 divide-y divide-gray-50 overflow-hidden">
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="چاگی chagi ضربه پا">
+                <span class="lead-ico !size-9"><i data-lucide="zap" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">چاگی</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Chagi</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">ضربه پا.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="آپ‌چاگی ap-chagi ضربه پا مستقیم به جلو">
+                <span class="lead-ico !size-9"><i data-lucide="zap" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">آپ‌چاگی</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Ap-chagi</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">ضربه پا مستقیم به جلو.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="دولیوچاگی dollyo-chagi ضربه پا چرخشی">
+                <span class="lead-ico !size-9"><i data-lucide="zap" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">دولیوچاگی</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Dollyo-chagi</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">ضربه پا چرخشی.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 px-4 py-3" data-word data-search="یوپ‌چاگی yop-chagi ضربه پا جانبی">
+                <span class="lead-ico !size-9"><i data-lucide="zap" class="size-4"></i></span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2"><b class="text-[13.5px] text-gray-900">یوپ‌چاگی</b><span dir="ltr" class="text-[10.5px] font-semibold text-gray-400">Yop-chagi</span></div>
+                  <p class="mt-0.5 text-[11.5px] leading-5 text-gray-500">ضربه پا جانبی.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- empty state -->
+          <div class="empty-state mt-4 hidden" data-empty>
+            <span class="empty-icon"><i data-lucide="languages" class="size-5"></i></span>
+            <p class="empty-title">واژه‌ای یافت نشد</p>
+            <p class="empty-hint">عبارت جستجو یا دسته‌بندی را تغییر دهید.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+    <script>
+      /* combined demo filter: search + single category chip + hide empty groups */
+      (function () {
+        var input = document.getElementById("search");
+        var words = Array.prototype.slice.call(document.querySelectorAll("#list [data-word]"));
+        var groups = Array.prototype.slice.call(document.querySelectorAll("#list [data-group]"));
+        var empty = document.querySelector("#list [data-empty]");
+        var count = document.getElementById("word-count");
+        var cat = "";
+        var fa = function (n) { return String(n).replace(/\d/g, function (d) { return "۰۱۲۳۴۵۶۷۸۹"[d]; }); };
+        function apply() {
+          var q = (input.value || "").trim().toLowerCase();
+          var shown = 0;
+          words.forEach(function (w) {
+            var ok = (!q || (w.getAttribute("data-search") || "").toLowerCase().indexOf(q) !== -1) && (!cat || w.closest("[data-group]").getAttribute("data-group") === cat);
+            w.classList.toggle("hidden", !ok);
+            if (ok) shown++;
+          });
+          groups.forEach(function (g) {
+            var visible = g.querySelectorAll("[data-word]:not(.hidden)").length > 0;
+            g.classList.toggle("hidden", !visible);
+          });
+          empty.classList.toggle("hidden", shown > 0);
+          count.textContent = fa(shown) + " واژه";
+        }
+        input.addEventListener("input", apply);
+        document.getElementById("cat-chips").addEventListener("chips:change", function () {
+          var active = document.querySelector("#cat-chips .filter-chip.is-active");
+          cat = active ? (active.getAttribute("data-cat") || "") : "";
+          apply();
+        });
+      })();
+    </script>
+</body>
+</html>

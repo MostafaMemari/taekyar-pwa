@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>تک‌یار — گفتگوها</title>
+
+    <meta name="theme-color" content="#CE004F" />
+    <link rel="manifest" href="../../manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="../../assets/icons/icon-192.png" />
+    <script>!function(){try{var d=document.documentElement,t=localStorage.getItem("ty-theme"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("ty-accent");if(a)d.setAttribute("data-accent",a)}catch(e){}}();</script>
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body>
+    <main class="role-main app-frame">
+      <div class="page-wrap !pb-28">
+        <header class="masthead">
+          <div class="min-w-0 flex-1">
+            <h1 class="mast-title">گفتگوها</h1>
+          </div>
+          <div class="mast-actions">
+            <button type="button" class="icon-btn" data-demo="جستجوی سراسری — نمونه" aria-label="گفتگوی جدید"><i data-lucide="pen-line" class="size-5"></i></button>
+          </div>
+        </header>
+
+        <!-- search -->
+        <div class="toolbar">
+          <div class="relative">
+            <i data-lucide="search" class="pointer-events-none absolute start-4 top-1/2 size-4 -translate-y-1/2 text-gray-400"></i>
+            <input type="search" placeholder="جستجو در گفتگوها…" data-filter-input data-filter-scope="[data-chat-scope]"
+              class="input-field !rounded-full !py-2.5 ps-11 text-[13px]" />
+          </div>
+        </div>
+
+        <div data-chat-scope>
+          <!-- pinned: AI assistant -->
+          <a data-filter-item data-filter-text="دستیار هوشمند تک یار هوش مصنوعی برنامه تمرین" href="SHR-019-ai-coach.html"
+            class="relative mt-1 flex items-center gap-3 overflow-hidden rounded-[20px] border border-white bg-brand-600 p-3.5 shadow-brand-lg">
+            <span class="hero-wm !text-[92px] !start-0 !-bottom-6">هوش</span>
+            <span class="relative grid size-11 shrink-0 place-items-center rounded-2xl border border-white/25 bg-white/15 text-white backdrop-blur">
+              <i data-lucide="sparkles" class="size-5"></i>
+            </span>
+            <span class="relative min-w-0 flex-1">
+              <b class="block truncate text-[13.5px] font-extrabold text-white">دستیار هوشمند تک‌یار</b>
+              <span class="mt-0.5 block truncate text-[11px] font-medium text-white/75">برنامه تمرین هفته‌ات را ببین — پیشنهاد تازه دارم</span>
+            </span>
+            <span class="relative chip !bg-white/15 !text-white !text-[9.5px]">جدید</span>
+          </a>
+
+          <!-- conversations -->
+          <div class="mt-3 card divide-y divide-gray-50 !p-0">
+            <a data-filter-item data-filter-text="محمود کریمی مربی کیوروگی تمرین عالی بود" href="SHR-018-chat-thread.html" class="flex items-center gap-3 p-4 transition hover:bg-gray-50/60">
+              <span class="relative shrink-0">
+                <span class="avatar !size-12 !text-[15px]">م‌ک</span>
+                <span class="absolute -bottom-0.5 -end-0.5 size-3 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="flex items-center gap-2">
+                  <b class="truncate text-[13.5px] font-extrabold text-gray-900">محمود کریمی</b>
+                  <span class="chip chip-brand !px-2 !py-0.5 !text-[9px]">مربی</span>
+                  <span class="ms-auto shrink-0 text-[10px] font-semibold text-gray-300">۱۰:۲۴</span>
+                </span>
+                <span class="mt-1 flex items-center gap-2">
+                  <span class="truncate text-[11.5px] font-semibold text-gray-400">تمرین عالی بود؛ فردا کشش پا یادت نره</span>
+                  <span class="ms-auto grid size-5 shrink-0 place-items-center rounded-full bg-brand-600 text-[9.5px] font-extrabold text-white">۳</span>
+                </span>
+              </span>
+            </a>
+
+            <a data-filter-item data-filter-text="گروه کلاس کیوروگی مریم جلسه ساعت" href="SHR-018-chat-thread.html" class="flex items-center gap-3 p-4 transition hover:bg-gray-50/60">
+              <span class="grid size-12 shrink-0 place-items-center rounded-full bg-sky-50 text-sky-600"><i data-lucide="users" class="size-5"></i></span>
+              <span class="min-w-0 flex-1">
+                <span class="flex items-center gap-2">
+                  <b class="truncate text-[13.5px] font-extrabold text-gray-900">گروه کلاس کیوروگی</b>
+                  <span class="ms-auto shrink-0 text-[10px] font-semibold text-gray-300">۰۹:۱۲</span>
+                </span>
+                <span class="mt-1 flex items-center gap-2">
+                  <span class="truncate text-[11.5px] font-semibold text-gray-400"><b class="font-extrabold text-gray-600">مریم:</b> بچه‌ها ساعت ۱۷ دقیق باشیم</span>
+                  <span class="ms-auto grid size-5 shrink-0 place-items-center rounded-full bg-brand-600 text-[9.5px] font-extrabold text-white">۵</span>
+                </span>
+              </span>
+            </a>
+
+            <a data-filter-item data-filter-text="مریم احمدی مربی سابق موفق باشی" href="SHR-018-chat-thread.html" class="flex items-center gap-3 p-4 transition hover:bg-gray-50/60">
+              <span class="avatar !size-12 !text-[15px] !bg-sky-50 !text-sky-600">م‌ا</span>
+              <span class="min-w-0 flex-1">
+                <span class="flex items-center gap-2">
+                  <b class="truncate text-[13.5px] font-extrabold text-gray-900">مریم احمدی</b>
+                  <span class="ms-auto shrink-0 text-[10px] font-semibold text-gray-300">دیروز</span>
+                </span>
+                <span class="mt-1 block truncate text-[11.5px] font-semibold text-gray-400">برای مسابقات استانی موفق باشی</span>
+              </span>
+            </a>
+
+            <a data-filter-item data-filter-text="پشتیبانی تک یار تیکت درخواست بسته" href="SHR-018-chat-thread.html" class="flex items-center gap-3 p-4 transition hover:bg-gray-50/60">
+              <span class="grid size-12 shrink-0 place-items-center rounded-full bg-gray-100 text-gray-500"><i data-lucide="shield-check" class="size-5"></i></span>
+              <span class="min-w-0 flex-1">
+                <span class="flex items-center gap-2">
+                  <b class="truncate text-[13.5px] font-extrabold text-gray-900">پشتیبانی تک‌یار</b>
+                  <span class="ms-auto shrink-0 text-[10px] font-semibold text-gray-300">۲ آبان</span>
+                </span>
+                <span class="mt-1 block truncate text-[11.5px] font-semibold text-gray-400">درخواست شما با موفقیت بسته شد</span>
+              </span>
+            </a>
+          </div>
+
+          <!-- empty state -->
+          <div data-empty class="empty-state mt-6 hidden">
+            <span class="empty-icon"><i data-lucide="message-square-text" class="size-5"></i></span>
+            <b class="empty-title">گفتگویی پیدا نشد</b>
+            <p class="empty-hint">نام مربی، گروه یا کلیدواژه دیگری را امتحان کنید.</p>
+          </div>
+        </div>
+
+        <p class="mt-6 text-center text-[10px] font-semibold text-gray-300">پیام‌ها رمزنگاری‌شده نمایش داده می‌شوند — نمونه رابط کاربری</p>
+      </div>
+    </main>
+
+    <script src="../../assets/js/vendor/lucide.min.js" defer></script>
+    <script src="../../assets/js/app.js" defer></script>
+    <nav class="bottom-nav" aria-label="ناوبری اصلی"><a href="../student/STU-001-dashboard.html" class="nav-item" aria-label="خانه"><span class="nav-ico relative"><i data-lucide="home" class="size-[18px]"></i></span><span>خانه</span></a><a href="SHR-017-chat-list.html" class="nav-item is-active" aria-label="گفتگو"><span class="nav-ico relative"><i data-lucide="message-square-text" class="size-[18px]"></i></span><span>گفتگو</span></a><a href="SHR-009-poomsae-library.html" class="nav-item" aria-label="آموزش"><span class="nav-ico relative"><i data-lucide="book-open" class="size-[18px]"></i></span><span>آموزش</span></a><a href="SHR-007-notifications.html" class="nav-item" aria-label="اعلان‌ها"><span class="nav-ico relative"><i data-lucide="bell" class="size-[18px]"></i><span class="nav-badge-dot"></span></span><span>اعلان‌ها</span></a><a href="../student/STU-002-my-profile.html" class="nav-item" aria-label="پروفایل"><span class="nav-ico relative"><i data-lucide="user" class="size-[18px]"></i></span><span>پروفایل</span></a></nav>
+</body>
+</html>
