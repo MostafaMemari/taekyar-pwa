@@ -94,7 +94,7 @@ export function StudentDetail({ studentId }: { studentId: string }) {
           </TabsList>
 
           <TabsContent value="info">
-            <StudentInfoPanel student={profile} />
+            <StudentInfoPanel student={profile} attendance={attendance.data} />
           </TabsContent>
           <TabsContent value="attendance">
             {attendance.error ? (

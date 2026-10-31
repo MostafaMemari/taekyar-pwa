@@ -1014,7 +1014,7 @@ COLOR | POOM | DAN
 | `/coach` داشبورد | `GET /class-session?page=1&take=100` (شمارش هر کلاس امروز از `GET /class-session/:id/students?take=1`)، `GET /club`، `GET /student/stats`، `GET /attendance/coach/summary`، `GET /student-coach-invitation/sent` و `GET /belt-exam` | وصل؛ کلاس های امروز، کاشی ها، درصد و نمودار حضور دو هفته، دعوت نامه های در انتظار و آزمون های نزدیک از سرور |
 | `/coach/students` | `GET /student` و `GET /student/stats` | وصل؛ فیلتر و مرتب سازی در URL و آمار کارت ها از `GET /student/stats` |
 | `/coach/students/new` | `POST /student` | وصل؛ react-hook-form و zod، تبدیل تاریخ شمسی به میلادی |
-| `/coach/students/[id]` | `GET /student/:id`، `GET /student?search=&take=1`، `GET /attendance/student/:id/summary`، `GET /attendance/student/:id?page=1&take=100`، `GET /club/by-student/:id`، `DELETE /student/:id` | وصل؛ کمربند و قد/وزن از آیتم لیست با همان کد ملی خوانده می شود (بخش 11.1)؛ «حذف» واقعی است و `403` حساب فعال را با پیام سرور نشان می دهد |
+| `/coach/students/[id]` | `GET /student/:id`، `GET /student?search=&take=1`، `GET /attendance/student/:id/summary`، `GET /attendance/student/:id?page=1&take=100`، `GET /club/by-student/:id`، `DELETE /student/:id` | وصل؛ کمربند، `nextBeltDate` و قد/وزن از آیتم لیست با همان کد ملی خوانده می شود (بخش 11.1)؛ کارت بیمه رنگ و وضعیت می دهد، کارت کمربند گیج دایره‌ای پیشرفت از `beltDate` تا `nextBeltDate` کنار کمربند فعلی و بعدی می سازد (کمربند بعدی سمت کلاینت از `nextStudentBelt` و سن هنرجو) و نمودار ماهانه حضور از همان رکوردهای `take=100`؛ «حذف» واقعی است و `403` حساب فعال را با پیام سرور نشان می دهد |
 | `/coach/students/[id]/edit` | `GET /student/:id` و `PATCH /student/:id` | وصل؛ مقادیر از پرونده واقعی پر می شود و کمربند/تاریخ کمربند/قد/وزن در ویرایش نمایش داده نمی شوند چون `PATCH` آن ها را نمی پذیرد |
 | `/coach/students/[id]/belt` | `GET /student/:id`، `GET /belt?page=1&take=100&sortBy=level&sortDirection=asc` و `PATCH /student/:id/belt` | وصل؛ کمربند بعدی از قاعده سنی `nextStudentBelt` و شناسه آن از لیست کمربندها؛ تاریخ شمسی به میلادی تبدیل می شود |
 | `/coach/students/[id]/attendance` | `GET /attendance/student/:id/summary` و `GET /attendance/student/:id?page=1&take=100` | وصل؛ خلاصه از `summary` و رکوردها یک صفحه ۱۰۰ تایی، گروه بندی ماهانه و فیلتر وضعیت سمت کلاینت |
@@ -1049,7 +1049,8 @@ COLOR | POOM | DAN
 - `GET /student/:id` همچنان فقط ستون های جدول `Student` را برمی گرداند؛ `currentBelt`، `metrics`، `beltHistory` و `clubMemberships` در آن نیستند.
 - هیچ مسیر `GET` برای تاریخچه کمربند یا متریک ها وجود ندارد.
 - **اثر:** تاریخچه کمربند در دسترس نیست و فرم ویرایش هم نمی تواند کمربند یا قد/وزن را از `GET /student/:id` بخواند.
-- **وضعیت فرانت (تست شده):** صفحه پرونده هنرجو برای پوشش همین شکاف دو درخواست می زند: `GET /student/:id` برای ستون ها و `GET /student?search=&take=1` با کد ملی همان هنرجو (یکتا و تحت نظر مربی) برای `currentBelt` (نام و `beltDate`) و آخرین `metrics`. قد و وزن `Decimal` سرور هستند و ممکن است رشته یا عدد برسند؛ مقدار نامعتبر در UI «ثبت نشده» می شود.
+- **وضعیت فرانت (تست شده):** صفحه پرونده هنرجو برای پوشش همین شکاف دو درخواست می زند: `GET /student/:id` برای ستون ها و `GET /student?search=&take=1` با کد ملی همان هنرجو (یکتا و تحت نظر مربی) برای `currentBelt` (نام، `beltDate` و `nextBeltDate`) و آخرین `metrics`. قد و وزن `Decimal` سرور هستند و ممکن است رشته یا عدد برسند؛ مقدار نامعتبر در UI «ثبت نشده» می شود.
+- **اثر بر نمودار:** چون `metrics` فقط آخرین رکورد را برمی گرداند (`take: 1`، بخش 4.2)، برای قد و وزن سابقه ای وجود ندارد که بتوان نمودار زد. نمودار پرونده هنرجو روند حضور و غیاب ماهانه است که از همان `GET /attendance/student/:id` ساخته می شود.
 - **پیشنهاد:** همان `include` لیست را به `findOneById` هم اضافه کنید، یا `GET /student/:id/belt` و `GET /student/:id/metrics` بسازید.
 
 ### 11.2 آمار داشبورد

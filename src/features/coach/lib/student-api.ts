@@ -8,7 +8,7 @@ export type StudentBeltRecord = {
   level: number;
 };
 
-export type StudentBeltAssignment = { beltDate: string; belt: StudentBeltRecord };
+export type StudentBeltAssignment = { beltDate: string; nextBeltDate: string | null; belt: StudentBeltRecord };
 
 export type StudentMetricsRecord = { height: string | number | null; weight: string | number | null };
 

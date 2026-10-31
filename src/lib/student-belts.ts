@@ -122,3 +122,15 @@ export function nextStudentBelt(belt: StudentBeltKey, age: number): StudentBeltK
 
   return null;
 }
+
+export function ageFromIso(isoDate: string | null) {
+  if (!isoDate) return 0;
+
+  const birth = new Date(isoDate);
+  if (Number.isNaN(birth.getTime())) return 0;
+
+  const today = new Date();
+  const beforeBirthday =
+    today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate());
+  return today.getFullYear() - birth.getFullYear() - (beforeBirthday ? 1 : 0);
+}

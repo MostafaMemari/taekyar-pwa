@@ -24,19 +24,7 @@ import { beltKeyOf } from "@/features/coach/lib/students-options";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { toLatinDigits, toPersianDigits } from "@/lib/digits";
 import { todayJalali, toGregorianDate } from "@/lib/jalali";
-import { beltDotStyle, getStudentBeltMeta, nextStudentBelt } from "@/lib/student-belts";
-
-function ageFromIso(isoDate: string | null) {
-  if (!isoDate) return 0;
-
-  const birth = new Date(isoDate);
-  if (Number.isNaN(birth.getTime())) return 0;
-
-  const today = new Date();
-  const beforeBirthday =
-    today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate());
-  return today.getFullYear() - birth.getFullYear() - (beforeBirthday ? 1 : 0);
-}
+import { ageFromIso, beltDotStyle, getStudentBeltMeta, nextStudentBelt } from "@/lib/student-belts";
 
 export function StudentBeltForm({ studentId }: { studentId: string }) {
   const router = useRouter();
