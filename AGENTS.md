@@ -39,6 +39,7 @@ Everything below the managed block is project-specific; `next dev` preserves it.
 - `src/components/ui/` holds base UI primitives (`Button`, `Input`, `Dialog`, …) only. `src/components/shared/` holds only components genuinely shared by independent areas; a component used by a single feature stays in that feature.
 - `src/lib/` holds domain-agnostic infrastructure and utilities (API client, digit helpers, Jalali dates, theme, …). Feature-specific code never goes there.
 - Client data fetching is SWR, and it belongs to the feature that owns the data: reads in `src/features/<feature>/hooks/use-*.ts`, writes with `useSWRMutation` in the same folder, requests still in the feature API file. Components take `data`, `error`, `isLoading` and `mutate` from the hook and never mirror that server state with their own `useState`. Cache keys are arrays that start with the resource name and then carry its parameters (`["club", id]`, `["club", "list", take]`), and `clearDataCache()` in `src/lib/api/cache.ts` is the logout / new-identity seam.
+- Zustand is only for global client state that unrelated components read and write and that no server response owns. Today that is just the theme: `src/lib/theme-store.ts` holds `mode`/`accent`, applies them through `applyTheme`/`applyAccent`, and `ThemeProvider` syncs it after mount from the class/attribute `THEME_INIT_SOURCE` already set. Server data stays in SWR, per-screen UI state stays `useState`, and filter/URL state stays `nuqs` — don't move those into a store.
 
 ## Design source of truth
 

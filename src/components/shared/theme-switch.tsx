@@ -1,9 +1,9 @@
 "use client";
 
 import { Check, Moon, Palette, Sun } from "lucide-react";
-import { useTheme } from "@/components/shared/theme-provider";
 import { Button } from "@/components/ui/button";
 import { ACCENTS, type AccentId } from "@/lib/theme";
+import { useThemeStore } from "@/lib/theme-store";
 import { cn } from "@/lib/utils";
 
 const SWATCH: Record<AccentId, string> = {
@@ -15,7 +15,10 @@ const SWATCH: Record<AccentId, string> = {
 };
 
 export function ThemeSwitch({ className }: { className?: string }) {
-  const { mode, accent, toggleMode, setAccent } = useTheme();
+  const mode = useThemeStore((state) => state.mode);
+  const accent = useThemeStore((state) => state.accent);
+  const toggleMode = useThemeStore((state) => state.toggleMode);
+  const setAccent = useThemeStore((state) => state.setAccent);
   const isDark = mode === "dark";
 
   return (
