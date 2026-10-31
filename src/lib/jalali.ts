@@ -4,6 +4,7 @@ const jalaliFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { dateStyl
 const jalaliDayFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { weekday: "long", day: "numeric", month: "long" });
 const jalaliMonthFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { month: "long", year: "numeric" });
 const jalaliDayMonthFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { day: "numeric", month: "long" });
+const jalaliMonthNameFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { month: "long" });
 
 const BREAKS = [-61, 9, 38, 199, 426, 686, 756, 818, 1111, 1181, 1210, 1635, 2060, 2097, 2192, 2262, 2324, 2394, 2456, 3178];
 
@@ -96,6 +97,11 @@ export function toJalaliMonth(isoDate: string): string {
 export function toJalaliDayMonth(isoDate: string): string {
   const date = new Date(isoDate);
   return Number.isNaN(date.getTime()) ? "" : jalaliDayMonthFormatter.format(date);
+}
+
+export function toJalaliMonthName(isoDate: string): string {
+  const date = new Date(isoDate);
+  return Number.isNaN(date.getTime()) ? "" : jalaliMonthNameFormatter.format(date);
 }
 
 export function todayJalali(): string {
