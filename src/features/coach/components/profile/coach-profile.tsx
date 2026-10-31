@@ -133,48 +133,47 @@ export function CoachProfile() {
       </CoachBand>
 
       <CoachSheet className="flex flex-col gap-5">
-        <Card className="gap-0 p-0">
-          <div className="px-4 pt-4">
-            <SectionHeading title="اطلاعات مربی" className="mb-0" />
-          </div>
-
-          <dl className="mt-2 px-4 pb-2">
-            {infoRows.map((row) => (
-              <div
-                key={row.label}
-                className="flex items-center justify-between gap-3 border-b border-[var(--line-2)] py-2.5 last:border-b-0"
-              >
-                <dt className="text-[11px] font-medium text-ink-subtle">{row.label}</dt>
-                <dd className="flex items-center gap-1.5 text-[12px] font-extrabold text-ink" dir={row.ltr ? "ltr" : undefined}>
-                  {row.belt ? (
-                    belt && beltKey ? (
-                      <>
-                        <BeltStrip color={belt.color} knotColor="#111827" stripes={belt.stripeCount} className="size-auto w-9" />
-                        <span>{coachBeltLabel(beltKey)}</span>
-                      </>
+        <section>
+          <SectionHeading title="اطلاعات مربی" />
+          <Card className="gap-0 p-0">
+            <dl className="px-4 py-2">
+              {infoRows.map((row) => (
+                <div
+                  key={row.label}
+                  className="flex items-center justify-between gap-3 border-b border-[var(--line-2)] py-2.5 last:border-b-0"
+                >
+                  <dt className="text-[11px] font-medium text-ink-subtle">{row.label}</dt>
+                  <dd className="flex items-center gap-1.5 text-[12px] font-extrabold text-ink" dir={row.ltr ? "ltr" : undefined}>
+                    {row.belt ? (
+                      belt && beltKey ? (
+                        <>
+                          <BeltStrip color={belt.color} knotColor="#111827" stripes={belt.stripeCount} className="size-auto w-9" />
+                          <span>{coachBeltLabel(beltKey)}</span>
+                        </>
+                      ) : (
+                        <span>ثبت نشده</span>
+                      )
                     ) : (
-                      <span>ثبت نشده</span>
-                    )
-                  ) : (
-                    row.value
-                  )}
-                </dd>
-              </div>
-            ))}
-          </dl>
+                      row.value
+                    )}
+                  </dd>
+                </div>
+              ))}
+            </dl>
 
-          <div className="border-t border-[var(--line-2)] px-4 py-2">
-            <Button
-              variant="ghost"
-              className="w-full gap-1.5 rounded-xl text-[12px] font-extrabold text-accent-ink hover:bg-brand-50"
-              render={<Link href="/coach/profile/edit" />}
-              nativeButton={false}
-            >
-              <Pencil data-icon="inline-start" aria-hidden="true" />
-              ویرایش پروفایل
-            </Button>
-          </div>
-        </Card>
+            <div className="border-t border-[var(--line-2)] px-4 py-2">
+              <Button
+                variant="ghost"
+                className="w-full gap-1.5 rounded-xl text-[12px] font-extrabold text-accent-ink hover:bg-brand-50"
+                render={<Link href="/coach/profile/edit" />}
+                nativeButton={false}
+              >
+                <Pencil data-icon="inline-start" aria-hidden="true" />
+                ویرایش پروفایل
+              </Button>
+            </div>
+          </Card>
+        </section>
 
         <section>
           <SectionHeading title="تنظیمات" />
