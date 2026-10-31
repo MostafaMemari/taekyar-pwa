@@ -27,7 +27,11 @@ export function CoachTabBar() {
             ? pathname === "/coach"
             : tab.href === "/coach/students"
               ? pathname.startsWith("/coach/students") || pathname.startsWith("/coach/invitations")
-              : pathname.startsWith(tab.href);
+              : tab.href === "/coach/profile"
+                ? pathname.startsWith("/coach/profile") ||
+                  pathname.startsWith("/coach/settings") ||
+                  pathname.startsWith("/coach/notifications")
+                : pathname.startsWith(tab.href);
 
         return (
           <Link

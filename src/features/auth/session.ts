@@ -26,6 +26,19 @@ export function getSession(): StoredSession | null {
   }
 }
 
+export function getSessionId(): string | null {
+  const token = getSession()?.accessToken.split(".")[1];
+  if (!token) return null;
+
+  try {
+    const payload = token.replace(/-/g, "+").replace(/_/g, "/");
+    const parsed = JSON.parse(atob(payload.padEnd(Math.ceil(payload.length / 4) * 4, "="))) as { sessionId?: unknown };
+    return typeof parsed.sessionId === "string" ? parsed.sessionId : null;
+  } catch {
+    return null;
+  }
+}
+
 export function saveSession(session: StoredSession) {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
 }

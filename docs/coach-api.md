@@ -1032,6 +1032,10 @@ COLOR | POOM | DAN
 | `/coach/sessions/[id]/report` | `GET /attendance/class/:id?date=` و `GET /class-session/:id` | وصل؛ تاریخ از `?date=` و آمار روی رکوردهای ذخیره شده همان تاریخ |
 | `/coach/profile` | `GET /auth/profile`، `GET /notifications/unread-count` و `POST /auth/logout` | وصل؛ اطلاعات، موبایل، کمربند و شمارنده اعلان از سرور |
 | `/coach/profile/edit` | `GET /auth/profile` و `PATCH /coach/:id` | وصل؛ react-hook-form و zod؛ تغییر جنسیت غیرفعال است چون با داشتن باشگاه یا هنرجو `400` می دهد |
+| `/coach/settings` | `GET /notifications/unread-count` | وصل؛ حالت نمایش و رنگ محلی است و فقط شمارنده اعلان از سرور خوانده می شود |
+| `/coach/settings/appearance` | — | فقط `localStorage` (`ty-theme`، `ty-accent` و `ty-radius`) و متغیر `--radius`؛ بدون درخواست سرور |
+| `/coach/settings/security` | `GET /sessions?page=1&take=50&isActive=true/false`، `DELETE /sessions/:id`، `DELETE /sessions` | وصل؛ نشست فعلی از `sessionId` داخل access token و لغو همه نشست فعلی را هم باطل می کند (بخش 11.16) |
+| `/coach/notifications` | `GET /notifications?page=1&take=100&sortBy=sentAt&sortDirection=desc`، `PATCH /notifications/read-all`، `GET /notifications/unread-count` | وصل؛ فیلتر خوانده نشده و نوع در کلاینت اعمال می شود (بخش 11.15) |
 
 ---
 
@@ -1133,7 +1137,12 @@ COLOR | POOM | DAN
 
 ### 11.15 اعلان ها
 
-ماژول `notification` وجود دارد، ولی در UI فعلی مربی استفاده نمی شود. اگر زنگ اعلان در هدر به آن وصل شود، باید مسیرهای `GET /notification` و علامت گذاری خوانده شده بررسی شوند. این بخش در دامنه این سند نیست.
+ماژول `notification` وجود دارد و در پنل مربی وصل شده است: `GET /notifications?page=1&take=100&sortBy=sentAt&sortDirection=desc` صفحه اعلان ها را با `id`، `type`، `title`، `body`، `isRead`، `readAt`، `sentAt` و `createdAt` می دهد، `GET /notifications/unread-count` مقدار `{ unreadCount }` را برمی گرداند و `PATCH /notifications/read-all` همه را خوانده می کند. `QueryNotificationDto` مقدار `isRead` و `type` را از query به boolean/enum تبدیل نمی کند، بنابراین صفحه یک صفحه ۱۰۰ تایی می گیرد و فیلتر «خوانده نشده» و نوع را سمت کلاینت اعمال می کند؛ `shortcut` مربوطه در `notification-api.ts` ثبت شده است.
+
+### 11.16 نشست ها و دستگاه ها
+
+- `GET /sessions?page=1&take=50&isActive=true|false` لیست نشست ها را با `ipAddress`، `userAgent`، `platform`، `expiresAt`، `lastUsedAt` و `revokedAt` می دهد. `DELETE /sessions/:id` یک نشست و `DELETE /sessions` با `{ confirm: true }` همه نشست ها را لغو می کند.
+- `QuerySessionDto` برای `isActive` مقدار پیش فرض ندارد و `@Transform` مقدار غایب را `false` می کند؛ در نتیجه درخواست بدون `isActive` فقط نشست های لغو شده را برمی گرداند. لایه فرانت هر دو حالت را می گیرد و نتیجه را ادغام می کند تا نشست فعلی و تاریخچه با هم دیده شوند. سرویس بک اند `exceptSessionId` را می پذیرد ولی کنترلر آن را پر نمی کند، پس «لغو همه نشست ها» نشست فعلی را هم باطل می کند و کاربر باید دوباره وارد شود.
 
 ---
 

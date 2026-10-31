@@ -24,7 +24,7 @@ function untilLabel(minutes: number) {
   return `${toPersianDigits(String(hours))} ساعت و ${toPersianDigits(String(rest))} دقیقه دیگر`;
 }
 
-export function DashboardHero() {
+export function DashboardHero({ watermark }: { watermark?: string | null }) {
   const [now] = useState(() => new Date());
   const { data: profile } = useCoachProfile();
   const { data } = useSessions();
@@ -36,7 +36,7 @@ export function DashboardHero() {
   const isUpcoming = next !== undefined && minutesOfDay(next.startTime) > nowMinutes;
 
   return (
-    <CoachBand>
+    <CoachBand watermark={watermark}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <h1 className="truncate text-xl font-extrabold leading-7">سلام{profile ? `، مربی ${profile.fullName}` : ""}</h1>

@@ -26,20 +26,21 @@ import { toJalaliDate } from "@/lib/jalali";
 import { PROVINCES } from "@/lib/provinces";
 import { getStudentBeltMeta } from "@/lib/student-belts";
 
-const MENU_ITEMS: { icon: LucideIcon; label: string }[] = [
-  { icon: Pencil, label: "ویرایش پروفایل" },
-  { icon: Bell, label: "اعلان ها" },
-  { icon: ShieldCheck, label: "نشست ها و امنیت" },
-  { icon: Palette, label: "نمایش و رنگ" },
-  { icon: Settings, label: "تنظیمات" },
+const MENU_ITEMS: { icon: LucideIcon; label: string; href: string }[] = [
+  { icon: Pencil, label: "ویرایش پروفایل", href: "/coach/profile/edit" },
+  { icon: Bell, label: "اعلان ها", href: "/coach/notifications" },
+  { icon: ShieldCheck, label: "نشست ها و امنیت", href: "/coach/settings/security" },
+  { icon: Palette, label: "نمایش و رنگ", href: "/coach/settings/appearance" },
+  { icon: Settings, label: "تنظیمات", href: "/coach/settings" },
 ];
 
-function MenuRow({ icon: Icon, label, badge }: { icon: LucideIcon; label: string; badge?: string }) {
+function MenuRow({ icon: Icon, label, href, badge }: { icon: LucideIcon; label: string; href: string; badge?: string }) {
   return (
     <Button
-      type="button"
       variant="ghost"
       className="h-12 w-full justify-start gap-3 rounded-none px-4 text-[12px] font-extrabold text-ink-body hover:bg-muted/50"
+      render={<Link href={href} />}
+      nativeButton={false}
     >
       <Icon className="text-ink-muted" aria-hidden="true" />
       <span className="flex-1 text-start">{label}</span>
@@ -184,6 +185,7 @@ export function CoachProfile() {
                 <MenuRow
                   icon={item.icon}
                   label={item.label}
+                  href={item.href}
                   badge={item.label === "اعلان ها" && unread ? `${toPersianDigits(String(unread))} خوانده نشده` : undefined}
                 />
               </Fragment>
