@@ -1,14 +1,16 @@
 "use client";
 
 import { create } from "zustand";
-import { type AccentId, applyAccent, applyTheme, type ThemeMode } from "@/lib/theme";
+import { type AccentId, applyAccent, applyRadius, applyTheme, RADII, type RadiusId, type ThemeMode } from "@/lib/theme";
 
 type ThemeState = {
   mode: ThemeMode;
   accent: AccentId;
+  radius: RadiusId;
   setMode: (mode: ThemeMode) => void;
   toggleMode: () => void;
   setAccent: (accent: AccentId) => void;
+  setRadius: (radius: RadiusId) => void;
   sync: () => void;
 };
 
@@ -20,9 +22,15 @@ function readAccent(): AccentId {
   return (document.documentElement.getAttribute("data-accent") as AccentId | null) ?? "crimson";
 }
 
+function readRadius(): RadiusId {
+  const value = document.documentElement.style.getPropertyValue("--radius").trim();
+  return RADII.find((option) => option.value === value)?.id ?? "default";
+}
+
 export const useThemeStore = create<ThemeState>((set, get) => ({
   mode: "light",
   accent: "crimson",
+  radius: "default",
   setMode: (mode) => {
     applyTheme(mode);
     set({ mode });
@@ -32,5 +40,9 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
     applyAccent(accent);
     set({ accent });
   },
-  sync: () => set({ mode: readMode(), accent: readAccent() }),
+  setRadius: (radius) => {
+    applyRadius(radius);
+    set({ radius });
+  },
+  sync: () => set({ mode: readMode(), accent: readAccent(), radius: readRadius() }),
 }));
