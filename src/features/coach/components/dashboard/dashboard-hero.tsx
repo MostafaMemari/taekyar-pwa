@@ -53,21 +53,21 @@ export function DashboardHero() {
             <CoachAvatar name={profile?.fullName} imageKey={profile?.imageKey} />
           </Link>
           <div className="flex min-w-0 items-baseline gap-1.5">
-            <span className="shrink-0 text-[11px] font-medium text-white/55">سلام استاد</span>
-            <h1 className="min-w-0 truncate text-[16px] font-extrabold leading-5 text-white">{profile?.fullName ?? ""}</h1>
+            <span className="shrink-0 text-[11px] font-medium text-white/55">استاد</span>
+            <h1 className="min-w-0 truncate text-[17px] font-extrabold leading-6 text-white">{profile?.fullName ?? ""}</h1>
           </div>
         </div>
         <CoachBell />
       </div>
 
-      <div className="mt-2.5 flex items-center justify-between gap-2">
-        <span className="flex items-center gap-1.5 text-[12px] font-medium tabular-nums text-white/60">
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-[12px] font-medium tabular-nums text-white/70">
           <CalendarDays className="size-3.5 shrink-0 text-white/55" aria-hidden="true" />
           {WEEK_DAY_META[todayWeekDay()].label} {toPersianDigits(toJalaliDate(now.toISOString()))}
         </span>
 
         {belt ? (
-          <span className="flex items-center gap-2 text-[12px] font-medium text-white/60">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/10 py-1 pe-3 ps-2 text-[12px] font-medium text-white/70">
             <BeltStrip
               color={belt.color}
               bottomColor={belt.bottomColor}
