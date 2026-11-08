@@ -1,6 +1,6 @@
 "use client";
 
-import { ClipboardCheck } from "lucide-react";
+import { ClipboardCheck, MapPin, Users } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -94,10 +94,13 @@ export function DashboardSessions() {
                         </span>
                       )}
                     </span>
-                    <span className="mt-0.5 flex items-center gap-1.5 text-[12px] font-medium text-ink-subtle">
-                      <span className="truncate">{clubNames.get(session.clubId) ?? "باشگاه حذف شده"}</span>
-                      <span aria-hidden="true">·</span>
+                    <span className="mt-1.5 flex items-center gap-3 text-[12px] font-medium text-ink-subtle">
+                      <span className="flex min-w-0 items-center gap-1">
+                        <MapPin className="size-3.5 shrink-0" aria-hidden="true" />
+                        <span className="truncate">{clubNames.get(session.clubId) ?? "باشگاه حذف شده"}</span>
+                      </span>
                       <span className="flex shrink-0 items-center gap-1 tabular-nums">
+                        <Users className="size-3.5 shrink-0" aria-hidden="true" />
                         {count === undefined ? <Skeleton className="h-3 w-4" /> : toPersianDigits(String(count))} هنرجو
                       </span>
                     </span>

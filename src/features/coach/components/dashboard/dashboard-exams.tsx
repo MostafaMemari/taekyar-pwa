@@ -65,20 +65,16 @@ export function DashboardExams() {
 
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[13px] font-bold text-ink">{toPersianDigits(exam.name)}</p>
-                    <p className="mt-0.5 flex items-center gap-1.5 text-[12px] font-medium text-ink-subtle">
-                      <span className={cn("size-1.5 shrink-0 rounded-full", open ? "bg-success" : "bg-ink-faint")} aria-hidden="true" />
+                    <p className="mt-0.5 flex items-center gap-2.5 text-[12px] font-medium text-ink-subtle">
                       <span className="flex shrink-0 items-center gap-1">
                         <CalendarDays className="size-3.5" aria-hidden="true" />
                         {open ? "ثبت نام باز" : `ثبت نام از ${toJalaliDate(exam.registerDate)}`}
                       </span>
                       {places ? (
-                        <>
-                          <span aria-hidden="true">·</span>
-                          <span className="flex min-w-0 items-center gap-1 truncate">
-                            <MapPin className="size-3.5 shrink-0" aria-hidden="true" />
-                            <span className="truncate">{places}</span>
-                          </span>
-                        </>
+                        <span className="flex min-w-0 items-center gap-1 truncate">
+                          <MapPin className="size-3.5 shrink-0" aria-hidden="true" />
+                          <span className="truncate">{places}</span>
+                        </span>
                       ) : null}
                     </p>
                   </div>
