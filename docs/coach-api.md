@@ -390,7 +390,7 @@ COLOR | POOM | DAN
 |---|---|---|---|
 | `page` | number | خیر | پیش فرض 1 |
 | `take` | number | خیر | پیش فرض 20، حداکثر 100 |
-| `search` | string | خیر | جستجو در نام (contains) یا برابری کد ملی |
+| `search` | string | خیر | جستجو در نام یا کد ملی (contains) |
 | `belt` | enum[] | خیر | یک یا چند `BeltName` |
 | `ageCategory` | enum[] | خیر | یک یا چند رده سنی: `BLOSSOM`، `YOUTH`، `CADET`، `JUNIOR`، `YOUNG`، `SENIOR`، `ULTRA` |
 | `insurance` | enum[] | خیر | `valid`، `expiring`، `expired`، `none` |
