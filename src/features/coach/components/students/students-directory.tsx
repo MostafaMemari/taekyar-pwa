@@ -56,15 +56,17 @@ export function StudentsDirectory() {
   const examLabel = filters.exam ? (exams?.find((item) => item.id === filters.exam)?.name ?? "آزمون") : null;
   const examChipLabel = examLabel ? toPersianDigits(examLabel) : null;
 
-  // One copy entry point: the exam filter gives the exam header, otherwise the insurance statuses do.
+  // One copy entry point: it always mirrors the on-screen filtered list; the header names the active contexts.
   const examRecord = filters.exam ? exams?.find((item) => item.id === filters.exam) : null;
+  const insuranceLine = filters.ins.length > 0 ? `بیمه: ${filters.ins.map((status) => INSURANCE_META[status].label).join(" و ")}` : null;
   const copyContext = examRecord
     ? {
         title: "کپی اسامی واجد شرایط آزمون",
         headerLines: [
           `فهرست هنرجویان واجد شرایط آزمون دوره ${toPersianDigits(String(examRecord.examNumber))}`,
           [examBeltRangeOf(examRecord.belts), `برگزاری ${toJalaliDate(examRecord.eventDate)}`].filter(Boolean).join(" · "),
-        ],
+          insuranceLine,
+        ].filter((line): line is string => Boolean(line)),
       }
     : filters.ins.length > 0
       ? {
