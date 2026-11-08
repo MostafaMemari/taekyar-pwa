@@ -1,5 +1,5 @@
 import { CalendarDays, ListOrdered, type LucideIcon, Medal, ShieldAlert, ShieldCheck, ShieldOff, ShieldX, Type } from "lucide-react";
-import type { AgeCategoryRecord } from "@/features/coach/lib/student-api";
+import type { AgeCategoryRecord, StudentBeltAssignment } from "@/features/coach/lib/student-api";
 import { digitsOnly } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
 import type { StudentBeltKey } from "@/lib/student-belts";
@@ -98,6 +98,15 @@ export function membershipChargeOf(membershipYear: number | null | undefined): {
 
   const currentYear = Number(digitsOnly(toJalaliDate(new Date().toISOString()).split("/")[0]));
   return { due: Math.max(0, currentYear - membershipYear) };
+}
+
+// The backend rejects belt assignment while nextBeltDate is in the future; the UI hides it under the same rule.
+export function isBeltAssignmentOpen(currentBelt: StudentBeltAssignment | null): boolean {
+  if (currentBelt === null || currentBelt.nextBeltDate === null) return true;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return new Date(`${currentBelt.nextBeltDate.slice(0, 10)}T00:00:00`) <= today;
 }
 
 export const SORT_FIELDS = ["createdAt", "updatedAt", "fullName", "belt", "beltDate", "insurance"] as const;

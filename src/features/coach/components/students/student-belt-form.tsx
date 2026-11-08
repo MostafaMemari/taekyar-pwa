@@ -20,10 +20,10 @@ import { useBelts } from "@/features/coach/hooks/use-belts";
 import { useStudent } from "@/features/coach/hooks/use-student";
 import { useAssignStudentBelt } from "@/features/coach/hooks/use-student-mutations";
 import { beltAssignDescription } from "@/features/coach/lib/student-form-options";
-import { beltKeyOf } from "@/features/coach/lib/students-options";
+import { beltKeyOf, isBeltAssignmentOpen } from "@/features/coach/lib/students-options";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { toLatinDigits, toPersianDigits } from "@/lib/digits";
-import { todayJalali, toGregorianDate } from "@/lib/jalali";
+import { todayJalali, toGregorianDate, toJalaliDate } from "@/lib/jalali";
 import { ageFromIso, beltDotStyle, getStudentBeltMeta, nextStudentBelt } from "@/lib/student-belts";
 
 export function StudentBeltForm({ studentId }: { studentId: string }) {
@@ -88,6 +88,24 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
   const current = profile.currentBelt;
   const currentKey = current ? beltKeyOf(current.belt.name) : null;
   const currentMeta = currentKey ? getStudentBeltMeta(currentKey) : null;
+
+  if (!isBeltAssignmentOpen(current)) {
+    const nextDate = current?.nextBeltDate ?? null;
+
+    return (
+      <main className="min-h-dvh px-4 pb-44 pt-[max(1rem,env(safe-area-inset-top))]">
+        <CoachPageHeader title="تخصیص کمربند" subtitle={profile.fullName} backHref={`/coach/students/${studentId}`} />
+        <Alert className="mt-4 rounded-xl border-none bg-info-soft/60 p-3 text-start">
+          <Info className="text-info" aria-hidden="true" />
+          <AlertDescription className="text-[12px] leading-5 text-ink-muted">
+            موعد کمربند بعدی این هنرجو هنوز نرسیده است
+            {nextDate ? ` و از ${toJalaliDate(nextDate)} در دسترس خواهد بود` : ""}. بعد از رسیدن موعد، گزینه تخصیص کمربند در پرونده او فعال
+            می شود.
+          </AlertDescription>
+        </Alert>
+      </main>
+    );
+  }
 
   // shortcut: the seeded nextBelt chain alternates poom/dan, so the age-aware rule drives the choice and the list only maps it to an id.
   const nextKey = currentKey ? nextStudentBelt(currentKey, ageFromIso(profile.birthDate)) : null;

@@ -11,7 +11,7 @@ import { ErrorState } from "@/features/coach/components/error-state";
 import { useStudentAttendance } from "@/features/coach/hooks/use-attendance";
 import { useStudentClubs } from "@/features/coach/hooks/use-clubs";
 import { useStudent } from "@/features/coach/hooks/use-student";
-import { beltKeyOf } from "@/features/coach/lib/students-options";
+import { beltKeyOf, isBeltAssignmentOpen } from "@/features/coach/lib/students-options";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { StudentAttendancePanel } from "./student-attendance-panel";
 import { StudentBand } from "./student-band";
@@ -102,7 +102,13 @@ export function StudentDetail({ studentId }: { studentId: string }) {
           </TabsContent>
           <TabsContent value="specs" className="flex flex-col gap-4">
             <StudentSpecsPanel student={profile} />
-            <StudentDetailActions studentId={studentId} fullName={profile.fullName} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
+            <StudentDetailActions
+              studentId={studentId}
+              fullName={profile.fullName}
+              beltAssignable={isBeltAssignmentOpen(profile.currentBelt)}
+              menuOpen={menuOpen}
+              onMenuOpenChange={setMenuOpen}
+            />
           </TabsContent>
           <TabsContent value="attendance">
             {attendance.error ? (
