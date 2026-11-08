@@ -6,6 +6,8 @@ import {
   type CreateClassSessionInput,
   changeSessionStatus,
   createSession,
+  deleteSession,
+  removeStudentFromSession,
   updateSession,
 } from "@/features/coach/lib/session-api";
 import { ApiError } from "@/lib/api/client";
@@ -55,4 +57,19 @@ export function useAddStudentsToSession(sessionId: string) {
       await mutate((key) => Array.isArray(key) && key[0] === "club");
     },
   );
+}
+
+export function useRemoveSessionStudent(sessionId: string) {
+  return useSWRMutation(["session", "students", "remove", sessionId] as const, async (_key: unknown, { arg }: { arg: string }) => {
+    await removeStudentFromSession(sessionId, arg);
+    await revalidateSessions();
+  });
+}
+
+export function useDeleteSession() {
+  return useSWRMutation(["session", "delete"] as const, async (_key: unknown, { arg }: { arg: string }) => {
+    await deleteSession(arg);
+    await revalidateSessions();
+    await mutate((key) => Array.isArray(key) && key[0] === "club");
+  });
 }

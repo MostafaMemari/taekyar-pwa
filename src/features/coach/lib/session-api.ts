@@ -75,3 +75,11 @@ export function changeSessionStatus(id: string, isActive: boolean): Promise<Clas
 export function addStudentsToSession(id: string, studentIds: string[]): Promise<void> {
   return authRequest<unknown>(`class-session/${id}/students`, { method: "post", json: { studentIds } }).then(() => undefined);
 }
+
+export function removeStudentFromSession(id: string, studentId: string): Promise<void> {
+  return authRequest<unknown>(`class-session/${id}/students/${studentId}`, { method: "delete" }).then(() => undefined);
+}
+
+export function deleteSession(id: string): Promise<void> {
+  return authRequest<unknown>(`class-session/${id}`, { method: "delete" }).then(() => undefined);
+}

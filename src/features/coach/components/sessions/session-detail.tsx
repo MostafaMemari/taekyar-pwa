@@ -1,20 +1,23 @@
 "use client";
 
-import { CalendarDays, Check, ClipboardCheck, ClipboardList, EllipsisVertical, Minus, Plus, Users } from "lucide-react";
+import { CalendarDays, Check, ClipboardCheck, ClipboardList, EllipsisVertical, Loader2, Minus, Plus, Users } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { type ReactNode, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
+import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { ErrorState } from "@/features/coach/components/error-state";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { SessionTime } from "@/features/coach/components/session-time";
 import { StatusBadge } from "@/features/coach/components/status-badge";
+import { useRemoveSessionStudent } from "@/features/coach/hooks/use-session-mutations";
 import { useSession } from "@/features/coach/hooks/use-sessions";
 import { weekDayLabels } from "@/features/coach/lib/coach-data";
 import type { ClassSessionRecord } from "@/features/coach/lib/session-api";
-import { apiErrorMessage } from "@/lib/api/client";
+import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
 import { AddClassStudentsSheet } from "./add-class-students-sheet";
 import { SessionBand } from "./session-band";
@@ -49,13 +52,26 @@ export function SessionDetailView({ sessionId }: { sessionId: string }) {
 }
 
 function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
+  const [removeTarget, setRemoveTarget] = useState<{ studentId: string; name: string } | null>(null);
+  const removeStudent = useRemoveSessionStudent(session.id);
   const clubName = session.club?.name ?? "باشگاه حذف شده";
   const members = (session.students ?? []).map((membership) => ({
     studentId: membership.studentId,
     name: membership.student.fullName,
   }));
+
+  const applyRemove = async () => {
+    if (!removeTarget) return;
+    try {
+      await removeStudent.trigger(removeTarget.studentId);
+      setRemoveTarget(null);
+    } catch (requestError) {
+      if (requestError instanceof ApiError && requestError.status === 401) router.replace("/login");
+    }
+  };
 
   return (
     <main className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300">
@@ -154,7 +170,14 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
           />
 
           {members.length > 0 ? (
-            <SessionRoster entries={members} linkStudents />
+            <SessionRoster
+              entries={members}
+              linkStudents
+              onRemove={(entry) => {
+                removeStudent.reset();
+                setRemoveTarget(entry);
+              }}
+            />
           ) : (
             <p className="rounded-xl bg-muted/60 p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
               هنوز هنرجویی در این کلاس ثبت نشده است.
@@ -173,6 +196,43 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
         clubGender={session.club?.gender}
         existingStudentIds={members.map((member) => member.studentId)}
       />
+
+      <SheetFrame
+        open={removeTarget !== null}
+        onOpenChange={(open) => {
+          if (!open) setRemoveTarget(null);
+        }}
+        title="حذف از کلاس"
+        description="تایید حذف هنرجو از کلاس"
+      >
+        <p className="rounded-xl bg-danger-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
+          {removeTarget ? removeTarget.name : ""} از فهرست هنرجویان این کلاس حذف می شود. عضویت باشگاه او باقی می ماند.
+        </p>
+
+        {removeStudent.error ? (
+          <p className="pt-2 text-[12px] font-bold leading-5 text-danger">{apiErrorMessage(removeStudent.error)}</p>
+        ) : null}
+
+        <div className="flex gap-2 pt-1">
+          <Button
+            variant="outline"
+            className="h-11 flex-1 rounded-xl"
+            onClick={() => setRemoveTarget(null)}
+            disabled={removeStudent.isMutating}
+          >
+            انصراف
+          </Button>
+          <Button
+            variant="destructive"
+            className="h-11 flex-[2] rounded-xl text-[12px] font-semibold"
+            onClick={() => void applyRemove()}
+            disabled={removeStudent.isMutating}
+          >
+            {removeStudent.isMutating ? <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : null}
+            {removeStudent.isMutating ? "در حال حذف..." : "حذف از کلاس"}
+          </Button>
+        </div>
+      </SheetFrame>
     </main>
   );
 }
