@@ -1,15 +1,20 @@
+import { Landmark } from "lucide-react";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { Card } from "@/components/ui/card";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { StatusBadge } from "@/features/coach/components/status-badge";
+import { useBeltExams } from "@/features/coach/hooks/use-belt-exams";
 import type { StudentBeltAssignment } from "@/features/coach/lib/student-api";
-import { beltKeyOf } from "@/features/coach/lib/students-options";
+import { beltApiName, beltKeyOf } from "@/features/coach/lib/students-options";
+import { toPersianDigits } from "@/lib/digits";
 import { durationLabel, toJalaliDate } from "@/lib/jalali";
 import { ageFromIso, beltDotStyle, getStudentBeltMeta, nextStudentBelt } from "@/lib/student-belts";
 
 const DAY_MS = 86_400_000;
 
 export function StudentBeltPanel({ assignment, birthDate }: { assignment: StudentBeltAssignment | null; birthDate: string | null }) {
+  const exams = useBeltExams();
+
   if (!assignment) {
     return (
       <section>
@@ -38,6 +43,19 @@ export function StudentBeltPanel({ assignment, birthDate }: { assignment: Studen
   const isDue = daysLeft !== null && daysLeft <= 0;
   const today = new Date();
   const target = nextDate === null ? null : new Date(`${nextDate.slice(0, 10)}T00:00:00`);
+
+  // Poom and dan belts are granted through federation exams; the exam periods in the backend announce them.
+  const nextIsFederation = nextKey !== null && (nextKey.startsWith("poom") || nextKey.startsWith("dan"));
+  const examsLoading = exams.isLoading && !exams.data;
+  const federationExam = nextIsFederation
+    ? ([...(exams.data ?? [])]
+        .filter(
+          (exam) =>
+            new Date(exam.eventDate).getTime() >= today.getTime() - DAY_MS &&
+            (exam.belts ?? []).some((belt) => belt.name.toUpperCase() === beltApiName(nextKey)),
+        )
+        .sort((a, b) => a.eventDate.localeCompare(b.eventDate))[0] ?? null)
+    : null;
 
   return (
     <section>
@@ -94,6 +112,29 @@ export function StudentBeltPanel({ assignment, birthDate }: { assignment: Studen
                   ? `موعد از ${toJalaliDate(nextDate)} گذشته است`
                   : `از ${toJalaliDate(nextDate)} در دسترس است`}
             </p>
+
+            {nextIsFederation && !examsLoading ? (
+              <div className="mt-3 border-t border-[var(--line-2)] pt-3">
+                <span className="flex items-center gap-1.5 text-[12px] font-semibold text-ink-muted">
+                  <Landmark className="size-3.5" aria-hidden="true" />
+                  آزمون فدراسیون
+                </span>
+                {federationExam ? (
+                  <div className="mt-1.5 flex items-center justify-between gap-2">
+                    <span className="min-w-0 truncate text-[12px] font-medium text-ink-body">
+                      دوره {toPersianDigits(String(federationExam.examNumber))} · برگزاری {toJalaliDate(federationExam.eventDate)}
+                    </span>
+                    <b className="shrink-0 text-[12px] font-bold text-accent-ink">
+                      {new Date(federationExam.eventDate).getTime() - Date.now() <= DAY_MS
+                        ? "امروز"
+                        : `${durationLabel(today, new Date(federationExam.eventDate))} مانده`}
+                    </b>
+                  </div>
+                ) : (
+                  <p className="mt-1.5 text-[12px] font-medium text-ink-subtle">هنوز دوره ای برای این کمربند اعلام نشده است.</p>
+                )}
+              </div>
+            ) : null}
           </div>
         ) : (
           <p className="mt-3 border-t border-[var(--line-2)] pt-3 text-[12px] font-medium text-ink-subtle">
