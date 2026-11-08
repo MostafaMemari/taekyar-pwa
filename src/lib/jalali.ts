@@ -1,4 +1,4 @@
-import { toLatinDigits } from "@/lib/digits";
+import { toLatinDigits, toPersianDigits } from "@/lib/digits";
 
 const jalaliFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { dateStyle: "short" });
 const jalaliDayFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { weekday: "long", day: "numeric", month: "long" });
@@ -106,6 +106,28 @@ export function toJalaliMonthName(isoDate: string): string {
 
 export function todayJalali(): string {
   return jalaliFormatter.format(new Date());
+}
+
+// Calendar-exact breakdown so 112 days reads like «۳ ماه و ۲۲ روز», borrowing real month lengths as it goes.
+export function durationLabel(from: Date, to: Date): string {
+  let years = to.getFullYear() - from.getFullYear();
+  let months = to.getMonth() - from.getMonth();
+  let days = to.getDate() - from.getDate();
+
+  if (days < 0) {
+    months -= 1;
+    days += new Date(to.getFullYear(), to.getMonth(), 0).getDate();
+  }
+  if (months < 0) {
+    years -= 1;
+    months += 12;
+  }
+
+  const parts: string[] = [];
+  if (years > 0) parts.push(`${toPersianDigits(String(years))} سال`);
+  if (months > 0) parts.push(`${toPersianDigits(String(months))} ماه`);
+  if (days > 0 || parts.length === 0) parts.push(`${toPersianDigits(String(days))} روز`);
+  return parts.join(" و ");
 }
 
 export function shiftJalaliDate(jalali: string, days: number): string {

@@ -1,6 +1,7 @@
 "use client";
 
-import { CalendarDays, Info, TrendingUp } from "lucide-react";
+import { CalendarDays, Hourglass, Info, TrendingUp } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import { AuthField } from "@/components/shared/auth-field";
@@ -9,6 +10,7 @@ import { DatePicker } from "@/components/shared/date-picker";
 import { NotFoundScreen } from "@/components/shared/not-found-screen";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
@@ -16,6 +18,7 @@ import { ErrorState } from "@/features/coach/components/error-state";
 import { FormDock } from "@/features/coach/components/form-dock";
 import { FormSection } from "@/features/coach/components/form-section";
 import { PersonAvatar } from "@/features/coach/components/person-avatar";
+import { StatusBadge } from "@/features/coach/components/status-badge";
 import { useBelts } from "@/features/coach/hooks/use-belts";
 import { useStudent } from "@/features/coach/hooks/use-student";
 import { useAssignStudentBelt } from "@/features/coach/hooks/use-student-mutations";
@@ -23,8 +26,10 @@ import { beltAssignDescription } from "@/features/coach/lib/student-form-options
 import { beltKeyOf, isBeltAssignmentOpen } from "@/features/coach/lib/students-options";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { toLatinDigits, toPersianDigits } from "@/lib/digits";
-import { todayJalali, toGregorianDate, toJalaliDate } from "@/lib/jalali";
+import { durationLabel, todayJalali, toGregorianDate, toJalaliDate } from "@/lib/jalali";
 import { ageFromIso, beltDotStyle, getStudentBeltMeta, nextStudentBelt } from "@/lib/student-belts";
+
+const DAY_MS = 86_400_000;
 
 export function StudentBeltForm({ studentId }: { studentId: string }) {
   const router = useRouter();
@@ -89,30 +94,110 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
   const currentKey = current ? beltKeyOf(current.belt.name) : null;
   const currentMeta = currentKey ? getStudentBeltMeta(currentKey) : null;
 
-  if (!isBeltAssignmentOpen(current)) {
-    const nextDate = current?.nextBeltDate ?? null;
-
-    return (
-      <main className="min-h-dvh px-4 pb-44 pt-[max(1rem,env(safe-area-inset-top))]">
-        <CoachPageHeader title="تخصیص کمربند" subtitle={profile.fullName} backHref={`/coach/students/${studentId}`} />
-        <Alert className="mt-4 rounded-xl border-none bg-info-soft/60 p-3 text-start">
-          <Info className="text-info" aria-hidden="true" />
-          <AlertDescription className="text-[12px] leading-5 text-ink-muted">
-            موعد کمربند بعدی این هنرجو هنوز نرسیده است
-            {nextDate ? ` و از ${toJalaliDate(nextDate)} در دسترس خواهد بود` : ""}. بعد از رسیدن موعد، گزینه تخصیص کمربند در پرونده او فعال
-            می شود.
-          </AlertDescription>
-        </Alert>
-      </main>
-    );
-  }
-
   // shortcut: the seeded nextBelt chain alternates poom/dan, so the age-aware rule drives the choice and the list only maps it to an id.
   const nextKey = currentKey ? nextStudentBelt(currentKey, ageFromIso(profile.birthDate)) : null;
   const nextMeta = nextKey ? getStudentBeltMeta(nextKey) : null;
   const nextBeltId = nextKey
     ? belts.data?.find((belt) => belt.name.toUpperCase() === nextKey.toUpperCase().replace("-", "_"))?.id
     : undefined;
+
+  if (!isBeltAssignmentOpen(current)) {
+    const nextDate = current?.nextBeltDate ?? null;
+    const target = nextDate === null ? null : new Date(`${nextDate.slice(0, 10)}T00:00:00`);
+    const startMs = current ? new Date(current.beltDate).getTime() : null;
+    const targetMs = target?.getTime() ?? null;
+    const windowDays = startMs !== null && targetMs !== null ? Math.max(1, Math.round((targetMs - startMs) / DAY_MS)) : null;
+    const percent =
+      startMs !== null && windowDays !== null
+        ? Math.max(0, Math.min(100, Math.round(((Date.now() - startMs) / DAY_MS / windowDays) * 100)))
+        : 0;
+
+    return (
+      <main className="min-h-dvh px-4 pb-44 pt-[max(1rem,env(safe-area-inset-top))]">
+        <CoachPageHeader title="تخصیص کمربند" subtitle={profile.fullName} backHref={`/coach/students/${studentId}`} />
+
+        <Card className="mt-4 flex-row items-center gap-3 p-3">
+          <PersonAvatar name={profile.fullName} className="size-12" fallbackClassName="text-base" />
+          <div className="min-w-0 flex-1">
+            <b className="block truncate text-[14px] font-extrabold text-ink">{profile.fullName}</b>
+            <span className="mt-1 flex flex-wrap items-center gap-2 text-[12px] font-medium text-ink-subtle">
+              <span>کد ملی {toPersianDigits(profile.nationalCode)}</span>
+              <span className="text-ink-subtle" aria-hidden="true">
+                •
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <span
+                  className="size-2.5 rounded-full ring-2 ring-black/5"
+                  style={currentKey ? beltDotStyle(currentKey) : undefined}
+                  aria-hidden="true"
+                />
+                کمربند فعلی: {currentMeta?.label ?? "ثبت نشده"}
+              </span>
+            </span>
+          </div>
+        </Card>
+
+        <Card className="mt-3 gap-0 p-4">
+          <div className="flex items-center justify-between gap-2">
+            <b className="text-[13px] font-extrabold text-ink">کمربند بعدی</b>
+            <StatusBadge tone="neutral">
+              <Hourglass aria-hidden="true" />
+              در انتظار موعد
+            </StatusBadge>
+          </div>
+
+          {nextKey && nextMeta ? (
+            <>
+              <div className="mt-3 flex items-center gap-3">
+                <BeltStrip
+                  color={nextMeta.color}
+                  bottomColor={nextMeta.bottomColor}
+                  outline={nextMeta.outline}
+                  stripes={nextMeta.stripeCount}
+                  className="w-20 shrink-0"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="text-[15px] font-extrabold text-ink">{nextMeta.label}</p>
+                  <p className="mt-0.5 text-[12px] font-medium leading-5 text-ink-subtle">{beltAssignDescription(nextKey)}</p>
+                </div>
+              </div>
+
+              {nextDate !== null && target !== null ? (
+                <div className="mt-4 border-t border-[var(--line-2)] pt-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-ink-muted">
+                      <Hourglass className="size-3.5" aria-hidden="true" />
+                      زمان تا موعد
+                    </span>
+                    <b className="text-[12px] font-bold text-ink">{durationLabel(new Date(), target)} مانده</b>
+                  </div>
+
+                  <div className="mt-2.5 h-2 overflow-hidden rounded-full bg-[var(--line-2)]">
+                    <div
+                      className="h-full w-full origin-left rounded-full bg-gradient-to-l from-brand-400 to-brand-600 transition-transform duration-500"
+                      style={{ transform: `scaleX(${percent / 100})` }}
+                    />
+                  </div>
+
+                  <p className="mt-2 text-[12px] font-medium text-ink-subtle">در دسترس از {toJalaliDate(nextDate)}</p>
+                </div>
+              ) : null}
+            </>
+          ) : null}
+        </Card>
+
+        <Button
+          type="button"
+          variant="outline"
+          className="mt-3 w-full rounded-xl text-[12px] font-semibold"
+          render={<Link href={`/coach/students/${studentId}`} />}
+          nativeButton={false}
+        >
+          بازگشت به پرونده
+        </Button>
+      </main>
+    );
+  }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

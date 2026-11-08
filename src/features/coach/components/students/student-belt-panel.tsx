@@ -4,33 +4,10 @@ import { SectionHeading } from "@/features/coach/components/section-heading";
 import { StatusBadge } from "@/features/coach/components/status-badge";
 import type { StudentBeltAssignment } from "@/features/coach/lib/student-api";
 import { beltKeyOf } from "@/features/coach/lib/students-options";
-import { toPersianDigits } from "@/lib/digits";
-import { toJalaliDate } from "@/lib/jalali";
+import { durationLabel, toJalaliDate } from "@/lib/jalali";
 import { ageFromIso, beltDotStyle, getStudentBeltMeta, nextStudentBelt } from "@/lib/student-belts";
 
 const DAY_MS = 86_400_000;
-
-// Calendar-exact breakdown so 112 days reads like «۳ ماه و ۲۲ روز», borrowing month lengths as it goes.
-function durationLabel(from: Date, to: Date): string {
-  let years = to.getFullYear() - from.getFullYear();
-  let months = to.getMonth() - from.getMonth();
-  let days = to.getDate() - from.getDate();
-
-  if (days < 0) {
-    months -= 1;
-    days += new Date(to.getFullYear(), to.getMonth(), 0).getDate();
-  }
-  if (months < 0) {
-    years -= 1;
-    months += 12;
-  }
-
-  const parts: string[] = [];
-  if (years > 0) parts.push(`${toPersianDigits(String(years))} سال`);
-  if (months > 0) parts.push(`${toPersianDigits(String(months))} ماه`);
-  if (days > 0 || parts.length === 0) parts.push(`${toPersianDigits(String(days))} روز`);
-  return parts.join(" و ");
-}
 
 export function StudentBeltPanel({ assignment, birthDate }: { assignment: StudentBeltAssignment | null; birthDate: string | null }) {
   if (!assignment) {
