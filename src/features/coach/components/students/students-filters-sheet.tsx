@@ -21,7 +21,7 @@ import {
 } from "@/features/coach/lib/students-options";
 import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
-import { beltDotStyle, STUDENT_BELT_GROUPS, type StudentBeltKey } from "@/lib/student-belts";
+import { beltDotStyle, STUDENT_BELT_GROUPS, type StudentBeltKey, studentBeltLabel } from "@/lib/student-belts";
 
 const BELT_GROUP_HINTS: Record<string, string> = {
   color: "از سفید تا قرمز",
@@ -71,7 +71,15 @@ export function StudentsFiltersSheet({
   onClear: () => void;
 }) {
   const selectedBelts = belts.map(beltKeyOf);
-  const exams = [...(useBeltExams().data ?? [])].sort((a, b) => b.eventDate.localeCompare(a.eventDate));
+  const exams = [...(useBeltExams().data ?? [])].sort((a, b) => a.eventDate.localeCompare(b.eventDate));
+  const selectedExam = exam ? exams.find((item) => item.id === exam) : null;
+  const examBelts = [...(selectedExam?.belts ?? [])].sort((a, b) => a.level - b.level);
+  const examBeltRange =
+    examBelts.length === 0
+      ? null
+      : examBelts.length === 1
+        ? studentBeltLabel(beltKeyOf(examBelts[0].name))
+        : `${studentBeltLabel(beltKeyOf(examBelts[0].name))} تا ${studentBeltLabel(beltKeyOf(examBelts[examBelts.length - 1].name))}`;
   const examOptions = exams.map((item) => ({
     value: item.id,
     label: `${toPersianDigits(item.name)} · ${toJalaliDate(item.eventDate)}`,
@@ -147,7 +155,9 @@ export function StudentsFiltersSheet({
               icon={Medal}
             />
             <p className="text-[12px] font-medium leading-5 text-ink-subtle">
-              با انتخاب آزمون، فقط هنرجوهای واجد شرایط همان دوره نشان داده می شود.
+              {selectedExam
+                ? [examBeltRange, `برگزاری ${toJalaliDate(selectedExam.eventDate)}`].filter(Boolean).join(" · ")
+                : "با انتخاب آزمون، فقط هنرجوهای واجد شرایط همان دوره نشان داده می شود"}
             </p>
           </section>
 
