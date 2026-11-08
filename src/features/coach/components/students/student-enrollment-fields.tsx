@@ -90,7 +90,7 @@ export function StudentEnrollmentFields({ control, errors, showImageExpiry = fal
       <PhotoPicker
         label="تصویر هنرجو"
         optional
-        hint="JPG یا PNG، حداکثر ۵ مگابایت"
+        hint="JPG، PNG یا WebP، حداکثر ۵ مگابایت"
         imageSrc={photo?.imageSrc}
         pending={photo?.pending}
         onSelectFile={photo?.onSelectFile}

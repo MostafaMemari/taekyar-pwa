@@ -99,7 +99,7 @@ export function CoachProfileForm() {
             <>
               <PhotoPicker
                 label="تصویر مربی"
-                hint="JPG یا PNG، حداکثر ۵ مگابایت"
+                hint="JPG، PNG یا WebP، حداکثر ۵ مگابایت"
                 imageSrc={imageUrlOf(profile?.imageKey)}
                 pending={uploadImage.isMutating}
                 onSelectFile={(file) => void uploadImage.trigger(file)}
