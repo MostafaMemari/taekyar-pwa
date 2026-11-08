@@ -130,6 +130,11 @@ export function updateStudent(id: string, input: UpdateStudentInput): Promise<vo
   return authRequest<unknown>(`student/${id}`, { method: "patch", json: input }).then(() => undefined);
 }
 
+// PATCH /student/:id takes optional fields, so the quick insurance flow sends only the new expiry date.
+export function updateStudentInsurance(id: string, isoDate: string): Promise<void> {
+  return authRequest<unknown>(`student/${id}`, { method: "patch", json: { sportsInsuranceDate: isoDate } }).then(() => undefined);
+}
+
 export function assignStudentBelt(id: string, beltId: string, beltDate: string): Promise<void> {
   return authRequest<unknown>(`student/${id}/belt`, { method: "patch", json: { beltId, beltDate } }).then(() => undefined);
 }

@@ -7,6 +7,7 @@ import {
   deleteStudent,
   type UpdateStudentInput,
   updateStudent,
+  updateStudentInsurance,
 } from "@/features/coach/lib/student-api";
 
 // A new student changes the list, the stats and every picker fed by them, so the whole student branch is revalidated.
@@ -27,6 +28,13 @@ export function useUpdateStudent() {
       await revalidateStudents();
     },
   );
+}
+
+export function useRegisterStudentInsurance() {
+  return useSWRMutation(["student", "insurance"] as const, async (_key: unknown, { arg }: { arg: { id: string; isoDate: string } }) => {
+    await updateStudentInsurance(arg.id, arg.isoDate);
+    await revalidateStudents();
+  });
 }
 
 export function useAssignStudentBelt() {
