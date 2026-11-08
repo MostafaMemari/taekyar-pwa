@@ -1,5 +1,6 @@
 "use client";
 
+import { CalendarDays } from "lucide-react";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -53,13 +54,17 @@ export function DashboardExams() {
               const eventDay = new Date(exam.eventDate);
               eventDay.setHours(0, 0, 0, 0);
               const daysLeft = Math.max(0, Math.round((eventDay.getTime() - today.getTime()) / DAY_MS));
-              const place = exam.eventPlaces[0] ?? null;
+              const places = exam.eventPlaces.join(" · ");
+              const urgent = daysLeft <= 7;
 
               return (
                 <li key={exam.id} className={cn("flex items-center gap-3 px-4 py-3", index > 0 && "border-t border-[var(--line-2)]")}>
-                  <span className="flex w-11 shrink-0 flex-col items-center rounded-[10px] bg-muted py-1">
-                    <b className="text-[15px] leading-5 font-extrabold tabular-nums text-ink">{day}</b>
-                    <span className="text-[12px] leading-4 font-medium text-ink-muted">{month.join(" ")}</span>
+                  <span
+                    className={cn("flex w-12 shrink-0 flex-col items-center rounded-[10px] py-1.5", urgent ? "bg-danger-soft" : "bg-muted")}
+                  >
+                    <CalendarDays className={cn("size-3.5", urgent ? "text-danger" : "text-ink-subtle")} aria-hidden="true" />
+                    <b className="mt-0.5 text-[15px] leading-5 font-extrabold tabular-nums text-ink">{day}</b>
+                    <span className="text-[11px] leading-4 font-medium text-ink-muted">{month.join(" ")}</span>
                   </span>
 
                   <div className="min-w-0 flex-1">
@@ -68,7 +73,7 @@ export function DashboardExams() {
                       <span className={cn("size-1.5 shrink-0 rounded-full", open ? "bg-success" : "bg-ink-faint")} aria-hidden="true" />
                       <span className="truncate">
                         {open ? "ثبت نام باز" : `ثبت نام از ${toJalaliDate(exam.registerDate)}`}
-                        {place ? ` · ${place}` : ""}
+                        {places ? ` · ${places}` : ""}
                       </span>
                     </p>
                   </div>
