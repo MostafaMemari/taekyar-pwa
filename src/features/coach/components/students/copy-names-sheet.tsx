@@ -5,37 +5,33 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
-import { useBeltExams } from "@/features/coach/hooks/use-belt-exams";
 import { useExamNames } from "@/features/coach/hooks/use-exam-names";
 import type { StudentFeedQuery } from "@/features/coach/lib/student-api";
-import { examBeltRangeOf } from "@/features/coach/lib/students-options";
 import { toPersianDigits } from "@/lib/digits";
-import { toJalaliDate } from "@/lib/jalali";
 
 const COUNT_OPTIONS: (number | null)[] = [10, 25, 50, 100, null];
 
-export function CopyExamNamesSheet({
+export function CopyNamesSheet({
   open,
   onOpenChange,
-  examId,
   query,
+  title,
+  headerLines,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  examId: string;
   query: StudentFeedQuery;
+  title: string;
+  headerLines: string[];
 }) {
   const [limit, setLimit] = useState<number | null>(10);
   const [copied, setCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
-  const exams = useBeltExams();
-  const exam = exams.data?.find((item) => item.id === examId);
-  const names = useExamNames(query, limit, open && Boolean(examId));
+  const names = useExamNames(query, limit, open);
 
   const list = names.data ?? [];
   const text = [
-    `فهرست هنرجویان واجد شرایط ${exam ? `آزمون دوره ${toPersianDigits(String(exam.examNumber))}` : "آزمون"}`,
-    [exam ? examBeltRangeOf(exam.belts) : null, exam ? `برگزاری ${toJalaliDate(exam.eventDate)}` : null].filter(Boolean).join(" · "),
+    ...headerLines,
     `تعداد: ${toPersianDigits(String(list.length))} نفر`,
     "",
     ...list.map((name, index) => `${toPersianDigits(String(index + 1))}. ${name}`),
@@ -56,7 +52,7 @@ export function CopyExamNamesSheet({
   };
 
   return (
-    <SheetFrame open={open} onOpenChange={onOpenChange} title="کپی اسامی آزمون" description="تعداد را انتخاب کن و فهرست را کپی کن.">
+    <SheetFrame open={open} onOpenChange={onOpenChange} title={title} description="تعداد را انتخاب کن و فهرست را کپی کن.">
       <div className="flex flex-wrap gap-1.5">
         {COUNT_OPTIONS.map((option) => (
           <Button

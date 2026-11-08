@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy } from "lucide-react";
+import { ChevronLeft, Copy } from "lucide-react";
 import { useQueryStates } from "nuqs";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -12,11 +12,18 @@ import { useBeltExams } from "@/features/coach/hooks/use-belt-exams";
 import { useStudentStats } from "@/features/coach/hooks/use-student-stats";
 import { useStudentsFeed } from "@/features/coach/hooks/use-students";
 import { activeFilterCount, studentFilterParsers, toggleValue, toStudentQuery } from "@/features/coach/lib/student-filters";
-import { DEFAULT_SORT_DIRECTIONS, type StudentSortDirection, type StudentSortField } from "@/features/coach/lib/students-options";
+import {
+  DEFAULT_SORT_DIRECTIONS,
+  examBeltRangeOf,
+  INSURANCE_META,
+  type StudentSortDirection,
+  type StudentSortField,
+} from "@/features/coach/lib/students-options";
 import { apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
+import { toJalaliDate } from "@/lib/jalali";
 import { AddStudentSheet } from "./add-student-sheet";
-import { CopyExamNamesSheet } from "./copy-exam-names-sheet";
+import { CopyNamesSheet } from "./copy-names-sheet";
 import { SortStudentsSheet } from "./sort-students-sheet";
 import { StudentsActiveFilters } from "./students-active-filters";
 import { StudentsFiltersSheet } from "./students-filters-sheet";
@@ -48,6 +55,23 @@ export function StudentsDirectory() {
   const { data: exams } = useBeltExams();
   const examLabel = filters.exam ? (exams?.find((item) => item.id === filters.exam)?.name ?? "آزمون") : null;
   const examChipLabel = examLabel ? toPersianDigits(examLabel) : null;
+
+  // One copy entry point: the exam filter gives the exam header, otherwise the insurance statuses do.
+  const examRecord = filters.exam ? exams?.find((item) => item.id === filters.exam) : null;
+  const copyContext = examRecord
+    ? {
+        title: "کپی اسامی واجد شرایط آزمون",
+        headerLines: [
+          `فهرست هنرجویان واجد شرایط آزمون دوره ${toPersianDigits(String(examRecord.examNumber))}`,
+          [examBeltRangeOf(examRecord.belts), `برگزاری ${toJalaliDate(examRecord.eventDate)}`].filter(Boolean).join(" · "),
+        ],
+      }
+    : filters.ins.length > 0
+      ? {
+          title: "کپی اسامی بیمه",
+          headerLines: [`فهرست هنرجویان با بیمه ${filters.ins.map((status) => INSURANCE_META[status].label).join(" و ")}`],
+        }
+      : null;
 
   const filterCount = activeFilterCount(filters);
   const isDirty = filterCount > 0 || filters.q.trim().length > 0;
@@ -89,14 +113,25 @@ export function StudentsDirectory() {
         onClear={clearFilters}
       />
 
-      {filters.exam ? (
-        <Button type="button" variant="outline" className="w-full rounded-xl text-[12px] font-semibold" onClick={() => setCopyOpen(true)}>
-          <Copy data-icon="inline-start" aria-hidden="true" />
-          کپی اسامی واجد شرایط آزمون
+      {copyContext ? (
+        <Button
+          type="button"
+          variant="outline"
+          className="mt-3 h-14 w-full justify-start gap-3 rounded-xl border-primary/25 bg-brand-50/50 px-3 text-accent-ink hover:bg-brand-50"
+          onClick={() => setCopyOpen(true)}
+        >
+          <span className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-brand-600 text-white">
+            <Copy className="size-4" aria-hidden="true" />
+          </span>
+          <span className="min-w-0 flex-1 text-start">
+            <b className="block truncate text-[13px] font-bold">{copyContext.title}</b>
+            <span className="text-[11px] font-medium text-ink-subtle">فهرست آماده کپی برای اطلاع رسانی</span>
+          </span>
+          <ChevronLeft className="size-4 shrink-0 text-ink-subtle" aria-hidden="true" />
         </Button>
       ) : null}
 
-      <div aria-busy={isLoading && !data}>
+      <div aria-busy={isLoading && !data} className={copyContext ? "mt-3" : undefined}>
         {isLoading && !data ? <StudentsSkeleton /> : null}
 
         {error && !data ? (
@@ -136,7 +171,13 @@ export function StudentsDirectory() {
 
       <AddStudentSheet open={addOpen} onOpenChange={setAddOpen} />
 
-      <CopyExamNamesSheet open={copyOpen} onOpenChange={setCopyOpen} examId={filters.exam} query={feedQuery} />
+      <CopyNamesSheet
+        open={copyOpen}
+        onOpenChange={setCopyOpen}
+        query={feedQuery}
+        title={copyContext?.title ?? "کپی اسامی هنرجویان"}
+        headerLines={copyContext?.headerLines ?? []}
+      />
 
       <SortStudentsSheet
         open={sortOpen}
