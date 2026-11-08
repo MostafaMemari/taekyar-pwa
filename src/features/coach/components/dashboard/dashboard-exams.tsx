@@ -11,6 +11,18 @@ import { cn } from "@/lib/utils";
 
 const DAY_MS = 86_400_000;
 
+type CountdownTone = "danger" | "warning" | "calm";
+
+const TONE_CLASS: Record<CountdownTone, string> = {
+  danger: "bg-danger-soft text-danger",
+  warning: "bg-warning-soft text-warning",
+  calm: "bg-muted text-ink-muted",
+};
+
+function countdownTone(days: number): CountdownTone {
+  return days <= 7 ? "danger" : days <= 30 ? "warning" : "calm";
+}
+
 export function DashboardExams() {
   const [now] = useState(() => new Date());
   const { data, isLoading } = useBeltExams();
@@ -41,6 +53,7 @@ export function DashboardExams() {
               const eventDay = new Date(exam.eventDate);
               eventDay.setHours(0, 0, 0, 0);
               const daysLeft = Math.max(0, Math.round((eventDay.getTime() - today.getTime()) / DAY_MS));
+              const place = exam.eventPlaces[0] ?? null;
 
               return (
                 <li key={exam.id} className={cn("flex items-center gap-3 px-4 py-3", index > 0 && "border-t border-[var(--line-2)]")}>
@@ -50,19 +63,22 @@ export function DashboardExams() {
                   </span>
 
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-[13px] font-bold text-ink">{exam.name}</p>
+                    <p className="truncate text-[13px] font-bold text-ink">{toPersianDigits(exam.name)}</p>
                     <p className="mt-0.5 flex items-center gap-1.5 text-[12px] font-medium text-ink-subtle">
                       <span className={cn("size-1.5 shrink-0 rounded-full", open ? "bg-success" : "bg-ink-faint")} aria-hidden="true" />
-                      <span className="shrink-0">{open ? "ثبت نام باز" : "به زودی"}</span>
-                      <span aria-hidden="true">·</span>
                       <span className="truncate">
-                        دوره {toPersianDigits(String(exam.examNumber))}،{" "}
-                        {open ? `تا ${toJalaliDate(exam.eventDate)}` : `از ${toJalaliDate(exam.registerDate)}`}
+                        {open ? "ثبت نام باز" : `ثبت نام از ${toJalaliDate(exam.registerDate)}`}
+                        {place ? ` · ${place}` : ""}
                       </span>
                     </p>
                   </div>
 
-                  <span className="shrink-0 text-[12px] font-semibold tabular-nums text-ink-muted">
+                  <span
+                    className={cn(
+                      "shrink-0 rounded-full px-2 py-0.5 text-[12px] font-bold tabular-nums",
+                      TONE_CLASS[countdownTone(daysLeft)],
+                    )}
+                  >
                     {daysLeft === 0 ? "امروز" : `${toPersianDigits(String(daysLeft))} روز`}
                   </span>
                 </li>
