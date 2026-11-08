@@ -1,6 +1,8 @@
-import { BadgeCheck } from "lucide-react";
+"use client";
+
+import { BadgeCheck, Check, Copy } from "lucide-react";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { Button } from "@/components/ui/button";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
@@ -9,7 +11,7 @@ import { StatusBadge } from "@/features/coach/components/status-badge";
 import type { AgeCategoryRecord, StudentRecord } from "@/features/coach/lib/student-api";
 import { GENDER_OPTIONS } from "@/features/coach/lib/student-form-options";
 import { AGE_CATEGORY_LABELS, ageCategoryOf, beltKeyOf, INSURANCE_META, insuranceStatusOf } from "@/features/coach/lib/students-options";
-import { toPersianDigits } from "@/lib/digits";
+import { digitsOnly, toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
 import { getStudentBeltMeta } from "@/lib/student-belts";
 
@@ -28,6 +30,8 @@ function metricText(value: string | number | null | undefined) {
   return Number.isFinite(parsed) ? toPersianDigits(String(parsed)) : null;
 }
 
+const DAY_MS = 86_400_000;
+
 export function StudentQuickSheet({
   open,
   onOpenChange,
@@ -41,6 +45,8 @@ export function StudentQuickSheet({
   ageCategories: AgeCategoryRecord[];
   expiringDays: number;
 }) {
+  const [copied, setCopied] = useState(false);
+
   const insurance = insuranceStatusOf(student?.sportsInsuranceDate ?? null, expiringDays);
   const insuranceMeta = INSURANCE_META[insurance];
   const ageCategory = student ? ageCategoryOf(student.birthDate, ageCategories) : null;
@@ -50,8 +56,27 @@ export function StudentQuickSheet({
   const weight = metricText(metric?.weight);
   const genderLabel = GENDER_OPTIONS.find((option) => option.value === student?.gender)?.label;
 
+  const currentYear = Number(digitsOnly(toJalaliDate(new Date().toISOString()).split("/")[0]));
+  const membershipYear = typeof student?.membershipYear === "number" ? student.membershipYear : null;
+  const membershipDue = membershipYear === null ? null : Math.max(0, currentYear - membershipYear);
+
+  const nextBeltTime = student?.currentBelt?.nextBeltDate ? new Date(student.currentBelt.nextBeltDate).getTime() : null;
+  const examDue = nextBeltTime !== null && nextBeltTime < Date.now();
+  const examSoon = !examDue && nextBeltTime !== null && nextBeltTime < Date.now() + 30 * DAY_MS;
+
+  const copyNationalCode = async () => {
+    if (!student) return;
+    try {
+      await navigator.clipboard.writeText(student.nationalCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // clipboard unavailable (insecure context); nothing to recover
+    }
+  };
+
   return (
-    <SheetFrame open={open} onOpenChange={onOpenChange} title={student?.fullName ?? "هنرجو"} description="اطلاعات سریع هنرجو">
+    <SheetFrame open={open} onOpenChange={onOpenChange} title="اطلاعات سریع هنرجو" description="اطلاعات پرونده هنرجو">
       <div className="mt-3 flex flex-col">
         <div className="flex items-center gap-3 pb-3">
           <span className="relative shrink-0">
@@ -69,12 +94,36 @@ export function StudentQuickSheet({
         </div>
 
         <div className="divide-y divide-[var(--line-2)] border-t border-[var(--line-2)]">
-          <Row label="کد ملی">{student ? toPersianDigits(student.nationalCode) : ""}</Row>
+          <Row label="کد ملی">
+            <span className="inline-flex items-center gap-1.5">
+              {student ? toPersianDigits(student.nationalCode) : ""}
+              <button
+                type="button"
+                aria-label="کپی کد ملی"
+                onClick={() => void copyNationalCode()}
+                className="grid size-6 place-items-center rounded-md text-ink-subtle transition-colors hover:bg-muted hover:text-ink"
+              >
+                {copied ? <Check className="size-3.5 text-success" aria-hidden="true" /> : <Copy className="size-3.5" aria-hidden="true" />}
+              </button>
+            </span>
+          </Row>
           <Row label="تاریخ تولد">
             {student?.birthDate ? toJalaliDate(student.birthDate) : "ثبت نشده"}
             {ageCategory ? ` · ${AGE_CATEGORY_LABELS[ageCategory]}` : ""}
           </Row>
           <Row label="جنسیت">{genderLabel ?? "ثبت نشده"}</Row>
+          <Row label="عضویت">
+            {membershipDue === null ? (
+              "ثبت نشده"
+            ) : (
+              <span className="flex flex-col items-end gap-1">
+                <StatusBadge tone={membershipDue === 0 ? "success" : "warning"} className="px-1.5 py-0.5 text-[12px]">
+                  {membershipDue === 0 ? "اشتراک معتبر" : `${toPersianDigits(String(membershipDue))} سال شارژ`}
+                </StatusBadge>
+                <span className="text-[11px] font-medium text-ink-subtle">سال {toPersianDigits(String(membershipYear))}</span>
+              </span>
+            )}
+          </Row>
           <Row label="بیمه">
             <span className="flex flex-col items-end gap-1">
               <StatusBadge tone={insuranceMeta.tone} className="px-1.5 py-0.5 text-[12px]">
@@ -102,7 +151,22 @@ export function StudentQuickSheet({
             )}
           </Row>
           {student?.currentBelt?.beltDate ? <Row label="تاریخ اخذ">{toJalaliDate(student.currentBelt.beltDate)}</Row> : null}
-          {student?.currentBelt?.nextBeltDate ? <Row label="آزمون بعدی">{toJalaliDate(student.currentBelt.nextBeltDate)}</Row> : null}
+          {student?.currentBelt?.nextBeltDate ? (
+            <Row label="آزمون بعدی">
+              <span className="flex flex-col items-end gap-1">
+                <span>{toJalaliDate(student.currentBelt.nextBeltDate)}</span>
+                {examDue ? (
+                  <StatusBadge tone="danger" className="px-1.5 py-0.5 text-[12px]">
+                    وقت آزمون رسیده
+                  </StatusBadge>
+                ) : examSoon ? (
+                  <StatusBadge tone="warning" className="px-1.5 py-0.5 text-[12px]">
+                    نزدیک آزمون
+                  </StatusBadge>
+                ) : null}
+              </span>
+            </Row>
+          ) : null}
           {height || weight ? (
             <Row label="قد و وزن">{[height ? `قد ${height}` : null, weight ? `وزن ${weight}` : null].filter(Boolean).join(" · ")}</Row>
           ) : null}

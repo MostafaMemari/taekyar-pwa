@@ -20,6 +20,7 @@ export type StudentRecord = {
   nationalCode: string;
   birthDate: string | null;
   sportsInsuranceDate: string | null;
+  membershipYear?: number | null;
   currentBelt: StudentBeltAssignment | null;
   metrics: StudentMetricsRecord[];
 };
