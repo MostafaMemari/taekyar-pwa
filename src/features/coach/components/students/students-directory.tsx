@@ -2,10 +2,13 @@
 
 import { useQueryStates } from "nuqs";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/features/coach/components/error-state";
+import { LoadMoreSentinel } from "@/features/coach/components/load-more-sentinel";
 import { useAgeCategories } from "@/features/coach/hooks/use-age-categories";
 import { useStudentStats } from "@/features/coach/hooks/use-student-stats";
-import { useStudents } from "@/features/coach/hooks/use-students";
+import { useStudentsFeed } from "@/features/coach/hooks/use-students";
 import { activeFilterCount, studentFilterParsers, toggleValue, toStudentQuery } from "@/features/coach/lib/student-filters";
 import { type StudentSortKey, sortPreset } from "@/features/coach/lib/students-options";
 import { apiErrorMessage } from "@/lib/api/client";
@@ -15,7 +18,6 @@ import { StudentsActiveFilters } from "./students-active-filters";
 import { StudentsFiltersSheet } from "./students-filters-sheet";
 import { StudentsList } from "./students-list";
 import { StudentsOverview } from "./students-overview";
-import { StudentsPagination } from "./students-pagination";
 import { StudentsSkeleton } from "./students-skeleton";
 import { StudentsToolbar } from "./students-toolbar";
 
@@ -34,25 +36,21 @@ export function StudentsDirectory() {
     return () => clearTimeout(timer);
   }, [filters.q]);
 
-  const { data, error, isLoading, mutate } = useStudents(toStudentQuery(filters, searchTerm));
+  const { data, students, total, hasMore, error, isLoading, isValidating, mutate, setSize } = useStudentsFeed(
+    toStudentQuery(filters, searchTerm),
+  );
   const { data: stats } = useStudentStats();
   const { data: ageCategories } = useAgeCategories();
-
-  const pager = data?.pager;
-
-  useEffect(() => {
-    if (pager && pager.totalPages > 0 && filters.page > pager.totalPages) void setFilters({ page: pager.totalPages });
-  }, [pager, filters.page, setFilters]);
 
   const filterCount = activeFilterCount(filters);
   const isDirty = filterCount > 0 || filters.q.trim().length > 0;
   const sortActive = filters.sort !== "createdAt" || filters.dir !== "desc";
 
-  const clearFilters = () => void setFilters({ q: "", belt: [], age: [], ins: [], page: 1 });
+  const clearFilters = () => void setFilters({ q: "", belt: [], age: [], ins: [] });
 
   const changeSort = (key: StudentSortKey) => {
     const preset = sortPreset(key);
-    void setFilters({ sort: preset.sortBy, dir: preset.sortDirection, page: 1 });
+    void setFilters({ sort: preset.sortBy, dir: preset.sortDirection });
     setSortOpen(false);
   };
 
@@ -62,13 +60,13 @@ export function StudentsDirectory() {
         total={stats?.total}
         stats={stats?.byInsurance}
         active={filters.ins}
-        onToggle={(value) => void setFilters({ ins: toggleValue(filters.ins, value), page: 1 })}
+        onToggle={(value) => void setFilters({ ins: toggleValue(filters.ins, value) })}
         onAdd={() => setAddOpen(true)}
       />
 
       <StudentsToolbar
         query={filters.q}
-        onQueryChange={(value) => void setFilters({ q: value, page: 1 })}
+        onQueryChange={(value) => void setFilters({ q: value })}
         filterCount={filterCount}
         onOpenFilters={() => setFiltersOpen(true)}
         sortActive={sortActive}
@@ -79,9 +77,9 @@ export function StudentsDirectory() {
         belts={filters.belt}
         ages={filters.age}
         insurances={filters.ins}
-        onRemoveBelt={(value) => void setFilters({ belt: filters.belt.filter((item) => item !== value), page: 1 })}
-        onRemoveAge={(value) => void setFilters({ age: filters.age.filter((item) => item !== value), page: 1 })}
-        onRemoveInsurance={(value) => void setFilters({ ins: filters.ins.filter((item) => item !== value), page: 1 })}
+        onRemoveBelt={(value) => void setFilters({ belt: filters.belt.filter((item) => item !== value) })}
+        onRemoveAge={(value) => void setFilters({ age: filters.age.filter((item) => item !== value) })}
+        onRemoveInsurance={(value) => void setFilters({ ins: filters.ins.filter((item) => item !== value) })}
         onClear={clearFilters}
       />
 
@@ -99,20 +97,25 @@ export function StudentsDirectory() {
       {data ? (
         <>
           <StudentsList
-            students={data.students}
+            students={students}
             ageCategories={ageCategories ?? []}
             expiringDays={stats?.expiringDays ?? 30}
             hasFilters={isDirty}
             onClear={clearFilters}
           />
-          {pager ? (
-            <StudentsPagination
-              page={pager.page}
-              perPage={pager.perPage}
-              total={pager.total}
-              onPageChange={(value) => void setFilters({ page: value })}
-            />
+
+          {isValidating && hasMore ? <Skeleton className="mt-2.5 h-16 w-full rounded-xl" /> : null}
+
+          {error && students.length > 0 ? (
+            <Button type="button" variant="outline" size="sm" className="mt-3 w-full rounded-xl" onClick={() => void mutate()}>
+              بارگذاری بیشتر
+            </Button>
           ) : null}
+
+          <LoadMoreSentinel
+            disabled={!hasMore || isValidating || Boolean(error)}
+            onLoadMore={() => void setSize((current) => current + 1)}
+          />
         </>
       ) : null}
 
@@ -133,10 +136,10 @@ export function StudentsDirectory() {
         ages={filters.age}
         insurances={filters.ins}
         ageCategories={ageCategories}
-        resultCount={pager?.total}
-        onBeltsChange={(value) => void setFilters({ belt: value, page: 1 })}
-        onAgesChange={(value) => void setFilters({ age: value, page: 1 })}
-        onInsurancesChange={(value) => void setFilters({ ins: value, page: 1 })}
+        resultCount={total}
+        onBeltsChange={(value) => void setFilters({ belt: value })}
+        onAgesChange={(value) => void setFilters({ age: value })}
+        onInsurancesChange={(value) => void setFilters({ ins: value })}
         onClear={clearFilters}
       />
     </>

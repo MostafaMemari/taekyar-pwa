@@ -57,6 +57,8 @@ export type StudentQuery = {
   sortDirection?: string;
 };
 
+export type StudentFeedQuery = Omit<StudentQuery, "page" | "take">;
+
 export type CreateStudentInput = {
   fullName: string;
   nationalCode: string;

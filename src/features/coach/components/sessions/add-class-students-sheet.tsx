@@ -2,21 +2,24 @@
 
 import { Check, Search, UserPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthFormError } from "@/components/shared/auth-form-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { ErrorState } from "@/features/coach/components/error-state";
+import { LoadMoreSentinel } from "@/features/coach/components/load-more-sentinel";
 import { useAddStudentsToSession } from "@/features/coach/hooks/use-session-mutations";
-import { useStudents } from "@/features/coach/hooks/use-students";
+import { useStudentsFeed } from "@/features/coach/hooks/use-students";
 import type { Gender } from "@/features/coach/lib/coach-data";
 import { beltKeyOf } from "@/features/coach/lib/students-options";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
 import { studentBeltLabel } from "@/lib/student-belts";
 import { cn } from "@/lib/utils";
+
+const SEARCH_DEBOUNCE_MS = 300;
 
 export function AddClassStudentsSheet({
   open,
@@ -35,17 +38,32 @@ export function AddClassStudentsSheet({
 }) {
   const router = useRouter();
   const [search, setSearch] = useState("");
+  const [term, setTerm] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
-  const { data, error, isLoading, mutate } = useStudents({ page: 1, take: 100, gender: clubGender });
+
+  // The API does the search; typing waits for a pause so the list does not refetch per character.
+  useEffect(() => {
+    const timer = setTimeout(() => setTerm(search.trim()), SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  const { students, hasMore, error, isLoading, isValidating, mutate, setSize } = useStudentsFeed({
+    search: term || undefined,
+    gender: clubGender,
+  });
   const save = useAddStudentsToSession(sessionId);
 
-  const students = data?.students ?? [];
   const existing = new Set(existingStudentIds);
-  const term = search.trim();
-  const visible = students.filter((student) => !existing.has(student.id) && (!term || student.fullName.includes(term)));
+  const visible = students.filter((student) => !existing.has(student.id));
+
+  // A full page of already-member students renders nothing; pull the next page instead of showing a dead end.
+  useEffect(() => {
+    if (open && !isLoading && !isValidating && !error && visible.length === 0 && hasMore) void setSize((current) => current + 1);
+  }, [error, hasMore, isLoading, isValidating, open, setSize, visible.length]);
 
   const close = () => {
     setSearch("");
+    setTerm("");
     setSelected([]);
     save.reset();
     onOpenChange(false);
@@ -72,7 +90,7 @@ export function AddClassStudentsSheet({
       description="هنرجویان ثبت شده را انتخاب کنید تا هم عضو باشگاه و هم عضو این کلاس شوند."
     >
       <div className="mt-3 flex flex-col gap-3">
-        {students.length > 0 ? (
+        {students.length > 0 || term ? (
           <div className="relative">
             <Search className="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-subtle" aria-hidden="true" />
             <Input
@@ -95,12 +113,14 @@ export function AddClassStudentsSheet({
           ) : error ? (
             <ErrorState title="خواندن هنرجویان انجام نشد" message={apiErrorMessage(error)} onRetry={() => void mutate()} />
           ) : students.length === 0 ? (
-            <p className="rounded-xl bg-muted/60 p-4 text-center text-[11px] font-semibold leading-5 text-ink-subtle">
-              هنوز هنرجویی ثبت نشده است. ابتدا در بخش هنرجویان یک پرونده بسازید، بعد او را به این کلاس اضافه کنید.
+            <p className="rounded-xl bg-muted/60 p-4 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
+              {term
+                ? "هنرجویی با این نام پیدا نشد."
+                : "هنوز هنرجویی ثبت نشده است. ابتدا در بخش هنرجویان یک پرونده بسازید، بعد او را به این کلاس اضافه کنید."}
             </p>
           ) : visible.length === 0 ? (
-            <p className="rounded-xl bg-muted/60 p-4 text-center text-[11px] font-semibold leading-5 text-ink-subtle">
-              {term ? "هنرجویی با این نام پیدا نشد." : "هنرجوی دیگری برای افزودن نمانده است."}
+            <p className="rounded-xl bg-muted/60 p-4 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
+              هنرجوی دیگری برای افزودن نمانده است.
             </p>
           ) : (
             <div className="flex flex-col gap-2">
@@ -126,13 +146,19 @@ export function AddClassStudentsSheet({
                       <UserPlus className="size-4" aria-hidden="true" />
                     </span>
                     <span className="min-w-0 flex-1 text-start">
-                      <b className="block truncate text-[12px] font-extrabold text-ink">{student.fullName}</b>
-                      <span className="text-[10px] font-medium text-ink-subtle">{belt ?? "بدون کمربند"}</span>
+                      <b className="block truncate text-[12px] font-semibold text-ink">{student.fullName}</b>
+                      <span className="text-[12px] font-medium text-ink-subtle">{belt ?? "بدون کمربند"}</span>
                     </span>
                     {isSelected ? <Check className="text-primary" aria-hidden="true" /> : null}
                   </Button>
                 );
               })}
+
+              {isValidating && hasMore ? <Skeleton className="h-14 w-full rounded-xl" /> : null}
+              <LoadMoreSentinel
+                disabled={!hasMore || isValidating || Boolean(error)}
+                onLoadMore={() => void setSize((current) => current + 1)}
+              />
             </div>
           )}
         </div>

@@ -1,5 +1,5 @@
-import { type inferParserType, parseAsArrayOf, parseAsInteger, parseAsString, parseAsStringEnum } from "nuqs";
-import { STUDENTS_PAGE_SIZE, type StudentQuery } from "@/features/coach/lib/student-api";
+import { type inferParserType, parseAsArrayOf, parseAsString, parseAsStringEnum } from "nuqs";
+import type { StudentFeedQuery } from "@/features/coach/lib/student-api";
 import {
   AGE_CATEGORY_NAMES,
   BELT_API_NAMES,
@@ -15,15 +15,12 @@ export const studentFilterParsers = {
   ins: parseAsArrayOf(parseAsStringEnum([...INSURANCE_STATUSES])).withDefault([]),
   sort: parseAsStringEnum([...SORT_FIELDS]).withDefault("createdAt"),
   dir: parseAsStringEnum<StudentSortDirection>(["asc", "desc"]).withDefault("desc"),
-  page: parseAsInteger.withDefault(1),
 };
 
 export type StudentFilters = inferParserType<typeof studentFilterParsers>;
 
-export function toStudentQuery(filters: StudentFilters, search: string): StudentQuery {
+export function toStudentQuery(filters: StudentFilters, search: string): StudentFeedQuery {
   return {
-    page: filters.page,
-    take: STUDENTS_PAGE_SIZE,
     search: search.trim() || undefined,
     belt: filters.belt.length > 0 ? filters.belt : undefined,
     ageCategory: filters.age.length > 0 ? filters.age : undefined,
