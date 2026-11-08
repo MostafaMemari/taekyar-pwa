@@ -48,7 +48,7 @@ function describeDevice(session: AccountSession) {
             ? "لینوکس"
             : "";
 
-  return os ? `${browser} — ${os}` : browser;
+  return os ? `${browser} · ${os}` : browser;
 }
 
 function stateOf(session: AccountSession) {

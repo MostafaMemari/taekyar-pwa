@@ -43,7 +43,7 @@ export function InvitationsList() {
       ) : isLoading && !data ? (
         <div className="flex flex-col gap-2.5">
           {[0, 1, 2].map((index) => (
-            <Skeleton key={index} className="h-[82px] rounded-2xl" />
+            <Skeleton key={index} className="h-[80px] rounded-2xl" />
           ))}
         </div>
       ) : invitations.length === 0 ? (

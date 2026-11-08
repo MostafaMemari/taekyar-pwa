@@ -110,7 +110,7 @@ export function DashboardAttendance() {
                 .join("، ")}
             </p>
 
-            <ChartContainer config={chartConfig} className="mt-3 h-[74px] w-full" aria-hidden="true">
+            <ChartContainer config={chartConfig} className="mt-3 h-[72px] w-full" aria-hidden="true">
               <BarChart data={days} margin={{ top: 4, right: 0, left: 0, bottom: 0 }} barCategoryGap="26%">
                 <XAxis
                   dataKey="day"

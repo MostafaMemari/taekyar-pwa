@@ -125,7 +125,7 @@ export function SettingsScreen() {
                   title={option.label}
                   onClick={() => setAccent(option.id)}
                   className={cn(
-                    "size-7 rounded-full transition-transform hover:scale-110",
+                    "size-7 rounded-full transition-opacity hover:opacity-80",
                     accent === option.id && "ring-2 ring-brand-600 ring-offset-2 ring-offset-card",
                   )}
                   style={{ background: ACCENT_SWATCH[option.id] }}
@@ -176,14 +176,14 @@ export function SettingsScreen() {
         <LogoutButton />
       </Card>
 
-      <p className="mt-5 text-center text-[12px] font-semibold text-ink-faint">تک یار — نسخه نمایشی رابط کاربری</p>
+      <p className="mt-5 text-center text-[12px] font-semibold text-ink-faint">تک یار، نسخه نمایشی رابط کاربری</p>
 
       <SheetFrame open={aboutOpen} onOpenChange={setAboutOpen} title="درباره تک یار" description="معرفی برنامه">
         <div className="flex flex-col items-center gap-3 py-2 text-center">
           <LogoMark className="size-16 rounded-[22px]" />
           <div>
             <b className="block text-[15px] font-extrabold text-ink">تک یار</b>
-            <span className="mt-0.5 block text-[12px] font-semibold text-ink-subtle">همیار تمرین تکواندو — هنرجو، مربی، باشگاه</span>
+            <span className="mt-0.5 block text-[12px] font-semibold text-ink-subtle">همیار تمرین تکواندو: هنرجو، مربی، باشگاه</span>
           </div>
           <div className="flex flex-wrap justify-center gap-1.5">
             <StatusBadge tone="neutral">نمونه رابط کاربری</StatusBadge>

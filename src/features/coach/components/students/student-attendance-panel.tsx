@@ -28,7 +28,7 @@ export function StudentAttendancePanel({ studentId, attendance }: { studentId: s
         counts={counts}
         footer={
           <>
-            مجموع: {toPersianDigits(String(attendanceTotal(counts)))} جلسه — غیبت {toPersianDigits(String(counts.absent))} · غیبت موجه{" "}
+            مجموع: {toPersianDigits(String(attendanceTotal(counts)))} جلسه، غیبت {toPersianDigits(String(counts.absent))} · غیبت موجه{" "}
             {toPersianDigits(String(counts.excused))}
           </>
         }

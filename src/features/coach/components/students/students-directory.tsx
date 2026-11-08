@@ -83,41 +83,43 @@ export function StudentsDirectory() {
         onClear={clearFilters}
       />
 
-      {isLoading && !data ? <StudentsSkeleton /> : null}
+      <div aria-busy={isLoading && !data}>
+        {isLoading && !data ? <StudentsSkeleton /> : null}
 
-      {error && !data ? (
-        <ErrorState
-          className="mt-4"
-          title="خواندن فهرست هنرجویان انجام نشد"
-          message={apiErrorMessage(error)}
-          onRetry={() => void mutate()}
-        />
-      ) : null}
-
-      {data ? (
-        <>
-          <StudentsList
-            students={students}
-            ageCategories={ageCategories ?? []}
-            expiringDays={stats?.expiringDays ?? 30}
-            hasFilters={isDirty}
-            onClear={clearFilters}
+        {error && !data ? (
+          <ErrorState
+            className="mt-4"
+            title="خواندن فهرست هنرجویان انجام نشد"
+            message={apiErrorMessage(error)}
+            onRetry={() => void mutate()}
           />
+        ) : null}
 
-          {isValidating && hasMore ? <Skeleton className="mt-2.5 h-16 w-full rounded-xl" /> : null}
+        {data ? (
+          <>
+            <StudentsList
+              students={students}
+              ageCategories={ageCategories ?? []}
+              expiringDays={stats?.expiringDays ?? 30}
+              hasFilters={isDirty}
+              onClear={clearFilters}
+            />
 
-          {error && students.length > 0 ? (
-            <Button type="button" variant="outline" size="sm" className="mt-3 w-full rounded-xl" onClick={() => void mutate()}>
-              بارگذاری بیشتر
-            </Button>
-          ) : null}
+            {isValidating && hasMore ? <Skeleton className="mt-2.5 h-16 w-full rounded-xl" /> : null}
 
-          <LoadMoreSentinel
-            disabled={!hasMore || isValidating || Boolean(error)}
-            onLoadMore={() => void setSize((current) => current + 1)}
-          />
-        </>
-      ) : null}
+            {error && students.length > 0 ? (
+              <Button type="button" variant="outline" size="sm" className="mt-3 w-full rounded-xl" onClick={() => void mutate()}>
+                بارگذاری بیشتر
+              </Button>
+            ) : null}
+
+            <LoadMoreSentinel
+              disabled={!hasMore || isValidating || Boolean(error)}
+              onLoadMore={() => void setSize((current) => current + 1)}
+            />
+          </>
+        ) : null}
+      </div>
 
       <AddStudentSheet open={addOpen} onOpenChange={setAddOpen} />
 

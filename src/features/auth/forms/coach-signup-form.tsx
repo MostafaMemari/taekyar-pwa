@@ -142,7 +142,7 @@ export function CoachSignupForm() {
               onClick={() => finish(form.getValues())}
               className="mt-3 block text-center text-[12px] font-bold text-ink-subtle"
             >
-              رد کردن — بعداً تکمیل می کنم
+              رد کردن (بعداً تکمیل می کنم)
             </Link>
           </form>
         </div>

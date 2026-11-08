@@ -64,33 +64,35 @@ export function ClubsDirectory() {
       <CoachSheet>
         <h2 className="text-[17px] font-extrabold text-ink">وارد کدام باشگاه می شوید؟</h2>
 
-        {isLoading && !readError ? <ClubsSkeleton /> : null}
+        <div aria-busy={isLoading && !readError}>
+          {isLoading && !readError ? <ClubsSkeleton /> : null}
 
-        {readError ? (
-          <ErrorState className="mt-6" title="خواندن باشگاه ها انجام نشد" message={apiErrorMessage(readError)} onRetry={retry} />
-        ) : null}
+          {readError ? (
+            <ErrorState className="mt-6" title="خواندن باشگاه ها انجام نشد" message={apiErrorMessage(readError)} onRetry={retry} />
+          ) : null}
 
-        {isReady && clubs.length === 0 ? (
-          <Empty className="mt-4 border-none bg-transparent p-4">
-            <EmptyHeader>
-              <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
-                <Landmark aria-hidden="true" />
-              </EmptyMedia>
-              <EmptyTitle className="text-[13px] font-extrabold text-ink">هنوز باشگاهی ثبت نشده</EmptyTitle>
-              <EmptyDescription className="text-[11px] leading-5 text-ink-subtle">
-                اولین باشگاه خود را بسازید تا کلاس بندی و حضور و غیاب شروع شود.
-              </EmptyDescription>
-            </EmptyHeader>
-          </Empty>
-        ) : null}
+          {isReady && clubs.length === 0 ? (
+            <Empty className="mt-4 border-none bg-transparent p-4">
+              <EmptyHeader>
+                <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
+                  <Landmark aria-hidden="true" />
+                </EmptyMedia>
+                <EmptyTitle className="text-[13px] font-extrabold text-ink">هنوز باشگاهی ثبت نشده</EmptyTitle>
+                <EmptyDescription className="text-[11px] leading-5 text-ink-subtle">
+                  اولین باشگاه خود را بسازید تا کلاس بندی و حضور و غیاب شروع شود.
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
+          ) : null}
 
-        {isReady ? (
-          <div className="mt-4 flex flex-col gap-3.5">
-            {clubs.map((club) => (
-              <ClubCard key={club.id} club={club} studentCount={counts?.[club.id]} />
-            ))}
-          </div>
-        ) : null}
+          {isReady ? (
+            <div className="mt-4 flex flex-col gap-3.5">
+              {clubs.map((club) => (
+                <ClubCard key={club.id} club={club} studentCount={counts?.[club.id]} />
+              ))}
+            </div>
+          ) : null}
+        </div>
 
         {!readError ? (
           <Button

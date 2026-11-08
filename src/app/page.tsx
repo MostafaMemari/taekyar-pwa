@@ -14,7 +14,7 @@ export default function WelcomePage() {
         <div className="relative flex items-center justify-between gap-2">
           <span className="hero-chip" style={{ background: "var(--surface)", color: "var(--ak-ink)", borderColor: "var(--ak-tint-line)" }}>
             <span className="relative flex size-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-75" />
+              <span className="absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75 motion-safe:animate-ping" />
               <span className="relative inline-flex size-1.5 rounded-full bg-brand-600" />
             </span>
             سامانه مدیریت باشگاه تکواندو
@@ -27,7 +27,7 @@ export default function WelcomePage() {
           <h1 className="text-[34px] font-extrabold leading-none tracking-tight text-ink">تک یار</h1>
         </div>
 
-        <figure className="relative mx-auto mt-3 flex min-h-[120px] max-h-[340px] w-full max-w-[360px] flex-1 overflow-hidden rounded-[26px] border border-[var(--card-line)] shadow-[0_26px_50px_-24px_rgba(206,0,79,0.45)]">
+        <figure className="relative mx-auto mt-3 flex min-h-[120px] max-h-[340px] w-full max-w-[360px] flex-1 overflow-hidden rounded-[26px] border border-[var(--card-line)] shadow-[0_26px_50px_-24px_rgba(16,18,26,0.3)]">
           <Image
             src="/images/hero-welcome.jpg"
             alt="هنرجوی تکواندو در حال اجرای ضربهٔ پا"
@@ -57,7 +57,7 @@ export default function WelcomePage() {
             </span>
             <span className="min-w-0 flex-1">
               <b className="block text-[15px] font-extrabold text-white">هنرجو هستم</b>
-              <span className="role-sub">ثبت نام هنرجو — کمربند، بیمه و مشخصات</span>
+              <span className="role-sub">ثبت نام هنرجو: کمربند، بیمه و مشخصات</span>
             </span>
             <ChevronLeft className="size-5 shrink-0 text-white/70" aria-hidden="true" />
             <BeltWatermark />

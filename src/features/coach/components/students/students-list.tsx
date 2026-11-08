@@ -19,7 +19,7 @@ export function StudentsList({
 }) {
   if (students.length === 0) {
     return (
-      <Empty className="mt-4 border-none bg-transparent p-6">
+      <Empty role="status" className="mt-4 border-none bg-transparent p-6">
         <EmptyHeader>
           <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
             {hasFilters ? <SearchX aria-hidden="true" /> : <Users aria-hidden="true" />}

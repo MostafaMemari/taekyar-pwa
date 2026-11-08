@@ -134,7 +134,7 @@
   --ink-3: #374151;
   --ink-4: #4b5563;
   --ink-5: #6b7280;
-  --ink-6: #9ca3af;
+  --ink-6: #667085;
   --ink-7: #d1d5db;
   --ink-8: #e5e7eb;
   --st-green: #059669;
@@ -469,24 +469,6 @@
 @utility welcome-hero {
   position: relative;
   overflow: clip;
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: -18% -30% auto auto;
-    width: 440px;
-    height: 440px;
-    background: radial-gradient(closest-side, color-mix(in srgb, var(--ak-600) 10%, transparent), transparent 70%);
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: auto auto -14% -28%;
-    width: 360px;
-    height: 360px;
-    background: radial-gradient(closest-side, color-mix(in srgb, var(--ak-600) 7%, transparent), transparent 70%);
-  }
 }
 
 @utility role-card {

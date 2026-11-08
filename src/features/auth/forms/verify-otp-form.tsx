@@ -100,7 +100,7 @@ export function VerifyOtpForm() {
             nativeButton={false}
           >
             <ClipboardCheck data-icon="inline-start" aria-hidden="true" />
-            <span>ورود به عنوان مربی — انتخاب باشگاه</span>
+            <span>ورود به عنوان مربی: انتخاب باشگاه</span>
           </Button>
         )}
       </form>

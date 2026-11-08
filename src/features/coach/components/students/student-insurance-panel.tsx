@@ -59,7 +59,7 @@ export function StudentInsurancePanel({ expiryDate }: { expiryDate: string | nul
             />
           </div>
           <p className="mt-1.5 text-[12px] font-semibold text-ink-subtle">
-            مانده از یک سال اعتبار بیمه{expiryDate ? ` — ${toPersianDigits(String(remaining))} روز` : ""}
+            مانده از یک سال اعتبار بیمه{expiryDate ? `، ${toPersianDigits(String(remaining))} روز` : ""}
           </p>
         </div>
       </Card>

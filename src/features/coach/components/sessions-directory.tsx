@@ -171,61 +171,65 @@ export function SessionsDirectory() {
         </ToggleGroup>
       </div>
 
-      {isLoading && !readError ? <SessionsSkeleton /> : null}
+      <div aria-busy={isLoading && !readError}>
+        {isLoading && !readError ? <SessionsSkeleton /> : null}
 
-      {readError ? (
-        <ErrorState className="mt-6" title="خواندن کلاس ها انجام نشد" message={apiErrorMessage(readError)} onRetry={retry} />
-      ) : null}
+        {readError ? (
+          <ErrorState className="mt-6" title="خواندن کلاس ها انجام نشد" message={apiErrorMessage(readError)} onRetry={retry} />
+        ) : null}
 
-      {isReady && sessions.length === 0 ? (
-        <Empty className="mt-4 border-none bg-transparent p-6">
-          <EmptyHeader>
-            <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
-              <CalendarDays aria-hidden="true" />
-            </EmptyMedia>
-            <EmptyTitle className="text-[13px] font-extrabold text-ink">هنوز کلاسی ثبت نشده</EmptyTitle>
-            <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
-              برای هر باشگاه، یک کلاس با روزها و ساعت برگزاری بسازید.
-            </EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <Button variant="outline" size="sm" className="rounded-lg" render={<Link href="/coach/sessions/new" />} nativeButton={false}>
-              <Plus data-icon="inline-start" aria-hidden="true" />
-              کلاس جدید
-            </Button>
-          </EmptyContent>
-        </Empty>
-      ) : null}
+        {isReady && sessions.length === 0 ? (
+          <Empty className="mt-4 border-none bg-transparent p-6">
+            <EmptyHeader>
+              <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
+                <CalendarDays aria-hidden="true" />
+              </EmptyMedia>
+              <EmptyTitle className="text-[13px] font-extrabold text-ink">هنوز کلاسی ثبت نشده</EmptyTitle>
+              <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
+                برای هر باشگاه، یک کلاس با روزها و ساعت برگزاری بسازید.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <Button variant="outline" size="sm" className="rounded-lg" render={<Link href="/coach/sessions/new" />} nativeButton={false}>
+                <Plus data-icon="inline-start" aria-hidden="true" />
+                کلاس جدید
+              </Button>
+            </EmptyContent>
+          </Empty>
+        ) : null}
 
-      {isReady && visible.length > 0 ? (
-        <div className="mt-3 flex flex-col gap-3">
-          {visible.map((session) => (
-            <SessionCard
-              key={session.id}
-              session={session}
-              clubName={clubNames.get(session.clubId) ?? "باشگاه حذف شده"}
-              memberCount={counts?.[session.id]}
-            />
-          ))}
-        </div>
-      ) : null}
+        {isReady && visible.length > 0 ? (
+          <div className="mt-3 flex flex-col gap-3">
+            {visible.map((session) => (
+              <SessionCard
+                key={session.id}
+                session={session}
+                clubName={clubNames.get(session.clubId) ?? "باشگاه حذف شده"}
+                memberCount={counts?.[session.id]}
+              />
+            ))}
+          </div>
+        ) : null}
 
-      {isReady && sessions.length > 0 && visible.length === 0 ? (
-        <Empty className="mt-4 border-none bg-transparent p-6">
-          <EmptyHeader>
-            <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
-              <CalendarDays aria-hidden="true" />
-            </EmptyMedia>
-            <EmptyTitle className="text-[13px] font-extrabold text-ink">کلاسی یافت نشد</EmptyTitle>
-            <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">عبارت جستجو یا بازه زمانی را تغییر دهید.</EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <Button type="button" variant="outline" size="sm" className="rounded-lg" onClick={reset}>
-              پاک کردن فیلترها
-            </Button>
-          </EmptyContent>
-        </Empty>
-      ) : null}
+        {isReady && sessions.length > 0 && visible.length === 0 ? (
+          <Empty className="mt-4 border-none bg-transparent p-6">
+            <EmptyHeader>
+              <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
+                <CalendarDays aria-hidden="true" />
+              </EmptyMedia>
+              <EmptyTitle className="text-[13px] font-extrabold text-ink">کلاسی یافت نشد</EmptyTitle>
+              <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
+                عبارت جستجو یا بازه زمانی را تغییر دهید.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <Button type="button" variant="outline" size="sm" className="rounded-lg" onClick={reset}>
+                پاک کردن فیلترها
+              </Button>
+            </EmptyContent>
+          </Empty>
+        ) : null}
+      </div>
 
       <div className="pointer-events-none fixed inset-x-0 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-40 mx-auto flex max-w-[var(--app-max-width)] justify-end px-5">
         <Button

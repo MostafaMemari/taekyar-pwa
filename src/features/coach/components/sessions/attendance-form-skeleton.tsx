@@ -24,7 +24,7 @@ export function AttendanceFormSkeleton() {
         <Skeleton className="mt-4 h-12 w-full rounded-xl" />
       </Card>
 
-      <Skeleton className="h-[74px] w-full rounded-2xl" />
+      <Skeleton className="h-[72px] w-full rounded-2xl" />
 
       <div className="flex flex-col gap-2.5">
         <Skeleton className="h-5 w-28" />

@@ -67,7 +67,7 @@ export function DashboardOverview() {
               className="flex flex-col items-center gap-0.5 border-s border-[var(--line-2)] py-3 first:border-s-0 active:bg-muted/40"
             >
               <b className="text-[20px] leading-7 font-extrabold tabular-nums text-ink">
-                {stat.value === undefined ? "—" : toPersianDigits(String(stat.value))}
+                {stat.value === undefined ? "ثبت نشده" : toPersianDigits(String(stat.value))}
               </b>
               <span className="text-[12px] font-medium text-ink-muted">{stat.label}</span>
             </Link>

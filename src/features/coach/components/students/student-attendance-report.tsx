@@ -105,7 +105,7 @@ export function StudentAttendanceReport({ studentId }: { studentId: string }) {
           counts={counts}
           footer={
             <>
-              مجموع: {toPersianDigits(String(attendanceTotal(counts)))} جلسه — از ابتدای عضویت{lastSession ? ` تا ${lastSession}` : ""}
+              مجموع: {toPersianDigits(String(attendanceTotal(counts)))} جلسه، از ابتدای عضویت{lastSession ? ` تا ${lastSession}` : ""}
             </>
           }
         />
