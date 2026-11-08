@@ -19,7 +19,7 @@ import { toPersianDigits } from "@/lib/digits";
 import { studentBeltLabel } from "@/lib/student-belts";
 import { cn } from "@/lib/utils";
 
-const SEARCH_DEBOUNCE_MS = 300;
+const SEARCH_DEBOUNCE_MS = 500;
 
 export function AddClassStudentsSheet({
   open,

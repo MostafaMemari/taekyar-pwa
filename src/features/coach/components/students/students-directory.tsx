@@ -21,7 +21,7 @@ import { StudentsOverview } from "./students-overview";
 import { StudentsSkeleton } from "./students-skeleton";
 import { StudentsToolbar } from "./students-toolbar";
 
-const SEARCH_DEBOUNCE_MS = 300;
+const SEARCH_DEBOUNCE_MS = 500;
 
 export function StudentsDirectory() {
   const [filters, setFilters] = useQueryStates(studentFilterParsers);
