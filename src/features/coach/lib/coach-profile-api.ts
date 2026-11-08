@@ -31,3 +31,9 @@ export function fetchCoachProfile(): Promise<CoachProfileRecord> {
 export function updateCoachProfile(id: string, input: CoachProfileInput): Promise<void> {
   return authRequest<unknown>(`coach/${id}`, { method: "patch", json: input }).then(() => undefined);
 }
+
+export function uploadCoachImage(id: string, file: File): Promise<void> {
+  const form = new FormData();
+  form.append("image", file);
+  return authRequest<unknown>(`coach/${id}/image`, { method: "post", body: form }).then(() => undefined);
+}

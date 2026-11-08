@@ -11,6 +11,7 @@ import { AuthInput } from "@/components/shared/auth-input";
 import { AuthSelect } from "@/components/shared/auth-select";
 import { type BeltOption, BeltPicker } from "@/components/shared/belt-picker";
 import { DatePicker } from "@/components/shared/date-picker";
+import { PhotoPicker } from "@/components/shared/photo-picker";
 import { Segmented } from "@/components/shared/segmented";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
@@ -18,7 +19,7 @@ import { ErrorState } from "@/features/coach/components/error-state";
 import { FormDock } from "@/features/coach/components/form-dock";
 import { FormSection } from "@/features/coach/components/form-section";
 import { useCoachProfile } from "@/features/coach/hooks/use-coach-profile";
-import { useUpdateCoachProfile } from "@/features/coach/hooks/use-coach-profile-mutations";
+import { useUpdateCoachProfile, useUploadCoachImage } from "@/features/coach/hooks/use-coach-profile-mutations";
 import { GENDER_META } from "@/features/coach/lib/coach-data";
 import {
   type CoachProfileFormValues,
@@ -30,6 +31,7 @@ import {
 import { GENDER_OPTIONS } from "@/features/coach/lib/student-form-options";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { digitsOnly, toPersianDigits } from "@/lib/digits";
+import { imageUrlOf } from "@/lib/images";
 import { PROVINCES } from "@/lib/provinces";
 
 const COACH_BELTS: readonly BeltOption[] = [
@@ -47,6 +49,7 @@ export function CoachProfileForm() {
   const router = useRouter();
   const { data: profile, error: loadError, isLoading, mutate } = useCoachProfile();
   const save = useUpdateCoachProfile(profile?.id ?? "");
+  const uploadImage = useUploadCoachImage(profile?.id ?? "");
 
   const {
     control,
@@ -94,6 +97,17 @@ export function CoachProfileForm() {
             </>
           ) : (
             <>
+              <PhotoPicker
+                label="تصویر مربی"
+                hint="JPG یا PNG، حداکثر ۵ مگابایت"
+                imageSrc={imageUrlOf(profile?.imageKey)}
+                pending={uploadImage.isMutating}
+                onSelectFile={(file) => void uploadImage.trigger(file)}
+              />
+              {uploadImage.error ? (
+                <p className="text-[12px] font-bold leading-5 text-danger">{apiErrorMessage(uploadImage.error)}</p>
+              ) : null}
+
               <FormSection icon={User} title="مشخصات فردی">
                 <AuthField label="نام و نام خانوادگی" htmlFor="fullName" required error={errors.fullName?.message}>
                   <Controller

@@ -14,9 +14,10 @@ type FieldsProps = {
   control: Control<StudentFormValues>;
   errors: FieldErrors<StudentFormValues>;
   showImageExpiry?: boolean;
+  photo?: { imageSrc?: string | null; pending?: boolean; error?: string; onSelectFile?: (file: File) => void };
 };
 
-export function StudentEnrollmentFields({ control, errors, showImageExpiry = false }: FieldsProps) {
+export function StudentEnrollmentFields({ control, errors, showImageExpiry = false, photo }: FieldsProps) {
   return (
     <FormSection icon={ShieldCheck} title="عضویت و بیمه" tone="sky">
       <div className="grid grid-cols-2 gap-3">
@@ -86,7 +87,15 @@ export function StudentEnrollmentFields({ control, errors, showImageExpiry = fal
         </AuthField>
       ) : null}
 
-      <PhotoPicker label="تصویر هنرجو" optional hint="JPG یا PNG، حداکثر ۵ مگابایت" />
+      <PhotoPicker
+        label="تصویر هنرجو"
+        optional
+        hint="JPG یا PNG، حداکثر ۵ مگابایت"
+        imageSrc={photo?.imageSrc}
+        pending={photo?.pending}
+        onSelectFile={photo?.onSelectFile}
+      />
+      {photo?.error ? <p className="text-[12px] font-bold leading-5 text-danger">{photo.error}</p> : null}
     </FormSection>
   );
 }

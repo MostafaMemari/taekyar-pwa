@@ -21,7 +21,15 @@ import { StudentEnrollmentFields } from "./student-enrollment-fields";
 import { StudentPersonalFields } from "./student-personal-fields";
 import { StudentSportsFields } from "./student-sports-fields";
 
-export function StudentForm({ mode, student }: { mode: "create" | "edit"; student?: StudentDetailRecord }) {
+export function StudentForm({
+  mode,
+  student,
+  photo,
+}: {
+  mode: "create" | "edit";
+  student?: StudentDetailRecord;
+  photo?: { imageSrc?: string | null; pending?: boolean; error?: string; onSelectFile?: (file: File) => void };
+}) {
   const router = useRouter();
   const create = useCreateStudent();
   const update = useUpdateStudent();
@@ -56,7 +64,7 @@ export function StudentForm({ mode, student }: { mode: "create" | "edit"; studen
     <form className="mt-4 flex flex-col gap-4" onSubmit={submit} noValidate>
       <StudentPersonalFields control={control} errors={errors} locked={mode === "edit"} />
       <StudentSportsFields control={control} errors={errors} mode={mode} />
-      <StudentEnrollmentFields control={control} errors={errors} showImageExpiry={mode === "edit"} />
+      <StudentEnrollmentFields control={control} errors={errors} showImageExpiry={mode === "edit"} photo={photo} />
 
       <AuthFormError message={failure ? apiErrorMessage(failure) : ""} />
 

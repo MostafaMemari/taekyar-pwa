@@ -5,11 +5,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
 import { ErrorState } from "@/features/coach/components/error-state";
 import { useStudent } from "@/features/coach/hooks/use-student";
+import { useUploadStudentImage } from "@/features/coach/hooks/use-student-mutations";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
+import { imageUrlOf } from "@/lib/images";
 import { StudentForm } from "./student-form";
 
 export function StudentEditScreen({ studentId }: { studentId: string }) {
   const student = useStudent(studentId);
+  const uploadImage = useUploadStudentImage(studentId);
 
   if (student.error) {
     const missing = student.error instanceof ApiError && student.error.status === 404;
@@ -50,7 +53,16 @@ export function StudentEditScreen({ studentId }: { studentId: string }) {
   return (
     <main className="min-h-dvh px-4 pb-44 pt-[max(1rem,env(safe-area-inset-top))] motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300">
       <CoachPageHeader title="ویرایش اطلاعات هنرجو" subtitle={student.data.fullName} backHref={`/coach/students/${studentId}`} />
-      <StudentForm mode="edit" student={student.data} />
+      <StudentForm
+        mode="edit"
+        student={student.data}
+        photo={{
+          imageSrc: imageUrlOf(student.data.imageKey),
+          pending: uploadImage.isMutating,
+          error: uploadImage.error ? apiErrorMessage(uploadImage.error) : undefined,
+          onSelectFile: (file) => void uploadImage.trigger(file),
+        }}
+      />
     </main>
   );
 }

@@ -137,6 +137,12 @@ export function updateStudentInsurance(id: string, isoDate: string): Promise<voi
   return authRequest<unknown>(`student/${id}`, { method: "patch", json: { sportsInsuranceDate: isoDate } }).then(() => undefined);
 }
 
+export function uploadStudentImage(id: string, file: File): Promise<void> {
+  const form = new FormData();
+  form.append("image", file);
+  return authRequest<unknown>(`student/${id}/image`, { method: "post", body: form }).then(() => undefined);
+}
+
 export function assignStudentBelt(id: string, beltId: string, beltDate: string): Promise<void> {
   return authRequest<unknown>(`student/${id}/belt`, { method: "patch", json: { beltId, beltDate } }).then(() => undefined);
 }
