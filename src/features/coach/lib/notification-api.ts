@@ -28,6 +28,10 @@ export function markAllNotificationsRead(): Promise<void> {
   return authRequest<unknown>("notifications/read-all", { method: "patch" }).then(() => undefined);
 }
 
+export function markNotificationRead(id: string): Promise<void> {
+  return authRequest<unknown>(`notifications/${id}/read`, { method: "patch" }).then(() => undefined);
+}
+
 export function fetchUnreadNotificationCount(): Promise<number> {
   return authRequest<UnreadCount>("notifications/unread-count").then((result) => result.unreadCount);
 }

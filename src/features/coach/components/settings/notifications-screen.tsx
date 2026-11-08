@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
 import { ErrorState } from "@/features/coach/components/error-state";
-import { useMarkAllNotificationsRead } from "@/features/coach/hooks/use-notification-mutations";
+import { useMarkAllNotificationsRead, useMarkNotificationRead } from "@/features/coach/hooks/use-notification-mutations";
 import { useNotifications } from "@/features/coach/hooks/use-notifications";
 import type { NotificationRecord, NotificationType } from "@/features/coach/lib/notification-api";
 import { apiErrorMessage } from "@/lib/api/client";
@@ -47,7 +47,7 @@ function relativeTime(iso: string) {
   return toJalaliDate(iso);
 }
 
-function NotificationCard({ notification }: { notification: NotificationRecord }) {
+function NotificationCard({ notification, onMarkRead }: { notification: NotificationRecord; onMarkRead: (id: string) => void }) {
   const meta = NOTIFICATION_META[notification.type];
   const Icon = meta.icon;
 
@@ -67,6 +67,19 @@ function NotificationCard({ notification }: { notification: NotificationRecord }
         <p className="mt-1 text-[12px] leading-5 text-ink-subtle">{notification.body}</p>
         <p className="mt-1.5 text-[12px] font-semibold text-ink-subtle">{relativeTime(notification.sentAt)}</p>
       </div>
+
+      {notification.isRead ? null : (
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="size-8 shrink-0 rounded-lg text-ink-subtle hover:bg-brand-50 hover:text-accent-ink"
+          aria-label={`علامت گذاری ${notification.title} به عنوان خوانده شده`}
+          onClick={() => onMarkRead(notification.id)}
+        >
+          <Check className="size-4" aria-hidden="true" />
+        </Button>
+      )}
     </Card>
   );
 }
@@ -74,6 +87,7 @@ function NotificationCard({ notification }: { notification: NotificationRecord }
 export function NotificationsScreen() {
   const { data, error, isLoading, mutate } = useNotifications();
   const markAll = useMarkAllNotificationsRead();
+  const markRead = useMarkNotificationRead();
   const [filter, setFilter] = useState<"all" | "unread" | NotificationType>("all");
 
   const notifications = data ?? [];
@@ -124,6 +138,7 @@ export function NotificationsScreen() {
       </div>
 
       {markAll.error ? <p className="mt-3 text-[12px] font-bold leading-5 text-danger">{apiErrorMessage(markAll.error)}</p> : null}
+      {markRead.error ? <p className="mt-3 text-[12px] font-bold leading-5 text-danger">{apiErrorMessage(markRead.error)}</p> : null}
 
       {error ? (
         <ErrorState className="mt-4" title="خواندن اعلان ها انجام نشد" message={apiErrorMessage(error)} onRetry={() => void mutate()} />
@@ -138,7 +153,7 @@ export function NotificationsScreen() {
       ) : (
         <div className="mt-4 flex flex-col gap-2.5">
           {visible.map((notification) => (
-            <NotificationCard key={notification.id} notification={notification} />
+            <NotificationCard key={notification.id} notification={notification} onMarkRead={(id) => void markRead.trigger(id)} />
           ))}
         </div>
       )}
