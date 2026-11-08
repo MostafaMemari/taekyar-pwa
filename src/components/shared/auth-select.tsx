@@ -1,18 +1,22 @@
 import type { LucideIcon } from "lucide-react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+export type AuthSelectOption = { value: string; label: string; description?: string };
+
 type AuthSelectProps = {
   id?: string;
   value: string | null;
   onValueChange: (value: string | null) => void;
   placeholder: string;
-  options: readonly { value: string; label: string }[];
+  options: readonly AuthSelectOption[];
   icon?: LucideIcon;
   disabled?: boolean;
 };
 
+type AuthSelectItem = { value: string | null; label: string; description?: string };
+
 export function AuthSelect({ id, value, onValueChange, placeholder, options, icon: Icon, disabled }: AuthSelectProps) {
-  const items = [{ label: placeholder, value: null }, ...options];
+  const items: AuthSelectItem[] = [{ label: placeholder, value: null }, ...options];
 
   return (
     <Select items={items} value={value} onValueChange={onValueChange} disabled={disabled}>
@@ -29,7 +33,10 @@ export function AuthSelect({ id, value, onValueChange, placeholder, options, ico
         <SelectGroup>
           {items.map((item) => (
             <SelectItem key={item.value ?? "placeholder"} value={item.value}>
-              {item.label}
+              <div className="min-w-0 flex-1">
+                <div className="truncate">{item.label}</div>
+                {item.description ? <div className="truncate text-[11px] font-medium text-ink-subtle">{item.description}</div> : null}
+              </div>
             </SelectItem>
           ))}
         </SelectGroup>

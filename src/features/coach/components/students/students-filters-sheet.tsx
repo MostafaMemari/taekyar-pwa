@@ -23,6 +23,13 @@ import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
 import { beltDotStyle, STUDENT_BELT_GROUPS, type StudentBeltKey, studentBeltLabel } from "@/lib/student-belts";
 
+function examBeltRangeOf(belts: { name: string; level: number }[] | undefined) {
+  const sorted = [...(belts ?? [])].sort((a, b) => a.level - b.level);
+  if (sorted.length === 0) return null;
+  const first = studentBeltLabel(beltKeyOf(sorted[0].name));
+  return sorted.length === 1 ? first : `${first} تا ${studentBeltLabel(beltKeyOf(sorted[sorted.length - 1].name))}`;
+}
+
 const BELT_GROUP_HINTS: Record<string, string> = {
   color: "از سفید تا قرمز",
   poom: "مشکی و قرمز، مخصوص زیر ۱۵ سال",
@@ -73,16 +80,10 @@ export function StudentsFiltersSheet({
   const selectedBelts = belts.map(beltKeyOf);
   const exams = [...(useBeltExams().data ?? [])].sort((a, b) => a.eventDate.localeCompare(b.eventDate));
   const selectedExam = exam ? exams.find((item) => item.id === exam) : null;
-  const examBelts = [...(selectedExam?.belts ?? [])].sort((a, b) => a.level - b.level);
-  const examBeltRange =
-    examBelts.length === 0
-      ? null
-      : examBelts.length === 1
-        ? studentBeltLabel(beltKeyOf(examBelts[0].name))
-        : `${studentBeltLabel(beltKeyOf(examBelts[0].name))} تا ${studentBeltLabel(beltKeyOf(examBelts[examBelts.length - 1].name))}`;
   const examOptions = exams.map((item) => ({
     value: item.id,
-    label: `${toPersianDigits(item.name)} · ${toJalaliDate(item.eventDate)}`,
+    label: toPersianDigits(item.name),
+    description: [examBeltRangeOf(item.belts), `برگزاری ${toJalaliDate(item.eventDate)}`].filter(Boolean).join(" · "),
   }));
 
   const activeCount = belts.length + ages.length + insurances.length + (exam ? 1 : 0);
@@ -156,7 +157,7 @@ export function StudentsFiltersSheet({
             />
             <p className="text-[12px] font-medium leading-5 text-ink-subtle">
               {selectedExam
-                ? [examBeltRange, `برگزاری ${toJalaliDate(selectedExam.eventDate)}`].filter(Boolean).join(" · ")
+                ? [examBeltRangeOf(selectedExam.belts), `برگزاری ${toJalaliDate(selectedExam.eventDate)}`].filter(Boolean).join(" · ")
                 : "با انتخاب آزمون، فقط هنرجوهای واجد شرایط همان دوره نشان داده می شود"}
             </p>
           </section>
