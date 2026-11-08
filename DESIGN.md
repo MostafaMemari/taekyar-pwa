@@ -22,7 +22,7 @@ The dojang — the training hall: mats, the evening dark of practice hours, the 
 - **Type.** Vazirmatn only (`public/fonts`), 400/500 with 700 for emphasis. Heavy weights (extrabold) belong to titles and tile labels; small running text stays 400/500. Persian digits via `toPersianDigits`, Latin digits in the model, `tabular-nums` on figures.
 - **Radius.** Three-step preset (`کم/معمولی/گرد`) written to `--radius`; components use the shadcn semantic radii. Nested radius math: inner = outer − padding.
 - **Depth.** Light theme: neutral, soft, small shadows. Dark theme: surface steps and hairlines, not shadows. Exactly one brand-colored glow is allowed per screen — today that is the `role-card-hero` welcome card.
-- **Copy.** Persian-first, regular spaces (never ZWNJ), no em dashes — «،» «؛» «:» and parentheses instead. No exclamation marks, no hype, placeholders show «ثبت نشده», numbers always compared to a reference when they claim change.
+- **Copy.** Persian-first, regular spaces (never ZWNJ), no em dashes — «،» «؛» «:» and parentheses instead. No exclamation marks, no hype, no trailing periods on labels, captions and hints. Placeholders show «ثبت نشده», numbers always compared to a reference when they claim change. Never repeat the same fact twice on one screen — badge, value and derived counters each say it once.
 
 ## Dials
 
