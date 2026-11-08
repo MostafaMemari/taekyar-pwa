@@ -48,18 +48,19 @@ export function DashboardHero() {
   return (
     <CoachBand>
       <div className="flex h-11 items-center justify-between gap-2">
-        <Link href="/coach/profile" aria-label="پرونده مربی" className="shrink-0">
-          <CoachAvatar name={profile?.fullName} imageKey={profile?.imageKey} />
-        </Link>
+        <div className="flex min-w-0 items-center gap-2.5">
+          <Link href="/coach/profile" aria-label="پرونده مربی" className="shrink-0">
+            <CoachAvatar name={profile?.fullName} imageKey={profile?.imageKey} />
+          </Link>
+          <div className="min-w-0">
+            <p className="text-[11px] font-medium leading-4 text-white/55">سلام استاد</p>
+            <h1 className="min-h-5 truncate text-[15px] font-extrabold leading-5 text-white">{profile?.fullName ?? ""}</h1>
+          </div>
+        </div>
         <CoachBell />
       </div>
 
-      <h1 className="page-title mt-3 truncate">
-        <span className="text-[14px] font-semibold text-white/55">سلام استاد </span>
-        {profile?.fullName ?? ""}
-      </h1>
-
-      <div className="mt-2 flex flex-wrap items-center gap-2">
+      <div className="mt-3 flex flex-wrap items-center gap-2">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-[12px] font-medium tabular-nums text-white/70">
           <CalendarDays className="size-3.5 shrink-0 text-white/55" aria-hidden="true" />
           {WEEK_DAY_META[todayWeekDay()].label} {toPersianDigits(toJalaliDate(now.toISOString()))}
