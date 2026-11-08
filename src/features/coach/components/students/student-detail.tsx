@@ -19,6 +19,7 @@ import { StudentClubsPanel } from "./student-clubs-panel";
 import { StudentDetailActions } from "./student-detail-actions";
 import { StudentDetailSkeleton } from "./student-detail-skeleton";
 import { StudentInfoPanel } from "./student-info-panel";
+import { StudentSpecsPanel } from "./student-specs-panel";
 
 export function StudentDetail({ studentId }: { studentId: string }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -81,20 +82,27 @@ export function StudentDetail({ studentId }: { studentId: string }) {
 
       <CoachSheet className="flex flex-col gap-4">
         <Tabs defaultValue="info" className="gap-3">
-          <TabsList className="grid h-10 w-full grid-cols-3">
-            <TabsTrigger value="info" className="text-[12px]">
+          <TabsList className="grid h-10 w-full grid-cols-4">
+            <TabsTrigger value="info" className="px-1 text-[11px]">
               اطلاعات
             </TabsTrigger>
-            <TabsTrigger value="attendance" className="text-[12px]">
+            <TabsTrigger value="specs" className="px-1 text-[11px]">
+              مشخصات
+            </TabsTrigger>
+            <TabsTrigger value="attendance" className="px-1 text-[11px]">
               حضور و غیاب
             </TabsTrigger>
-            <TabsTrigger value="clubs" className="text-[12px]">
+            <TabsTrigger value="clubs" className="px-1 text-[11px]">
               باشگاه ها
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="info">
             <StudentInfoPanel student={profile} attendance={attendance.data} />
+          </TabsContent>
+          <TabsContent value="specs" className="flex flex-col gap-4">
+            <StudentSpecsPanel student={profile} />
+            <StudentDetailActions studentId={studentId} fullName={profile.fullName} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
           </TabsContent>
           <TabsContent value="attendance">
             {attendance.error ? (
@@ -115,8 +123,6 @@ export function StudentDetail({ studentId }: { studentId: string }) {
             )}
           </TabsContent>
         </Tabs>
-
-        <StudentDetailActions studentId={studentId} fullName={profile.fullName} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
       </CoachSheet>
     </main>
   );
