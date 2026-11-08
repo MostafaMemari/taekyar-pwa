@@ -4,6 +4,7 @@ import { CalendarPlus, ClipboardCheck, Send, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useInvitations } from "@/features/coach/hooks/use-invitations";
 import { useSessions } from "@/features/coach/hooks/use-sessions";
 import { useStudentStats } from "@/features/coach/hooks/use-student-stats";
@@ -33,9 +34,9 @@ export function DashboardOverview() {
   ];
 
   const stats = [
-    { href: "/coach/students", label: "هنرجو", value: studentStats?.total },
-    { href: "/coach/sessions", label: "کلاس امروز", value: sessions ? todayCount : undefined },
-    { href: "/coach/invitations", label: "دعوت", value: pendingInvitations },
+    { href: "/coach/students", label: "هنرجو", value: studentStats?.total, loading: !studentStats },
+    { href: "/coach/sessions", label: "کلاس امروز", value: sessions ? todayCount : undefined, loading: !sessions },
+    { href: "/coach/invitations", label: "دعوت", value: pendingInvitations, loading: !invitations },
   ];
 
   return (
@@ -67,7 +68,13 @@ export function DashboardOverview() {
               className="flex flex-col items-center gap-0.5 border-s border-[var(--line-2)] py-3 first:border-s-0 active:bg-muted/40"
             >
               <b className="text-[20px] leading-7 font-extrabold tabular-nums text-ink">
-                {stat.value === undefined ? "ثبت نشده" : toPersianDigits(String(stat.value))}
+                {stat.loading ? (
+                  <Skeleton className="h-5 w-10" />
+                ) : stat.value === undefined ? (
+                  "ثبت نشده"
+                ) : (
+                  toPersianDigits(String(stat.value))
+                )}
               </b>
               <span className="text-[12px] font-medium text-ink-muted">{stat.label}</span>
             </Link>
