@@ -54,8 +54,8 @@ export function StudentInsurancePanel({ expiryDate }: { expiryDate: string | nul
         <div className="mt-3">
           <div className="h-2 overflow-hidden rounded-full bg-surface-sunken" role="presentation">
             <span
-              className="block h-full rounded-full transition-[width] duration-500"
-              style={{ width: `${(remaining / VALIDITY_DAYS) * 100}%`, background: TONE_COLOR[status] }}
+              className="block h-full w-full origin-right rounded-full transition-transform duration-500"
+              style={{ transform: `scaleX(${remaining / VALIDITY_DAYS})`, background: TONE_COLOR[status] }}
             />
           </div>
           <p className="mt-1.5 text-[12px] font-semibold text-ink-subtle">

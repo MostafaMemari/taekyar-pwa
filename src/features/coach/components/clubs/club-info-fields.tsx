@@ -62,7 +62,7 @@ export function ClubInfoFields({ control, gender, nameError, addressError }: Fie
             />
           )}
         />
-        <p className="text-end text-[12px] font-semibold text-ink-faint" dir="ltr">
+        <p className="text-end text-[12px] font-semibold text-ink-subtle" dir="ltr">
           {toPersianDigits(String(address.length))} / {toPersianDigits("200")}
         </p>
       </AuthField>

@@ -71,7 +71,7 @@ export default function WelcomePage() {
               <b className="block text-[14px] font-extrabold text-ink">مربی هستم</b>
               <span className="role-sub">ثبت نام مربی و ساخت باشگاه</span>
             </span>
-            <ChevronLeft className="size-5 shrink-0 text-ink-faint" aria-hidden="true" />
+            <ChevronLeft className="size-5 shrink-0 text-ink-subtle" aria-hidden="true" />
           </Link>
 
           <Link href="/login" className="role-card">
@@ -82,7 +82,7 @@ export default function WelcomePage() {
               <b className="block text-[14px] font-extrabold text-ink">قبلاً ثبت نام کرده ام</b>
               <span className="role-sub">ورود با شماره موبایل و کد تایید</span>
             </span>
-            <ChevronLeft className="size-5 shrink-0 text-ink-faint" aria-hidden="true" />
+            <ChevronLeft className="size-5 shrink-0 text-ink-subtle" aria-hidden="true" />
           </Link>
         </div>
       </section>

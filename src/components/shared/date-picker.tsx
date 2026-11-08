@@ -123,7 +123,7 @@ export function DatePicker({ id, title, value, onChange, defaultValue, fromYear 
       >
         <CalendarDays className="pointer-events-none absolute start-3.5 text-ink-subtle" aria-hidden="true" />
         <span className="truncate">{display ? toPersianDigits(formatJalali(display)) : "انتخاب تاریخ"}</span>
-        <ChevronDown className="pointer-events-none absolute end-3.5 text-ink-faint" aria-hidden="true" />
+        <ChevronDown className="pointer-events-none absolute end-3.5 text-ink-subtle" aria-hidden="true" />
       </Button>
 
       <Sheet open={open} onOpenChange={setOpen}>

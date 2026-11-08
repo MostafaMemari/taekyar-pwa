@@ -70,7 +70,7 @@ function SessionCard({ session, clubName, memberCount }: { session: ClassSession
             </div>
           </div>
 
-          <ChevronLeft className="mt-1 size-4 shrink-0 text-ink-faint" aria-hidden="true" />
+          <ChevronLeft className="mt-1 size-4 shrink-0 text-ink-subtle" aria-hidden="true" />
         </div>
       </Link>
 

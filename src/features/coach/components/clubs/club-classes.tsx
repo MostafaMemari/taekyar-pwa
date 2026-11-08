@@ -59,7 +59,7 @@ export function ClubClasses({ sessions, memberCounts }: { sessions: ClassSession
                   </span>
                 </span>
 
-                <ChevronLeft className="size-4 shrink-0 text-ink-faint" aria-hidden="true" />
+                <ChevronLeft className="size-4 shrink-0 text-ink-subtle" aria-hidden="true" />
               </Card>
             </Link>
           ))}

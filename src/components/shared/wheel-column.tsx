@@ -117,7 +117,7 @@ export function WheelColumn({
                   ? "text-2xl font-extrabold text-ink"
                   : distance === 1
                     ? "text-base font-semibold text-ink-subtle"
-                    : "text-sm font-medium text-ink-faint",
+                    : "text-sm font-medium text-ink-subtle",
               )}
               onClick={() => select(item)}
             >

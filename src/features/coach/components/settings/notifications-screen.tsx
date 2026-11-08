@@ -65,7 +65,7 @@ function NotificationCard({ notification }: { notification: NotificationRecord }
           {notification.isRead ? null : <span className="size-2 shrink-0 rounded-full bg-brand-600" aria-hidden="true" />}
         </div>
         <p className="mt-1 text-[12px] leading-5 text-ink-subtle">{notification.body}</p>
-        <p className="mt-1.5 text-[12px] font-semibold text-ink-faint">{relativeTime(notification.sentAt)}</p>
+        <p className="mt-1.5 text-[12px] font-semibold text-ink-subtle">{relativeTime(notification.sentAt)}</p>
       </div>
     </Card>
   );

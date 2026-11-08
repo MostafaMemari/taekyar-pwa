@@ -35,7 +35,7 @@ export function SessionRoster({
               {subline ? <span className="mt-0.5 block truncate text-[12px] font-semibold text-ink-subtle">{subline}</span> : null}
             </span>
             {entry.status ? <AttendanceStatusText status={entry.status} /> : null}
-            {linkStudents ? <ChevronLeft className="size-4 shrink-0 text-ink-faint" aria-hidden="true" /> : null}
+            {linkStudents ? <ChevronLeft className="size-4 shrink-0 text-ink-subtle" aria-hidden="true" /> : null}
           </div>
         );
 

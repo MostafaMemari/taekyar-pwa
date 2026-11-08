@@ -158,7 +158,7 @@ export function SessionReport({
               note: entry.attendance?.note ?? undefined,
             }))}
           />
-          <p className="mt-2 text-center text-[12px] font-bold text-ink-faint">نمایش {toPersianDigits(String(entries.length))} هنرجو</p>
+          <p className="mt-2 text-center text-[12px] font-bold text-ink-subtle">نمایش {toPersianDigits(String(entries.length))} هنرجو</p>
         </section>
 
         <div className="grid grid-cols-2 gap-3">

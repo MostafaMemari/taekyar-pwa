@@ -49,7 +49,7 @@ function MenuRow({ icon: Icon, label, href, badge }: { icon: LucideIcon; label: 
           {badge}
         </StatusBadge>
       ) : null}
-      <ChevronLeft className="text-ink-faint" aria-hidden="true" />
+      <ChevronLeft className="text-ink-subtle" aria-hidden="true" />
     </Button>
   );
 }

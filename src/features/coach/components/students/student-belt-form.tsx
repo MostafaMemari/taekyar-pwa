@@ -122,7 +122,7 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
             <b className="block truncate text-[14px] font-extrabold text-ink">{profile.fullName}</b>
             <span className="mt-1 flex flex-wrap items-center gap-2 text-[12px] font-medium text-ink-subtle">
               <span>کد ملی {toPersianDigits(profile.nationalCode)}</span>
-              <span className="text-ink-faint" aria-hidden="true">
+              <span className="text-ink-subtle" aria-hidden="true">
                 •
               </span>
               <span className="inline-flex items-center gap-1.5">

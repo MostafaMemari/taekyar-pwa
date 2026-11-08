@@ -55,7 +55,7 @@ export function LoginForm() {
           <Link href="/signup/student" className="ms-1 font-bold text-accent-ink">
             ثبت نام هنرجو
           </Link>
-          <span className="mx-1 text-ink-faint">|</span>
+          <span className="mx-1 text-ink-subtle">|</span>
           <Link href="/signup/coach" className="font-bold text-accent-ink">
             ثبت نام مربی
           </Link>

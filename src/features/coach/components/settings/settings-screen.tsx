@@ -34,7 +34,7 @@ function LinkRow({ href, icon: Icon, label, badge }: { href: string; icon: Lucid
           {badge}
         </StatusBadge>
       ) : null}
-      <ChevronLeft className="text-ink-faint" aria-hidden="true" />
+      <ChevronLeft className="text-ink-subtle" aria-hidden="true" />
     </Button>
   );
 }
@@ -156,7 +156,7 @@ export function SettingsScreen() {
           >
             <Info className="text-ink-muted" aria-hidden="true" />
             <span className="flex-1 text-start">درباره تک یار</span>
-            <ChevronLeft className="text-ink-faint" aria-hidden="true" />
+            <ChevronLeft className="text-ink-subtle" aria-hidden="true" />
           </Button>
         </Card>
       </section>
@@ -176,7 +176,7 @@ export function SettingsScreen() {
         <LogoutButton />
       </Card>
 
-      <p className="mt-5 text-center text-[12px] font-semibold text-ink-faint">تک یار، نسخه نمایشی رابط کاربری</p>
+      <p className="mt-5 text-center text-[12px] font-semibold text-ink-subtle">تک یار، نسخه نمایشی رابط کاربری</p>
 
       <SheetFrame open={aboutOpen} onOpenChange={setAboutOpen} title="درباره تک یار" description="معرفی برنامه">
         <div className="flex flex-col items-center gap-3 py-2 text-center">

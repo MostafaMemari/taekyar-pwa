@@ -65,7 +65,7 @@ export function StudentDetailActions({
               >
                 <action.icon className="text-ink-muted" aria-hidden="true" />
                 <span className="flex-1 text-start">{action.label}</span>
-                <ChevronLeft className="text-ink-faint" aria-hidden="true" />
+                <ChevronLeft className="text-ink-subtle" aria-hidden="true" />
               </Button>
             </Fragment>
           ))}

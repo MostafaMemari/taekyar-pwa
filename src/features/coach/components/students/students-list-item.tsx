@@ -66,12 +66,12 @@ export function StudentsListItem({
             <span className="text-[12px] leading-none font-semibold text-ink-muted">{belt.label}</span>
           </span>
         ) : (
-          <span className="flex w-14 shrink-0 items-center justify-center text-center text-[12px] leading-4 font-bold text-ink-faint">
+          <span className="flex w-14 shrink-0 items-center justify-center text-center text-[12px] leading-4 font-bold text-ink-subtle">
             بدون کمربند
           </span>
         )}
 
-        <ChevronLeft className="size-4 shrink-0 text-ink-faint" aria-hidden="true" />
+        <ChevronLeft className="size-4 shrink-0 text-ink-subtle" aria-hidden="true" />
       </Card>
     </Link>
   );
