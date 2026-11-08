@@ -10,6 +10,28 @@ import { ageFromIso, beltDotStyle, getStudentBeltMeta, nextStudentBelt } from "@
 
 const DAY_MS = 86_400_000;
 
+// Calendar-exact breakdown so 112 days reads like «۳ ماه و ۲۲ روز», borrowing month lengths as it goes.
+function durationLabel(from: Date, to: Date): string {
+  let years = to.getFullYear() - from.getFullYear();
+  let months = to.getMonth() - from.getMonth();
+  let days = to.getDate() - from.getDate();
+
+  if (days < 0) {
+    months -= 1;
+    days += new Date(to.getFullYear(), to.getMonth(), 0).getDate();
+  }
+  if (months < 0) {
+    years -= 1;
+    months += 12;
+  }
+
+  const parts: string[] = [];
+  if (years > 0) parts.push(`${toPersianDigits(String(years))} سال`);
+  if (months > 0) parts.push(`${toPersianDigits(String(months))} ماه`);
+  if (days > 0 || parts.length === 0) parts.push(`${toPersianDigits(String(days))} روز`);
+  return parts.join(" و ");
+}
+
 export function StudentBeltPanel({ assignment, birthDate }: { assignment: StudentBeltAssignment | null; birthDate: string | null }) {
   if (!assignment) {
     return (
@@ -37,6 +59,8 @@ export function StudentBeltPanel({ assignment, birthDate }: { assignment: Studen
       ? 0
       : Math.max(0, Math.min(100, Math.round(((Date.now() - startMs) / DAY_MS / windowDays) * 100)));
   const isDue = daysLeft !== null && daysLeft <= 0;
+  const today = new Date();
+  const target = nextDate === null ? null : new Date(`${nextDate.slice(0, 10)}T00:00:00`);
 
   return (
     <section>
@@ -72,11 +96,7 @@ export function StudentBeltPanel({ assignment, birthDate }: { assignment: Studen
               <span
                 className={isDue ? "shrink-0 text-[12px] font-semibold text-danger" : "shrink-0 text-[12px] font-semibold text-ink-muted"}
               >
-                {daysLeft === null
-                  ? "بدون موعد"
-                  : isDue
-                    ? `${toPersianDigits(String(Math.abs(daysLeft)))} روز گذشته`
-                    : `${toPersianDigits(String(daysLeft))} روز مانده`}
+                {target === null ? "بدون موعد" : isDue ? `${durationLabel(target, today)} گذشته` : `${durationLabel(today, target)} مانده`}
               </span>
             </div>
 
