@@ -20,7 +20,7 @@ export function CoachPageHeader({
         variant="ghost"
         size="icon"
         aria-label="بازگشت"
-        className="-ms-2 size-10 shrink-0 rounded-xl text-ink-body"
+        className="-ms-2 size-11 shrink-0 rounded-xl text-ink-body"
         render={<Link href={backHref} />}
         nativeButton={false}
       >
@@ -28,7 +28,7 @@ export function CoachPageHeader({
       </Button>
       <div className="min-w-0 flex-1">
         <h1 className="truncate text-[17px] font-extrabold leading-6 text-ink">{title}</h1>
-        {subtitle ? <p className="truncate text-[10px] font-medium text-ink-subtle">{subtitle}</p> : null}
+        {subtitle ? <p className="truncate text-[12px] font-medium text-ink-subtle">{subtitle}</p> : null}
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}
     </header>

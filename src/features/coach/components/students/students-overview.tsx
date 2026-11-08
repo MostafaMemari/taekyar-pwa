@@ -23,7 +23,7 @@ export function StudentsOverview({
   return (
     <>
       <header className="flex items-center gap-2">
-        <h1 className="text-[22px] font-extrabold text-ink">هنرجویان</h1>
+        <h1 className="page-title text-ink">هنرجویان</h1>
         <StatusBadge tone="neutral" className="mt-0.5">
           <Users aria-hidden="true" />
           {total === undefined ? <Skeleton className="h-3 w-5" /> : <b className="tabular-nums">{toPersianDigits(String(total))}</b>}
@@ -33,7 +33,7 @@ export function StudentsOverview({
           type="button"
           variant="brand"
           size="sm"
-          className="ms-auto h-8 gap-1.5 rounded-xl px-3.5 text-[11px] font-bold"
+          className="ms-auto h-8 gap-1.5 rounded-xl px-3.5 text-[12px] font-bold"
           onClick={onAdd}
         >
           <UserPlus data-icon="inline-start" aria-hidden="true" />
@@ -68,7 +68,7 @@ export function StudentsOverview({
               ) : (
                 <b className="text-[14px] leading-none font-extrabold tabular-nums text-ink">{toPersianDigits(String(count))}</b>
               )}
-              <span className="text-[9px] font-bold leading-[11px] text-ink-muted">{meta.shortLabel}</span>
+              <span className="text-[12px] font-bold leading-4 text-ink-muted">{meta.shortLabel}</span>
             </Button>
           );
         })}

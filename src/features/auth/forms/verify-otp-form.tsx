@@ -88,7 +88,7 @@ export function VerifyOtpForm() {
         </div>
 
         {fromSignup ? (
-          <Link href="/" onClick={clearPendingSignup} className="mt-3 block text-center text-[11px] font-bold text-ink-subtle">
+          <Link href="/" onClick={clearPendingSignup} className="mt-3 block text-center text-[12px] font-bold text-ink-subtle">
             انصراف از ثبت نام
           </Link>
         ) : (

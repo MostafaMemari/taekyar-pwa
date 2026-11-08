@@ -1,17 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SectionHeading } from "@/features/coach/components/section-heading";
-import { StatusBadge } from "@/features/coach/components/status-badge";
 import { useBeltExams } from "@/features/coach/hooks/use-belt-exams";
 import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate, toJalaliDayMonth } from "@/lib/jalali";
 import { cn } from "@/lib/utils";
 
+const DAY_MS = 86_400_000;
+
 export function DashboardExams() {
+  const [now] = useState(() => new Date());
   const { data, isLoading } = useBeltExams();
-  const today = new Date();
+  const today = new Date(now);
   today.setHours(0, 0, 0, 0);
 
   const exams = (data ?? [])
@@ -25,37 +28,47 @@ export function DashboardExams() {
       <Card className="gap-0 p-0">
         {isLoading && !data ? (
           <div className="flex flex-col gap-2 p-4">
-            <Skeleton className="h-12 rounded-xl" />
-            <Skeleton className="h-12 rounded-xl" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
           </div>
         ) : exams.length === 0 ? (
-          <p className="p-4 text-center text-sm font-semibold text-ink-muted">آزمون کمربندی پیش رو ثبت نشده است.</p>
+          <p className="px-4 py-6 text-center text-[12px] font-medium text-ink-subtle">آزمون کمربندی پیش رو ثبت نشده است.</p>
         ) : (
-          exams.map((exam, index) => {
-            const [day, ...month] = toJalaliDayMonth(exam.eventDate).split(" ");
-            const open = new Date(exam.registerDate) <= new Date();
+          <ul>
+            {exams.map((exam, index) => {
+              const [day, ...month] = toJalaliDayMonth(exam.eventDate).split(" ");
+              const open = new Date(exam.registerDate) <= now;
+              const eventDay = new Date(exam.eventDate);
+              eventDay.setHours(0, 0, 0, 0);
+              const daysLeft = Math.max(0, Math.round((eventDay.getTime() - today.getTime()) / DAY_MS));
 
-            return (
-              <div key={exam.id} className={cn("flex items-center gap-3 px-4 py-3", index > 0 && "border-t border-[var(--line-2)]")}>
-                <span className="flex w-12 shrink-0 flex-col items-center rounded-lg bg-muted py-1.5 text-ink">
-                  <b className="text-base leading-5 font-extrabold tabular-nums">{day}</b>
-                  <span className="text-xs font-medium">{month.join(" ")}</span>
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm leading-5 font-bold text-ink">{exam.name}</p>
-                  <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
-                    <StatusBadge tone={open ? "success" : "neutral"} className="text-xs">
-                      {open ? "در حال ثبت نام" : "به زودی"}
-                    </StatusBadge>
-                    <span className="text-xs text-ink-muted">
-                      دوره {toPersianDigits(String(exam.examNumber))} ·{" "}
-                      {open ? `ثبت نام تا ${toJalaliDate(exam.eventDate)}` : `ثبت نام از ${toJalaliDate(exam.registerDate)}`}
-                    </span>
+              return (
+                <li key={exam.id} className={cn("flex items-center gap-3 px-4 py-3", index > 0 && "border-t border-[var(--line-2)]")}>
+                  <span className="flex w-11 shrink-0 flex-col items-center rounded-[10px] bg-muted py-1">
+                    <b className="text-[15px] leading-5 font-extrabold tabular-nums text-ink">{day}</b>
+                    <span className="text-[12px] leading-4 font-medium text-ink-muted">{month.join(" ")}</span>
+                  </span>
+
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[13px] font-bold text-ink">{exam.name}</p>
+                    <p className="mt-0.5 flex items-center gap-1.5 text-[12px] font-medium text-ink-subtle">
+                      <span className={cn("size-1.5 shrink-0 rounded-full", open ? "bg-success" : "bg-ink-faint")} aria-hidden="true" />
+                      <span className="shrink-0">{open ? "ثبت نام باز" : "به زودی"}</span>
+                      <span aria-hidden="true">·</span>
+                      <span className="truncate">
+                        دوره {toPersianDigits(String(exam.examNumber))}،{" "}
+                        {open ? `تا ${toJalaliDate(exam.eventDate)}` : `از ${toJalaliDate(exam.registerDate)}`}
+                      </span>
+                    </p>
                   </div>
-                </div>
-              </div>
-            );
-          })
+
+                  <span className="shrink-0 text-[12px] font-semibold tabular-nums text-ink-muted">
+                    {daysLeft === 0 ? "امروز" : `${toPersianDigits(String(daysLeft))} روز`}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
         )}
       </Card>
     </section>

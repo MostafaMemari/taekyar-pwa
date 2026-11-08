@@ -16,7 +16,7 @@ export default function InvitationsPage() {
           <Button
             variant="brand"
             size="sm"
-            className="h-8 rounded-lg px-3 text-[10px] font-extrabold"
+            className="h-8 rounded-lg px-3 text-[12px] font-semibold"
             render={<Link href="/coach/students/invite" />}
             nativeButton={false}
           >

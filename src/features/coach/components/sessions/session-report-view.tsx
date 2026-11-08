@@ -47,7 +47,7 @@ export function SessionReportView({ sessionId, initialDate }: { sessionId: strin
 function ReportSkeleton({ sessionId }: { sessionId: string }) {
   return (
     <main>
-      <CoachBand watermark="گزارش">
+      <CoachBand>
         <div className="flex items-center justify-between gap-3">
           <Button
             variant="ghost"

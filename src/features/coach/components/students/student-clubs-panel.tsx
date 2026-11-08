@@ -36,7 +36,7 @@ export function StudentClubsPanel({ memberships, isLoading }: { memberships: Clu
 
               <div className="min-w-0 flex-1">
                 <p className="truncate text-[13px] font-bold text-ink">{membership.club.name}</p>
-                <p className="mt-0.5 truncate text-[11px] text-ink-subtle">
+                <p className="mt-0.5 truncate text-[12px] text-ink-subtle">
                   {membership.isActive
                     ? `عضویت از ${toJalaliMonth(membership.joinedAt)}`
                     : `تاریخ خروج: ${toJalaliMonth(membership.removedAt ?? membership.joinedAt)}`}
@@ -48,14 +48,14 @@ export function StudentClubsPanel({ memberships, isLoading }: { memberships: Clu
           ))}
         </div>
       ) : (
-        <p className="rounded-xl bg-muted/60 p-3 text-center text-[11px] font-semibold leading-5 text-ink-subtle">
+        <p className="rounded-xl bg-muted/60 p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
           این هنرجو هنوز در باشگاهی ثبت نشده است.
         </p>
       )}
 
       <Button
         variant="outline"
-        className="h-11 w-full rounded-xl text-[12px] font-extrabold"
+        className="h-11 w-full rounded-xl text-[12px] font-semibold"
         render={<Link href="/coach/clubs" />}
         nativeButton={false}
       >

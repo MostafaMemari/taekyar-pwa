@@ -33,7 +33,7 @@ export function StudentSignupStepDocuments({ form, onBack, onSubmit, onSkip }: S
       }
     >
       <form className="mt-4 flex flex-1 flex-col" onSubmit={onSubmit} noValidate>
-        <PhotoPicker label="عکس پروفایل" hint="JPG یا PNG — حداکثر ۵ مگابایت" optional />
+        <PhotoPicker label="عکس پروفایل" hint="JPG یا PNG، حداکثر ۵ مگابایت" optional />
 
         <div className="mt-4 grid gap-4">
           <AuthField label="تاریخ بیمه ورزشی" htmlFor="insuranceDate" optional hint="۷ روز قبل از انقضا یادآوری می شود.">
@@ -110,7 +110,7 @@ export function StudentSignupStepDocuments({ form, onBack, onSubmit, onSkip }: S
           </Button>
         </div>
 
-        <Link href="/signup/mobile?role=student" onClick={onSkip} className="mt-3 block text-center text-[11px] font-bold text-ink-subtle">
+        <Link href="/signup/mobile?role=student" onClick={onSkip} className="mt-3 block text-center text-[12px] font-bold text-ink-subtle">
           رد کردن — بعداً تکمیل می کنم
         </Link>
       </form>

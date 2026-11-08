@@ -31,9 +31,9 @@ export function InvitationsList() {
         {SUMMARY.map((item) => (
           <Card key={item.status} className="items-center gap-1 rounded-2xl p-3 text-center">
             <b className={cn("text-[19px] font-extrabold leading-none tabular-nums", item.tone)}>
-              {data ? toPersianDigits(String(invitations.filter((invitation) => invitation.status === item.status).length)) : "—"}
+              {data ? toPersianDigits(String(invitations.filter((invitation) => invitation.status === item.status).length)) : ""}
             </b>
-            <span className="text-[10px] font-bold text-ink-subtle">{item.label}</span>
+            <span className="text-[12px] font-bold text-ink-subtle">{item.label}</span>
           </Card>
         ))}
       </div>
@@ -69,12 +69,12 @@ export function InvitationsList() {
                     </StatusBadge>
                   </div>
 
-                  <p className="mt-1 flex items-center gap-1.5 text-[11px] text-ink-subtle">
+                  <p className="mt-1 flex items-center gap-1.5 text-[12px] text-ink-subtle">
                     <IdCard className="size-3 shrink-0" aria-hidden="true" />
                     کد ملی <span dir="ltr">{toPersianDigits(invitation.nationalCode)}</span>
                   </p>
 
-                  <p className="mt-0.5 text-[11px] text-ink-subtle">
+                  <p className="mt-0.5 text-[12px] text-ink-subtle">
                     ارسال: {toJalaliDate(invitation.createdAt)}
                     {invitation.respondedAt ? ` · پاسخ: ${toJalaliDate(invitation.respondedAt)}` : null}
                   </p>
@@ -87,7 +87,7 @@ export function InvitationsList() {
 
       <Button
         variant="outline"
-        className="mt-2 h-12 w-full rounded-xl border-dashed text-[12px] font-extrabold text-ink-muted"
+        className="mt-2 h-12 w-full rounded-xl border-dashed text-[12px] font-semibold text-ink-muted"
         render={<Link href="/coach/students/invite" />}
         nativeButton={false}
       >
@@ -95,7 +95,7 @@ export function InvitationsList() {
         دعوت نامه جدید
       </Button>
 
-      <p className="text-center text-[10px] font-medium leading-5 text-ink-subtle">
+      <p className="text-center text-[12px] font-medium leading-5 text-ink-subtle">
         برای دعوت مجدد هنرجویی که دعوت نامه اش رد شده، همان کد ملی را دوباره ثبت کنید.
       </p>
     </div>

@@ -65,8 +65,8 @@ export function AttendanceForm({
       <div className="mt-3 flex items-center gap-3 rounded-2xl border border-[var(--card-line)] bg-card px-4 py-3 shadow-[var(--card-shadow)]">
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-[11px] font-extrabold text-ink-body">پیشرفت علامت گذاری</span>
-            <span className="text-[10px] font-bold text-ink-subtle">
+            <span className="text-[12px] font-semibold text-ink-body">پیشرفت علامت گذاری</span>
+            <span className="text-[12px] font-bold text-ink-subtle">
               {toPersianDigits(String(reviewed.size))} از {toPersianDigits(String(total))} هنرجو
             </span>
           </div>
@@ -84,12 +84,7 @@ export function AttendanceForm({
             ))}
           </div>
         </div>
-        <Button
-          type="button"
-          variant="outline"
-          className="h-9 shrink-0 rounded-xl px-3 text-[10px] font-extrabold"
-          onClick={markAllPresent}
-        >
+        <Button type="button" variant="outline" className="h-9 shrink-0 rounded-xl px-3 text-[12px] font-semibold" onClick={markAllPresent}>
           <Check data-icon="inline-start" aria-hidden="true" />
           همه حاضر
         </Button>
@@ -121,7 +116,7 @@ export function AttendanceForm({
 
       <ActionDock>
         {error ? (
-          <p role="alert" className="mb-2 rounded-xl bg-danger-soft px-3 py-2 text-[11px] font-bold leading-5 text-danger">
+          <p role="alert" className="mb-2 rounded-xl bg-danger-soft px-3 py-2 text-[12px] font-bold leading-5 text-danger">
             {error}
           </p>
         ) : null}

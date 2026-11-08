@@ -54,8 +54,8 @@ export function AttendanceNoteSheet({
             <StickyNote className="size-4" aria-hidden="true" />
           </span>
           <div className="min-w-0 flex-1">
-            <b className="block truncate text-[12px] font-extrabold text-ink">{studentName}</b>
-            <span className="mt-0.5 block text-[10px] font-semibold text-ink-subtle">دلیل یا توضیح این وضعیت را ثبت کنید.</span>
+            <b className="block truncate text-[12px] font-semibold text-ink">{studentName}</b>
+            <span className="mt-0.5 block text-[12px] font-semibold text-ink-subtle">دلیل یا توضیح این وضعیت را ثبت کنید.</span>
           </div>
         </div>
 
@@ -68,7 +68,7 @@ export function AttendanceNoteSheet({
                 type="button"
                 variant="outline"
                 size="sm"
-                className="h-8 rounded-full px-3 text-[10px] font-bold"
+                className="h-8 rounded-full px-3 text-[12px] font-bold"
                 onClick={() => appendReason(reason)}
               >
                 {reason}
@@ -95,7 +95,7 @@ export function AttendanceNoteSheet({
         </FieldGroup>
 
         <div className="flex items-center gap-2">
-          <Button type="button" variant="brand" className="h-11 flex-1 rounded-xl text-[12px] font-extrabold" onClick={save}>
+          <Button type="button" variant="brand" className="h-11 flex-1 rounded-xl text-[12px] font-semibold" onClick={save}>
             ثبت توضیح
           </Button>
           <Button type="button" variant="outline" className="h-11 rounded-xl px-4 text-[12px]" onClick={clear}>

@@ -47,7 +47,7 @@ export function StudentInsurancePanel({ expiryDate }: { expiryDate: string | nul
           </span>
           <div className="min-w-0 flex-1">
             <b className="block text-[13px] font-extrabold text-ink">{expiryDate ? `اعتبار تا ${toJalaliDate(expiryDate)}` : "ثبت نشده"}</b>
-            <p className="mt-0.5 text-[11px] font-medium leading-5 text-ink-subtle">{caption}</p>
+            <p className="mt-0.5 text-[12px] font-medium leading-5 text-ink-subtle">{caption}</p>
           </div>
         </div>
 
@@ -58,7 +58,7 @@ export function StudentInsurancePanel({ expiryDate }: { expiryDate: string | nul
               style={{ width: `${(remaining / VALIDITY_DAYS) * 100}%`, background: TONE_COLOR[status] }}
             />
           </div>
-          <p className="mt-1.5 text-[10px] font-semibold text-ink-subtle">
+          <p className="mt-1.5 text-[12px] font-semibold text-ink-subtle">
             مانده از یک سال اعتبار بیمه{expiryDate ? ` — ${toPersianDigits(String(remaining))} روز` : ""}
           </p>
         </div>

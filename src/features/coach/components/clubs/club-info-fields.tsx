@@ -43,7 +43,7 @@ export function ClubInfoFields({ control, gender, nameError, addressError }: Fie
         />
       </AuthField>
 
-      <AuthField label="آدرس" htmlFor="address" hint="اختیاری — ۵ تا ۲۰۰ کاراکتر" error={addressError}>
+      <AuthField label="آدرس" htmlFor="address" hint="اختیاری، ۵ تا ۲۰۰ کاراکتر" error={addressError}>
         <Controller
           control={control}
           name="address"
@@ -62,14 +62,14 @@ export function ClubInfoFields({ control, gender, nameError, addressError }: Fie
             />
           )}
         />
-        <p className="text-end text-[10px] font-semibold text-ink-faint" dir="ltr">
+        <p className="text-end text-[12px] font-semibold text-ink-faint" dir="ltr">
           {toPersianDigits(String(address.length))} / {toPersianDigits("200")}
         </p>
       </AuthField>
 
       <Alert className="rounded-xl border-none bg-info-soft/60 p-3 text-start">
         <Info className="text-info" aria-hidden="true" />
-        <AlertDescription className="text-[11px] leading-5 text-ink-muted">
+        <AlertDescription className="text-[12px] leading-5 text-ink-muted">
           جنسیت باشگاه از پروفایل مربی گرفته می شود{gender ? ` و روی «${GENDER_META[gender].clubLabel}» ثابت است` : ""}؛ فقط هنرجویان هم جنس
           قابل افزودن هستند.
         </AlertDescription>

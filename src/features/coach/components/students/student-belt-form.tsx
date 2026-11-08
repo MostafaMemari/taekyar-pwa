@@ -120,7 +120,7 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
           <PersonAvatar name={profile.fullName} className="size-12" fallbackClassName="text-base" />
           <div className="min-w-0 flex-1">
             <b className="block truncate text-[14px] font-extrabold text-ink">{profile.fullName}</b>
-            <span className="mt-1 flex flex-wrap items-center gap-2 text-[11px] font-medium text-ink-subtle">
+            <span className="mt-1 flex flex-wrap items-center gap-2 text-[12px] font-medium text-ink-subtle">
               <span>کد ملی {toPersianDigits(profile.nationalCode)}</span>
               <span className="text-ink-faint" aria-hidden="true">
                 •
@@ -138,7 +138,7 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
         </Card>
 
         <FormSection icon={TrendingUp} title="کمربند بعدی" tone="amber">
-          <p className="-mt-2 text-start text-[11px] font-medium leading-5 text-ink-muted">
+          <p className="-mt-2 text-start text-[12px] font-medium leading-5 text-ink-muted">
             کمربند بعدی هنرجو بر اساس کمربند فعلی و رده سنی او تعیین می شود و تنها همین کمربند قابل ثبت است.
           </p>
 
@@ -153,13 +153,13 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
               />
               <div className="min-w-0 flex-1 text-start">
                 <b className="block text-[14px] font-extrabold text-ink">{nextMeta.label}</b>
-                <p className="mt-1 text-[11px] font-medium leading-5 text-ink-subtle">{beltAssignDescription(nextKey)}</p>
+                <p className="mt-1 text-[12px] font-medium leading-5 text-ink-subtle">{beltAssignDescription(nextKey)}</p>
               </div>
             </Card>
           ) : (
             <Alert className="rounded-xl border-none bg-info-soft/60 p-3 text-start">
               <Info className="text-info" aria-hidden="true" />
-              <AlertDescription className="text-[11px] leading-5 text-ink-muted">
+              <AlertDescription className="text-[12px] leading-5 text-ink-muted">
                 {current
                   ? "این هنرجو در بالاترین کمربند ممکن است و کمربند بعدی برای او تعریف نشده است."
                   : "برای این هنرجو کمربند فعلی ثبت نشده است، بنابراین کمربند بعدی قابل تعیین نیست."}
@@ -181,7 +181,7 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
             />
           </AuthField>
 
-          <Card className="gap-2 bg-muted/50 p-3.5 text-[11px] leading-5 text-ink-muted ring-0">
+          <Card className="gap-2 bg-muted/50 p-3.5 text-[12px] leading-5 text-ink-muted ring-0">
             <p className="flex items-start gap-1.5">
               <Info className="mt-0.5 size-3.5 shrink-0 text-accent-ink" aria-hidden="true" />
               <span>تاریخ آزمون کمربند بعدی به صورت خودکار بر اساس مدت زمان کمربند جدید محاسبه می شود.</span>

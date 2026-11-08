@@ -9,7 +9,7 @@ import { CoachSheet } from "@/features/coach/components/coach-sheet";
 export function StudentDetailSkeleton() {
   return (
     <main>
-      <CoachBand watermark="پرونده">
+      <CoachBand>
         <div className="flex items-center justify-between gap-3">
           <Button
             variant="ghost"

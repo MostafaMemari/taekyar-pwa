@@ -86,7 +86,7 @@ export function StudentEnrollmentFields({ control, errors, showImageExpiry = fal
         </AuthField>
       ) : null}
 
-      <PhotoPicker label="تصویر هنرجو" optional hint="JPG یا PNG — حداکثر ۵ مگابایت" />
+      <PhotoPicker label="تصویر هنرجو" optional hint="JPG یا PNG، حداکثر ۵ مگابایت" />
     </FormSection>
   );
 }

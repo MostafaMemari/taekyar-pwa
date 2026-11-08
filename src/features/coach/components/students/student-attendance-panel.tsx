@@ -48,14 +48,14 @@ export function StudentAttendancePanel({ studentId, attendance }: { studentId: s
           ))}
         </div>
       ) : (
-        <p className="rounded-xl bg-muted/60 p-3 text-center text-[11px] font-semibold leading-5 text-ink-subtle">
+        <p className="rounded-xl bg-muted/60 p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
           هنوز جلسه ای برای این هنرجو ثبت نشده است.
         </p>
       )}
 
       <Button
         variant="outline"
-        className="h-11 w-full rounded-xl text-[12px] font-extrabold"
+        className="h-11 w-full rounded-xl text-[12px] font-semibold"
         render={<Link href={`/coach/students/${studentId}/attendance`} />}
         nativeButton={false}
       >

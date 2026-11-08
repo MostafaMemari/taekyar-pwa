@@ -19,11 +19,11 @@ export function AttendanceBars({ counts, className }: { counts: AttendanceCounts
 
         return (
           <div key={item.label} className="flex items-center gap-2.5">
-            <span className="w-14 shrink-0 text-[10px] font-bold text-ink-muted">{item.label}</span>
+            <span className="w-14 shrink-0 text-[12px] font-bold text-ink-muted">{item.label}</span>
             <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-sunken">
               <span className="block h-full rounded-full" style={{ width: `${width}%`, background: item.color }} />
             </span>
-            <b className="w-7 shrink-0 text-end text-[10px] font-extrabold tabular-nums text-ink-body">
+            <b className="w-7 shrink-0 text-end text-[12px] font-semibold tabular-nums text-ink-body">
               {toPersianDigits(String(item.value))}
             </b>
           </div>

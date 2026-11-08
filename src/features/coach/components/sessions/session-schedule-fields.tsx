@@ -43,7 +43,7 @@ export function SessionScheduleFields({ control, weekDaysError, startTimeError, 
                 <ToggleGroupItem
                   key={day.value}
                   value={day.value}
-                  className="h-9 rounded-full px-3.5 text-[11px] font-bold aria-pressed:border-primary/35 aria-pressed:bg-brand-50 aria-pressed:text-accent-ink"
+                  className="h-9 rounded-full px-3.5 text-[12px] font-bold aria-pressed:border-primary/35 aria-pressed:bg-brand-50 aria-pressed:text-accent-ink"
                 >
                   {day.label}
                 </ToggleGroupItem>
@@ -51,8 +51,8 @@ export function SessionScheduleFields({ control, weekDaysError, startTimeError, 
             </ToggleGroup>
           )}
         />
-        {weekDaysError ? <FieldError className="text-start text-[11px] font-semibold">{weekDaysError}</FieldError> : null}
-        <FieldDescription className="text-start text-[11px] font-medium leading-5 text-ink-muted">
+        {weekDaysError ? <FieldError className="text-start text-[12px] font-semibold">{weekDaysError}</FieldError> : null}
+        <FieldDescription className="text-start text-[12px] font-medium leading-5 text-ink-muted">
           حداقل یک روز برگزاری را انتخاب کنید. ساعت پایان باید بعد از ساعت شروع باشد.
         </FieldDescription>
       </Field>
@@ -81,7 +81,7 @@ export function SessionScheduleFields({ control, weekDaysError, startTimeError, 
 
       <Alert className="rounded-xl border-none bg-info-soft/60 p-3 text-start">
         <Info className="text-info" aria-hidden="true" />
-        <AlertDescription className="text-[11px] leading-5 text-ink-muted">
+        <AlertDescription className="text-[12px] leading-5 text-ink-muted">
           بازه زمانی باید معتبر باشد (شروع قبل از پایان). برای هر کلاس سقف ظرفیت تعیین نمی شود و هنرجویان بعد از ساخت کلاس اضافه می شوند.
         </AlertDescription>
       </Alert>

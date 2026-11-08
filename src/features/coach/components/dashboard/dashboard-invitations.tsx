@@ -23,33 +23,40 @@ export function DashboardInvitations() {
           <Button
             variant="link"
             size="sm"
-            className="h-9 text-sm font-bold text-accent-ink"
+            className="h-9 text-[12px] font-semibold text-accent-ink"
             render={<Link href="/coach/invitations" />}
             nativeButton={false}
           >
-            همه دعوت نامه ها
+            همه
           </Button>
         }
       />
       <Card className="gap-0 p-0">
         {isLoading && !data ? (
           <div className="flex flex-col gap-2 p-4">
-            <Skeleton className="h-10 rounded-xl" />
-            <Skeleton className="h-10 rounded-xl" />
+            <Skeleton className="h-11 w-full" />
+            <Skeleton className="h-11 w-full" />
           </div>
         ) : pending.length > 0 ? (
-          pending.map((invitation, index) => (
-            <div key={invitation.id} className={cn("flex items-center gap-3 px-4 py-3", index > 0 && "border-t border-[var(--line-2)]")}>
-              <PersonAvatar name={invitation.student?.fullName ?? invitation.nationalCode} />
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-bold text-ink">{invitation.student?.fullName ?? "هنرجوی بدون حساب"}</p>
-                <p className="mt-1 truncate text-xs text-ink-muted">کد ملی {toPersianDigits(invitation.nationalCode)}</p>
-              </div>
-              <span className="shrink-0 text-xs font-medium text-ink-muted">{toJalaliDate(invitation.createdAt)}</span>
-            </div>
-          ))
+          <ul>
+            {pending.map((invitation, index) => (
+              <li key={invitation.id} className={cn("flex items-center gap-3 px-4 py-3", index > 0 && "border-t border-[var(--line-2)]")}>
+                <PersonAvatar name={invitation.student?.fullName ?? invitation.nationalCode} className="size-9" />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[13px] font-bold text-ink">{invitation.student?.fullName ?? "هنرجوی بدون حساب"}</p>
+                  <p className="mt-0.5 truncate text-[12px] font-medium tabular-nums text-ink-subtle">
+                    {toJalaliDate(invitation.createdAt)} · {toPersianDigits(invitation.nationalCode)}
+                  </p>
+                </div>
+                <span className="flex shrink-0 items-center gap-1.5 text-[12px] font-semibold text-warning">
+                  <span className="size-1.5 rounded-full bg-warning" aria-hidden="true" />
+                  در انتظار
+                </span>
+              </li>
+            ))}
+          </ul>
         ) : (
-          <p className="p-4 text-center text-sm font-semibold text-ink-muted">دعوت نامه در انتظاری وجود ندارد.</p>
+          <p className="px-4 py-6 text-center text-[12px] font-medium text-ink-subtle">دعوت نامه در انتظاری وجود ندارد.</p>
         )}
       </Card>
     </section>

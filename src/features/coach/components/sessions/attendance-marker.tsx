@@ -99,7 +99,7 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
           </span>
           <div className="min-w-0 flex-1">
             <b className="block truncate text-[13px] font-extrabold text-ink">{session.data.name}</b>
-            <p className="mt-0.5 truncate text-[11px] text-ink-subtle">
+            <p className="mt-0.5 truncate text-[12px] text-ink-subtle">
               {clubName} · <SessionTime start={session.data.startTime} end={session.data.endTime} />
             </p>
           </div>
@@ -110,7 +110,7 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
         </div>
 
         <div className="mt-3 border-t border-[var(--line-2)] pt-3">
-          <span className="mb-1.5 flex items-center gap-1.5 text-[11px] font-bold text-ink-subtle">
+          <span className="mb-1.5 flex items-center gap-1.5 text-[12px] font-bold text-ink-subtle">
             <CalendarDays className="size-3.5" aria-hidden="true" />
             تاریخ جلسه
           </span>
@@ -129,7 +129,7 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
       ) : (
         <Alert className="mt-4 rounded-xl border-none bg-info-soft/60 p-3 text-start">
           <Info className="text-info" aria-hidden="true" />
-          <AlertDescription className="text-[11px] leading-5 text-ink-muted">
+          <AlertDescription className="text-[12px] leading-5 text-ink-muted">
             هنوز هنرجویی در این کلاس ثبت نشده است. بعد از افزودن هنرجو می توانید حضور و غیاب را ثبت کنید.
           </AlertDescription>
         </Alert>

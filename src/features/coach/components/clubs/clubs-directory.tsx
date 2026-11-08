@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CoachBand } from "@/features/coach/components/coach-band";
-import { CoachBell } from "@/features/coach/components/coach-bell";
+import { CoachBandBar } from "@/features/coach/components/coach-band-bar";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
 import { ErrorState } from "@/features/coach/components/error-state";
 import { useClubStudentCounts, useClubs } from "@/features/coach/hooks/use-clubs";
@@ -19,9 +19,9 @@ import { ClubsSkeleton } from "./clubs-skeleton";
 
 function GlassStat({ value, label }: { value: ReactNode; label: string }) {
   return (
-    <span className="flex flex-1 flex-col items-center rounded-xl border border-white/15 bg-white/10 px-2 py-1.5 backdrop-blur-sm">
+    <span className="flex flex-1 flex-col items-center rounded-xl border border-white/15 bg-white/10 px-2 py-1.5">
       <b className="text-[16px] font-extrabold leading-none tabular-nums">{value}</b>
-      <span className="mt-1 text-[9px] font-semibold text-white/65">{label}</span>
+      <span className="mt-1 text-[12px] font-semibold text-white/65">{label}</span>
     </span>
   );
 }
@@ -44,13 +44,9 @@ export function ClubsDirectory() {
   return (
     <main className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300">
       <CoachBand>
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0 flex-1">
-            <h1 className="truncate text-[20px] font-extrabold leading-7">باشگاه های من</h1>
-            <p className="mt-1 text-[11px] font-semibold text-white/55">هر باشگاه، حضور و غیاب و کلاس بندی مستقل خودش را دارد</p>
-          </div>
-          <CoachBell />
-        </div>
+        <CoachBandBar title="باشگاه های من" />
+
+        <p className="mt-2 text-[12px] font-semibold text-white/55">هر باشگاه، حضور و غیاب و کلاس بندی مستقل خودش را دارد</p>
 
         <div className="mt-3 flex items-center gap-2.5">
           <GlassStat

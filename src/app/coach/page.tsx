@@ -14,8 +14,8 @@ export default function CoachDashboardPage() {
       <DashboardHero />
 
       <CoachSheet className="flex flex-col gap-6">
-        <DashboardSessions />
         <DashboardOverview />
+        <DashboardSessions />
         <DashboardAttendance />
         <DashboardInvitations />
         <DashboardExams />

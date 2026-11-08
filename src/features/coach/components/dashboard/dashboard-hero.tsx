@@ -1,78 +1,92 @@
 "use client";
 
-import { CalendarDays, ChevronLeft } from "lucide-react";
+import { CalendarDays, ChevronLeft, Clock } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { CoachBand } from "@/features/coach/components/coach-band";
-import { CoachBell } from "@/features/coach/components/coach-bell";
+import { CoachBandBar } from "@/features/coach/components/coach-band-bar";
 import { useCoachProfile } from "@/features/coach/hooks/use-coach-profile";
 import { useSessions } from "@/features/coach/hooks/use-sessions";
-import { sessionIsToday, todayWeekDay, WEEK_DAY_META } from "@/features/coach/lib/coach-data";
+import { todayWeekDay, WEEK_DAY_META } from "@/features/coach/lib/coach-data";
+import { minutesOfDay, pickNextSession } from "@/features/coach/lib/next-session";
+import { beltKeyOf } from "@/features/coach/lib/students-options";
 import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
-
-function minutesOfDay(time: string) {
-  const [hours, minutes] = time.split(":");
-  return Number(hours) * 60 + Number(minutes);
-}
+import { getStudentBeltMeta } from "@/lib/student-belts";
 
 function untilLabel(minutes: number) {
   const hours = Math.floor(minutes / 60);
   const rest = minutes % 60;
-  if (hours === 0) return `${toPersianDigits(String(rest))} دقیقه دیگر`;
-  if (rest === 0) return `${toPersianDigits(String(hours))} ساعت دیگر`;
-  return `${toPersianDigits(String(hours))} ساعت و ${toPersianDigits(String(rest))} دقیقه دیگر`;
+  if (hours === 0) return `${toPersianDigits(String(rest))} دقیقه`;
+  if (rest === 0) return `${toPersianDigits(String(hours))} ساعت`;
+  return `${toPersianDigits(String(hours))} ساعت و ${toPersianDigits(String(rest))} دقیقه`;
 }
 
-export function DashboardHero({ watermark }: { watermark?: string | null }) {
+export function DashboardHero() {
   const [now] = useState(() => new Date());
   const { data: profile } = useCoachProfile();
   const { data } = useSessions();
-  const today = (data?.sessions ?? [])
-    .filter((session) => sessionIsToday(session.weekDays))
-    .sort((a, b) => a.startTime.localeCompare(b.startTime));
-  const nowMinutes = now.getHours() * 60 + now.getMinutes();
-  const next = today.find((session) => minutesOfDay(session.endTime) > nowMinutes);
-  const isUpcoming = next !== undefined && minutesOfDay(next.startTime) > nowMinutes;
+
+  const next = pickNextSession(data?.sessions ?? [], now);
+  const belt = profile?.belt ? getStudentBeltMeta(beltKeyOf(profile.belt)) : null;
+  const until = next?.isUpcoming ? minutesOfDay(next.session.startTime) - (now.getHours() * 60 + now.getMinutes()) : null;
 
   return (
-    <CoachBand watermark={watermark}>
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0 flex-1">
-          <h1 className="truncate text-xl font-extrabold leading-7">سلام{profile ? `، مربی ${profile.fullName}` : ""}</h1>
-          <p className="mt-1 text-xs font-semibold text-white">
-            {WEEK_DAY_META[todayWeekDay()].label} {toPersianDigits(toJalaliDate(now.toISOString()))}
+    <CoachBand>
+      <CoachBandBar />
+
+      <div className="mt-4 min-w-0">
+        <h1 className="page-title truncate">سلام{profile ? `، مربی ${profile.fullName}` : ""}</h1>
+        <p className="mt-1 flex items-center gap-1.5 text-[12px] font-medium text-white/55">
+          <CalendarDays className="size-3.5 shrink-0" aria-hidden="true" />
+          {WEEK_DAY_META[todayWeekDay()].label} {toPersianDigits(toJalaliDate(now.toISOString()))}
+        </p>
+        {belt ? (
+          <p className="mt-2.5 flex items-center gap-2 text-[12px] font-medium text-white/55">
+            <BeltStrip
+              color={belt.color}
+              bottomColor={belt.bottomColor}
+              outline="rgba(255,255,255,0.32)"
+              stripes={belt.stripeCount}
+              className="w-14 shrink-0"
+            />
+            کمربند <b className="font-bold text-white/85">{belt.label}</b>
           </p>
-        </div>
-        <CoachBell />
+        ) : null}
       </div>
 
       <Link
-        href={next ? `/coach/sessions/${next.id}` : "/coach/sessions"}
-        className="mt-4 flex items-center gap-3 border-t border-white/20 pt-3.5"
+        href={next ? `/coach/sessions/${next.session.id}` : "/coach/sessions"}
+        className="mt-4 flex items-center gap-3 border-t border-white/10 pt-3.5"
       >
-        {next ? (
-          <>
-            <span className="min-w-0 flex-1">
-              <span className="block text-xs font-bold text-white">
-                {isUpcoming ? `کلاس بعدی · ${untilLabel(minutesOfDay(next.startTime) - nowMinutes)}` : "کلاس در جریان"}
-              </span>
-              <span className="mt-1 block truncate text-sm font-extrabold">{next.name}</span>
-            </span>
-            <span className="shrink-0 text-end">
-              <b className="block text-xl leading-6 font-extrabold tabular-nums">{toPersianDigits(next.startTime)}</b>
-              <span className="block text-xs tabular-nums text-white">تا {toPersianDigits(next.endTime)}</span>
-            </span>
-          </>
-        ) : (
-          <>
-            <CalendarDays className="size-5 shrink-0 text-white" aria-hidden="true" />
-            <span className="min-w-0 flex-1 text-sm font-bold">
-              {today.length > 0 ? "کلاس های امروز پایان یافت" : "برنامه هفتگی کلاس ها"}
-            </span>
-            <ChevronLeft className="size-4 shrink-0 text-white" aria-hidden="true" />
-          </>
-        )}
+        <span className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-white/10">
+          {next ? <Clock className="size-4" aria-hidden="true" /> : <CalendarDays className="size-4" aria-hidden="true" />}
+        </span>
+
+        <span className="min-w-0 flex-1">
+          <b className="block truncate text-[13px] font-bold text-white">{next ? next.session.name : "برنامه هفتگی کلاس ها"}</b>
+          <span className="mt-0.5 flex items-center gap-1.5 text-[12px] font-medium tabular-nums text-white/55">
+            {next ? (
+              <>
+                <span>{next.isUpcoming ? "کلاس بعدی" : "در حال برگزاری"}</span>
+                <span aria-hidden="true">·</span>
+                <span>
+                  {toPersianDigits(next.session.startTime)} تا {toPersianDigits(next.session.endTime)}
+                </span>
+              </>
+            ) : (
+              <span>کلاس بعدی خود را ببینید</span>
+            )}
+          </span>
+        </span>
+
+        {until !== null ? (
+          <span className="shrink-0 rounded-full bg-white/10 px-2.5 py-1 text-[12px] font-semibold tabular-nums text-white/80">
+            {untilLabel(until)}
+          </span>
+        ) : null}
+        <ChevronLeft className="size-4 shrink-0 text-white/40" aria-hidden="true" />
       </Link>
     </CoachBand>
   );

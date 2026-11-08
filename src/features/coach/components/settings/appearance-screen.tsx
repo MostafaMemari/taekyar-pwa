@@ -28,7 +28,7 @@ export function AppearanceScreen() {
       <section className="mt-5">
         <SectionHeading title="پیش نمایش زنده" />
         <div className="pointer-events-none overflow-hidden rounded-2xl border border-[var(--card-line)]" inert aria-hidden="true">
-          <DashboardHero watermark={null} />
+          <DashboardHero />
         </div>
       </section>
 
@@ -46,7 +46,7 @@ export function AppearanceScreen() {
                 aria-pressed={active}
                 onClick={() => setMode(option.value)}
                 className={cn(
-                  "flex flex-col items-center gap-2 rounded-2xl border px-4 py-4 text-[12px] font-extrabold transition-colors",
+                  "flex flex-col items-center gap-2 rounded-2xl border px-4 py-4 text-[12px] font-semibold transition-colors",
                   active ? "border-brand-600 bg-brand-50 text-accent-ink" : "border-[var(--line-2)] bg-card text-ink-muted hover:text-ink",
                 )}
               >
@@ -64,7 +64,7 @@ export function AppearanceScreen() {
       </section>
 
       <section className="mt-7">
-        <SectionHeading title="رنگ اصلی" action={<span className="text-[10px] font-bold text-ink-subtle">۵ رنگ</span>} />
+        <SectionHeading title="رنگ اصلی" action={<span className="text-[12px] font-bold text-ink-subtle">۵ رنگ</span>} />
         <div className="grid grid-cols-3 gap-3">
           {ACCENTS.map((option) => {
             const active = accent === option.id;
@@ -76,7 +76,7 @@ export function AppearanceScreen() {
                 aria-pressed={active}
                 onClick={() => setAccent(option.id)}
                 className={cn(
-                  "relative flex flex-col items-center gap-2 rounded-2xl border px-3 py-3 text-[11px] font-extrabold transition-colors",
+                  "relative flex flex-col items-center gap-2 rounded-2xl border px-3 py-3 text-[12px] font-semibold transition-colors",
                   active ? "border-brand-600 bg-brand-50 text-accent-ink" : "border-[var(--line-2)] bg-card text-ink-muted hover:text-ink",
                 )}
               >
@@ -98,7 +98,7 @@ export function AppearanceScreen() {
       </section>
 
       <section className="mt-7">
-        <SectionHeading title="گردی گوشه ها" action={<span className="text-[10px] font-bold text-ink-subtle">۳ سطح</span>} />
+        <SectionHeading title="گردی گوشه ها" action={<span className="text-[12px] font-bold text-ink-subtle">۳ سطح</span>} />
         <div className="grid grid-cols-3 gap-3">
           {RADII.map((option) => {
             const active = radius === option.id;
@@ -110,7 +110,7 @@ export function AppearanceScreen() {
                 aria-pressed={active}
                 onClick={() => setRadius(option.id)}
                 className={cn(
-                  "flex flex-col items-center gap-2 rounded-2xl border px-3 py-3 text-[11px] font-extrabold transition-colors",
+                  "flex flex-col items-center gap-2 rounded-2xl border px-3 py-3 text-[12px] font-semibold transition-colors",
                   active ? "border-brand-600 bg-brand-50 text-accent-ink" : "border-[var(--line-2)] bg-card text-ink-muted hover:text-ink",
                 )}
               >
@@ -134,8 +134,8 @@ export function AppearanceScreen() {
           <Info className="size-4" aria-hidden="true" />
         </span>
         <div className="min-w-0 flex-1">
-          <b className="block text-[12.5px] font-extrabold text-accent-ink">ذخیره سازی محلی</b>
-          <p className="mt-1 text-[11.5px] leading-5 text-ink-body">
+          <b className="block text-[13px] font-extrabold text-accent-ink">ذخیره سازی محلی</b>
+          <p className="mt-1 text-[12px] leading-5 text-ink-body">
             انتخاب شما روی همین دستگاه نگه داشته می شود و در همه صفحه ها اعمال می شود.
           </p>
         </div>

@@ -39,17 +39,17 @@ export function StudentsListItem({
         <span className="min-w-0 flex-1">
           <span className="flex items-center gap-1.5">
             <b className="truncate text-[13px] font-extrabold text-ink">{student.fullName}</b>
-            <StatusBadge tone={student.userId ? "brand" : "neutral"} className="shrink-0 px-1.5 py-0.5 text-[9px]">
+            <StatusBadge tone={student.userId ? "brand" : "neutral"} className="shrink-0 px-1.5 py-0.5 text-[12px]">
               {student.userId ? "دارای حساب" : "بدون حساب"}
             </StatusBadge>
           </span>
           <span className="mt-1.5 flex items-center gap-1.5">
-            <StatusBadge tone={insuranceMeta.tone} className="shrink-0 px-1.5 py-[3px] text-[9px]">
+            <StatusBadge tone={insuranceMeta.tone} className="shrink-0 px-1.5 py-[3px] text-[12px]">
               <InsuranceIcon aria-hidden="true" />
               {insuranceLabel}
             </StatusBadge>
             {ageCategory ? (
-              <span className="truncate text-[10px] font-bold text-ink-subtle">{AGE_CATEGORY_LABELS[ageCategory]}</span>
+              <span className="truncate text-[12px] font-bold text-ink-subtle">{AGE_CATEGORY_LABELS[ageCategory]}</span>
             ) : null}
           </span>
         </span>
@@ -63,10 +63,10 @@ export function StudentsListItem({
               stripes={belt.stripeCount}
               className="size-auto w-12"
             />
-            <span className="text-[9px] leading-none font-extrabold text-ink-muted">{belt.label}</span>
+            <span className="text-[12px] leading-none font-semibold text-ink-muted">{belt.label}</span>
           </span>
         ) : (
-          <span className="flex w-14 shrink-0 items-center justify-center text-center text-[9px] leading-3 font-bold text-ink-faint">
+          <span className="flex w-14 shrink-0 items-center justify-center text-center text-[12px] leading-4 font-bold text-ink-faint">
             بدون کمربند
           </span>
         )}

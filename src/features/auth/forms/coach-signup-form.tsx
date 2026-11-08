@@ -84,13 +84,13 @@ export function CoachSignupForm() {
         <div className="mt-6 flex flex-1 flex-col">
           <div className="flex items-center gap-2">
             <AuthPageTitle className="text-[22px] leading-8">مشخصات حرفه ای</AuthPageTitle>
-            <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[10px] font-bold text-ink-subtle">اختیاری</span>
+            <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[12px] font-bold text-ink-subtle">اختیاری</span>
           </div>
           <AuthPageLead>همه اختیاری؛ بعداً از پروفایل تکمیل کنید.</AuthPageLead>
 
           <form className="mt-4 flex flex-1 flex-col" onSubmit={submit} noValidate>
             <div className="flex flex-col gap-4">
-              <PhotoPicker label="تصویر پروفایل" hint="JPG یا PNG — حداکثر ۵ مگابایت" optional />
+              <PhotoPicker label="تصویر پروفایل" hint="JPG یا PNG، حداکثر ۵ مگابایت" optional />
 
               <AuthField label="تاریخ تولد" htmlFor="birthDate" optional>
                 <Controller
@@ -140,7 +140,7 @@ export function CoachSignupForm() {
             <Link
               href="/signup/mobile?role=coach"
               onClick={() => finish(form.getValues())}
-              className="mt-3 block text-center text-[11px] font-bold text-ink-subtle"
+              className="mt-3 block text-center text-[12px] font-bold text-ink-subtle"
             >
               رد کردن — بعداً تکمیل می کنم
             </Link>

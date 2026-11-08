@@ -107,7 +107,7 @@
   --color-info: var(--st-sky);
   --color-info-soft: var(--st-sky-soft);
   --shadow-field: var(--field-shadow);
-  --shadow-brand-xl: 0 20px 44px -16px color-mix(in srgb, var(--ak-600) 68%, transparent);
+  --shadow-brand-xl: 0 8px 20px -12px color-mix(in srgb, var(--ak-600) 55%, transparent);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -150,7 +150,7 @@
   --field-line-hover: #b9c2d0;
   --field-shadow: 0 1px 2px rgba(16, 18, 26, 0.05);
   --card-line: #ffffff;
-  --card-shadow: 0 1px 2px rgba(16, 18, 26, 0.04), 0 14px 36px -18px rgba(16, 18, 26, 0.12);
+  --card-shadow: 0 1px 2px rgba(16, 18, 26, 0.05), 0 8px 24px -20px rgba(16, 18, 26, 0.35);
   --ak-ink: var(--ak-600);
   --ak-ink-strong: var(--ak-700);
   --ak-soft: color-mix(in srgb, var(--ak-600) 8%, var(--surface));
@@ -223,7 +223,7 @@
   --field-line-hover: #434e66;
   --field-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
   --card-line: rgba(255, 255, 255, 0.065);
-  --card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045), 0 18px 44px -20px rgba(0, 0, 0, 0.6);
+  --card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 10px 28px -22px rgba(0, 0, 0, 0.85);
   --ak-ink: var(--ak-400);
   --ak-ink-strong: var(--ak-300);
   --ak-soft: color-mix(in srgb, var(--ak-500) 16%, var(--surface));
@@ -338,6 +338,14 @@
     color: var(--ak-ink-strong);
   }
 
+  :where(a[href], button:not(:disabled), [role="button"]:not([aria-disabled="true"])) {
+    cursor: pointer;
+  }
+
+  :where(button:disabled, [aria-disabled="true"]) {
+    cursor: not-allowed;
+  }
+
   :where(a, button, input, select, textarea, label, [tabindex]):focus-visible {
     outline: 2px solid color-mix(in srgb, var(--ak-600) 65%, transparent);
     outline-offset: 2px;
@@ -427,9 +435,8 @@
   border: 1px solid;
   padding-inline: 0.75rem;
   padding-block: 0.25rem;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  backdrop-filter: blur(8px);
 }
 
 @utility meta-glass {
@@ -441,10 +448,9 @@
   background: rgba(255, 255, 255, 0.12);
   padding-inline: 0.625rem;
   padding-block: 0.25rem;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   color: #ffffff;
-  backdrop-filter: blur(8px);
 }
 
 @utility welcome-sheet {
@@ -533,7 +539,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 600;
     color: var(--ink-6);
   }
@@ -602,7 +608,7 @@
   }
 
   & .stp-label {
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 700;
     color: var(--ink-6);
   }
@@ -667,23 +673,15 @@
   position: relative;
   overflow: clip;
   padding-block: max(1rem, env(safe-area-inset-top)) 2.75rem;
-  padding-inline: 1.25rem;
+  padding-inline: 1rem;
   color: #ffffff;
-  background:
-    radial-gradient(110% 80% at 100% 0%, color-mix(in srgb, var(--ak-400) 58%, transparent), transparent 62%),
-    linear-gradient(150deg, var(--ak-500) 0%, var(--ak-600) 45%, var(--ak-800) 100%);
+  background: radial-gradient(140% 120% at 100% 0%, color-mix(in srgb, var(--ak-600) 34%, transparent), transparent 55%), #0e1113;
 }
 
-@utility coach-band-wm {
-  pointer-events: none;
-  position: absolute;
-  inset-block-start: -3.25rem;
-  inset-inline-start: -1.25rem;
-  font-size: 9rem;
+@utility page-title {
+  font-size: 21px;
   font-weight: 800;
-  line-height: 1;
-  color: rgba(255, 255, 255, 0.07);
-  user-select: none;
+  line-height: 1.75rem;
 }
 
 @utility coach-sheet {
@@ -705,8 +703,8 @@
   z-index: 40;
   margin-inline: auto;
   display: grid;
-  width: calc(100% - 1.75rem);
-  max-width: calc(var(--app-max-width) - 1.75rem);
+  width: calc(100% - 2rem);
+  max-width: calc(var(--app-max-width) - 2rem);
   grid-template-columns: repeat(5, minmax(0, 1fr));
   border: 1px solid var(--line-2);
   border-radius: 28px;
@@ -724,7 +722,7 @@
   gap: 0.15rem;
   border-radius: 14px;
   padding-block: 0.3rem;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--ink-6);
   transition:

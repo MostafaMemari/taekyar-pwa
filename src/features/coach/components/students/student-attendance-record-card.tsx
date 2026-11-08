@@ -28,11 +28,11 @@ export function StudentAttendanceRecordCard({
 
       <div className="min-w-0 flex-1">
         <p className="truncate text-[13px] font-bold text-ink">{sessionName}</p>
-        <p className="mt-0.5 truncate text-[11px] text-ink-subtle">
+        <p className="mt-0.5 truncate text-[12px] text-ink-subtle">
           {clubName} · {date}
         </p>
         {note ? (
-          <p className="mt-1 truncate text-[11px] text-ink-subtle">
+          <p className="mt-1 truncate text-[12px] text-ink-subtle">
             <span className="font-bold">یادداشت:</span> {note}
           </p>
         ) : null}

@@ -44,12 +44,12 @@ export function ClubCard({ club, studentCount }: { club: ClubRecord; studentCoun
         {stats.map((stat, index) => (
           <div key={stat.label} className={cn("flex flex-col items-center py-2.5", index > 0 && "border-s border-[var(--line-2)]")}>
             <b className="text-[14px] font-extrabold tabular-nums text-ink">{stat.value}</b>
-            <span className="mt-1 text-[9px] font-bold text-ink-subtle">{stat.label}</span>
+            <span className="mt-1 text-[12px] font-bold text-ink-subtle">{stat.label}</span>
           </div>
         ))}
       </div>
 
-      <div className="flex items-start gap-1.5 px-4 pt-3 text-[11px] leading-5 text-ink-subtle">
+      <div className="flex items-start gap-1.5 px-4 pt-3 text-[12px] leading-5 text-ink-subtle">
         <MapPin className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
         <span className="line-clamp-2">{club.address || "آدرس ثبت نشده"}</span>
       </div>
@@ -58,7 +58,7 @@ export function ClubCard({ club, studentCount }: { club: ClubRecord; studentCoun
         <Button
           variant="brand"
           size="sm"
-          className="h-9 flex-1 rounded-xl text-[11px] font-extrabold"
+          className="h-9 flex-1 rounded-xl text-[12px] font-semibold"
           render={<Link href="/coach" />}
           nativeButton={false}
         >

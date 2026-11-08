@@ -48,7 +48,7 @@ export function ClubDetailActions({
         <div className="flex flex-col gap-1 py-1">
           <Button
             variant="ghost"
-            className="h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-extrabold text-ink-body"
+            className="h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-semibold text-ink-body"
             onClick={() => {
               onMenuOpenChange(false);
               router.push(`/coach/clubs/${club.id}/edit`);
@@ -61,8 +61,8 @@ export function ClubDetailActions({
             variant="ghost"
             className={
               isActive
-                ? "h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-extrabold text-destructive hover:bg-danger-soft hover:text-danger"
-                : "h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-extrabold text-ink-body"
+                ? "h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-semibold text-destructive hover:bg-danger-soft hover:text-danger"
+                : "h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-semibold text-ink-body"
             }
             onClick={openConfirm}
           >
@@ -78,13 +78,13 @@ export function ClubDetailActions({
         title={isActive ? "غیرفعال کردن باشگاه" : "فعال کردن باشگاه"}
         description={isActive ? "تایید غیرفعال کردن باشگاه" : "تایید فعال کردن باشگاه"}
       >
-        <p className="rounded-xl bg-danger-soft/60 p-3 text-[11px] leading-5 text-ink-muted">
+        <p className="rounded-xl bg-danger-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
           {isActive
             ? `با غیرفعال کردن ${club.name}، کلاس ها و حضور و غیاب این باشگاه از دسترس خارج می شود. این کار قابل بازگشت است.`
             : `با فعال کردن ${club.name}، دوباره می توانید کلاس و حضور و غیاب آن را مدیریت کنید.`}
         </p>
 
-        {error ? <p className="pt-2 text-[11px] font-bold leading-5 text-danger">{error}</p> : null}
+        {error ? <p className="pt-2 text-[12px] font-bold leading-5 text-danger">{error}</p> : null}
 
         <div className="flex gap-2 pt-1">
           <Button variant="outline" className="h-11 flex-1 rounded-xl" onClick={() => setConfirmOpen(false)} disabled={pending}>
@@ -92,7 +92,7 @@ export function ClubDetailActions({
           </Button>
           <Button
             variant={isActive ? "destructive" : "brand"}
-            className="h-11 flex-[2] rounded-xl text-[12px] font-extrabold"
+            className="h-11 flex-[2] rounded-xl text-[12px] font-semibold"
             onClick={applyStatus}
             disabled={pending}
           >

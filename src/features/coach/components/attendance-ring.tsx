@@ -24,7 +24,7 @@ export function AttendanceRing({
         <b className={cn("font-extrabold tabular-nums text-ink", size >= 80 ? "text-[17px]" : "text-[15px]")}>
           {toPersianDigits(String(percent))}٪
         </b>
-        <span className="mt-1 text-[9px] font-bold text-ink-subtle">{label}</span>
+        <span className="mt-1 text-[12px] font-bold text-ink-subtle">{label}</span>
       </span>
     </div>
   );

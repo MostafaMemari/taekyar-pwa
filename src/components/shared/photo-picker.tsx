@@ -27,9 +27,9 @@ export function PhotoPicker({ label, hint, optional = false }: PhotoPickerProps)
       <div className="text-center">
         <b className="block text-[13px] font-extrabold text-ink">
           {label}
-          {optional ? <span className="text-[9px] font-bold text-ink-subtle"> (اختیاری)</span> : null}
+          {optional ? <span className="text-[12px] font-bold text-ink-subtle"> (اختیاری)</span> : null}
         </b>
-        <span className="mt-0.5 block text-[10px] font-semibold text-ink-subtle">{hint}</span>
+        <span className="mt-0.5 block text-[12px] font-semibold text-ink-subtle">{hint}</span>
       </div>
     </Card>
   );

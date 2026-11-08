@@ -26,13 +26,13 @@ export function NotFoundScreen({
           <SearchX className="size-6" aria-hidden="true" />
         </EmptyMedia>
         <EmptyTitle className="text-[15px] font-extrabold text-ink">{title}</EmptyTitle>
-        <EmptyDescription className="text-[11px] leading-5 text-ink-subtle">{description}</EmptyDescription>
+        <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">{description}</EmptyDescription>
       </EmptyHeader>
 
       <EmptyContent>
         <Button
           variant="brand"
-          className="h-11 w-full rounded-xl text-[12px] font-extrabold"
+          className="h-11 w-full rounded-xl text-[12px] font-semibold"
           render={<Link href={backHref} />}
           nativeButton={false}
         >

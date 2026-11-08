@@ -16,8 +16,8 @@ export function ErrorState({
 }) {
   return (
     <Alert className={cn("rounded-2xl border-none bg-danger-soft/60 p-3.5 text-start", className)}>
-      <AlertTitle className="text-[12px] font-extrabold text-danger">{title}</AlertTitle>
-      <AlertDescription className="text-[11px] leading-5 text-ink-muted">{message}</AlertDescription>
+      <AlertTitle className="text-[12px] font-semibold text-danger">{title}</AlertTitle>
+      <AlertDescription className="text-[12px] leading-5 text-ink-muted">{message}</AlertDescription>
       <Button type="button" variant="outline" size="sm" className="mt-3 rounded-lg" onClick={onRetry}>
         <RefreshCw data-icon="inline-start" aria-hidden="true" />
         تلاش دوباره

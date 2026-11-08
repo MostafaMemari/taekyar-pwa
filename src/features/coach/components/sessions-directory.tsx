@@ -52,9 +52,9 @@ function SessionCard({ session, clubName, memberCount }: { session: ClassSession
                 {session.isActive ? "فعال" : "غیرفعال"}
               </StatusBadge>
             </div>
-            <p className="mt-0.5 truncate text-[11px] text-ink-subtle">{clubName}</p>
+            <p className="mt-0.5 truncate text-[12px] text-ink-subtle">{clubName}</p>
 
-            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-semibold text-ink-muted">
+            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] font-semibold text-ink-muted">
               <span className="flex items-center gap-1">
                 <CalendarClock className="size-3.5 shrink-0 text-ink-subtle" aria-hidden="true" />
                 {weekDayLabels(session.weekDays).join(" · ")}
@@ -65,7 +65,7 @@ function SessionCard({ session, clubName, memberCount }: { session: ClassSession
               </span>
               <span className="flex items-center gap-1 tabular-nums">
                 <Users className="size-3.5 shrink-0 text-ink-subtle" aria-hidden="true" />
-                {memberCount === undefined ? "—" : `${toPersianDigits(String(memberCount))} هنرجو`}
+                {memberCount === undefined ? "" : `${toPersianDigits(String(memberCount))} هنرجو`}
               </span>
             </div>
           </div>
@@ -78,7 +78,7 @@ function SessionCard({ session, clubName, memberCount }: { session: ClassSession
         <Button
           variant="ghost"
           size="sm"
-          className="h-10 gap-2 rounded-lg px-2 text-[11px] font-extrabold text-accent-ink"
+          className="h-10 gap-2 rounded-lg px-2 text-[12px] font-semibold text-accent-ink"
           render={<Link href={`/coach/sessions/${session.id}/attendance`} />}
           nativeButton={false}
         >
@@ -128,7 +128,7 @@ export function SessionsDirectory() {
   return (
     <>
       <header className="flex items-center gap-2">
-        <h1 className="text-[22px] font-extrabold text-ink">کلاس ها</h1>
+        <h1 className="page-title text-ink">کلاس ها</h1>
         {data && !readError ? (
           <StatusBadge tone="neutral" className="mt-0.5">
             {visible.length === sessions.length
@@ -164,7 +164,7 @@ export function SessionsDirectory() {
           className="mt-3 w-full rounded-xl bg-muted p-1"
         >
           {PERIODS.map((option) => (
-            <ToggleGroupItem key={option.value} value={option.value} className="h-9 flex-1 rounded-lg text-[11px] font-bold">
+            <ToggleGroupItem key={option.value} value={option.value} className="h-9 flex-1 rounded-lg text-[12px] font-bold">
               {option.label}
             </ToggleGroupItem>
           ))}
@@ -184,7 +184,7 @@ export function SessionsDirectory() {
               <CalendarDays aria-hidden="true" />
             </EmptyMedia>
             <EmptyTitle className="text-[13px] font-extrabold text-ink">هنوز کلاسی ثبت نشده</EmptyTitle>
-            <EmptyDescription className="text-[11px] leading-5 text-ink-subtle">
+            <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
               برای هر باشگاه، یک کلاس با روزها و ساعت برگزاری بسازید.
             </EmptyDescription>
           </EmptyHeader>
@@ -217,7 +217,7 @@ export function SessionsDirectory() {
               <CalendarDays aria-hidden="true" />
             </EmptyMedia>
             <EmptyTitle className="text-[13px] font-extrabold text-ink">کلاسی یافت نشد</EmptyTitle>
-            <EmptyDescription className="text-[11px] leading-5 text-ink-subtle">عبارت جستجو یا بازه زمانی را تغییر دهید.</EmptyDescription>
+            <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">عبارت جستجو یا بازه زمانی را تغییر دهید.</EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
             <Button type="button" variant="outline" size="sm" className="rounded-lg" onClick={reset}>

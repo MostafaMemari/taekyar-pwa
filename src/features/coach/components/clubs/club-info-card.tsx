@@ -27,7 +27,7 @@ export function ClubInfoCard({ club }: { club: ClubRecord }) {
           <span>{club.address || "آدرس ثبت نشده"}</span>
         </div>
 
-        <div className="flex items-center gap-2 text-[11px] text-ink-subtle">
+        <div className="flex items-center gap-2 text-[12px] text-ink-subtle">
           <CalendarDays className="size-3.5 shrink-0" aria-hidden="true" />
           <span>تاریخ ثبت: {toJalaliDate(club.createdAt)}</span>
         </div>

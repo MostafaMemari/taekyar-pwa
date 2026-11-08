@@ -11,7 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LogoutButton } from "@/features/auth/components/logout-button";
 import { CoachBand } from "@/features/coach/components/coach-band";
-import { CoachBell } from "@/features/coach/components/coach-bell";
+import { CoachBandBar } from "@/features/coach/components/coach-band-bar";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
 import { ErrorState } from "@/features/coach/components/error-state";
 import { SectionHeading } from "@/features/coach/components/section-heading";
@@ -38,7 +38,7 @@ function MenuRow({ icon: Icon, label, href, badge }: { icon: LucideIcon; label: 
   return (
     <Button
       variant="ghost"
-      className="h-12 w-full justify-start gap-3 rounded-none px-4 text-[12px] font-extrabold text-ink-body hover:bg-muted/50"
+      className="h-12 w-full justify-start gap-3 rounded-none px-4 text-[12px] font-semibold text-ink-body hover:bg-muted/50"
       render={<Link href={href} />}
       nativeButton={false}
     >
@@ -85,7 +85,7 @@ export function CoachProfile() {
     { label: "کد ملی", value: toPersianDigits(profile.nationalCode), ltr: true },
     { label: "جنسیت", value: GENDER_META[profile.gender].label },
     { label: "استان", value: province },
-    { label: "تاریخ تولد", value: profile.birthDate ? toPersianDigits(toJalaliDate(profile.birthDate)) : "—", ltr: true },
+    { label: "تاریخ تولد", value: profile.birthDate ? toPersianDigits(toJalaliDate(profile.birthDate)) : "ثبت نشده", ltr: true },
     { label: "شماره موبایل", value: toPersianDigits(profile.mobile), ltr: true },
     { label: "کمربند", value: "", belt: true },
   ];
@@ -93,19 +93,16 @@ export function CoachProfile() {
   return (
     <main className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300">
       <CoachBand>
-        <div className="flex items-center justify-between gap-3">
-          <span className="hero-chip border-white/20 bg-white/10 text-white backdrop-blur-sm">پروفایل مربی</span>
-          <CoachBell />
-        </div>
+        <CoachBandBar />
 
-        <div className="mt-3 flex items-center gap-3.5">
-          <Avatar className="size-16 shrink-0 ring-2 ring-white/25">
+        <div className="mt-4 flex items-center gap-3.5">
+          <Avatar className="size-16 shrink-0 ring-1 ring-white/20">
             <AvatarFallback className="bg-white/15 text-xl font-extrabold text-white">{profile.fullName.slice(0, 1)}</AvatarFallback>
           </Avatar>
 
           <div className="min-w-0 flex-1">
-            <h1 className="truncate text-[20px] font-extrabold leading-7">{profile.fullName}</h1>
-            <p className="mt-0.5 text-[11px] font-semibold text-white/65" dir="ltr">
+            <h1 className="page-title truncate">{profile.fullName}</h1>
+            <p className="mt-0.5 text-[12px] font-semibold text-white/65" dir="ltr">
               {toPersianDigits(profile.mobile)}
             </p>
             <div className="mt-2 flex flex-wrap gap-1.5">
@@ -122,7 +119,7 @@ export function CoachProfile() {
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 shrink-0 gap-1.5 rounded-xl bg-white px-3 text-[11px] font-extrabold text-accent-ink hover:bg-white/90"
+            className="h-8 shrink-0 gap-1.5 rounded-xl bg-white px-3 text-[12px] font-semibold text-accent-ink hover:bg-white/90"
             render={<Link href="/coach/profile/edit" />}
             nativeButton={false}
           >
@@ -142,8 +139,8 @@ export function CoachProfile() {
                   key={row.label}
                   className="flex items-center justify-between gap-3 border-b border-[var(--line-2)] py-2.5 last:border-b-0"
                 >
-                  <dt className="text-[11px] font-medium text-ink-subtle">{row.label}</dt>
-                  <dd className="flex items-center gap-1.5 text-[12px] font-extrabold text-ink" dir={row.ltr ? "ltr" : undefined}>
+                  <dt className="text-[12px] font-medium text-ink-subtle">{row.label}</dt>
+                  <dd className="flex items-center gap-1.5 text-[12px] font-semibold text-ink" dir={row.ltr ? "ltr" : undefined}>
                     {row.belt ? (
                       belt && beltKey ? (
                         <>
@@ -164,7 +161,7 @@ export function CoachProfile() {
             <div className="border-t border-[var(--line-2)] px-4 py-2">
               <Button
                 variant="ghost"
-                className="w-full gap-1.5 rounded-xl text-[12px] font-extrabold text-accent-ink hover:bg-brand-50"
+                className="w-full gap-1.5 rounded-xl text-[12px] font-semibold text-accent-ink hover:bg-brand-50"
                 render={<Link href="/coach/profile/edit" />}
                 nativeButton={false}
               >

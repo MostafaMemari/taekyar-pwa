@@ -76,7 +76,7 @@ export function InviteForm() {
   return (
     <form className="mt-4 flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
       <FormSection icon={IdCard} title="کد ملی هنرجو">
-        <p className="-mt-2 text-start text-[11px] font-medium leading-5 text-ink-muted">
+        <p className="-mt-2 text-start text-[12px] font-medium leading-5 text-ink-muted">
           کد ملی ۱۰ رقمی هنرجو را وارد کنید؛ دعوت نامه برای پروفایل موجود او در سامانه ارسال می شود.
         </p>
 
@@ -103,7 +103,7 @@ export function InviteForm() {
             <Button
               variant="link"
               size="sm"
-              className="h-auto p-0 text-[10px] font-extrabold text-accent-ink"
+              className="h-auto p-0 text-[12px] font-semibold text-accent-ink"
               render={<Link href="/coach/invitations" />}
               nativeButton={false}
             >
@@ -132,7 +132,7 @@ export function InviteForm() {
                   <PersonAvatar name={invitation.student?.fullName ?? invitation.nationalCode} />
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[13px] font-extrabold text-ink">{invitation.student?.fullName ?? "هنرجوی بدون حساب"}</p>
-                    <p className="mt-0.5 truncate text-[10px] font-medium text-ink-subtle">
+                    <p className="mt-0.5 truncate text-[12px] font-medium text-ink-subtle">
                       کد ملی <span dir="ltr">{toPersianDigits(invitation.nationalCode)}</span> · ارسال: {toJalaliDate(invitation.createdAt)}
                     </p>
                   </div>
@@ -147,7 +147,7 @@ export function InviteForm() {
         </Card>
       </section>
 
-      <Card className="gap-2 bg-muted/50 p-3.5 text-[11px] leading-5 text-ink-muted ring-0">
+      <Card className="gap-2 bg-muted/50 p-3.5 text-[12px] leading-5 text-ink-muted ring-0">
         <p className="font-bold text-ink-body">روند دعوت نامه چگونه است؟</p>
         {FLOW_NOTES.map((note) => (
           <p key={note.text} className="flex items-start gap-1.5">
@@ -159,7 +159,7 @@ export function InviteForm() {
 
       <Button
         variant="outline"
-        className="h-11 w-full rounded-xl text-[12px] font-extrabold"
+        className="h-11 w-full rounded-xl text-[12px] font-semibold"
         render={<Link href="/coach/students/new" />}
         nativeButton={false}
       >
@@ -170,7 +170,7 @@ export function InviteForm() {
       <AuthFormError message={message} />
 
       <ActionDock>
-        <Button type="submit" variant="brand" className="h-12 w-full rounded-xl text-[12px] font-extrabold" disabled={send.isMutating}>
+        <Button type="submit" variant="brand" className="h-12 w-full rounded-xl text-[12px] font-semibold" disabled={send.isMutating}>
           <Send data-icon="inline-start" aria-hidden="true" />
           {send.isMutating ? "در حال ارسال..." : "ارسال دعوت نامه"}
         </Button>

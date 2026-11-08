@@ -79,7 +79,7 @@ export function TaekyarWordmark({ subtitle }: { subtitle: string }) {
   return (
     <span className="block">
       <span className="block text-[15px] font-extrabold leading-5 text-ink">تک یار</span>
-      <span className="block text-[10px] font-medium text-ink-subtle">{subtitle}</span>
+      <span className="block text-[12px] font-medium text-ink-subtle">{subtitle}</span>
     </span>
   );
 }

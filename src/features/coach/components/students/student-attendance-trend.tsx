@@ -34,7 +34,7 @@ export function StudentAttendanceTrend({ records }: { records: StudentAttendance
 
   return (
     <section>
-      <SectionHeading title="روند حضور و غیاب" action={<span className="text-[10px] font-bold text-ink-subtle">۶ ماه اخیر</span>} />
+      <SectionHeading title="روند حضور و غیاب" action={<span className="text-[12px] font-bold text-ink-subtle">۶ ماه اخیر</span>} />
       <Card className="gap-0 p-4">
         <ChartContainer config={chartConfig} className="mx-auto h-44 w-full">
           <BarChart data={data} margin={{ top: 4, right: 4, left: 4, bottom: 0 }}>

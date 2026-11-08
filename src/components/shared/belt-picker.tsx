@@ -64,7 +64,7 @@ export function BeltPicker({
       <FieldLabel className="text-[13px] font-semibold text-ink-body">
         {label}
         {required && !optional ? <span className="text-accent-ink"> *</span> : null}
-        {optional ? <span className="text-[9px] font-bold text-ink-subtle"> (اختیاری)</span> : null}
+        {optional ? <span className="text-[12px] font-bold text-ink-subtle"> (اختیاری)</span> : null}
       </FieldLabel>
       {groups ? (
         <ToggleGroup
@@ -97,7 +97,7 @@ export function BeltPicker({
             key={option.value}
             value={option.value}
             className={cn(
-              "relative h-auto min-w-0 flex-col gap-1.5 rounded-xl border-border bg-field px-3 pt-7 pb-3 text-[11px] font-bold whitespace-normal aria-pressed:border-primary aria-pressed:bg-primary/5 aria-pressed:text-primary",
+              "relative h-auto min-w-0 flex-col gap-1.5 rounded-xl border-border bg-field px-3 pt-7 pb-3 text-[12px] font-bold whitespace-normal aria-pressed:border-primary aria-pressed:bg-primary/5 aria-pressed:text-primary",
               option.wide && gridColumns === 2 ? "col-span-2" : null,
             )}
           >
@@ -117,8 +117,8 @@ export function BeltPicker({
           </ToggleGroupItem>
         ))}
       </ToggleGroup>
-      {error ? <FieldError className="text-start text-[11px] font-semibold">{error}</FieldError> : null}
-      {hint ? <FieldDescription className="text-start text-[11px] font-medium leading-5 text-ink-muted">{hint}</FieldDescription> : null}
+      {error ? <FieldError className="text-start text-[12px] font-semibold">{error}</FieldError> : null}
+      {hint ? <FieldDescription className="text-start text-[12px] font-medium leading-5 text-ink-muted">{hint}</FieldDescription> : null}
     </Field>
   );
 }

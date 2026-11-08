@@ -109,7 +109,7 @@ export function StudentSportsFields({ control, errors, mode }: FieldsProps) {
         <>
           <div className="flex items-center justify-between gap-3 rounded-xl border border-border bg-field p-3.5">
             <div className="min-w-0 flex-1">
-              <p className="text-[11px] font-medium text-ink-subtle">کمربند فعلی</p>
+              <p className="text-[12px] font-medium text-ink-subtle">کمربند فعلی</p>
               <p className="mt-1 text-[13px] font-extrabold text-ink">{belt?.label ?? "ثبت نشده"}</p>
             </div>
             {belt ? (
@@ -123,7 +123,7 @@ export function StudentSportsFields({ control, errors, mode }: FieldsProps) {
             ) : null}
           </div>
 
-          <p className="text-start text-[11px] font-medium leading-5 text-ink-muted">
+          <p className="text-start text-[12px] font-medium leading-5 text-ink-muted">
             برای تغییر کمربند از گزینه «تخصیص کمربند» در پرونده هنرجو استفاده کنید. قد، وزن و تاریخ کمربند فقط در زمان ثبت اولیه قابل ثبت
             هستند.
           </p>

@@ -16,7 +16,7 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
       type="button"
       variant="outline"
       size="xs"
-      className="h-7 shrink-0 gap-1 rounded-full px-2 text-[10px] font-bold"
+      className="h-7 shrink-0 gap-1 rounded-full px-2 text-[12px] font-bold"
       aria-label={`حذف فیلتر ${label}`}
       onClick={onRemove}
     >
@@ -63,7 +63,7 @@ export function StudentsActiveFilters({
         type="button"
         variant="ghost"
         size="xs"
-        className="h-7 shrink-0 gap-1 px-2 text-[10px] font-extrabold text-destructive"
+        className="h-7 shrink-0 gap-1 px-2 text-[12px] font-semibold text-destructive"
         onClick={onClear}
       >
         <X data-icon="inline-start" aria-hidden="true" />

@@ -15,8 +15,8 @@ const NOT_SET = "ثبت نشده";
 function InfoRow({ label, value, ltr }: { label: string; value: string; ltr?: boolean }) {
   return (
     <div className="flex items-center justify-between gap-3 border-b border-[var(--line-2)] py-2.5 last:border-b-0">
-      <dt className="shrink-0 text-[11px] font-medium text-ink-subtle">{label}</dt>
-      <dd className="min-w-0 truncate text-[12px] font-extrabold text-ink" dir={ltr ? "ltr" : undefined}>
+      <dt className="shrink-0 text-[12px] font-medium text-ink-subtle">{label}</dt>
+      <dd className="min-w-0 truncate text-[12px] font-semibold text-ink" dir={ltr ? "ltr" : undefined}>
         {value}
       </dd>
     </div>
@@ -32,6 +32,8 @@ export function StudentInfoPanel({ student, attendance }: { student: StudentDeta
 
   return (
     <div className="flex flex-col gap-4">
+      <StudentBeltPanel assignment={student.currentBelt} birthDate={student.birthDate} />
+
       <section>
         <SectionHeading title="مشخصات هنرجو" />
         <Card className="gap-0 p-0">
@@ -53,7 +55,6 @@ export function StudentInfoPanel({ student, attendance }: { student: StudentDeta
 
       <StudentInsurancePanel expiryDate={student.sportsInsuranceDate} />
       {attendance ? <StudentAttendanceTrend records={attendance.records} /> : null}
-      <StudentBeltPanel assignment={student.currentBelt} birthDate={student.birthDate} />
     </div>
   );
 }

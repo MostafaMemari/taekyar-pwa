@@ -57,7 +57,6 @@ export function SessionReport({
         start={session.startTime}
         end={session.endTime}
         backHref={`/coach/sessions/${session.id}`}
-        watermark="گزارش"
         chip="گزارش جلسه"
         subtitle={`جلسه ${weekDayLabels(session.weekDays).join(" و ")}`}
         meta={
@@ -79,7 +78,7 @@ export function SessionReport({
 
       <CoachSheet className="flex flex-col gap-4">
         <Card className="gap-0 p-4">
-          <span className="mb-1.5 flex items-center gap-1.5 text-[11px] font-bold text-ink-subtle">
+          <span className="mb-1.5 flex items-center gap-1.5 text-[12px] font-bold text-ink-subtle">
             <CalendarDays className="size-3.5" aria-hidden="true" />
             تاریخ جلسه
           </span>
@@ -98,7 +97,7 @@ export function SessionReport({
               <AttendanceBars counts={counts} />
             </div>
           </div>
-          <p className="mt-3 border-t border-[var(--line-2)] pt-2.5 text-center text-[10px] font-semibold text-ink-subtle">
+          <p className="mt-3 border-t border-[var(--line-2)] pt-2.5 text-center text-[12px] font-semibold text-ink-subtle">
             {toPersianDigits(String(marked))} از {toPersianDigits(String(entries.length))} هنرجو برای این تاریخ ثبت شده
           </p>
         </Card>
@@ -106,13 +105,13 @@ export function SessionReport({
         {marked === 0 ? (
           <Alert className="rounded-xl border-none bg-info-soft/60 p-3 text-start">
             <Info className="text-info" aria-hidden="true" />
-            <AlertDescription className="text-[11px] leading-5 text-ink-muted">
+            <AlertDescription className="text-[12px] leading-5 text-ink-muted">
               برای این تاریخ هنوز حضور و غیابی ثبت نشده است.
             </AlertDescription>
             <Button
               variant="brand"
               size="sm"
-              className="mt-2 rounded-lg text-[11px] font-extrabold"
+              className="mt-2 rounded-lg text-[12px] font-semibold"
               render={<Link href={`/coach/sessions/${session.id}/attendance?date=${date}`} />}
               nativeButton={false}
             >
@@ -144,7 +143,7 @@ export function SessionReport({
             action={
               <Link
                 href={reportStudent ? `/coach/students/${reportStudent.studentId}/attendance` : "/coach/students"}
-                className="inline-flex items-center gap-0.5 text-[10px] font-extrabold text-accent-ink"
+                className="inline-flex items-center gap-0.5 text-[12px] font-semibold text-accent-ink"
               >
                 گزارش تک هنرجو
                 <ChevronLeft className="size-3" aria-hidden="true" />
@@ -159,13 +158,13 @@ export function SessionReport({
               note: entry.attendance?.note ?? undefined,
             }))}
           />
-          <p className="mt-2 text-center text-[10px] font-bold text-ink-faint">نمایش {toPersianDigits(String(entries.length))} هنرجو</p>
+          <p className="mt-2 text-center text-[12px] font-bold text-ink-faint">نمایش {toPersianDigits(String(entries.length))} هنرجو</p>
         </section>
 
         <div className="grid grid-cols-2 gap-3">
           <Button
             variant="outline"
-            className="h-12 rounded-xl text-[12px] font-extrabold"
+            className="h-12 rounded-xl text-[12px] font-semibold"
             render={<Link href={`/coach/sessions/${session.id}`} />}
             nativeButton={false}
           >
@@ -174,7 +173,7 @@ export function SessionReport({
           </Button>
           <Button
             variant="brand"
-            className="h-12 rounded-xl text-[12px] font-extrabold"
+            className="h-12 rounded-xl text-[12px] font-semibold"
             render={<Link href={`/coach/sessions/${session.id}/attendance`} />}
             nativeButton={false}
           >

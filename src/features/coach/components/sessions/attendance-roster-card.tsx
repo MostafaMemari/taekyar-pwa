@@ -35,14 +35,14 @@ export function AttendanceRosterCard({
         <Button
           type="button"
           variant="ghost"
-          className="h-8 shrink-0 gap-1.5 rounded-full bg-muted px-3 text-[10px] font-extrabold text-ink-muted hover:bg-muted"
+          className="h-8 shrink-0 gap-1.5 rounded-full bg-muted px-3 text-[12px] font-semibold text-ink-muted hover:bg-muted"
           onClick={onNoteOpen}
         >
           <StickyNote data-icon="inline-start" aria-hidden="true" />
           توضیح
         </Button>
         {note ? (
-          <span className="flex min-w-0 flex-1 items-center gap-1.5 rounded-full bg-info-soft px-2.5 py-1.5 text-[10px] font-bold text-info">
+          <span className="flex min-w-0 flex-1 items-center gap-1.5 rounded-full bg-info-soft px-2.5 py-1.5 text-[12px] font-bold text-info">
             <NotebookPen className="size-3 shrink-0" aria-hidden="true" />
             <span className="truncate">{note}</span>
           </span>

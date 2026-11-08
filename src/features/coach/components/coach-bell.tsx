@@ -16,13 +16,13 @@ export function CoachBell({ className }: { className?: string }) {
       variant="ghost"
       size="icon"
       aria-label="اعلان ها"
-      className={cn("relative size-10 rounded-full border border-white/20 bg-white/10 text-white hover:bg-white/20", className)}
+      className={cn("relative size-11 rounded-full border border-white/20 bg-white/10 text-white hover:bg-white/20", className)}
       render={<Link href="/coach/notifications" />}
       nativeButton={false}
     >
       <Bell aria-hidden="true" />
       {unread ? (
-        <Badge className="absolute -end-1 -top-1 size-[18px] justify-center rounded-full border-2 border-brand-600 bg-white p-0 text-[9px] font-extrabold text-accent-ink">
+        <Badge className="absolute -end-1 -top-1 size-[18px] justify-center rounded-full border-2 border-brand-600 bg-white p-0 text-[11px] font-semibold text-accent-ink">
           {toPersianDigits(String(unread))}
         </Badge>
       ) : null}

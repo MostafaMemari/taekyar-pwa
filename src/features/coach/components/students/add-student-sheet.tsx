@@ -45,7 +45,7 @@ export function AddStudentSheet({ open, onOpenChange }: { open: boolean; onOpenC
             </span>
             <span className="min-w-0 flex-1 text-start">
               <b className="block text-[13px] font-extrabold text-ink">{option.title}</b>
-              <span className="text-[11px] font-medium text-ink-subtle">{option.description}</span>
+              <span className="text-[12px] font-medium text-ink-subtle">{option.description}</span>
             </span>
           </Button>
         ))}

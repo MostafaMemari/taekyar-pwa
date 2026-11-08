@@ -37,7 +37,7 @@ export function AttendanceStatusControl({
         <ToggleGroupItem
           key={status}
           value={status}
-          className={cn("h-9 min-w-0 flex-1 rounded-lg text-[11px] font-extrabold text-ink-muted transition", ACTIVE_CLASS[status])}
+          className={cn("h-9 min-w-0 flex-1 rounded-lg text-[12px] font-semibold text-ink-muted transition", ACTIVE_CLASS[status])}
         >
           {ATTENDANCE_META[status].label}
         </ToggleGroupItem>

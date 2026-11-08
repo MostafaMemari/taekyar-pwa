@@ -95,7 +95,7 @@ function SessionCard({ session, current, onRevoke }: { session: AccountSession; 
           )}
         </div>
 
-        <div className="mt-2 space-y-1 text-[11px] text-ink-subtle">
+        <div className="mt-2 space-y-1 text-[12px] text-ink-subtle">
           <p className="flex items-center gap-1.5">
             <span className="shrink-0 font-semibold text-ink-muted">پلتفرم:</span>
             <span className="font-bold text-ink-body">{session.platform ?? "وب"}</span>
@@ -114,7 +114,7 @@ function SessionCard({ session, current, onRevoke }: { session: AccountSession; 
         <Button
           variant="outline"
           size="sm"
-          className="h-8 shrink-0 rounded-lg border-danger/30 text-[10px] font-extrabold text-danger hover:bg-danger-soft hover:text-danger"
+          className="h-8 shrink-0 rounded-lg border-danger/30 text-[12px] font-semibold text-danger hover:bg-danger-soft hover:text-danger"
           onClick={onRevoke}
         >
           خروج از نشست
@@ -214,12 +214,12 @@ export function SecurityScreen() {
               <AlertTriangle className="size-4" aria-hidden="true" />
               منطقه خطر
             </h2>
-            <p className="mt-1 text-[11px] leading-5 text-danger/90">
+            <p className="mt-1 text-[12px] leading-5 text-danger/90">
               با لغو همه نشست ها از همه دستگاه ها خارج می شوید و باید دوباره وارد شوید.
             </p>
             <Button
               variant="destructive"
-              className="mt-3 h-11 w-full rounded-xl bg-danger text-[12px] font-extrabold text-white hover:bg-danger/90"
+              className="mt-3 h-11 w-full rounded-xl bg-danger text-[12px] font-semibold text-white hover:bg-danger/90"
               onClick={openRevokeAll}
               disabled={sessions.length === 0}
             >
@@ -237,11 +237,11 @@ export function SecurityScreen() {
         title="خروج از نشست"
         description="تایید خروج از نشست انتخاب شده"
       >
-        <p className="rounded-xl bg-danger-soft/60 p-3 text-[11px] leading-5 text-ink-muted">
+        <p className="rounded-xl bg-danger-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
           نشست {revokeTarget ? describeDevice(revokeTarget) : ""} بسته می شود و برای استفاده از این دستگاه باید دوباره وارد شوید.
         </p>
 
-        {revoke.error ? <p className="pt-2 text-[11px] font-bold leading-5 text-danger">{apiErrorMessage(revoke.error)}</p> : null}
+        {revoke.error ? <p className="pt-2 text-[12px] font-bold leading-5 text-danger">{apiErrorMessage(revoke.error)}</p> : null}
 
         <div className="flex gap-2 pt-1">
           <Button variant="outline" className="h-11 flex-1 rounded-xl" onClick={() => setRevokeTarget(null)} disabled={revoke.isMutating}>
@@ -249,7 +249,7 @@ export function SecurityScreen() {
           </Button>
           <Button
             variant="destructive"
-            className="h-11 flex-[2] rounded-xl bg-danger text-[12px] font-extrabold text-white hover:bg-danger/90"
+            className="h-11 flex-[2] rounded-xl bg-danger text-[12px] font-semibold text-white hover:bg-danger/90"
             onClick={applyRevoke}
             disabled={revoke.isMutating}
           >
@@ -260,11 +260,11 @@ export function SecurityScreen() {
       </SheetFrame>
 
       <SheetFrame open={revokeAllOpen} onOpenChange={setRevokeAllOpen} title="لغو همه نشست ها" description="تایید لغو همه نشست ها">
-        <p className="rounded-xl bg-danger-soft/60 p-3 text-[11px] leading-5 text-ink-muted">
+        <p className="rounded-xl bg-danger-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
           همه نشست ها از جمله نشست فعلی لغو می شوند و برای ادامه باید دوباره وارد حساب شوید.
         </p>
 
-        {revokeAll.error ? <p className="pt-2 text-[11px] font-bold leading-5 text-danger">{apiErrorMessage(revokeAll.error)}</p> : null}
+        {revokeAll.error ? <p className="pt-2 text-[12px] font-bold leading-5 text-danger">{apiErrorMessage(revokeAll.error)}</p> : null}
 
         <div className="flex gap-2 pt-1">
           <Button
@@ -277,7 +277,7 @@ export function SecurityScreen() {
           </Button>
           <Button
             variant="destructive"
-            className="h-11 flex-[2] rounded-xl bg-danger text-[12px] font-extrabold text-white hover:bg-danger/90"
+            className="h-11 flex-[2] rounded-xl bg-danger text-[12px] font-semibold text-white hover:bg-danger/90"
             onClick={applyRevokeAll}
             disabled={revokeAll.isMutating}
           >

@@ -53,7 +53,7 @@ export function SessionDetailActions({
         <div className="flex flex-col gap-1 py-1">
           <Button
             variant="ghost"
-            className="h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-extrabold text-ink-body"
+            className="h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-semibold text-ink-body"
             onClick={() => {
               onMenuOpenChange(false);
               router.push(`/coach/sessions/${session.id}/edit`);
@@ -66,8 +66,8 @@ export function SessionDetailActions({
             variant="ghost"
             className={
               isActive
-                ? "h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-extrabold text-destructive hover:bg-danger-soft hover:text-danger"
-                : "h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-extrabold text-ink-body"
+                ? "h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-semibold text-destructive hover:bg-danger-soft hover:text-danger"
+                : "h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-semibold text-ink-body"
             }
             onClick={openConfirm}
           >
@@ -83,13 +83,13 @@ export function SessionDetailActions({
         title={isActive ? "غیرفعال کردن کلاس" : "فعال کردن کلاس"}
         description={isActive ? "تایید غیرفعال کردن کلاس" : "تایید فعال کردن کلاس"}
       >
-        <p className="rounded-xl bg-danger-soft/60 p-3 text-[11px] leading-5 text-ink-muted">
+        <p className="rounded-xl bg-danger-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
           {isActive
             ? `با غیرفعال کردن ${session.name}، این کلاس از فهرست کلاس های فعال خارج می شود. این کار قابل بازگشت است.`
             : `با فعال کردن ${session.name}، دوباره می توانید این کلاس را مدیریت کنید.`}
         </p>
 
-        {error ? <p className="pt-2 text-[11px] font-bold leading-5 text-danger">{error}</p> : null}
+        {error ? <p className="pt-2 text-[12px] font-bold leading-5 text-danger">{error}</p> : null}
 
         <div className="flex gap-2 pt-1">
           <Button variant="outline" className="h-11 flex-1 rounded-xl" onClick={() => setConfirmOpen(false)} disabled={pending}>
@@ -97,7 +97,7 @@ export function SessionDetailActions({
           </Button>
           <Button
             variant={isActive ? "destructive" : "brand"}
-            className="h-11 flex-[2] rounded-xl text-[12px] font-extrabold"
+            className="h-11 flex-[2] rounded-xl text-[12px] font-semibold"
             onClick={applyStatus}
             disabled={pending}
           >

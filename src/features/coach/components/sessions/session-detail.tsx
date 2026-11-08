@@ -25,8 +25,8 @@ import { SessionRoster } from "./session-roster";
 function InfoRow({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="flex items-center justify-between gap-3 border-b border-[var(--line-2)] py-2.5 last:border-b-0">
-      <dt className="shrink-0 text-[11px] font-medium text-ink-subtle">{label}</dt>
-      <dd className="min-w-0 text-end text-[12px] font-extrabold text-ink">{children}</dd>
+      <dt className="shrink-0 text-[12px] font-medium text-ink-subtle">{label}</dt>
+      <dd className="min-w-0 text-end text-[12px] font-semibold text-ink">{children}</dd>
     </div>
   );
 }
@@ -113,7 +113,7 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
         <div className="grid grid-cols-2 gap-3">
           <Button
             variant="brand"
-            className="h-11 rounded-xl text-[12px] font-extrabold"
+            className="h-11 rounded-xl text-[12px] font-semibold"
             render={<Link href={`/coach/sessions/${session.id}/attendance`} />}
             nativeButton={false}
           >
@@ -122,7 +122,7 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
           </Button>
           <Button
             variant="outline"
-            className="h-11 rounded-xl text-[12px] font-extrabold"
+            className="h-11 rounded-xl text-[12px] font-semibold"
             render={<Link href={`/coach/sessions/${session.id}/report`} />}
             nativeButton={false}
           >
@@ -143,7 +143,7 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-8 rounded-lg px-2.5 text-[11px] font-bold"
+                  className="h-8 rounded-lg px-2.5 text-[12px] font-bold"
                   onClick={() => setAddOpen(true)}
                 >
                   <Plus data-icon="inline-start" aria-hidden="true" />
@@ -156,7 +156,7 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
           {members.length > 0 ? (
             <SessionRoster entries={members} linkStudents />
           ) : (
-            <p className="rounded-xl bg-muted/60 p-3 text-center text-[11px] font-semibold leading-5 text-ink-subtle">
+            <p className="rounded-xl bg-muted/60 p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
               هنوز هنرجویی در این کلاس ثبت نشده است.
             </p>
           )}

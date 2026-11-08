@@ -11,7 +11,7 @@ export function ClubCoverFields() {
         <Camera data-icon="inline-start" aria-hidden="true" />
         انتخاب تصویر باشگاه (اختیاری)
       </Button>
-      <p className="text-start text-[11px] font-medium leading-5 text-ink-muted">
+      <p className="text-start text-[12px] font-medium leading-5 text-ink-muted">
         تصویر باشگاه اختیاری است؛ آپلود تصویر در این نسخه از سامانه فعال نشده است.
       </p>
     </FormSection>

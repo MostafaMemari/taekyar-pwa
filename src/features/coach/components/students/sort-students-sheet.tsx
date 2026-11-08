@@ -50,7 +50,7 @@ export function SortStudentsSheet({
             </span>
             <span className="min-w-0 flex-1">
               <b className="block text-[13px] font-extrabold text-ink">{option.label}</b>
-              <span className="text-[11px] font-medium text-ink-subtle">{option.description}</span>
+              <span className="text-[12px] font-medium text-ink-subtle">{option.description}</span>
             </span>
             <RadioGroupItem value={option.key} />
           </Label>
