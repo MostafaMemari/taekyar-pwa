@@ -13,7 +13,6 @@ import { membershipChargeOf } from "@/features/coach/lib/students-options";
 import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
 import { PROVINCES } from "@/lib/provinces";
-import { ageFromIso } from "@/lib/student-belts";
 
 const NOT_SET = "ثبت نشده";
 
@@ -109,7 +108,6 @@ export function StudentSpecsPanel({ student }: { student: StudentDetailRecord })
       ? `${toPersianDigits(student.height)} سانتی متر · ${toPersianDigits(student.weight)} کیلوگرم`
       : NOT_SET;
   const province = PROVINCES.find((option) => option.value === student.province)?.label ?? student.province ?? NOT_SET;
-  const age = student.birthDate ? ageFromIso(student.birthDate) : null;
 
   return (
     <div className="flex flex-col gap-4">
@@ -117,10 +115,7 @@ export function StudentSpecsPanel({ student }: { student: StudentDetailRecord })
         <SectionHeading title="شناسنامه" />
         <Card className="gap-0 py-1">
           <NationalCodeRow nationalCode={student.nationalCode} />
-          <InfoRow label="تاریخ تولد">
-            {student.birthDate ? toJalaliDate(student.birthDate) : NOT_SET}
-            {age ? ` · ${toPersianDigits(String(age))} ساله` : ""}
-          </InfoRow>
+          <InfoRow label="تاریخ تولد">{student.birthDate ? toJalaliDate(student.birthDate) : NOT_SET}</InfoRow>
           <InfoRow label="جنسیت">{GENDER_META[student.gender].label}</InfoRow>
           <InfoRow label="استان">{province}</InfoRow>
         </Card>
