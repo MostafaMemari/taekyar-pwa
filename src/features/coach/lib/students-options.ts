@@ -1,11 +1,10 @@
-import { ListOrdered, type LucideIcon, Medal, ShieldAlert, ShieldCheck, ShieldOff, ShieldX, Type } from "lucide-react";
+import { CalendarDays, ListOrdered, type LucideIcon, Medal, ShieldAlert, ShieldCheck, ShieldOff, ShieldX, Type } from "lucide-react";
 import type { AgeCategoryRecord } from "@/features/coach/lib/student-api";
 import { digitsOnly } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
 import type { StudentBeltKey } from "@/lib/student-belts";
 
 export type StudentInsuranceStatus = "valid" | "expiring" | "expired" | "none";
-export type StudentSortKey = "default" | "name" | "belt" | "ins";
 
 export const INSURANCE_STATUSES = ["valid", "expiring", "expired", "none"] as const;
 
@@ -101,61 +100,59 @@ export function membershipChargeOf(membershipYear: number | null | undefined): {
   return { due: Math.max(0, currentYear - membershipYear) };
 }
 
-export const SORT_FIELDS = ["createdAt", "updatedAt", "fullName", "belt", "insurance"] as const;
+export const SORT_FIELDS = ["createdAt", "updatedAt", "fullName", "belt", "beltDate", "insurance"] as const;
 export type StudentSortField = (typeof SORT_FIELDS)[number];
 export type StudentSortDirection = "asc" | "desc";
 
-export const SORT_PRESETS: {
-  key: StudentSortKey;
+export const SORT_FIELD_META: {
+  key: StudentSortField;
   label: string;
   description: string;
   icon: LucideIcon;
   tile: string;
-  sortBy: StudentSortField;
-  sortDirection: StudentSortDirection;
 }[] = [
   {
-    key: "default",
-    label: "ترتیب ثبت نام",
-    description: "جدیدترین هنرجوها اول",
-    icon: ListOrdered,
-    tile: "bg-muted text-ink-muted",
-    sortBy: "createdAt",
-    sortDirection: "desc",
+    key: "beltDate",
+    label: "تاریخ دریافت کمربند",
+    description: "بر اساس آخرین کمربند دریافتی",
+    icon: CalendarDays,
+    tile: "bg-brand-50 text-accent-ink",
   },
   {
-    key: "name",
+    key: "createdAt",
+    label: "تاریخ ثبت پرونده",
+    description: "بر اساس زمان ساخت پرونده",
+    icon: ListOrdered,
+    tile: "bg-muted text-ink-muted",
+  },
+  {
+    key: "fullName",
     label: "نام و نام خانوادگی",
-    description: "بر اساس حروف الفبا",
+    description: "ترتیب حروف الفبا",
     icon: Type,
     tile: "bg-brand-50 text-accent-ink",
-    sortBy: "fullName",
-    sortDirection: "asc",
   },
   {
     key: "belt",
     label: "رتبه کمربند",
-    description: "از بالاترین به پایین ترین",
+    description: "بر اساس رتبه کمربند فعلی",
     icon: Medal,
     tile: "bg-warning-soft text-warning",
-    sortBy: "belt",
-    sortDirection: "desc",
   },
   {
-    key: "ins",
+    key: "insurance",
     label: "تاریخ بیمه",
-    description: "نزدیک ترین انقضا در بالا",
+    description: "بر اساس تاریخ انقضای بیمه",
     icon: ShieldAlert,
     tile: "bg-danger-soft text-danger",
-    sortBy: "insurance",
-    sortDirection: "asc",
   },
 ];
 
-export function sortPresetKey(sortBy: StudentSortField, sortDirection: StudentSortDirection): StudentSortKey | "" {
-  return SORT_PRESETS.find((preset) => preset.sortBy === sortBy && preset.sortDirection === sortDirection)?.key ?? "";
-}
-
-export function sortPreset(key: StudentSortKey) {
-  return SORT_PRESETS.find((preset) => preset.key === key) ?? SORT_PRESETS[0];
-}
+export const DEFAULT_SORT_DIRECTIONS: Record<StudentSortField, StudentSortDirection> = {
+  beltDate: "desc",
+  createdAt: "desc",
+  fullName: "asc",
+  belt: "desc",
+  insurance: "asc",
+  updatedAt: "desc",
+};

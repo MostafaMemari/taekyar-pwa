@@ -11,7 +11,7 @@ import { useBeltExams } from "@/features/coach/hooks/use-belt-exams";
 import { useStudentStats } from "@/features/coach/hooks/use-student-stats";
 import { useStudentsFeed } from "@/features/coach/hooks/use-students";
 import { activeFilterCount, studentFilterParsers, toggleValue, toStudentQuery } from "@/features/coach/lib/student-filters";
-import { type StudentSortKey, sortPreset } from "@/features/coach/lib/students-options";
+import { DEFAULT_SORT_DIRECTIONS, type StudentSortDirection, type StudentSortField } from "@/features/coach/lib/students-options";
 import { apiErrorMessage } from "@/lib/api/client";
 import { AddStudentSheet } from "./add-student-sheet";
 import { SortStudentsSheet } from "./sort-students-sheet";
@@ -47,15 +47,12 @@ export function StudentsDirectory() {
 
   const filterCount = activeFilterCount(filters);
   const isDirty = filterCount > 0 || filters.q.trim().length > 0;
-  const sortActive = filters.sort !== "createdAt" || filters.dir !== "desc";
+  const sortActive = filters.sort !== "beltDate" || filters.dir !== "desc";
 
   const clearFilters = () => void setFilters({ q: "", belt: [], age: [], ins: [], exam: "" });
 
-  const changeSort = (key: StudentSortKey) => {
-    const preset = sortPreset(key);
-    void setFilters({ sort: preset.sortBy, dir: preset.sortDirection });
-    setSortOpen(false);
-  };
+  const onSortFieldChange = (field: StudentSortField) => void setFilters({ sort: field, dir: DEFAULT_SORT_DIRECTIONS[field] });
+  const onSortDirectionChange = (direction: StudentSortDirection) => void setFilters({ dir: direction });
 
   return (
     <>
@@ -133,7 +130,8 @@ export function StudentsDirectory() {
         onOpenChange={setSortOpen}
         sortBy={filters.sort}
         sortDirection={filters.dir}
-        onChange={changeSort}
+        onFieldChange={onSortFieldChange}
+        onDirectionChange={onSortDirectionChange}
       />
 
       <StudentsFiltersSheet

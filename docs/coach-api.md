@@ -390,13 +390,13 @@ COLOR | POOM | DAN
 |---|---|---|---|
 | `page` | number | خیر | پیش فرض 1 |
 | `take` | number | خیر | پیش فرض 20، حداکثر 100 |
-| `search` | string | خیر | جستجو در نام یا کد ملی (contains) |
+| `search` | string | خیر | |
 | `belt` | enum[] | خیر | یک یا چند `BeltName` |
 | `ageCategory` | enum[] | خیر | یک یا چند رده سنی: `BLOSSOM`، `YOUTH`، `CADET`، `JUNIOR`، `YOUNG`، `SENIOR`، `ULTRA` |
 | `insurance` | enum[] | خیر | `valid`، `expiring`، `expired`، `none` |
 | `beltExamId` | uuid | خیر | هنرجویان واجد شرایط آزمون کمربندی انتخاب شده (جنسیت، کمربند بعدی و موعد) |
 | `gender` | enum | خیر | `MALE` یا `FEMALE` |
-| `sortBy` | enum | خیر | `createdAt`، `updatedAt`، `fullName`، `belt`، `insurance` |
+| `sortBy` | enum | خیر | `createdAt`، `updatedAt`، `fullName`، `belt`، `beltDate`، `insurance` |
 | `sortDirection` | enum | خیر | `asc` یا `desc` (پیش فرض `desc`) |
 
 پارامترهای آرایه ای هم به شکل تکرار کلید (`?belt=WHITE&belt=YELLOW`) و هم با کاما (`?belt=WHITE,YELLOW`) پذیرفته می شوند. مقدار نامعتبر در هر کدام `400` می دهد.

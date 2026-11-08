@@ -1,9 +1,10 @@
 "use client";
 
-import { Medal, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
-import { AuthSelect } from "@/components/shared/auth-select";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
@@ -21,7 +22,8 @@ import {
 } from "@/features/coach/lib/students-options";
 import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
-import { beltDotStyle, STUDENT_BELT_GROUPS, type StudentBeltKey } from "@/lib/student-belts";
+import { beltDotStyle, STUDENT_BELT_GROUPS, type StudentBeltKey, studentBeltLabel } from "@/lib/student-belts";
+import { cn } from "@/lib/utils";
 
 const BELT_GROUP_HINTS: Record<string, string> = {
   color: "از سفید تا قرمز",
@@ -72,10 +74,6 @@ export function StudentsFiltersSheet({
 }) {
   const selectedBelts = belts.map(beltKeyOf);
   const exams = useBeltExams();
-  const examOptions = [
-    { value: "", label: "همه آزمون ها" },
-    ...(exams.data ?? []).map((item) => ({ value: item.id, label: toPersianDigits(item.name) })),
-  ];
 
   const activeCount = belts.length + ages.length + insurances.length + (exam ? 1 : 0);
 
@@ -136,16 +134,41 @@ export function StudentsFiltersSheet({
           </section>
 
           <section className="flex flex-col gap-2">
-            <SectionTitle icon={<Medal className="size-3.5" aria-hidden="true" />}>آزمون کمربند</SectionTitle>
+            <SectionTitle icon={<span className="size-3 rounded-full bg-warning" aria-hidden="true" />}>آزمون کمربند</SectionTitle>
 
-            <AuthSelect
-              id="examFilter"
-              value={exam || null}
-              onValueChange={(value) => onExamChange(value ?? "")}
-              placeholder="همه آزمون ها"
-              options={examOptions}
-              icon={Medal}
-            />
+            <RadioGroup value={exam} onValueChange={(value) => onExamChange(value ?? "")} className="gap-2">
+              <Label
+                className={cn(
+                  "flex items-center gap-3 rounded-xl border border-input bg-field px-3 py-2.5 shadow-field transition-colors hover:bg-muted/40",
+                  exam === "" && "border-primary/35 bg-brand-50/60",
+                )}
+              >
+                <span className="min-w-0 flex-1">
+                  <b className="block text-[13px] font-extrabold text-ink">همه آزمون ها</b>
+                  <span className="text-[12px] font-medium text-ink-subtle">نمایش همه هنرجویان</span>
+                </span>
+                <RadioGroupItem value="" />
+              </Label>
+
+              {(exams.data ?? []).map((item) => (
+                <Label
+                  key={item.id}
+                  className={cn(
+                    "flex items-center gap-3 rounded-xl border border-input bg-field px-3 py-2.5 shadow-field transition-colors hover:bg-muted/40",
+                    exam === item.id && "border-primary/35 bg-brand-50/60",
+                  )}
+                >
+                  <span className="min-w-0 flex-1">
+                    <b className="block truncate text-[13px] font-extrabold text-ink">{toPersianDigits(item.name)}</b>
+                    <span className="block truncate text-[12px] font-medium text-ink-subtle">
+                      {toJalaliDate(item.eventDate)}
+                      {item.belts?.length ? ` · ${item.belts.map((belt) => studentBeltLabel(beltKeyOf(belt.name))).join("، ")}` : ""}
+                    </span>
+                  </span>
+                  <RadioGroupItem value={item.id} />
+                </Label>
+              ))}
+            </RadioGroup>
             <p className="text-[12px] font-medium leading-5 text-ink-subtle">
               با انتخاب آزمون، فقط هنرجوهای واجد شرایط همان دوره نشان داده می شود.
             </p>

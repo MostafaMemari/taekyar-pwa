@@ -14,7 +14,7 @@ export const studentFilterParsers = {
   age: parseAsArrayOf(parseAsStringEnum([...AGE_CATEGORY_NAMES])).withDefault([]),
   ins: parseAsArrayOf(parseAsStringEnum([...INSURANCE_STATUSES])).withDefault([]),
   exam: parseAsString.withDefault(""),
-  sort: parseAsStringEnum([...SORT_FIELDS]).withDefault("createdAt"),
+  sort: parseAsStringEnum([...SORT_FIELDS]).withDefault("beltDate"),
   dir: parseAsStringEnum<StudentSortDirection>(["asc", "desc"]).withDefault("desc"),
 };
 
