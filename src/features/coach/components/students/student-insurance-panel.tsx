@@ -89,7 +89,7 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
                 className="block h-full w-full origin-left rounded-full transition-transform duration-500"
                 style={{
                   transform: `scaleX(${(VALIDITY_DAYS - remaining) / VALIDITY_DAYS})`,
-                  background: "linear-gradient(to right, var(--st-green), var(--st-amber), var(--st-red))",
+                  background: remaining <= 30 ? "var(--st-red)" : remaining <= 180 ? "var(--st-amber)" : "var(--st-green)",
                 }}
               />
             </div>

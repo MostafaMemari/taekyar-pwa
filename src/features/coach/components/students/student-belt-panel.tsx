@@ -70,7 +70,7 @@ export function StudentBeltPanel({ assignment, birthDate }: { assignment: Studen
                 <span className="shrink-0 text-[12px] font-medium text-ink-subtle">کمربند بعدی</span>
               </span>
               <span
-                className={isDue ? "shrink-0 text-[12px] font-semibold text-success" : "shrink-0 text-[12px] font-semibold text-ink-muted"}
+                className={isDue ? "shrink-0 text-[12px] font-semibold text-danger" : "shrink-0 text-[12px] font-semibold text-ink-muted"}
               >
                 {daysLeft === null
                   ? "بدون موعد"
@@ -85,7 +85,7 @@ export function StudentBeltPanel({ assignment, birthDate }: { assignment: Studen
                 className="h-full w-full origin-left rounded-full transition-transform duration-500"
                 style={{
                   transform: `scaleX(${percent / 100})`,
-                  background: "linear-gradient(to right, var(--st-red), var(--st-amber), var(--st-green))",
+                  background: isDue || percent >= 80 ? "var(--st-green)" : percent >= 50 ? "var(--st-amber)" : "var(--st-red)",
                 }}
               />
             </div>
