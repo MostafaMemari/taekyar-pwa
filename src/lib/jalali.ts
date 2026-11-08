@@ -108,8 +108,11 @@ export function todayJalali(): string {
   return jalaliFormatter.format(new Date());
 }
 
-export function yesterdayJalali(): string {
-  const date = new Date();
-  date.setDate(date.getDate() - 1);
+export function shiftJalaliDate(jalali: string, days: number): string {
+  const iso = toGregorianDate(jalali);
+  if (!iso) return jalali;
+
+  const date = new Date(`${iso}T00:00:00`);
+  date.setDate(date.getDate() + days);
   return jalaliFormatter.format(date);
 }
