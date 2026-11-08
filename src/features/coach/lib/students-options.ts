@@ -1,5 +1,7 @@
 import { ListOrdered, type LucideIcon, Medal, ShieldAlert, ShieldCheck, ShieldOff, ShieldX, Type } from "lucide-react";
 import type { AgeCategoryRecord } from "@/features/coach/lib/student-api";
+import { digitsOnly } from "@/lib/digits";
+import { toJalaliDate } from "@/lib/jalali";
 import type { StudentBeltKey } from "@/lib/student-belts";
 
 export type StudentInsuranceStatus = "valid" | "expiring" | "expired" | "none";
@@ -89,6 +91,14 @@ export function ageCategoryOf(birthDate: string | null, categories: AgeCategoryR
   );
 
   return (match?.name as AgeCategoryName | undefined) ?? null;
+}
+
+// membershipYear is the last year the federation database charge covers; the value is how many years are owed.
+export function membershipChargeOf(membershipYear: number | null | undefined): { due: number } | null {
+  if (typeof membershipYear !== "number") return null;
+
+  const currentYear = Number(digitsOnly(toJalaliDate(new Date().toISOString()).split("/")[0]));
+  return { due: Math.max(0, currentYear - membershipYear) };
 }
 
 export const SORT_FIELDS = ["createdAt", "updatedAt", "fullName", "belt", "insurance"] as const;

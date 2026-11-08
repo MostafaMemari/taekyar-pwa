@@ -55,7 +55,8 @@ export function StudentBeltPanel({ assignment, birthDate }: { assignment: Studen
             className="w-24 shrink-0"
           />
           <div className="min-w-0 flex-1">
-            <p className="text-[13px] font-bold text-ink">{belt.label}</p>
+            <span className="block text-[12px] font-medium text-ink-muted">کمربند فعلی</span>
+            <p className="mt-0.5 text-[15px] font-extrabold text-ink">{belt.label}</p>
             <p className="mt-0.5 text-[12px] font-medium text-ink-subtle">دریافت {toJalaliDate(assignment.beltDate)}</p>
           </div>
         </div>
@@ -79,7 +80,7 @@ export function StudentBeltPanel({ assignment, birthDate }: { assignment: Studen
               </span>
             </div>
 
-            <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-[var(--line-2)]">
+            <div className="mt-2.5 h-2 overflow-hidden rounded-full bg-[var(--line-2)]">
               <div
                 className={isDue ? "h-full rounded-full bg-warning" : "h-full rounded-full bg-brand-600"}
                 style={{ width: `${percent}%` }}

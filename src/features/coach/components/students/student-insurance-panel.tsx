@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { StatusBadge } from "@/features/coach/components/status-badge";
@@ -23,7 +25,7 @@ function daysFromToday(date: string) {
   return Math.round((new Date(date).getTime() - today.getTime()) / DAY_MS);
 }
 
-export function StudentInsurancePanel({ expiryDate }: { expiryDate: string | null }) {
+export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: string | null; studentId: string }) {
   const status = insuranceStatusOf(expiryDate, INSURING_DAYS);
   const meta = INSURANCE_META[status];
   const Icon = meta.icon;
@@ -51,17 +53,29 @@ export function StudentInsurancePanel({ expiryDate }: { expiryDate: string | nul
           </div>
         </div>
 
-        <div className="mt-3">
-          <div className="h-2 overflow-hidden rounded-full bg-surface-sunken" role="presentation">
-            <span
-              className="block h-full w-full origin-right rounded-full transition-transform duration-500"
-              style={{ transform: `scaleX(${remaining / VALIDITY_DAYS})`, background: TONE_COLOR[status] }}
-            />
+        {expiryDate ? (
+          <div className="mt-3">
+            <div className="h-2 overflow-hidden rounded-full bg-surface-sunken" role="presentation">
+              <span
+                className="block h-full w-full origin-right rounded-full transition-transform duration-500"
+                style={{ transform: `scaleX(${remaining / VALIDITY_DAYS})`, background: TONE_COLOR[status] }}
+              />
+            </div>
+            <p className="mt-1.5 text-[12px] font-semibold text-ink-subtle">
+              مانده از یک سال اعتبار بیمه، {toPersianDigits(String(remaining))} روز
+            </p>
           </div>
-          <p className="mt-1.5 text-[12px] font-semibold text-ink-subtle">
-            مانده از یک سال اعتبار بیمه{expiryDate ? `، ${toPersianDigits(String(remaining))} روز` : ""}
-          </p>
-        </div>
+        ) : (
+          <Button
+            variant="outline"
+            size="sm"
+            className="mt-3 w-full rounded-xl text-[12px] font-bold"
+            render={<Link href={`/coach/students/${studentId}/edit`} />}
+            nativeButton={false}
+          >
+            ثبت بیمه در پرونده
+          </Button>
+        )}
       </Card>
     </section>
   );

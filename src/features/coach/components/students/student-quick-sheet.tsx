@@ -10,8 +10,15 @@ import { PersonAvatar } from "@/features/coach/components/person-avatar";
 import { StatusBadge } from "@/features/coach/components/status-badge";
 import type { AgeCategoryRecord, StudentRecord } from "@/features/coach/lib/student-api";
 import { GENDER_OPTIONS } from "@/features/coach/lib/student-form-options";
-import { AGE_CATEGORY_LABELS, ageCategoryOf, beltKeyOf, INSURANCE_META, insuranceStatusOf } from "@/features/coach/lib/students-options";
-import { digitsOnly, toPersianDigits } from "@/lib/digits";
+import {
+  AGE_CATEGORY_LABELS,
+  ageCategoryOf,
+  beltKeyOf,
+  INSURANCE_META,
+  insuranceStatusOf,
+  membershipChargeOf,
+} from "@/features/coach/lib/students-options";
+import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
 import { getStudentBeltMeta } from "@/lib/student-belts";
 
@@ -60,9 +67,7 @@ export function StudentQuickSheet({
   const weight = metricText(metric?.weight);
   const genderLabel = GENDER_OPTIONS.find((option) => option.value === student?.gender)?.label;
 
-  const currentYear = Number(digitsOnly(toJalaliDate(new Date().toISOString()).split("/")[0]));
-  const membershipYear = typeof student?.membershipYear === "number" ? student.membershipYear : null;
-  const membershipDue = membershipYear === null ? null : Math.max(0, currentYear - membershipYear);
+  const membershipDue = membershipChargeOf(student?.membershipYear)?.due ?? null;
 
   const nextBeltTime = student?.currentBelt?.nextBeltDate ? new Date(student.currentBelt.nextBeltDate).getTime() : null;
   const examDue = nextBeltTime !== null && nextBeltTime < Date.now();
