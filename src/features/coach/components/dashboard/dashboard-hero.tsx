@@ -4,14 +4,16 @@ import { CalendarDays, ChevronLeft, Clock } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CoachBand } from "@/features/coach/components/coach-band";
-import { CoachBandBar } from "@/features/coach/components/coach-band-bar";
+import { CoachBell } from "@/features/coach/components/coach-bell";
 import { useCoachProfile } from "@/features/coach/hooks/use-coach-profile";
 import { useSessions } from "@/features/coach/hooks/use-sessions";
 import { todayWeekDay, WEEK_DAY_META } from "@/features/coach/lib/coach-data";
 import { minutesOfDay, pickNextSession } from "@/features/coach/lib/next-session";
 import { beltKeyOf } from "@/features/coach/lib/students-options";
 import { toPersianDigits } from "@/lib/digits";
+import { imageUrlOf } from "@/lib/images";
 import { toJalaliDate } from "@/lib/jalali";
 import { getStudentBeltMeta } from "@/lib/student-belts";
 
@@ -21,6 +23,17 @@ function untilLabel(minutes: number) {
   if (hours === 0) return `${toPersianDigits(String(rest))} دقیقه`;
   if (rest === 0) return `${toPersianDigits(String(hours))} ساعت`;
   return `${toPersianDigits(String(hours))} ساعت و ${toPersianDigits(String(rest))} دقیقه`;
+}
+
+function CoachAvatar({ name, imageKey }: { name?: string; imageKey?: string | null }) {
+  const src = imageUrlOf(imageKey);
+
+  return (
+    <Avatar className="size-14 border border-white/20 bg-white/10 text-white after:border-transparent">
+      {src ? <AvatarImage src={src} alt="عکس مربی" /> : null}
+      <AvatarFallback className="bg-transparent text-[19px] font-extrabold text-white/85">{name ? name.slice(0, 1) : null}</AvatarFallback>
+    </Avatar>
+  );
 }
 
 export function DashboardHero() {
@@ -34,33 +47,43 @@ export function DashboardHero() {
 
   return (
     <CoachBand>
-      <CoachBandBar />
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-3">
+          <Link href="/coach/profile" aria-label="پرونده مربی" className="shrink-0">
+            <CoachAvatar name={profile?.fullName} imageKey={profile?.imageKey} />
+          </Link>
 
-      <div className="mt-4 min-w-0">
-        <h1 className="page-title truncate">سلام{profile ? `، مربی ${profile.fullName}` : ""}</h1>
-        <p className="mt-1 flex items-center gap-1.5 text-[12px] font-medium text-white/55">
-          <CalendarDays className="size-3.5 shrink-0" aria-hidden="true" />
-          {WEEK_DAY_META[todayWeekDay()].label} {toPersianDigits(toJalaliDate(now.toISOString()))}
-        </p>
-        {belt ? (
-          <p className="mt-2.5 flex items-center gap-2 text-[12px] font-medium text-white/55">
-            <BeltStrip
-              color={belt.color}
-              bottomColor={belt.bottomColor}
-              outline="rgba(255,255,255,0.32)"
-              stripes={belt.stripeCount}
-              className="w-14 shrink-0"
-            />
-            کمربند <b className="font-bold text-white/85">{belt.label}</b>
-          </p>
-        ) : null}
+          <div className="min-w-0">
+            <p className="text-[12px] font-medium text-white/55">سلام، مربی</p>
+            <h1 className="page-title min-h-7 truncate">{profile?.fullName ?? ""}</h1>
+            <p className="mt-0.5 flex items-center gap-1.5 text-[12px] font-medium tabular-nums text-white/55">
+              <CalendarDays className="size-3.5 shrink-0" aria-hidden="true" />
+              {WEEK_DAY_META[todayWeekDay()].label} {toPersianDigits(toJalaliDate(now.toISOString()))}
+            </p>
+          </div>
+        </div>
+
+        <CoachBell className="shrink-0" />
       </div>
+
+      {belt ? (
+        <p className="mt-3 flex items-center gap-2 text-[12px] font-medium text-white/55">
+          <BeltStrip
+            color={belt.color}
+            bottomColor={belt.bottomColor}
+            outline="rgba(255,255,255,0.32)"
+            stripes={belt.stripeCount}
+            className="w-14 shrink-0"
+          />
+          کمربند <b className="font-bold text-white/85">{belt.label}</b>
+        </p>
+      ) : null}
 
       <Link
         href={next ? `/coach/sessions/${next.session.id}` : "/coach/sessions"}
-        className="mt-4 flex items-center gap-3 border-t border-white/10 pt-3.5"
+        className="mt-4 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/10 p-3 transition-colors hover:bg-white/15"
       >
-        <span className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-white/10">
+        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-white/15">
           {next ? <Clock className="size-4" aria-hidden="true" /> : <CalendarDays className="size-4" aria-hidden="true" />}
         </span>
 
@@ -82,7 +105,7 @@ export function DashboardHero() {
         </span>
 
         {until !== null ? (
-          <span className="shrink-0 rounded-full bg-white/10 px-2.5 py-1 text-[12px] font-semibold tabular-nums text-white/80">
+          <span className="shrink-0 rounded-full bg-white/15 px-2.5 py-1 text-[12px] font-semibold tabular-nums text-white/80">
             {untilLabel(until)}
           </span>
         ) : null}
