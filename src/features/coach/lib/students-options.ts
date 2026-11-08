@@ -70,11 +70,11 @@ export type AgeCategoryName = (typeof AGE_CATEGORY_NAMES)[number];
 
 export const AGE_CATEGORY_LABELS: Record<AgeCategoryName, string> = {
   BLOSSOM: "شکوفه",
-  YOUTH: "نونهال",
-  CADET: "نوجوان",
-  JUNIOR: "جوان",
-  YOUNG: "امید",
-  SENIOR: "بزرگسال",
+  YOUTH: "خردسالان",
+  CADET: "نونهالان",
+  JUNIOR: "نوجوانان",
+  YOUNG: "جوانان",
+  SENIOR: "بزرگسالان",
   ULTRA: "پیشکسوت",
 };
 
