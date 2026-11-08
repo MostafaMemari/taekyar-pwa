@@ -105,11 +105,6 @@ export function StudentQuickSheet({
               {AGE_CATEGORY_LABELS[ageCategory]}
             </StatusBadge>
           ) : null}
-          {membershipDue !== null ? (
-            <StatusBadge tone={membershipDue === 0 ? "success" : "warning"} className="px-1.5 py-1 text-[12px]">
-              {membershipDue === 0 ? "اشتراک معتبر" : `${toPersianDigits(String(membershipDue))} سال شارژ`}
-            </StatusBadge>
-          ) : null}
           <StatusBadge tone={insuranceMeta.tone} className="px-1.5 py-1 text-[12px]">
             {insuranceLabel}
           </StatusBadge>
@@ -140,6 +135,15 @@ export function StudentQuickSheet({
           </Row>
           <Row label="تاریخ تولد">{student?.birthDate ? toJalaliDate(student.birthDate) : "ثبت نشده"}</Row>
           <Row label="جنسیت">{genderLabel ?? "ثبت نشده"}</Row>
+          <Row label="شارژ بانک اطلاعاتی">
+            {membershipDue === null ? (
+              "ثبت نشده"
+            ) : membershipDue === 0 ? (
+              <span className="text-success">معتبر</span>
+            ) : (
+              <span className="text-warning">{toPersianDigits(String(membershipDue))} سال شارژ</span>
+            )}
+          </Row>
           {height || weight ? (
             <Row label="قد و وزن">{[height ? `قد ${height}` : null, weight ? `وزن ${weight}` : null].filter(Boolean).join(" · ")}</Row>
           ) : null}
@@ -154,9 +158,12 @@ export function StudentQuickSheet({
                 bottomColor={belt.bottomColor}
                 outline={belt.outline}
                 stripes={belt.stripeCount}
-                className="size-auto w-12"
+                className="size-auto w-14"
               />
-              <b className="text-[13px] font-extrabold text-ink">{belt.label}</b>
+              <span className="min-w-0">
+                <b className="block text-[13px] font-extrabold text-ink">{belt.label}</b>
+                <span className="text-[12px] font-medium text-ink-muted">کمربند فعلی</span>
+              </span>
             </div>
             <div className="divide-y divide-[var(--line-3)]">
               {student?.currentBelt?.beltDate ? <Row label="تاریخ اخذ">{toJalaliDate(student.currentBelt.beltDate)}</Row> : null}
