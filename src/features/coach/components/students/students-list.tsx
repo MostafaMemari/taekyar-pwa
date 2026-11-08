@@ -1,7 +1,11 @@
+"use client";
+
 import { SearchX, Users } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import type { AgeCategoryRecord, StudentRecord } from "@/features/coach/lib/student-api";
+import { StudentQuickSheet } from "./student-quick-sheet";
 import { StudentsListItem } from "./students-list-item";
 
 export function StudentsList({
@@ -17,6 +21,9 @@ export function StudentsList({
   hasFilters: boolean;
   onClear: () => void;
 }) {
+  const [quickOpen, setQuickOpen] = useState(false);
+  const [selected, setSelected] = useState<StudentRecord | null>(null);
+
   if (students.length === 0) {
     return (
       <Empty role="status" className="mt-4 border-none bg-transparent p-6">
@@ -43,10 +50,29 @@ export function StudentsList({
   }
 
   return (
-    <div className="mt-3 flex flex-col gap-2.5">
-      {students.map((student) => (
-        <StudentsListItem key={student.id} student={student} ageCategories={ageCategories} expiringDays={expiringDays} />
-      ))}
-    </div>
+    <>
+      <div className="mt-3 flex flex-col gap-2.5">
+        {students.map((student) => (
+          <StudentsListItem
+            key={student.id}
+            student={student}
+            ageCategories={ageCategories}
+            expiringDays={expiringDays}
+            onSelect={(item) => {
+              setSelected(item);
+              setQuickOpen(true);
+            }}
+          />
+        ))}
+      </div>
+
+      <StudentQuickSheet
+        open={quickOpen}
+        onOpenChange={setQuickOpen}
+        student={selected}
+        ageCategories={ageCategories}
+        expiringDays={expiringDays}
+      />
+    </>
   );
 }

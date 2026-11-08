@@ -1,5 +1,4 @@
-import { ChevronLeft } from "lucide-react";
-import Link from "next/link";
+import { BadgeCheck, ChevronLeft } from "lucide-react";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { Card } from "@/components/ui/card";
 import { PersonAvatar } from "@/features/coach/components/person-avatar";
@@ -14,10 +13,12 @@ export function StudentsListItem({
   student,
   ageCategories,
   expiringDays,
+  onSelect,
 }: {
   student: StudentRecord;
   ageCategories: AgeCategoryRecord[];
   expiringDays: number;
+  onSelect: (student: StudentRecord) => void;
 }) {
   const insurance = insuranceStatusOf(student.sportsInsuranceDate, expiringDays);
   const insuranceMeta = INSURANCE_META[insurance];
@@ -32,17 +33,23 @@ export function StudentsListItem({
   const belt = beltName ? getStudentBeltMeta(beltKeyOf(beltName)) : null;
 
   return (
-    <Link href={`/coach/students/${student.id}`} className="block transition duration-150 active:scale-[0.995]">
+    <button
+      type="button"
+      onClick={() => onSelect(student)}
+      className="block w-full text-start transition duration-150 active:scale-[0.995]"
+    >
       <Card className="flex-row items-center gap-3 rounded-2xl px-3 py-3">
-        <PersonAvatar name={student.fullName} />
+        <span className="relative shrink-0">
+          <PersonAvatar name={student.fullName} />
+          {student.userId ? (
+            <span className="absolute -bottom-1 -end-1 grid size-[18px] place-items-center rounded-full bg-card">
+              <BadgeCheck className="size-4 fill-sky-600 text-white" aria-hidden="true" />
+            </span>
+          ) : null}
+        </span>
 
         <span className="min-w-0 flex-1">
-          <span className="flex items-center gap-1.5">
-            <b className="truncate text-[13px] font-extrabold text-ink">{student.fullName}</b>
-            <StatusBadge tone={student.userId ? "brand" : "neutral"} className="shrink-0 px-1.5 py-0.5 text-[12px]">
-              {student.userId ? "دارای حساب" : "بدون حساب"}
-            </StatusBadge>
-          </span>
+          <b className="block truncate text-[13px] font-extrabold text-ink">{student.fullName}</b>
           <span className="mt-1.5 flex items-center gap-1.5">
             <StatusBadge tone={insuranceMeta.tone} className="shrink-0 px-1.5 py-[3px] text-[12px]">
               <InsuranceIcon aria-hidden="true" />
@@ -73,6 +80,6 @@ export function StudentsListItem({
 
         <ChevronLeft className="size-4 shrink-0 text-ink-subtle" aria-hidden="true" />
       </Card>
-    </Link>
+    </button>
   );
 }

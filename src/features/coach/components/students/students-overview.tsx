@@ -7,6 +7,13 @@ import { INSURANCE_META, INSURANCE_STATUSES, type StudentInsuranceStatus } from 
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
+const TONE_TEXT: Record<StudentInsuranceStatus, string> = {
+  valid: "text-success",
+  expiring: "text-warning",
+  expired: "text-danger",
+  none: "text-ink-muted",
+};
+
 export function StudentsOverview({
   total,
   stats,
@@ -41,7 +48,7 @@ export function StudentsOverview({
         </Button>
       </header>
 
-      <div className="mt-4 grid grid-cols-4 gap-1.5">
+      <div className="mt-4 flex flex-wrap gap-1.5">
         {INSURANCE_STATUSES.map((value) => {
           const meta = INSURANCE_META[value];
           const Icon = meta.icon;
@@ -56,19 +63,17 @@ export function StudentsOverview({
               aria-pressed={isActive}
               onClick={() => onToggle(value)}
               className={cn(
-                "h-auto flex-col gap-1 rounded-2xl px-1 py-2 whitespace-nowrap",
-                isActive && "border-primary/35 bg-brand-50/60 ring-2 ring-primary/15",
+                "h-9 gap-1.5 rounded-xl px-2.5 text-[12px] font-bold",
+                isActive && "border-primary/35 bg-brand-50 text-accent-ink",
               )}
             >
-              <span className={cn("grid size-7 place-items-center rounded-lg", meta.tile)}>
-                <Icon className="size-4" aria-hidden="true" />
-              </span>
+              <Icon className={cn("size-3.5", TONE_TEXT[value])} aria-hidden="true" />
+              <span>{meta.shortLabel}</span>
               {count === undefined ? (
-                <Skeleton className="h-3.5 w-6" />
+                <Skeleton className="h-3 w-5" />
               ) : (
-                <b className="text-[14px] leading-none font-extrabold tabular-nums text-ink">{toPersianDigits(String(count))}</b>
+                <b className={cn("leading-none tabular-nums", TONE_TEXT[value])}>{toPersianDigits(String(count))}</b>
               )}
-              <span className="text-[12px] font-bold leading-4 text-ink-muted">{meta.shortLabel}</span>
             </Button>
           );
         })}
