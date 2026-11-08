@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, MapPin } from "lucide-react";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -59,22 +59,28 @@ export function DashboardExams() {
 
               return (
                 <li key={exam.id} className={cn("flex items-center gap-3 px-4 py-3", index > 0 && "border-t border-[var(--line-2)]")}>
-                  <span
-                    className={cn("flex w-12 shrink-0 flex-col items-center rounded-[10px] py-1.5", urgent ? "bg-danger-soft" : "bg-muted")}
-                  >
-                    <CalendarDays className={cn("size-3.5", urgent ? "text-danger" : "text-ink-subtle")} aria-hidden="true" />
-                    <b className="mt-0.5 text-[15px] leading-5 font-extrabold tabular-nums text-ink">{day}</b>
-                    <span className="text-[11px] leading-4 font-medium text-ink-muted">{month.join(" ")}</span>
+                  <span className="flex w-11 shrink-0 flex-col items-center rounded-[10px] bg-muted py-1">
+                    <b className="text-[15px] leading-5 font-extrabold tabular-nums text-ink">{day}</b>
+                    <span className="text-[12px] leading-4 font-medium text-ink-muted">{month.join(" ")}</span>
                   </span>
 
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[13px] font-bold text-ink">{toPersianDigits(exam.name)}</p>
                     <p className="mt-0.5 flex items-center gap-1.5 text-[12px] font-medium text-ink-subtle">
                       <span className={cn("size-1.5 shrink-0 rounded-full", open ? "bg-success" : "bg-ink-faint")} aria-hidden="true" />
-                      <span className="truncate">
+                      <span className="flex shrink-0 items-center gap-1">
+                        <CalendarDays className="size-3.5" aria-hidden="true" />
                         {open ? "ثبت نام باز" : `ثبت نام از ${toJalaliDate(exam.registerDate)}`}
-                        {places ? ` · ${places}` : ""}
                       </span>
+                      {places ? (
+                        <>
+                          <span aria-hidden="true">·</span>
+                          <span className="flex min-w-0 items-center gap-1 truncate">
+                            <MapPin className="size-3.5 shrink-0" aria-hidden="true" />
+                            <span className="truncate">{places}</span>
+                          </span>
+                        </>
+                      ) : null}
                     </p>
                   </div>
 
