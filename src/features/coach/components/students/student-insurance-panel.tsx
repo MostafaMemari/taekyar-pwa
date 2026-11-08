@@ -43,12 +43,6 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
   const Icon = meta.icon;
   const daysLeft = expiryDate ? daysFromToday(expiryDate) : null;
   const remaining = daysLeft === null ? 0 : Math.max(0, Math.min(VALIDITY_DAYS, daysLeft));
-  const caption =
-    daysLeft === null
-      ? "برای این هنرجو تاریخ بیمه ثبت نشده است."
-      : daysLeft < 0
-        ? `${toPersianDigits(String(Math.abs(daysLeft)))} روز از انقضا گذشته است.`
-        : `${toPersianDigits(String(daysLeft))} روز تا پایان اعتبار.`;
 
   const currentJalaliYear = Number(digitsOnly(todayJalali().split("/")[0]));
 
@@ -92,7 +86,6 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
           </span>
           <div className="min-w-0 flex-1">
             <b className="block text-[13px] font-extrabold text-ink">{expiryDate ? `اعتبار تا ${toJalaliDate(expiryDate)}` : "ثبت نشده"}</b>
-            <p className="mt-0.5 text-[12px] font-medium leading-5 text-ink-subtle">{caption}</p>
           </div>
         </div>
 
@@ -145,7 +138,7 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
               toYear={currentJalaliYear + 1}
             />
             <p className="text-[12px] font-medium leading-5 text-ink-subtle">
-              بیمه یک ساله است؛ تاریخ انتخابی باید بعد از امروز و حداکثر یک سال آینده باشد.
+              بیمه یک ساله است؛ تاریخ انتخابی باید بعد از امروز و حداکثر یک سال آینده باشد
             </p>
             <AuthFormError message={error || (register.error ? apiErrorMessage(register.error) : "")} />
             <Button
