@@ -55,7 +55,6 @@ export function DashboardExams() {
               eventDay.setHours(0, 0, 0, 0);
               const daysLeft = Math.max(0, Math.round((eventDay.getTime() - today.getTime()) / DAY_MS));
               const places = exam.eventPlaces.join(" · ");
-              const urgent = daysLeft <= 7;
 
               return (
                 <li key={exam.id} className={cn("flex items-center gap-3 px-4 py-3", index > 0 && "border-t border-[var(--line-2)]")}>
