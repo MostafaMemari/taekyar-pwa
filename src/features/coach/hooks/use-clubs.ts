@@ -2,6 +2,7 @@ import useSWR from "swr";
 import {
   CLUBS_PAGE_SIZE,
   fetchClub,
+  fetchClubMembers,
   fetchClubStudentCount,
   fetchClubStudentTotals,
   fetchClubs,
@@ -14,6 +15,7 @@ const clubKeys = {
   list: ["club", "list", CLUBS_PAGE_SIZE] as const,
   detail: (id: string) => ["club", id] as const,
   students: (id: string) => ["club", id, "students"] as const,
+  members: (id: string) => ["club", id, "members"] as const,
   byStudent: (id: string) => ["club", "by-student", id] as const,
   counts: (ids: string[]) => ["club", "counts", ids.join(",")] as const,
 };
@@ -32,6 +34,10 @@ export function useStudentClubs(studentId: string) {
 
 export function useClubStudentCount(id: string) {
   return useSWR(clubKeys.students(id), ([, clubId]) => fetchClubStudentCount(clubId), swrReadOptions);
+}
+
+export function useClubMembers(id: string) {
+  return useSWR(clubKeys.members(id), ([, clubId]) => fetchClubMembers(clubId), swrReadOptions);
 }
 
 export function useClubStudentCounts(clubIds: string[]) {

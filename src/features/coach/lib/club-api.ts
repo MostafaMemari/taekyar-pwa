@@ -73,3 +73,19 @@ export function changeClubStatus(id: string, isActive: boolean): Promise<ClubRec
 export function addStudentToClub(id: string, studentId: string): Promise<void> {
   return authRequest<unknown>(`club/${id}/students`, { method: "post", json: { studentId } }).then(() => undefined);
 }
+
+export type ClubMemberRecord = {
+  id: string;
+  studentId: string;
+  joinedAt: string;
+  isActive: boolean;
+  student: { id: string; fullName: string };
+};
+
+export function fetchClubMembers(id: string): Promise<ClubMemberRecord[]> {
+  return authRequestWithMeta<ClubMemberRecord[]>(`club/${id}/students?page=1&take=100`).then(({ data }) => data);
+}
+
+export function changeClubMemberStatus(id: string, studentId: string, isActive: boolean): Promise<void> {
+  return authRequest<unknown>(`club/${id}/students/${studentId}/status`, { method: "patch", json: { isActive } }).then(() => undefined);
+}

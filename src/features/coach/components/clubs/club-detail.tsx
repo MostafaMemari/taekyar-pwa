@@ -22,6 +22,7 @@ import { ClubClassesSkeleton } from "./club-classes-skeleton";
 import { ClubDetailActions } from "./club-detail-actions";
 import { ClubDetailSkeleton } from "./club-detail-skeleton";
 import { ClubInfoCard } from "./club-info-card";
+import { ClubMembers } from "./club-members";
 
 export function ClubDetail({ clubId }: { clubId: string }) {
   const { data: club, error, mutate } = useClub(clubId);
@@ -127,6 +128,8 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
         ) : (
           <ClubClasses sessions={sessions} memberCounts={memberCounts} />
         )}
+
+        <ClubMembers clubId={club.id} />
 
         <div className="grid grid-cols-2 gap-3">
           <Button
