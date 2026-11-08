@@ -1,5 +1,6 @@
 "use client";
 
+import { Copy } from "lucide-react";
 import { useQueryStates } from "nuqs";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ import { DEFAULT_SORT_DIRECTIONS, type StudentSortDirection, type StudentSortFie
 import { apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
 import { AddStudentSheet } from "./add-student-sheet";
+import { CopyExamNamesSheet } from "./copy-exam-names-sheet";
 import { SortStudentsSheet } from "./sort-students-sheet";
 import { StudentsActiveFilters } from "./students-active-filters";
 import { StudentsFiltersSheet } from "./students-filters-sheet";
@@ -31,6 +33,7 @@ export function StudentsDirectory() {
   const [addOpen, setAddOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [copyOpen, setCopyOpen] = useState(false);
 
   // The URL keeps every keystroke; the request waits for a pause so the list does not refetch per character.
   useEffect(() => {
@@ -38,9 +41,8 @@ export function StudentsDirectory() {
     return () => clearTimeout(timer);
   }, [filters.q]);
 
-  const { data, students, total, hasMore, error, isLoading, isValidating, mutate, setSize } = useStudentsFeed(
-    toStudentQuery(filters, searchTerm),
-  );
+  const feedQuery = toStudentQuery(filters, searchTerm);
+  const { data, students, total, hasMore, error, isLoading, isValidating, mutate, setSize } = useStudentsFeed(feedQuery);
   const { data: stats } = useStudentStats();
   const { data: ageCategories } = useAgeCategories();
   const { data: exams } = useBeltExams();
@@ -87,6 +89,13 @@ export function StudentsDirectory() {
         onClear={clearFilters}
       />
 
+      {filters.exam ? (
+        <Button type="button" variant="outline" className="w-full rounded-xl text-[12px] font-semibold" onClick={() => setCopyOpen(true)}>
+          <Copy data-icon="inline-start" aria-hidden="true" />
+          کپی اسامی واجد شرایط آزمون
+        </Button>
+      ) : null}
+
       <div aria-busy={isLoading && !data}>
         {isLoading && !data ? <StudentsSkeleton /> : null}
 
@@ -126,6 +135,8 @@ export function StudentsDirectory() {
       </div>
 
       <AddStudentSheet open={addOpen} onOpenChange={setAddOpen} />
+
+      <CopyExamNamesSheet open={copyOpen} onOpenChange={setCopyOpen} examId={filters.exam} query={feedQuery} />
 
       <SortStudentsSheet
         open={sortOpen}

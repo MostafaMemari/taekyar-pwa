@@ -2,7 +2,15 @@ import { CalendarDays, ListOrdered, type LucideIcon, Medal, ShieldAlert, ShieldC
 import type { AgeCategoryRecord, StudentBeltAssignment } from "@/features/coach/lib/student-api";
 import { digitsOnly } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
-import type { StudentBeltKey } from "@/lib/student-belts";
+import { type StudentBeltKey, studentBeltLabel } from "@/lib/student-belts";
+
+// «قرمز تا پوم ۳» — the exam's belt span, used by the filter sheet and the copy-names output.
+export function examBeltRangeOf(belts: { name: string; level: number }[] | undefined): string | null {
+  const sorted = [...(belts ?? [])].sort((a, b) => a.level - b.level);
+  if (sorted.length === 0) return null;
+  const first = studentBeltLabel(beltKeyOf(sorted[0].name));
+  return sorted.length === 1 ? first : `${first} تا ${studentBeltLabel(beltKeyOf(sorted[sorted.length - 1].name))}`;
+}
 
 export type StudentInsuranceStatus = "valid" | "expiring" | "expired" | "none";
 

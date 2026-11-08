@@ -14,6 +14,7 @@ import {
   type AgeCategoryName,
   beltApiName,
   beltKeyOf,
+  examBeltRangeOf,
   INSURANCE_META,
   INSURANCE_STATUSES,
   type StudentBeltApiName,
@@ -21,14 +22,7 @@ import {
 } from "@/features/coach/lib/students-options";
 import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
-import { beltDotStyle, STUDENT_BELT_GROUPS, type StudentBeltKey, studentBeltLabel } from "@/lib/student-belts";
-
-function examBeltRangeOf(belts: { name: string; level: number }[] | undefined) {
-  const sorted = [...(belts ?? [])].sort((a, b) => a.level - b.level);
-  if (sorted.length === 0) return null;
-  const first = studentBeltLabel(beltKeyOf(sorted[0].name));
-  return sorted.length === 1 ? first : `${first} تا ${studentBeltLabel(beltKeyOf(sorted[sorted.length - 1].name))}`;
-}
+import { beltDotStyle, STUDENT_BELT_GROUPS, type StudentBeltKey } from "@/lib/student-belts";
 
 const BELT_GROUP_HINTS: Record<string, string> = {
   color: "از سفید تا قرمز",
