@@ -17,9 +17,9 @@ import { getStudentBeltMeta } from "@/lib/student-belts";
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-3 py-2.5">
-      <span className="shrink-0 text-[12px] font-semibold text-ink-muted">{label}</span>
-      <span className="min-w-0 text-end text-[12px] font-bold text-ink">{children}</span>
+    <div className="flex min-h-10 items-center justify-between gap-3 px-3">
+      <span className="shrink-0 text-[12px] font-medium text-ink-muted">{label}</span>
+      <span className="min-w-0 text-end text-[13px] font-bold text-ink">{children}</span>
     </div>
   );
 }
@@ -49,6 +49,10 @@ export function StudentQuickSheet({
 
   const insurance = insuranceStatusOf(student?.sportsInsuranceDate ?? null, expiringDays);
   const insuranceMeta = INSURANCE_META[insurance];
+  const insuranceLabel =
+    insurance === "none"
+      ? insuranceMeta.shortLabel
+      : `${insurance === "expired" ? "منقضی" : "تا"} ${toPersianDigits(toJalaliDate(student?.sportsInsuranceDate ?? ""))}`;
   const ageCategory = student ? ageCategoryOf(student.birthDate, ageCategories) : null;
   const belt = student?.currentBelt ? getStudentBeltMeta(beltKeyOf(student.currentBelt.belt.name)) : null;
   const metric = student?.metrics[0];
@@ -77,23 +81,45 @@ export function StudentQuickSheet({
 
   return (
     <SheetFrame open={open} onOpenChange={onOpenChange} title="اطلاعات سریع هنرجو" description="اطلاعات پرونده هنرجو">
-      <div className="mt-3 flex flex-col">
-        <div className="flex items-center gap-3 pb-3">
+      <div className="mt-3 flex flex-col gap-3">
+        <div className="flex items-center gap-3">
           <span className="relative shrink-0">
-            <PersonAvatar name={student?.fullName ?? ""} className="size-12" />
+            <PersonAvatar name={student?.fullName ?? ""} className="size-14" />
             {student?.userId ? (
               <span className="absolute -bottom-1 -end-1 grid size-[18px] place-items-center rounded-full bg-card">
                 <BadgeCheck className="size-4 fill-sky-600 text-white" aria-hidden="true" />
               </span>
             ) : null}
           </span>
-          <span className="min-w-0">
-            <b className="block truncate text-[14px] font-extrabold text-ink">{student?.fullName}</b>
-            <span className="text-[12px] font-medium text-ink-subtle">{student?.userId ? "حساب کاربری دارد" : "حساب کاربری ندارد"}</span>
+          <span className="min-w-0 flex-1">
+            <b className="block truncate text-[15px] font-extrabold text-ink">{student?.fullName}</b>
+            <span className="mt-0.5 block text-[12px] font-medium text-ink-subtle">
+              {student?.userId ? "حساب کاربری متصل" : "حساب کاربری ندارد"}
+            </span>
           </span>
         </div>
 
-        <div className="divide-y divide-[var(--line-2)] border-t border-[var(--line-2)]">
+        <div className="flex flex-wrap gap-1.5">
+          {membershipDue !== null ? (
+            <StatusBadge tone={membershipDue === 0 ? "success" : "warning"} className="px-1.5 py-1 text-[12px]">
+              {membershipDue === 0 ? "اشتراک معتبر" : `${toPersianDigits(String(membershipDue))} سال شارژ`}
+            </StatusBadge>
+          ) : null}
+          <StatusBadge tone={insuranceMeta.tone} className="px-1.5 py-1 text-[12px]">
+            {insuranceLabel}
+          </StatusBadge>
+          {examDue ? (
+            <StatusBadge tone="danger" className="px-1.5 py-1 text-[12px]">
+              وقت آزمون رسیده
+            </StatusBadge>
+          ) : examSoon ? (
+            <StatusBadge tone="warning" className="px-1.5 py-1 text-[12px]">
+              نزدیک آزمون
+            </StatusBadge>
+          ) : null}
+        </div>
+
+        <div className="divide-y divide-[var(--line-3)] rounded-2xl bg-muted/40 py-1">
           <Row label="کد ملی">
             <span className="inline-flex items-center gap-1.5">
               {student ? toPersianDigits(student.nationalCode) : ""}
@@ -112,65 +138,30 @@ export function StudentQuickSheet({
             {ageCategory ? ` · ${AGE_CATEGORY_LABELS[ageCategory]}` : ""}
           </Row>
           <Row label="جنسیت">{genderLabel ?? "ثبت نشده"}</Row>
-          <Row label="عضویت">
-            {membershipDue === null ? (
-              "ثبت نشده"
-            ) : (
-              <span className="flex flex-col items-end gap-1">
-                <StatusBadge tone={membershipDue === 0 ? "success" : "warning"} className="px-1.5 py-0.5 text-[12px]">
-                  {membershipDue === 0 ? "اشتراک معتبر" : `${toPersianDigits(String(membershipDue))} سال شارژ`}
-                </StatusBadge>
-                <span className="text-[11px] font-medium text-ink-subtle">سال {toPersianDigits(String(membershipYear))}</span>
-              </span>
-            )}
-          </Row>
-          <Row label="بیمه">
-            <span className="flex flex-col items-end gap-1">
-              <StatusBadge tone={insuranceMeta.tone} className="px-1.5 py-0.5 text-[12px]">
-                {insuranceMeta.shortLabel}
-              </StatusBadge>
-              {student?.sportsInsuranceDate ? (
-                <span className="text-[11px] font-medium text-ink-subtle">{toJalaliDate(student.sportsInsuranceDate)}</span>
-              ) : null}
-            </span>
-          </Row>
-          <Row label="کمربند">
-            {belt ? (
-              <span className="flex items-center gap-2">
-                <BeltStrip
-                  color={belt.color}
-                  bottomColor={belt.bottomColor}
-                  outline={belt.outline}
-                  stripes={belt.stripeCount}
-                  className="size-auto w-8"
-                />
-                {belt.label}
-              </span>
-            ) : (
-              "بدون کمربند"
-            )}
-          </Row>
-          {student?.currentBelt?.beltDate ? <Row label="تاریخ اخذ">{toJalaliDate(student.currentBelt.beltDate)}</Row> : null}
-          {student?.currentBelt?.nextBeltDate ? (
-            <Row label="آزمون بعدی">
-              <span className="flex flex-col items-end gap-1">
-                <span>{toJalaliDate(student.currentBelt.nextBeltDate)}</span>
-                {examDue ? (
-                  <StatusBadge tone="danger" className="px-1.5 py-0.5 text-[12px]">
-                    وقت آزمون رسیده
-                  </StatusBadge>
-                ) : examSoon ? (
-                  <StatusBadge tone="warning" className="px-1.5 py-0.5 text-[12px]">
-                    نزدیک آزمون
-                  </StatusBadge>
-                ) : null}
-              </span>
-            </Row>
-          ) : null}
           {height || weight ? (
             <Row label="قد و وزن">{[height ? `قد ${height}` : null, weight ? `وزن ${weight}` : null].filter(Boolean).join(" · ")}</Row>
           ) : null}
+          {!belt ? <Row label="کمربند">ثبت نشده</Row> : null}
         </div>
+
+        {belt ? (
+          <div className="rounded-2xl bg-brand-50/60 py-1">
+            <div className="flex min-h-10 items-center gap-3 px-3">
+              <BeltStrip
+                color={belt.color}
+                bottomColor={belt.bottomColor}
+                outline={belt.outline}
+                stripes={belt.stripeCount}
+                className="size-auto w-12"
+              />
+              <b className="text-[13px] font-extrabold text-ink">{belt.label}</b>
+            </div>
+            <div className="divide-y divide-[var(--line-3)]">
+              {student?.currentBelt?.beltDate ? <Row label="تاریخ اخذ">{toJalaliDate(student.currentBelt.beltDate)}</Row> : null}
+              {student?.currentBelt?.nextBeltDate ? <Row label="آزمون بعدی">{toJalaliDate(student.currentBelt.nextBeltDate)}</Row> : null}
+            </div>
+          </div>
+        ) : null}
       </div>
 
       <Button
