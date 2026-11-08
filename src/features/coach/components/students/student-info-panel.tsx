@@ -3,10 +3,13 @@
 import { Check, Copy } from "lucide-react";
 import { type ReactNode, useState } from "react";
 import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { SectionHeading } from "@/features/coach/components/section-heading";
+import { useAgeCategories } from "@/features/coach/hooks/use-age-categories";
+import { useWeightClassSuggestion } from "@/features/coach/hooks/use-weight-class";
 import type { StudentAttendance } from "@/features/coach/lib/attendance-api";
 import { GENDER_META } from "@/features/coach/lib/coach-data";
-import type { StudentDetailRecord } from "@/features/coach/lib/student-api";
+import type { AgeCategoryRecord, StudentDetailRecord } from "@/features/coach/lib/student-api";
 import { membershipChargeOf } from "@/features/coach/lib/students-options";
 import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
@@ -71,6 +74,38 @@ function PhoneRow({ label, value }: { label: string; value: string | null }) {
   );
 }
 
+function nextDayIso(iso: string) {
+  const date = new Date(`${iso.slice(0, 10)}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + 1);
+  return date.toISOString().slice(0, 10);
+}
+
+// Same bounds the backend uses to place a student in an age category: birthDate >= startDate && < endDate + 1 day.
+function ageCategoryForBirthDate(birthDate: string | null, categories: AgeCategoryRecord[]) {
+  if (!birthDate) return null;
+  const day = birthDate.slice(0, 10);
+  return categories.find((category) => day >= category.startDate.slice(0, 10) && day < nextDayIso(category.endDate)) ?? null;
+}
+
+function StudentWeightClassRow({ student }: { student: StudentDetailRecord }) {
+  const { data: categories } = useAgeCategories();
+  const category = ageCategoryForBirthDate(student.birthDate, categories ?? []);
+  const weightKg = student.weight ? Number(student.weight) : null;
+  const ready = category !== null && weightKg !== null && weightKg > 0;
+  const { data: suggestion, error } = useWeightClassSuggestion(
+    ready ? { ageCategoryId: category.id, gender: student.gender, weightKg } : null,
+  );
+
+  let value: ReactNode = NOT_SET;
+  if (ready) {
+    if (error) value = <span className="text-ink-subtle">در دسترس نیست</span>;
+    else if (!suggestion) value = <Skeleton className="h-4 w-20" />;
+    else value = suggestion.weightClass.label;
+  }
+
+  return <InfoRow label="رده وزنی پیشنهادی">{value}</InfoRow>;
+}
+
 export function StudentInfoPanel({ student, attendance }: { student: StudentDetailRecord; attendance?: StudentAttendance }) {
   const charge = membershipChargeOf(student.membershipYear);
   const dimensions =
@@ -122,6 +157,7 @@ export function StudentInfoPanel({ student, attendance }: { student: StudentDeta
             )}
           </InfoRow>
           <InfoRow label="قد / وزن">{dimensions}</InfoRow>
+          <StudentWeightClassRow student={student} />
           <InfoRow label="انقضای عکس پرونده">{student.expireImageDate ? toJalaliDate(student.expireImageDate) : NOT_SET}</InfoRow>
           <InfoRow label="تاریخ ثبت پرونده">{toJalaliDate(student.createdAt)}</InfoRow>
         </Card>
