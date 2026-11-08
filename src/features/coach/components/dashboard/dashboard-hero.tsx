@@ -54,30 +54,35 @@ export function DashboardHero() {
           </Link>
 
           <div className="min-w-0">
-            <p className="text-[12px] font-medium text-white/55">سلام، مربی</p>
-            <h1 className="page-title min-h-7 truncate">{profile?.fullName ?? ""}</h1>
-            <p className="mt-0.5 flex items-center gap-1.5 text-[12px] font-medium tabular-nums text-white/55">
-              <CalendarDays className="size-3.5 shrink-0" aria-hidden="true" />
-              {WEEK_DAY_META[todayWeekDay()].label} {toPersianDigits(toJalaliDate(now.toISOString()))}
-            </p>
+            <h1 className="page-title truncate">
+              <span className="text-[14px] font-semibold text-white/55">سلام استاد </span>
+              {profile?.fullName ?? ""}
+            </h1>
+
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-[12px] font-medium tabular-nums text-white/70">
+                <CalendarDays className="size-3.5 shrink-0 text-white/55" aria-hidden="true" />
+                {WEEK_DAY_META[todayWeekDay()].label} {toPersianDigits(toJalaliDate(now.toISOString()))}
+              </span>
+
+              {belt ? (
+                <span className="inline-flex items-center gap-2 rounded-full bg-white/10 py-1 pe-3 ps-2 text-[12px] font-medium text-white/70">
+                  <BeltStrip
+                    color={belt.color}
+                    bottomColor={belt.bottomColor}
+                    outline="rgba(255,255,255,0.32)"
+                    stripes={belt.stripeCount}
+                    className="w-9 shrink-0"
+                  />
+                  کمربند <b className="font-bold text-white/85">{belt.label}</b>
+                </span>
+              ) : null}
+            </div>
           </div>
         </div>
 
         <CoachBell className="shrink-0" />
       </div>
-
-      {belt ? (
-        <p className="mt-3 flex items-center gap-2 text-[12px] font-medium text-white/55">
-          <BeltStrip
-            color={belt.color}
-            bottomColor={belt.bottomColor}
-            outline="rgba(255,255,255,0.32)"
-            stripes={belt.stripeCount}
-            className="w-14 shrink-0"
-          />
-          کمربند <b className="font-bold text-white/85">{belt.label}</b>
-        </p>
-      ) : null}
 
       <Link
         href={next ? `/coach/sessions/${next.session.id}` : "/coach/sessions"}
