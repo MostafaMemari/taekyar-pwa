@@ -18,7 +18,7 @@ import { useSession } from "@/features/coach/hooks/use-sessions";
 import type { AttendanceItem } from "@/features/coach/lib/attendance-api";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
-import { todayJalali, toGregorianDate, toJalaliDate } from "@/lib/jalali";
+import { todayJalali, toGregorianDate, toJalaliDate, yesterdayJalali } from "@/lib/jalali";
 import { AttendanceForm } from "./attendance-form";
 import { AttendanceFormSkeleton } from "./attendance-form-skeleton";
 
@@ -110,10 +110,32 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
         </div>
 
         <div className="mt-3 border-t border-[var(--line-2)] pt-3">
-          <span className="mb-1.5 flex items-center gap-1.5 text-[12px] font-bold text-ink-subtle">
-            <CalendarDays className="size-3.5" aria-hidden="true" />
-            تاریخ جلسه
-          </span>
+          <div className="mb-1.5 flex items-center justify-between gap-2">
+            <span className="flex items-center gap-1.5 text-[12px] font-bold text-ink-subtle">
+              <CalendarDays className="size-3.5" aria-hidden="true" />
+              تاریخ جلسه
+            </span>
+            <div className="flex gap-1.5">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-7 rounded-lg px-2.5 text-[11px] font-bold"
+                onClick={() => setDate(todayJalali())}
+              >
+                امروز
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-7 rounded-lg px-2.5 text-[11px] font-bold"
+                onClick={() => setDate(yesterdayJalali())}
+              >
+                دیروز
+              </Button>
+            </div>
+          </div>
           <DatePicker title="تاریخ جلسه" value={date} onChange={setDate} />
         </div>
       </Card>

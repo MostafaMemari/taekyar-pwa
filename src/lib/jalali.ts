@@ -107,3 +107,9 @@ export function toJalaliMonthName(isoDate: string): string {
 export function todayJalali(): string {
   return jalaliFormatter.format(new Date());
 }
+
+export function yesterdayJalali(): string {
+  const date = new Date();
+  date.setDate(date.getDate() - 1);
+  return jalaliFormatter.format(date);
+}
