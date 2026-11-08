@@ -4,6 +4,7 @@ import { Loader2, Minus, Pencil, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { CoachActionMenu } from "@/features/coach/components/coach-action-menu";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { useChangeClubStatus } from "@/features/coach/hooks/use-club-mutations";
 import type { ClubRecord } from "@/features/coach/lib/club-api";
@@ -45,31 +46,24 @@ export function ClubDetailActions({
   return (
     <>
       <SheetFrame open={menuOpen} onOpenChange={onMenuOpenChange} title="عملیات باشگاه" description={`عملیات قابل انجام برای ${club.name}`}>
-        <div className="flex flex-col gap-1 py-1">
-          <Button
-            variant="ghost"
-            className="h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-semibold text-ink-body"
-            onClick={() => {
-              onMenuOpenChange(false);
-              router.push(`/coach/clubs/${club.id}/edit`);
-            }}
-          >
-            <Pencil className="text-ink-muted" aria-hidden="true" />
-            ویرایش باشگاه
-          </Button>
-          <Button
-            variant="ghost"
-            className={
-              isActive
-                ? "h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-semibold text-destructive hover:bg-danger-soft hover:text-danger"
-                : "h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-semibold text-ink-body"
-            }
-            onClick={openConfirm}
-          >
-            {isActive ? <Minus aria-hidden="true" /> : <Plus aria-hidden="true" />}
-            {isActive ? "غیرفعال کردن باشگاه" : "فعال کردن باشگاه"}
-          </Button>
-        </div>
+        <CoachActionMenu
+          items={[
+            {
+              icon: Pencil,
+              label: "ویرایش باشگاه",
+              onSelect: () => {
+                onMenuOpenChange(false);
+                router.push(`/coach/clubs/${club.id}/edit`);
+              },
+            },
+            {
+              icon: isActive ? Minus : Plus,
+              label: isActive ? "غیرفعال کردن باشگاه" : "فعال کردن باشگاه",
+              tone: isActive ? "danger" : "default",
+              onSelect: openConfirm,
+            },
+          ]}
+        />
       </SheetFrame>
 
       <SheetFrame

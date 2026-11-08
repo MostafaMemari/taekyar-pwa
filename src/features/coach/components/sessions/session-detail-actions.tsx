@@ -4,6 +4,7 @@ import { Loader2, Minus, Pencil, Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { CoachActionMenu } from "@/features/coach/components/coach-action-menu";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { useChangeSessionStatus, useDeleteSession } from "@/features/coach/hooks/use-session-mutations";
 import type { ClassSessionRecord } from "@/features/coach/lib/session-api";
@@ -70,39 +71,25 @@ export function SessionDetailActions({
         title="عملیات کلاس"
         description={`عملیات قابل انجام برای ${session.name}`}
       >
-        <div className="flex flex-col gap-1 py-1">
-          <Button
-            variant="ghost"
-            className="h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-semibold text-ink-body"
-            onClick={() => {
-              onMenuOpenChange(false);
-              router.push(`/coach/sessions/${session.id}/edit`);
-            }}
-          >
-            <Pencil className="text-ink-muted" aria-hidden="true" />
-            ویرایش کلاس
-          </Button>
-          <Button
-            variant="ghost"
-            className={
-              isActive
-                ? "h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-semibold text-destructive hover:bg-danger-soft hover:text-danger"
-                : "h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-semibold text-ink-body"
-            }
-            onClick={openConfirm}
-          >
-            {isActive ? <Minus aria-hidden="true" /> : <Plus aria-hidden="true" />}
-            {isActive ? "غیرفعال کردن کلاس" : "فعال کردن کلاس"}
-          </Button>
-          <Button
-            variant="ghost"
-            className="h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-semibold text-destructive hover:bg-danger-soft hover:text-danger"
-            onClick={openDelete}
-          >
-            <Trash2 aria-hidden="true" />
-            حذف کلاس
-          </Button>
-        </div>
+        <CoachActionMenu
+          items={[
+            {
+              icon: Pencil,
+              label: "ویرایش کلاس",
+              onSelect: () => {
+                onMenuOpenChange(false);
+                router.push(`/coach/sessions/${session.id}/edit`);
+              },
+            },
+            {
+              icon: isActive ? Minus : Plus,
+              label: isActive ? "غیرفعال کردن کلاس" : "فعال کردن کلاس",
+              tone: isActive ? "danger" : "default",
+              onSelect: openConfirm,
+            },
+            { icon: Trash2, label: "حذف کلاس", tone: "danger", onSelect: openDelete },
+          ]}
+        />
       </SheetFrame>
 
       <SheetFrame open={deleteOpen} onOpenChange={setDeleteOpen} title="حذف کلاس" description="تایید حذف کلاس">

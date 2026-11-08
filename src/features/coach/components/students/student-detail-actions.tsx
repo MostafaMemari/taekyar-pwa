@@ -8,6 +8,7 @@ import { AuthFormError } from "@/components/shared/auth-form-error";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { CoachActionMenu } from "@/features/coach/components/coach-action-menu";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { useDeleteStudent } from "@/features/coach/hooks/use-student-mutations";
@@ -90,30 +91,19 @@ export function StudentDetailActions({
       </section>
 
       <SheetFrame open={menuOpen} onOpenChange={onMenuOpenChange} title="عملیات" description={`عملیات قابل انجام برای پرونده ${fullName}`}>
-        <div className="flex flex-col gap-1 py-1">
-          {ACTIONS.map((action) => (
-            <Button
-              key={action.label}
-              variant="ghost"
-              className="h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-semibold text-ink-body"
-              onClick={() => {
+        <CoachActionMenu
+          items={[
+            ...ACTIONS.map((action) => ({
+              icon: action.icon,
+              label: action.label,
+              onSelect: () => {
                 onMenuOpenChange(false);
                 router.push(action.href(studentId));
-              }}
-            >
-              <action.icon className="text-ink-muted" aria-hidden="true" />
-              {action.label}
-            </Button>
-          ))}
-          <Button
-            variant="ghost"
-            className="h-12 w-full justify-start gap-3 rounded-xl px-3 text-[12px] font-semibold text-destructive hover:bg-danger-soft hover:text-danger"
-            onClick={openDelete}
-          >
-            <Trash2 aria-hidden="true" />
-            حذف پروفایل
-          </Button>
-        </div>
+              },
+            })),
+            { icon: Trash2, label: "حذف پروفایل", tone: "danger" as const, onSelect: openDelete },
+          ]}
+        />
       </SheetFrame>
 
       <SheetFrame open={deleteOpen} onOpenChange={setDeleteOpen} title="حذف پروفایل" description="تایید حذف پروفایل هنرجو">
