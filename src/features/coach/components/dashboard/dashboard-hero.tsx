@@ -52,22 +52,22 @@ export function DashboardHero() {
           <Link href="/coach/profile" aria-label="پرونده مربی" className="shrink-0">
             <CoachAvatar name={profile?.fullName} imageKey={profile?.imageKey} />
           </Link>
-          <div className="min-w-0">
-            <p className="text-[11px] font-medium leading-4 text-white/55">سلام استاد</p>
-            <h1 className="min-h-5 truncate text-[15px] font-extrabold leading-5 text-white">{profile?.fullName ?? ""}</h1>
+          <div className="flex min-w-0 items-baseline gap-1.5">
+            <span className="shrink-0 text-[11px] font-medium text-white/55">سلام استاد</span>
+            <h1 className="min-w-0 truncate text-[16px] font-extrabold leading-5 text-white">{profile?.fullName ?? ""}</h1>
           </div>
         </div>
         <CoachBell />
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center gap-2">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-[12px] font-medium tabular-nums text-white/70">
+      <div className="mt-2.5 flex items-center justify-between gap-2">
+        <span className="flex items-center gap-1.5 text-[12px] font-medium tabular-nums text-white/60">
           <CalendarDays className="size-3.5 shrink-0 text-white/55" aria-hidden="true" />
           {WEEK_DAY_META[todayWeekDay()].label} {toPersianDigits(toJalaliDate(now.toISOString()))}
         </span>
 
         {belt ? (
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/10 py-1 pe-3 ps-2 text-[12px] font-medium text-white/70">
+          <span className="flex items-center gap-2 text-[12px] font-medium text-white/60">
             <BeltStrip
               color={belt.color}
               bottomColor={belt.bottomColor}
