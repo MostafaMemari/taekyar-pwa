@@ -119,18 +119,11 @@ export const SORT_FIELD_META: {
     tile: "bg-brand-50 text-accent-ink",
   },
   {
-    key: "createdAt",
-    label: "تاریخ ثبت پرونده",
-    description: "بر اساس زمان ساخت پرونده",
-    icon: ListOrdered,
-    tile: "bg-muted text-ink-muted",
-  },
-  {
-    key: "fullName",
-    label: "نام و نام خانوادگی",
-    description: "ترتیب حروف الفبا",
-    icon: Type,
-    tile: "bg-brand-50 text-accent-ink",
+    key: "insurance",
+    label: "تاریخ بیمه",
+    description: "بر اساس تاریخ انقضای بیمه",
+    icon: ShieldAlert,
+    tile: "bg-danger-soft text-danger",
   },
   {
     key: "belt",
@@ -140,11 +133,18 @@ export const SORT_FIELD_META: {
     tile: "bg-warning-soft text-warning",
   },
   {
-    key: "insurance",
-    label: "تاریخ بیمه",
-    description: "بر اساس تاریخ انقضای بیمه",
-    icon: ShieldAlert,
-    tile: "bg-danger-soft text-danger",
+    key: "fullName",
+    label: "نام و نام خانوادگی",
+    description: "ترتیب حروف الفبا",
+    icon: Type,
+    tile: "bg-brand-50 text-accent-ink",
+  },
+  {
+    key: "createdAt",
+    label: "تاریخ ثبت پرونده",
+    description: "بر اساس زمان ساخت پرونده",
+    icon: ListOrdered,
+    tile: "bg-muted text-ink-muted",
   },
 ];
 

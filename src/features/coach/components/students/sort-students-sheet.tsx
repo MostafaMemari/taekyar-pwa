@@ -37,7 +37,7 @@ export function SortStudentsSheet({
               <span className={cn("grid size-10 shrink-0 place-items-center rounded-xl", option.tile)}>
                 <option.icon className="size-5" aria-hidden="true" />
               </span>
-              <span className="min-w-0 flex-1">
+              <span className="flex min-w-0 flex-1 flex-col gap-1">
                 <b className="block text-[13px] font-extrabold text-ink">{option.label}</b>
                 <span className="text-[12px] font-medium text-ink-subtle">{option.description}</span>
               </span>
