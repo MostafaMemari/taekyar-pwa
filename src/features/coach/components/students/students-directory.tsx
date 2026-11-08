@@ -13,6 +13,7 @@ import { useStudentsFeed } from "@/features/coach/hooks/use-students";
 import { activeFilterCount, studentFilterParsers, toggleValue, toStudentQuery } from "@/features/coach/lib/student-filters";
 import { DEFAULT_SORT_DIRECTIONS, type StudentSortDirection, type StudentSortField } from "@/features/coach/lib/students-options";
 import { apiErrorMessage } from "@/lib/api/client";
+import { toPersianDigits } from "@/lib/digits";
 import { AddStudentSheet } from "./add-student-sheet";
 import { SortStudentsSheet } from "./sort-students-sheet";
 import { StudentsActiveFilters } from "./students-active-filters";
@@ -44,6 +45,7 @@ export function StudentsDirectory() {
   const { data: ageCategories } = useAgeCategories();
   const { data: exams } = useBeltExams();
   const examLabel = filters.exam ? (exams?.find((item) => item.id === filters.exam)?.name ?? "آزمون") : null;
+  const examChipLabel = examLabel ? toPersianDigits(examLabel) : null;
 
   const filterCount = activeFilterCount(filters);
   const isDirty = filterCount > 0 || filters.q.trim().length > 0;
@@ -77,7 +79,7 @@ export function StudentsDirectory() {
         belts={filters.belt}
         ages={filters.age}
         insurances={filters.ins}
-        exam={filters.exam ? { label: examLabel ?? "آزمون" } : null}
+        exam={filters.exam ? { label: examChipLabel ?? "آزمون" } : null}
         onRemoveBelt={(value) => void setFilters({ belt: filters.belt.filter((item) => item !== value) })}
         onRemoveAge={(value) => void setFilters({ age: filters.age.filter((item) => item !== value) })}
         onRemoveInsurance={(value) => void setFilters({ ins: filters.ins.filter((item) => item !== value) })}

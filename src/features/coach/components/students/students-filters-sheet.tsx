@@ -82,8 +82,8 @@ export function StudentsFiltersSheet({
   const selectedExam = exam ? exams.find((item) => item.id === exam) : null;
   const examOptions = exams.map((item) => ({
     value: item.id,
-    label: toPersianDigits(item.name),
-    description: [examBeltRangeOf(item.belts), `برگزاری ${toJalaliDate(item.eventDate)}`].filter(Boolean).join(" · "),
+    label: [`آزمون دوره ${toPersianDigits(String(item.examNumber))}`, examBeltRangeOf(item.belts)].filter(Boolean).join(" · "),
+    description: [`برگزاری ${toJalaliDate(item.eventDate)}`, item.eventPlaces.join("، ")].filter(Boolean).join(" · "),
   }));
 
   const activeCount = belts.length + ages.length + insurances.length + (exam ? 1 : 0);
@@ -154,6 +154,7 @@ export function StudentsFiltersSheet({
               placeholder="همه آزمون ها"
               options={examOptions}
               icon={Medal}
+              itemGap
             />
             <p className="text-[12px] font-medium leading-5 text-ink-subtle">
               {selectedExam

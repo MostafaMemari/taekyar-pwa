@@ -11,11 +11,12 @@ type AuthSelectProps = {
   options: readonly AuthSelectOption[];
   icon?: LucideIcon;
   disabled?: boolean;
+  itemGap?: boolean;
 };
 
 type AuthSelectItem = { value: string | null; label: string; description?: string };
 
-export function AuthSelect({ id, value, onValueChange, placeholder, options, icon: Icon, disabled }: AuthSelectProps) {
+export function AuthSelect({ id, value, onValueChange, placeholder, options, icon: Icon, disabled, itemGap }: AuthSelectProps) {
   const items: AuthSelectItem[] = [{ label: placeholder, value: null }, ...options];
 
   return (
@@ -30,10 +31,10 @@ export function AuthSelect({ id, value, onValueChange, placeholder, options, ico
         <SelectValue />
       </SelectTrigger>
       <SelectContent alignItemWithTrigger={false}>
-        <SelectGroup>
+        <SelectGroup className={itemGap ? "flex flex-col gap-1.5" : undefined}>
           {items.map((item) => (
             <SelectItem key={item.value ?? "placeholder"} value={item.value}>
-              <div className="min-w-0 flex-1">
+              <div className="flex min-w-0 flex-1 flex-col gap-1">
                 <div className="truncate">{item.label}</div>
                 {item.description ? <div className="truncate text-[11px] font-medium text-ink-subtle">{item.description}</div> : null}
               </div>
