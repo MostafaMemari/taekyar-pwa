@@ -84,6 +84,8 @@ export function StudentInfoPanel({ student, attendance }: { student: StudentDeta
     <div className="flex flex-col gap-4">
       <StudentBeltPanel assignment={student.currentBelt} birthDate={student.birthDate} />
 
+      <StudentInsurancePanel expiryDate={student.sportsInsuranceDate} studentId={student.id} />
+
       <section>
         <SectionHeading title="شناسنامه" />
         <Card className="gap-0 py-1">
@@ -105,8 +107,6 @@ export function StudentInfoPanel({ student, attendance }: { student: StudentDeta
           <InfoRow label="نام پدر">{student.fatherName || NOT_SET}</InfoRow>
         </Card>
       </section>
-
-      <StudentInsurancePanel expiryDate={student.sportsInsuranceDate} studentId={student.id} />
 
       <section>
         <SectionHeading title="پرونده" />

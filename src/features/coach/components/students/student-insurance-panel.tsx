@@ -9,22 +9,15 @@ import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { StatusBadge } from "@/features/coach/components/status-badge";
 import { useRegisterStudentInsurance } from "@/features/coach/hooks/use-student-mutations";
-import { INSURANCE_META, insuranceStatusOf, type StudentInsuranceStatus } from "@/features/coach/lib/students-options";
+import { INSURANCE_META, insuranceStatusOf } from "@/features/coach/lib/students-options";
 import { apiErrorMessage } from "@/lib/api/client";
-import { digitsOnly, toPersianDigits } from "@/lib/digits";
+import { digitsOnly } from "@/lib/digits";
 import { todayJalali, toGregorianDate, toJalaliDate } from "@/lib/jalali";
 import { cn } from "@/lib/utils";
 
 const DAY_MS = 86_400_000;
 const INSURING_DAYS = 30;
 const VALIDITY_DAYS = 365;
-
-const TONE_COLOR: Record<StudentInsuranceStatus, string> = {
-  valid: "var(--st-green)",
-  expiring: "var(--st-amber)",
-  expired: "var(--st-red)",
-  none: "var(--surface-3)",
-};
 
 function daysFromToday(date: string) {
   const today = new Date();
@@ -93,13 +86,13 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
           <div className="mt-3">
             <div className="h-2 overflow-hidden rounded-full bg-surface-sunken" role="presentation">
               <span
-                className="block h-full w-full origin-right rounded-full transition-transform duration-500"
-                style={{ transform: `scaleX(${remaining / VALIDITY_DAYS})`, background: TONE_COLOR[status] }}
+                className="block h-full w-full origin-left rounded-full transition-transform duration-500"
+                style={{
+                  transform: `scaleX(${(VALIDITY_DAYS - remaining) / VALIDITY_DAYS})`,
+                  background: "linear-gradient(to right, var(--st-green), var(--st-amber), var(--st-red))",
+                }}
               />
             </div>
-            <p className="mt-1.5 text-[12px] font-semibold text-ink-subtle">
-              مانده از یک سال اعتبار بیمه، {toPersianDigits(String(remaining))} روز
-            </p>
           </div>
         ) : (
           <Button

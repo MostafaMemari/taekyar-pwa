@@ -42,7 +42,7 @@ export function StudentBeltPanel({ assignment, birthDate }: { assignment: Studen
     <section>
       <SectionHeading
         title="کمربند و ارتقا"
-        action={nextMeta ? <StatusBadge tone={isDue ? "warning" : "neutral"}>{isDue ? "قابل ارتقا" : "در مسیر"}</StatusBadge> : null}
+        action={nextMeta ? <StatusBadge tone={isDue ? "success" : "neutral"}>{isDue ? "قابل ارتقا" : "در مسیر"}</StatusBadge> : null}
       />
 
       <Card className="gap-0 p-4">
@@ -70,7 +70,7 @@ export function StudentBeltPanel({ assignment, birthDate }: { assignment: Studen
                 <span className="shrink-0 text-[12px] font-medium text-ink-subtle">کمربند بعدی</span>
               </span>
               <span
-                className={isDue ? "shrink-0 text-[12px] font-semibold text-warning" : "shrink-0 text-[12px] font-semibold text-ink-muted"}
+                className={isDue ? "shrink-0 text-[12px] font-semibold text-success" : "shrink-0 text-[12px] font-semibold text-ink-muted"}
               >
                 {daysLeft === null
                   ? "بدون موعد"
@@ -82,8 +82,11 @@ export function StudentBeltPanel({ assignment, birthDate }: { assignment: Studen
 
             <div className="mt-2.5 h-2 overflow-hidden rounded-full bg-[var(--line-2)]">
               <div
-                className={isDue ? "h-full rounded-full bg-warning" : "h-full rounded-full bg-brand-600"}
-                style={{ width: `${percent}%` }}
+                className="h-full w-full origin-left rounded-full transition-transform duration-500"
+                style={{
+                  transform: `scaleX(${percent / 100})`,
+                  background: "linear-gradient(to right, var(--st-red), var(--st-amber), var(--st-green))",
+                }}
               />
             </div>
 
