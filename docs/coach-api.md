@@ -394,6 +394,7 @@ COLOR | POOM | DAN
 | `belt` | enum[] | خیر | یک یا چند `BeltName` |
 | `ageCategory` | enum[] | خیر | یک یا چند رده سنی: `BLOSSOM`، `YOUTH`، `CADET`، `JUNIOR`، `YOUNG`، `SENIOR`، `ULTRA` |
 | `insurance` | enum[] | خیر | `valid`، `expiring`، `expired`، `none` |
+| `beltExamId` | uuid | خیر | هنرجویان واجد شرایط آزمون کمربندی انتخاب شده (جنسیت، کمربند بعدی و موعد) |
 | `gender` | enum | خیر | `MALE` یا `FEMALE` |
 | `sortBy` | enum | خیر | `createdAt`، `updatedAt`، `fullName`، `belt`، `insurance` |
 | `sortDirection` | enum | خیر | `asc` یا `desc` (پیش فرض `desc`) |

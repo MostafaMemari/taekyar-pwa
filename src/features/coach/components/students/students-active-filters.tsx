@@ -30,20 +30,24 @@ export function StudentsActiveFilters({
   belts,
   ages,
   insurances,
+  exam,
   onRemoveBelt,
   onRemoveAge,
   onRemoveInsurance,
+  onRemoveExam,
   onClear,
 }: {
   belts: StudentBeltApiName[];
   ages: AgeCategoryName[];
   insurances: StudentInsuranceStatus[];
+  exam: { label: string } | null;
   onRemoveBelt: (value: StudentBeltApiName) => void;
   onRemoveAge: (value: AgeCategoryName) => void;
   onRemoveInsurance: (value: StudentInsuranceStatus) => void;
+  onRemoveExam: () => void;
   onClear: () => void;
 }) {
-  if (belts.length + ages.length + insurances.length === 0) return null;
+  if (belts.length + ages.length + insurances.length + (exam ? 1 : 0) === 0) return null;
 
   return (
     <div className="no-scrollbar mt-3 flex items-center gap-1.5 overflow-x-auto pb-0.5">
@@ -58,6 +62,8 @@ export function StudentsActiveFilters({
       {insurances.map((insurance) => (
         <FilterChip key={insurance} label={INSURANCE_META[insurance].shortLabel} onRemove={() => onRemoveInsurance(insurance)} />
       ))}
+
+      {exam ? <FilterChip label={exam.label} onRemove={onRemoveExam} /> : null}
 
       <Button
         type="button"

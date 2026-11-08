@@ -53,6 +53,7 @@ export type StudentQuery = {
   belt?: string[];
   ageCategory?: string[];
   insurance?: string[];
+  beltExamId?: string;
   gender?: Gender;
   sortBy?: string;
   sortDirection?: string;
@@ -111,6 +112,7 @@ function toQueryString(query: StudentQuery) {
   for (const belt of query.belt ?? []) params.append("belt", belt);
   for (const ageCategory of query.ageCategory ?? []) params.append("ageCategory", ageCategory);
   for (const insurance of query.insurance ?? []) params.append("insurance", insurance);
+  if (query.beltExamId) params.set("beltExamId", query.beltExamId);
   if (query.gender) params.set("gender", query.gender);
   if (query.sortBy) params.set("sortBy", query.sortBy);
   if (query.sortDirection) params.set("sortDirection", query.sortDirection);

@@ -1,11 +1,13 @@
 "use client";
 
-import { ShieldCheck } from "lucide-react";
+import { Medal, ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
+import { AuthSelect } from "@/components/shared/auth-select";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
+import { useBeltExams } from "@/features/coach/hooks/use-belt-exams";
 import type { AgeCategoryRecord } from "@/features/coach/lib/student-api";
 import {
   AGE_CATEGORY_LABELS,
@@ -45,11 +47,13 @@ export function StudentsFiltersSheet({
   belts,
   ages,
   insurances,
+  exam,
   ageCategories,
   resultCount,
   onBeltsChange,
   onAgesChange,
   onInsurancesChange,
+  onExamChange,
   onClear,
 }: {
   open: boolean;
@@ -57,16 +61,23 @@ export function StudentsFiltersSheet({
   belts: StudentBeltApiName[];
   ages: AgeCategoryName[];
   insurances: StudentInsuranceStatus[];
+  exam: string;
   ageCategories?: AgeCategoryRecord[];
   resultCount?: number;
   onBeltsChange: (value: StudentBeltApiName[]) => void;
   onAgesChange: (value: AgeCategoryName[]) => void;
   onInsurancesChange: (value: StudentInsuranceStatus[]) => void;
+  onExamChange: (value: string) => void;
   onClear: () => void;
 }) {
   const selectedBelts = belts.map(beltKeyOf);
+  const exams = useBeltExams();
+  const examOptions = [
+    { value: "", label: "همه آزمون ها" },
+    ...(exams.data ?? []).map((item) => ({ value: item.id, label: toPersianDigits(item.name) })),
+  ];
 
-  const activeCount = belts.length + ages.length + insurances.length;
+  const activeCount = belts.length + ages.length + insurances.length + (exam ? 1 : 0);
 
   return (
     <SheetFrame
@@ -122,6 +133,22 @@ export function StudentsFiltersSheet({
                 </div>
               );
             })}
+          </section>
+
+          <section className="flex flex-col gap-2">
+            <SectionTitle icon={<Medal className="size-3.5" aria-hidden="true" />}>آزمون کمربند</SectionTitle>
+
+            <AuthSelect
+              id="examFilter"
+              value={exam || null}
+              onValueChange={(value) => onExamChange(value ?? "")}
+              placeholder="همه آزمون ها"
+              options={examOptions}
+              icon={Medal}
+            />
+            <p className="text-[12px] font-medium leading-5 text-ink-subtle">
+              با انتخاب آزمون، فقط هنرجوهای واجد شرایط همان دوره نشان داده می شود.
+            </p>
           </section>
 
           <section className="flex flex-col gap-2">

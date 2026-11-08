@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/features/coach/components/error-state";
 import { LoadMoreSentinel } from "@/features/coach/components/load-more-sentinel";
 import { useAgeCategories } from "@/features/coach/hooks/use-age-categories";
+import { useBeltExams } from "@/features/coach/hooks/use-belt-exams";
 import { useStudentStats } from "@/features/coach/hooks/use-student-stats";
 import { useStudentsFeed } from "@/features/coach/hooks/use-students";
 import { activeFilterCount, studentFilterParsers, toggleValue, toStudentQuery } from "@/features/coach/lib/student-filters";
@@ -41,12 +42,14 @@ export function StudentsDirectory() {
   );
   const { data: stats } = useStudentStats();
   const { data: ageCategories } = useAgeCategories();
+  const { data: exams } = useBeltExams();
+  const examLabel = filters.exam ? (exams?.find((item) => item.id === filters.exam)?.name ?? "آزمون") : null;
 
   const filterCount = activeFilterCount(filters);
   const isDirty = filterCount > 0 || filters.q.trim().length > 0;
   const sortActive = filters.sort !== "createdAt" || filters.dir !== "desc";
 
-  const clearFilters = () => void setFilters({ q: "", belt: [], age: [], ins: [] });
+  const clearFilters = () => void setFilters({ q: "", belt: [], age: [], ins: [], exam: "" });
 
   const changeSort = (key: StudentSortKey) => {
     const preset = sortPreset(key);
@@ -77,9 +80,11 @@ export function StudentsDirectory() {
         belts={filters.belt}
         ages={filters.age}
         insurances={filters.ins}
+        exam={filters.exam ? { label: examLabel ?? "آزمون" } : null}
         onRemoveBelt={(value) => void setFilters({ belt: filters.belt.filter((item) => item !== value) })}
         onRemoveAge={(value) => void setFilters({ age: filters.age.filter((item) => item !== value) })}
         onRemoveInsurance={(value) => void setFilters({ ins: filters.ins.filter((item) => item !== value) })}
+        onRemoveExam={() => void setFilters({ exam: "" })}
         onClear={clearFilters}
       />
 
@@ -137,11 +142,13 @@ export function StudentsDirectory() {
         belts={filters.belt}
         ages={filters.age}
         insurances={filters.ins}
+        exam={filters.exam}
         ageCategories={ageCategories}
         resultCount={total}
         onBeltsChange={(value) => void setFilters({ belt: value })}
         onAgesChange={(value) => void setFilters({ age: value })}
         onInsurancesChange={(value) => void setFilters({ ins: value })}
+        onExamChange={(value) => void setFilters({ exam: value })}
         onClear={clearFilters}
       />
     </>
