@@ -100,6 +100,11 @@ export function StudentQuickSheet({
         </div>
 
         <div className="flex flex-wrap gap-1.5">
+          {ageCategory ? (
+            <StatusBadge tone="neutral" className="px-1.5 py-1 text-[12px]">
+              {AGE_CATEGORY_LABELS[ageCategory]}
+            </StatusBadge>
+          ) : null}
           {membershipDue !== null ? (
             <StatusBadge tone={membershipDue === 0 ? "success" : "warning"} className="px-1.5 py-1 text-[12px]">
               {membershipDue === 0 ? "اشتراک معتبر" : `${toPersianDigits(String(membershipDue))} سال شارژ`}
@@ -133,10 +138,7 @@ export function StudentQuickSheet({
               </button>
             </span>
           </Row>
-          <Row label="تاریخ تولد">
-            {student?.birthDate ? toJalaliDate(student.birthDate) : "ثبت نشده"}
-            {ageCategory ? ` · ${AGE_CATEGORY_LABELS[ageCategory]}` : ""}
-          </Row>
+          <Row label="تاریخ تولد">{student?.birthDate ? toJalaliDate(student.birthDate) : "ثبت نشده"}</Row>
           <Row label="جنسیت">{genderLabel ?? "ثبت نشده"}</Row>
           {height || weight ? (
             <Row label="قد و وزن">{[height ? `قد ${height}` : null, weight ? `وزن ${weight}` : null].filter(Boolean).join(" · ")}</Row>
