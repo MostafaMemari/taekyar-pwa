@@ -1,6 +1,6 @@
 "use client";
 
-import { Medal, ShieldCheck } from "lucide-react";
+import { Loader2, Medal, ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
 import { AuthSelect } from "@/components/shared/auth-select";
 import { Button } from "@/components/ui/button";
@@ -233,11 +233,27 @@ export function StudentsFiltersSheet({
       </ScrollArea>
 
       <div className="mt-4 flex items-center gap-2 border-t border-[var(--line-2)] pt-3">
-        <Button type="button" variant="outline" className="h-11 rounded-xl" disabled={activeCount === 0} onClick={onClear}>
+        <Button
+          type="button"
+          variant="outline"
+          className="h-11 rounded-xl"
+          disabled={activeCount === 0}
+          onClick={() => {
+            onClear();
+            onOpenChange(false);
+          }}
+        >
           پاک کردن
         </Button>
         <Button type="button" variant="brand" className="h-11 flex-1 rounded-xl" onClick={() => onOpenChange(false)}>
-          نمایش {toPersianDigits(String(resultCount ?? 0))} هنرجو
+          {resultCount === undefined ? (
+            <>
+              <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" />
+              نمایش نتایج
+            </>
+          ) : (
+            `نمایش ${toPersianDigits(String(resultCount))} هنرجو`
+          )}
         </Button>
       </div>
     </SheetFrame>
