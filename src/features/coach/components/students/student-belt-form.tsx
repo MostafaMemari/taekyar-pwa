@@ -129,6 +129,19 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
             label: `آزمون دوره ${toPersianDigits(String(exam.examNumber))}`,
             description: [`برگزاری ${toJalaliDate(exam.eventDate)}`, exam.eventPlaces.join("، ")].filter(Boolean).join(" · "),
           }));
+  // Exams announced for this belt but not held yet cannot be used (the belt date comes from the event date); naming the nearest one explains the empty list.
+  const upcomingExams =
+    examBeltName === null
+      ? []
+      : (exams.data ?? []).filter((exam) => {
+          const eventMs = new Date(`${exam.eventDate.slice(0, 10)}T00:00:00`).getTime();
+          return (
+            exam.genders.includes(profile.gender) &&
+            (exam.belts ?? []).some((belt) => belt.name.toUpperCase() === examBeltName) &&
+            eventMs > new Date().setHours(0, 0, 0, 0)
+          );
+        });
+  const upcomingExam = upcomingExams.sort((a, b) => a.eventDate.localeCompare(b.eventDate))[0] ?? null;
 
   if (!isBeltAssignmentOpen(current)) {
     const nextDate = current?.nextBeltDate ?? null;
@@ -324,6 +337,14 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
                   icon={Landmark}
                   itemGap
                 />
+              ) : upcomingExam ? (
+                <Alert className="rounded-xl border-none bg-info-soft/60 p-3 text-start">
+                  <Info className="text-info" aria-hidden="true" />
+                  <AlertDescription className="text-[12px] leading-5 text-ink-muted">
+                    آزمون دوره {toPersianDigits(String(upcomingExam.examNumber))} برای این کمربند اعلام شده ولی هنوز برگزار نشده است.
+                    برگزاری {toJalaliDate(upcomingExam.eventDate)}.
+                  </AlertDescription>
+                </Alert>
               ) : (
                 <Alert className="rounded-xl border-none bg-info-soft/60 p-3 text-start">
                   <Info className="text-info" aria-hidden="true" />
