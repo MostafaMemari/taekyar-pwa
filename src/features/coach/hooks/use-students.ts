@@ -1,3 +1,4 @@
+import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
 import { fetchStudents, STUDENTS_PAGE_SIZE, type StudentFeedQuery } from "@/features/coach/lib/student-api";
 import { swrReadOptions } from "@/lib/api/swr";
@@ -24,4 +25,13 @@ export function useStudentsFeed(query: StudentFeedQuery) {
     total: pages[0]?.pager?.total,
     hasMore,
   };
+}
+
+// shortcut: the guest picker reads only the first 100 students; wire search-based paging when a coach's list outgrows it.
+export function useStudentOptions(search: string) {
+  return useSWR(
+    ["student", "options", search] as const,
+    ([, , term]) => fetchStudents({ page: 1, take: 100, search: term || undefined }).then(({ students }) => students),
+    swrReadOptions,
+  );
 }

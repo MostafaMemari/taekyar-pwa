@@ -16,6 +16,7 @@ export type ClassAttendanceEntry = {
   studentId: string;
   student: { id: string; fullName: string };
   attendance: AttendanceRecord | null;
+  isGuest: boolean;
 };
 
 export type AttendanceItem = {

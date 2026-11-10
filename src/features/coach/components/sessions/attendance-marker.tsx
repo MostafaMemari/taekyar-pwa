@@ -140,22 +140,22 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
         </div>
       </Card>
 
-      {total > 0 ? (
-        <AttendanceForm
-          key={isoDate}
-          entries={roster.data}
-          pending={save.isMutating}
-          error={save.error ? apiErrorMessage(save.error) : ""}
-          onSave={(items) => void handleSave(items)}
-        />
-      ) : (
+      {total === 0 ? (
         <Alert className="mt-4 rounded-xl border-none bg-info-soft/60 p-3 text-start">
           <Info className="text-info" aria-hidden="true" />
           <AlertDescription className="text-[12px] leading-5 text-ink-muted">
-            هنوز هنرجویی در این کلاس ثبت نشده است. بعد از افزودن هنرجو می توانید حضور و غیاب را ثبت کنید
+            هنوز هنرجویی در این کلاس ثبت نشده است. با «افزودن مهمان» می توانی حضور و غیاب این جلسه را ثبت کنی
           </AlertDescription>
         </Alert>
-      )}
+      ) : null}
+
+      <AttendanceForm
+        key={isoDate}
+        entries={roster.data}
+        pending={save.isMutating}
+        error={save.error ? apiErrorMessage(save.error) : ""}
+        onSave={(items) => void handleSave(items)}
+      />
     </>
   );
 }

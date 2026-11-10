@@ -1,6 +1,6 @@
 "use client";
 
-import { NotebookPen, StickyNote } from "lucide-react";
+import { NotebookPen, StickyNote, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { AttendanceStatusText } from "@/features/coach/components/attendance-status-text";
@@ -10,22 +10,41 @@ import { AttendanceStatusControl } from "./attendance-status-control";
 
 export function AttendanceRosterCard({
   name,
+  isGuest = false,
   status,
   note,
   onStatusChange,
   onNoteOpen,
+  onRemove,
 }: {
   name: string;
+  isGuest?: boolean;
   status: AttendanceStatus;
   note?: string;
   onStatusChange: (status: AttendanceStatus) => void;
   onNoteOpen: () => void;
+  onRemove?: () => void;
 }) {
   return (
     <Card className="gap-0 p-3.5">
       <div className="flex items-center gap-3">
         <PersonAvatar name={name} className="size-9" fallbackClassName="text-[12px]" />
         <b className="min-w-0 flex-1 truncate text-[13px] font-extrabold text-ink-body">{name}</b>
+        {isGuest ? (
+          <span className="flex shrink-0 items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[11px] font-bold text-ink-muted">
+            مهمان
+            {onRemove ? (
+              <button
+                type="button"
+                aria-label={`حذف ${name} از مهمان ها`}
+                onClick={onRemove}
+                className="grid size-4 place-items-center rounded-full transition-colors hover:bg-background"
+              >
+                <X className="size-3" aria-hidden="true" />
+              </button>
+            ) : null}
+          </span>
+        ) : null}
         <AttendanceStatusText status={status} />
       </div>
 
