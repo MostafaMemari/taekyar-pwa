@@ -45,6 +45,16 @@ export function StudentEnrollmentFields({ control, errors, mode, photo }: Fields
         </AuthField>
       ) : null}
 
+      <PhotoPicker
+        label="تصویر هنرجو"
+        optional
+        hint="JPG، PNG یا WebP، حداکثر ۵ مگابایت"
+        imageSrc={photo?.imageSrc}
+        pending={photo?.pending}
+        onSelectFile={photo?.onSelectFile}
+      />
+      {photo?.error ? <p className="text-[12px] font-bold leading-5 text-danger">{photo.error}</p> : null}
+
       {mode === "edit" ? (
         <AuthField
           label="تاریخ انقضای عکس پرونده"
@@ -69,16 +79,6 @@ export function StudentEnrollmentFields({ control, errors, mode, photo }: Fields
           />
         </AuthField>
       ) : null}
-
-      <PhotoPicker
-        label="تصویر هنرجو"
-        optional
-        hint="JPG، PNG یا WebP، حداکثر ۵ مگابایت"
-        imageSrc={photo?.imageSrc}
-        pending={photo?.pending}
-        onSelectFile={photo?.onSelectFile}
-      />
-      {photo?.error ? <p className="text-[12px] font-bold leading-5 text-danger">{photo.error}</p> : null}
     </FormSection>
   );
 }

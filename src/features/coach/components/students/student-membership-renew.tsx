@@ -56,18 +56,20 @@ export function StudentMembershipRenew({ studentId, membershipYear }: { studentI
 
         {renewed ? <p className="mt-2 text-[12px] font-bold text-success">سال عضویت به سال جاری به روز شد.</p> : null}
 
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="mt-3 w-full rounded-xl text-[12px] font-bold"
-          onClick={() => {
-            setOpen(true);
-            setRenewed(false);
-          }}
-        >
-          تمدید سال عضویت
-        </Button>
+        {charge === null || charge.due > 0 ? (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="mt-3 w-full rounded-xl text-[12px] font-bold"
+            onClick={() => {
+              setOpen(true);
+              setRenewed(false);
+            }}
+          >
+            ثبت تمدید عضویت
+          </Button>
+        ) : null}
 
         <SheetFrame open={open} onOpenChange={setOpen} title="تمدید سال عضویت" description="تایید تمدید سال عضویت هنرجو">
           <p className="rounded-xl bg-info-soft/60 p-3 text-[12px] leading-5 text-ink-muted">

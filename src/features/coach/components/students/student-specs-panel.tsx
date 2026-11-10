@@ -12,7 +12,6 @@ import type { AgeCategoryRecord, StudentDetailRecord } from "@/features/coach/li
 import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
 import { PROVINCES } from "@/lib/provinces";
-import { StudentMembershipRenew } from "./student-membership-renew";
 
 const NOT_SET = "ثبت نشده";
 
@@ -138,8 +137,6 @@ export function StudentSpecsPanel({ student }: { student: StudentDetailRecord })
           <InfoRow label="تاریخ ثبت پرونده">{toJalaliDate(student.createdAt)}</InfoRow>
         </Card>
       </section>
-
-      <StudentMembershipRenew studentId={student.id} membershipYear={student.membershipYear} />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import type { StudentDetailRecord } from "@/features/coach/lib/student-api";
 import { StudentAttendanceTrend } from "./student-attendance-trend";
 import { StudentBeltPanel } from "./student-belt-panel";
 import { StudentInsurancePanel } from "./student-insurance-panel";
+import { StudentMembershipRenew } from "./student-membership-renew";
 
 export function StudentInfoPanel({ student, attendance }: { student: StudentDetailRecord; attendance?: StudentAttendance }) {
   return (
@@ -12,6 +13,8 @@ export function StudentInfoPanel({ student, attendance }: { student: StudentDeta
       <StudentBeltPanel assignment={student.currentBelt} birthDate={student.birthDate} />
 
       <StudentInsurancePanel expiryDate={student.sportsInsuranceDate} studentId={student.id} />
+
+      <StudentMembershipRenew studentId={student.id} membershipYear={student.membershipYear} />
 
       {attendance ? <StudentAttendanceTrend records={attendance.records} /> : null}
     </div>

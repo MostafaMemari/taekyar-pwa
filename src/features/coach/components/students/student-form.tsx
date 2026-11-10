@@ -62,9 +62,18 @@ export function StudentForm({
 
   return (
     <form className="mt-4 flex flex-col gap-4" onSubmit={submit} noValidate>
-      <StudentPersonalFields control={control} errors={errors} locked={mode === "edit"} />
-      <StudentSportsFields control={control} errors={errors} mode={mode} />
-      <StudentEnrollmentFields control={control} errors={errors} mode={mode} photo={photo} />
+      {mode === "create" ? (
+        <>
+          <StudentPersonalFields control={control} errors={errors} />
+          <StudentSportsFields control={control} errors={errors} mode={mode} />
+          <StudentEnrollmentFields control={control} errors={errors} mode={mode} photo={photo} />
+        </>
+      ) : (
+        <>
+          <StudentEnrollmentFields control={control} errors={errors} mode={mode} photo={photo} />
+          <StudentPersonalFields control={control} errors={errors} locked />
+        </>
+      )}
 
       <AuthFormError message={failure ? apiErrorMessage(failure) : ""} />
 
