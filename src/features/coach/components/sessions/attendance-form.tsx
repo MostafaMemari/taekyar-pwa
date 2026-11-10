@@ -48,6 +48,7 @@ export function AttendanceForm({
   const statusOf = (entry: ClassAttendanceEntry): AttendanceStatus => overrides[entry.studentId] ?? entry.attendance?.status ?? "PRESENT";
 
   const total = allEntries.length;
+  const reviewedCount = allEntries.filter((entry) => reviewed.has(entry.studentId)).length;
   const counts: Record<AttendanceStatus, number> = { PRESENT: 0, LATE: 0, ABSENT: 0, EXCUSED: 0 };
   for (const entry of allEntries) counts[statusOf(entry)] += 1;
 
@@ -111,13 +112,13 @@ export function AttendanceForm({
           <div className="flex items-center justify-between gap-2">
             <span className="text-[12px] font-semibold text-ink-body">پیشرفت علامت گذاری</span>
             <span className="text-[12px] font-bold text-ink-subtle">
-              {toPersianDigits(String(reviewed.size))} از {toPersianDigits(String(total))} هنرجو
+              {toPersianDigits(String(reviewedCount))} از {toPersianDigits(String(total))} هنرجو
             </span>
           </div>
           <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
             <span
               className="block h-full w-full origin-left rounded-full bg-gradient-to-r from-brand-400 to-brand-600 transition-transform duration-200"
-              style={{ transform: `scaleX(${total ? reviewed.size / total : 0})` }}
+              style={{ transform: `scaleX(${total ? reviewedCount / total : 0})` }}
             />
           </div>
           <div className="mt-2.5 flex flex-wrap gap-1.5">

@@ -18,10 +18,13 @@ export function useStudentsFeed(query: StudentFeedQuery) {
   const lastPage = pages[pages.length - 1];
   const hasMore = Boolean(lastPage?.students.length && (!lastPage.pager || lastPage.pager.page < lastPage.pager.totalPages));
 
+  // Offset pagination can overlap when the underlying data shifts between page fetches; keep the first occurrence only.
+  const students = [...new Map(pages.flatMap((page) => page.students).map((student) => [student.id, student])).values()];
+
   return {
     ...feed,
     pages,
-    students: pages.flatMap((page) => page.students),
+    students,
     total: pages[0]?.pager?.total,
     hasMore,
   };
