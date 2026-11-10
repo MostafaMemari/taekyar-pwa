@@ -1,11 +1,12 @@
 "use client";
 
-import { CalendarDays, Hourglass, Info, TrendingUp } from "lucide-react";
+import { CalendarDays, Hourglass, Info, Landmark, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import { AuthField } from "@/components/shared/auth-field";
 import { AuthFormError } from "@/components/shared/auth-form-error";
+import { AuthSelect } from "@/components/shared/auth-select";
 import { DatePicker } from "@/components/shared/date-picker";
 import { NotFoundScreen } from "@/components/shared/not-found-screen";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
@@ -19,11 +20,12 @@ import { FormDock } from "@/features/coach/components/form-dock";
 import { FormSection } from "@/features/coach/components/form-section";
 import { PersonAvatar } from "@/features/coach/components/person-avatar";
 import { StatusBadge } from "@/features/coach/components/status-badge";
+import { useBeltExams } from "@/features/coach/hooks/use-belt-exams";
 import { useBelts } from "@/features/coach/hooks/use-belts";
 import { useStudent } from "@/features/coach/hooks/use-student";
 import { useAssignStudentBelt } from "@/features/coach/hooks/use-student-mutations";
 import { beltAssignDescription } from "@/features/coach/lib/student-form-options";
-import { beltKeyOf, isBeltAssignmentOpen } from "@/features/coach/lib/students-options";
+import { beltApiName, beltKeyOf, isBeltAssignmentOpen } from "@/features/coach/lib/students-options";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { toLatinDigits, toPersianDigits } from "@/lib/digits";
 import { durationLabel, todayJalali, toGregorianDate, toJalaliDate } from "@/lib/jalali";
@@ -35,8 +37,10 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
   const router = useRouter();
   const student = useStudent(studentId);
   const belts = useBelts();
+  const exams = useBeltExams();
   const assign = useAssignStudentBelt();
   const [date, setDate] = useState(() => toLatinDigits(todayJalali()));
+  const [examId, setExamId] = useState<string | null>(null);
 
   if (student.error) {
     const missing = student.error instanceof ApiError && student.error.status === 404;
@@ -100,6 +104,31 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
   const nextBeltId = nextKey
     ? belts.data?.find((belt) => belt.name.toUpperCase() === nextKey.toUpperCase().replace("-", "_"))?.id
     : undefined;
+
+  // قرمز به بالا فقط با آزمون فدراسیون ثبت می شود و تاریخ کمربند از تاریخ برگزاری آزمون می آید.
+  const examBeltName =
+    nextKey !== null && (nextKey === "red" || nextKey.startsWith("poom") || nextKey.startsWith("dan")) ? beltApiName(nextKey) : null;
+  const needsExam = examBeltName !== null;
+  const examsLoading = exams.isLoading && !exams.data;
+  const eligibleExams =
+    examBeltName === null
+      ? []
+      : (exams.data ?? [])
+          .filter((exam) => {
+            const eventMs = new Date(`${exam.eventDate.slice(0, 10)}T00:00:00`).getTime();
+            const readyMs = current?.nextBeltDate ? new Date(`${current.nextBeltDate.slice(0, 10)}T00:00:00`).getTime() : null;
+            return (
+              exam.genders.includes(profile.gender) &&
+              (exam.belts ?? []).some((belt) => belt.name.toUpperCase() === examBeltName) &&
+              eventMs <= new Date().setHours(0, 0, 0, 0) &&
+              (readyMs === null || eventMs >= readyMs)
+            );
+          })
+          .map((exam) => ({
+            value: exam.id,
+            label: `آزمون دوره ${toPersianDigits(String(exam.examNumber))}`,
+            description: [`برگزاری ${toJalaliDate(exam.eventDate)}`, exam.eventPlaces.join("، ")].filter(Boolean).join(" · "),
+          }));
 
   if (!isBeltAssignmentOpen(current)) {
     const nextDate = current?.nextBeltDate ?? null;
@@ -203,11 +232,15 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
     event.preventDefault();
     if (!nextBeltId) return;
 
-    const beltDate = toGregorianDate(date);
-    if (!beltDate) return;
-
     try {
-      await assign.trigger({ id: studentId, beltId: nextBeltId, beltDate });
+      if (needsExam) {
+        if (!examId) return;
+        await assign.trigger({ id: studentId, beltId: nextBeltId, beltExamId: examId });
+      } else {
+        const beltDate = toGregorianDate(date);
+        if (!beltDate) return;
+        await assign.trigger({ id: studentId, beltId: nextBeltId, beltDate });
+      }
       router.push(`/coach/students/${studentId}`);
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) router.replace("/login");
@@ -272,22 +305,56 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
         </FormSection>
 
         <FormSection icon={CalendarDays} title="جزئیات تخصیص" tone="sky">
-          <AuthField label="تاریخ دریافت کمربند" htmlFor="beltDate" required hint="تاریخ را مطابق آزمون فنی ثبت کنید.">
-            <DatePicker
-              id="beltDate"
-              title="تاریخ دریافت کمربند"
-              value={date}
-              onChange={setDate}
-              defaultValue={toLatinDigits(todayJalali())}
-              fromYear={1390}
-              toYear={1405}
-            />
-          </AuthField>
+          {needsExam ? (
+            <AuthField
+              label="آزمون فدراسیون"
+              htmlFor="beltExamId"
+              required
+              hint="آزمون برگزار شده ای که هنرجو در آن این کمربند را گرفته است."
+            >
+              {examsLoading ? (
+                <Skeleton className="h-12 w-full rounded-xl" />
+              ) : eligibleExams.length > 0 ? (
+                <AuthSelect
+                  id="beltExamId"
+                  value={examId}
+                  onValueChange={setExamId}
+                  placeholder="آزمون را انتخاب کنید"
+                  options={eligibleExams}
+                  icon={Landmark}
+                  itemGap
+                />
+              ) : (
+                <Alert className="rounded-xl border-none bg-info-soft/60 p-3 text-start">
+                  <Info className="text-info" aria-hidden="true" />
+                  <AlertDescription className="text-[12px] leading-5 text-ink-muted">
+                    هنوز آزمون برگزار شده ای برای این کمربند ثبت نشده است.
+                  </AlertDescription>
+                </Alert>
+              )}
+            </AuthField>
+          ) : (
+            <AuthField label="تاریخ دریافت کمربند" htmlFor="beltDate" required hint="تاریخ را مطابق آزمون فنی ثبت کنید.">
+              <DatePicker
+                id="beltDate"
+                title="تاریخ دریافت کمربند"
+                value={date}
+                onChange={setDate}
+                defaultValue={toLatinDigits(todayJalali())}
+                fromYear={1390}
+                toYear={1405}
+              />
+            </AuthField>
+          )}
 
           <Card className="gap-2 bg-muted/50 p-3.5 text-[12px] leading-5 text-ink-muted ring-0">
             <p className="flex items-start gap-1.5">
               <Info className="mt-0.5 size-3.5 shrink-0 text-accent-ink" aria-hidden="true" />
-              <span>تاریخ آزمون کمربند بعدی به صورت خودکار بر اساس مدت زمان کمربند جدید محاسبه می شود.</span>
+              <span>
+                {needsExam
+                  ? "تاریخ دریافت کمربند به صورت خودکار بر اساس تاریخ برگزاری آزمون ثبت می شود."
+                  : "تاریخ آزمون کمربند بعدی به صورت خودکار بر اساس مدت زمان کمربند جدید محاسبه می شود."}
+              </span>
             </p>
             <p className="flex items-start gap-1.5">
               <Info className="mt-0.5 size-3.5 shrink-0 text-accent-ink" aria-hidden="true" />

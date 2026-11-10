@@ -1,6 +1,7 @@
 import { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
 import {
+  type AssignBeltInput,
   assignStudentBelt,
   type CreateStudentInput,
   createStudent,
@@ -47,13 +48,10 @@ export function useRenewStudentInsurance() {
 }
 
 export function useAssignStudentBelt() {
-  return useSWRMutation(
-    ["student", "belt"] as const,
-    async (_key: unknown, { arg }: { arg: { id: string; beltId: string; beltDate: string } }) => {
-      await assignStudentBelt(arg.id, arg.beltId, arg.beltDate);
-      await revalidateStudents();
-    },
-  );
+  return useSWRMutation(["student", "belt"] as const, async (_key: unknown, { arg }: { arg: { id: string } & AssignBeltInput }) => {
+    await assignStudentBelt(arg.id, arg);
+    await revalidateStudents();
+  });
 }
 
 export function useDeleteStudent() {

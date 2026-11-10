@@ -138,8 +138,11 @@ export function uploadStudentImage(id: string, file: File): Promise<void> {
   return authRequest<unknown>(`student/${id}/image`, { method: "post", body: form }).then(() => undefined);
 }
 
-export function assignStudentBelt(id: string, beltId: string, beltDate: string): Promise<void> {
-  return authRequest<unknown>(`student/${id}/belt`, { method: "patch", json: { beltId, beltDate } }).then(() => undefined);
+// سفید تا آبی با beltDate ثبت می شود؛ قرمز به بالا فقط beltExamId می گیرد و تاریخ از آزمون می آید.
+export type AssignBeltInput = { beltId: string; beltDate?: string; beltExamId?: string };
+
+export function assignStudentBelt(id: string, input: AssignBeltInput): Promise<void> {
+  return authRequest<unknown>(`student/${id}/belt`, { method: "patch", json: input }).then(() => undefined);
 }
 
 export type BeltRecord = { id: string; name: string; level: number };
