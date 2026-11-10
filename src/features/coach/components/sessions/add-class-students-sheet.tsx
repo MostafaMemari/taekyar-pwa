@@ -103,7 +103,7 @@ export function AddClassStudentsSheet({
           </div>
         ) : null}
 
-        <ScrollArea className="max-h-[45vh] [&_[data-slot=scroll-area-scrollbar]]:end-auto! [&_[data-slot=scroll-area-scrollbar]]:start-0! [&_[data-slot=scroll-area-viewport]]:max-h-[45vh]">
+        <ScrollArea className="max-h-[45vh] [&_[data-slot=scroll-area-viewport]]:max-h-[45vh]">
           {isLoading ? (
             <div className="flex flex-col gap-2">
               {[0, 1, 2].map((row) => (

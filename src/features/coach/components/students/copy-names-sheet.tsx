@@ -104,7 +104,7 @@ export function CopyNamesSheet({
           ))}
         </div>
       ) : (
-        <ScrollArea className="max-h-44 [&_[data-slot=scroll-area-scrollbar]]:end-auto! [&_[data-slot=scroll-area-scrollbar]]:start-0! [&_[data-slot=scroll-area-viewport]]:max-h-44">
+        <ScrollArea className="max-h-44 [&_[data-slot=scroll-area-viewport]]:max-h-44">
           <pre className="rounded-xl bg-muted/60 p-3 font-sans text-start text-[12px] leading-5 whitespace-pre-wrap text-ink-body">
             {text}
           </pre>

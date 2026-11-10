@@ -89,7 +89,7 @@ export function StudentsFiltersSheet({
       title="فیلتر هنرجویان"
       description="کمربند، رده سنی و وضعیت بیمه را برای محدود کردن فهرست انتخاب کنید"
     >
-      <ScrollArea className="mt-3 max-h-[60vh] [&_[data-slot=scroll-area-scrollbar]]:end-auto! [&_[data-slot=scroll-area-scrollbar]]:start-0! [&_[data-slot=scroll-area-viewport]]:max-h-[60vh]">
+      <ScrollArea className="mt-3 max-h-[60vh] [&_[data-slot=scroll-area-viewport]]:max-h-[60vh]">
         <div className="flex flex-col gap-5 pb-1 pe-2 ps-3">
           <section className="flex flex-col gap-3">
             <SectionTitle icon={<span className="size-3 rounded-full bg-brand-500" aria-hidden="true" />}>کمربند</SectionTitle>
