@@ -1,5 +1,6 @@
 "use client";
 
+import { jalaaliMonthLength } from "jalaali-js";
 import { CalendarDays, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { WheelColumn } from "@/components/shared/wheel-column";
@@ -9,8 +10,6 @@ import { toLatinDigits, toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
 const MONTHS = ["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"] as const;
-const MONTH_DAYS = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29] as const;
-const LEAP_REMAINDERS = new Set([1, 5, 9, 13, 17, 22, 26, 30]);
 
 type DateParts = { year: number; month: number; day: number };
 
@@ -24,15 +23,6 @@ type DatePickerProps = {
   toYear?: number;
 };
 
-function isLeapYear(year: number) {
-  // 33-year cycle, accurate for the 1343–1472 range used here.
-  return LEAP_REMAINDERS.has(year % 33);
-}
-
-function daysInMonth(year: number, month: number) {
-  return month === 12 && isLeapYear(year) ? 30 : MONTH_DAYS[month - 1];
-}
-
 function parseJalali(value: string): DateParts | null {
   const match = toLatinDigits(value).match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
   if (!match) return null;
@@ -41,7 +31,7 @@ function parseJalali(value: string): DateParts | null {
   const month = Number(match[2]);
   const day = Number(match[3]);
 
-  if (month < 1 || month > 12 || day < 1 || day > daysInMonth(year, month)) return null;
+  if (month < 1 || month > 12 || day < 1 || day > jalaaliMonthLength(year, month)) return null;
   return { year, month, day };
 }
 
@@ -60,7 +50,7 @@ function todayJalali(): DateParts {
     const day = read("day");
 
     if (year && month >= 1 && month <= 12 && day >= 1) {
-      return { year, month, day: Math.min(day, daysInMonth(year, month)) };
+      return { year, month, day: Math.min(day, jalaaliMonthLength(year, month)) };
     }
   } catch {
     // Fall through to a stable default when the Persian calendar is unavailable.
@@ -72,7 +62,7 @@ function todayJalali(): DateParts {
 function clampDate(parts: DateParts, fromYear: number, toYear: number): DateParts {
   const year = Math.min(toYear, Math.max(fromYear, parts.year));
   const month = Math.min(12, Math.max(1, parts.month));
-  return { year, month, day: Math.min(daysInMonth(year, month), Math.max(1, parts.day)) };
+  return { year, month, day: Math.min(jalaaliMonthLength(year, month), Math.max(1, parts.day)) };
 }
 
 export function DatePicker({ id, title, value, onChange, defaultValue, fromYear = 1350, toYear = 1406 }: DatePickerProps) {
@@ -80,7 +70,7 @@ export function DatePicker({ id, title, value, onChange, defaultValue, fromYear 
   const [draft, setDraft] = useState<DateParts>({ year: fromYear, month: 1, day: 1 });
 
   const display = parseJalali(value);
-  const days = daysInMonth(draft.year, draft.month);
+  const days = jalaaliMonthLength(draft.year, draft.month);
 
   const handleOpen = () => {
     const initial = parseJalali(value) ?? parseJalali(defaultValue ?? "") ?? todayJalali();
@@ -89,11 +79,11 @@ export function DatePicker({ id, title, value, onChange, defaultValue, fromYear 
   };
 
   const setYear = (year: number) => {
-    setDraft((current) => ({ ...current, year, day: Math.min(current.day, daysInMonth(year, current.month)) }));
+    setDraft((current) => ({ ...current, year, day: Math.min(current.day, jalaaliMonthLength(year, current.month)) }));
   };
 
   const setMonth = (month: number) => {
-    setDraft((current) => ({ ...current, month, day: Math.min(current.day, daysInMonth(current.year, month)) }));
+    setDraft((current) => ({ ...current, month, day: Math.min(current.day, jalaaliMonthLength(current.year, month)) }));
   };
 
   const setDay = (day: number) => {
