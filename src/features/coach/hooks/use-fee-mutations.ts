@@ -12,9 +12,9 @@ export function useSaveClubFee(clubId: string) {
   });
 }
 
-export function useRecordFeePayment(clubId: string) {
-  return useSWRMutation(["fee", "record", clubId] as const, async (_key: unknown, { arg }: { arg: RecordFeePaymentInput }) => {
-    await recordFeePayment(clubId, arg);
+export function useRecordFeePayment() {
+  return useSWRMutation(["fee", "record"] as const, async (_key: unknown, { arg }: { arg: RecordFeePaymentInput & { clubId: string } }) => {
+    await recordFeePayment(arg.clubId, arg);
     await revalidateFees();
   });
 }

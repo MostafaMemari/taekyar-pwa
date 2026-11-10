@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
+import { Landmark, Loader2, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AuthField } from "@/components/shared/auth-field";
@@ -12,6 +12,7 @@ import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { useClubMembers } from "@/features/coach/hooks/use-clubs";
 import { useClubFee } from "@/features/coach/hooks/use-fee";
 import { useRecordFeePayment } from "@/features/coach/hooks/use-fee-mutations";
+import type { ClubRecord } from "@/features/coach/lib/club-api";
 import type { FeeMonth } from "@/features/coach/lib/fee-api";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { digitsOnly, formatMoney } from "@/lib/digits";
@@ -21,17 +22,22 @@ export function FeePaymentSheet({
   open,
   onOpenChange,
   clubId,
+  clubs,
   month,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   clubId: string;
+  // Pass the coach's clubs so the sheet can offer a picker; a single club needs none.
+  clubs?: ClubRecord[];
   month: FeeMonth;
 }) {
   const router = useRouter();
-  const { data: members, isLoading: membersLoading } = useClubMembers(clubId);
-  const { data: fee } = useClubFee(clubId);
-  const record = useRecordFeePayment(clubId);
+  const [pickedClubId, setPickedClubId] = useState<string | null>(null);
+  const activeClubId = pickedClubId ?? clubId;
+  const { data: members, isLoading: membersLoading } = useClubMembers(activeClubId);
+  const { data: fee } = useClubFee(activeClubId);
+  const record = useRecordFeePayment();
   const [studentId, setStudentId] = useState<string | null>(null);
   const [picked, setPicked] = useState<FeeMonth>(month);
   // Stays null until the coach types, so the stored fee amount shows through untouched.
@@ -39,6 +45,7 @@ export function FeePaymentSheet({
   const [note, setNote] = useState("");
 
   const close = () => {
+    setPickedClubId(null);
     setStudentId(null);
     setPicked(month);
     setAmount(null);
@@ -47,14 +54,16 @@ export function FeePaymentSheet({
     onOpenChange(false);
   };
 
+  const clubOptions = (clubs ?? []).map((club) => ({ value: club.id, label: club.name }));
   const activeMembers = (members ?? []).filter((member) => member.isActive);
   const amountValue = amount ?? (fee ? String(Math.trunc(Number(fee.monthlyAmount))) : "");
-  const canSubmit = studentId !== null && !membersLoading && !record.isMutating;
+  const canSubmit = activeClubId !== "" && studentId !== null && !membersLoading && !record.isMutating;
 
   const submit = async () => {
-    if (!studentId) return;
+    if (!studentId || activeClubId === "") return;
     try {
       await record.trigger({
+        clubId: activeClubId,
         studentId,
         year: picked.year,
         month: picked.month,
@@ -75,6 +84,22 @@ export function FeePaymentSheet({
       description="پرداخت هنرجو برای ماه انتخاب شده ثبت می شود"
     >
       <div className="mt-3 flex flex-col gap-3">
+        {clubOptions.length > 1 ? (
+          <AuthField label="باشگاه" htmlFor="feePaymentClub" required>
+            <AuthSelect
+              id="feePaymentClub"
+              icon={Landmark}
+              placeholder="انتخاب باشگاه"
+              value={activeClubId}
+              onValueChange={(value) => {
+                setPickedClubId(value);
+                setStudentId(null);
+              }}
+              options={clubOptions}
+            />
+          </AuthField>
+        ) : null}
+
         {fee ? null : (
           <p className="rounded-xl bg-danger-soft/60 p-3 text-[12px] font-bold leading-5 text-danger">ابتدا شهریه باشگاه را تنظیم کنید</p>
         )}
@@ -82,6 +107,7 @@ export function FeePaymentSheet({
         <AuthField label="هنرجو" htmlFor="feePaymentStudent" required>
           <AuthSelect
             id="feePaymentStudent"
+            icon={User}
             placeholder="انتخاب هنرجو"
             value={studentId}
             onValueChange={setStudentId}

@@ -1,23 +1,28 @@
 "use client";
 
-import { CalendarPlus, ClipboardCheck, Send, UserPlus } from "lucide-react";
+import { CalendarPlus, ClipboardCheck, type LucideIcon, UserPlus, Wallet } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { FeePaymentSheet } from "@/features/coach/components/clubs/fee/fee-payment-sheet";
+import { useClubs } from "@/features/coach/hooks/use-clubs";
 import { useInvitations } from "@/features/coach/hooks/use-invitations";
 import { useSessions } from "@/features/coach/hooks/use-sessions";
 import { useStudentStats } from "@/features/coach/hooks/use-student-stats";
 import { sessionIsToday } from "@/features/coach/lib/coach-data";
+import { currentFeeMonth } from "@/features/coach/lib/fee-api";
 import { pickNextSession } from "@/features/coach/lib/next-session";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
 export function DashboardOverview() {
   const [now] = useState(() => new Date());
+  const [payOpen, setPayOpen] = useState(false);
   const { data: sessions } = useSessions();
   const { data: studentStats } = useStudentStats();
   const { data: invitations } = useInvitations();
+  const { data: clubs } = useClubs();
 
   const next = pickNextSession(sessions?.sessions ?? [], now);
   const attendanceHref = next ? `/coach/sessions/${next.session.id}/attendance` : "/coach/sessions";
@@ -26,10 +31,10 @@ export function DashboardOverview() {
     ? invitations.invitations.filter((invitation) => invitation.status === "PENDING").length
     : undefined;
 
-  const actions = [
+  const actions: Array<{ label: string; icon: LucideIcon; primary?: boolean; href?: string; payment?: true }> = [
     { href: attendanceHref, label: "حضور", icon: ClipboardCheck, primary: true },
     { href: "/coach/students/new", label: "هنرجو", icon: UserPlus, primary: false },
-    { href: "/coach/students/invite", label: "دعوت", icon: Send, primary: false },
+    { label: "شهریه", icon: Wallet, payment: true },
     { href: "/coach/sessions/new", label: "کلاس", icon: CalendarPlus, primary: false },
   ];
 
@@ -42,9 +47,9 @@ export function DashboardOverview() {
   return (
     <div className="flex flex-col gap-4">
       <ul className="grid grid-cols-4 gap-1">
-        {actions.map((action) => (
-          <li key={action.label}>
-            <Link href={action.href} className="flex flex-col items-center gap-1.5 rounded-2xl py-1.5 transition-colors active:bg-muted/60">
+        {actions.map((action) => {
+          const tile = (
+            <>
               <span
                 className={cn(
                   "grid size-11 place-items-center rounded-full",
@@ -54,9 +59,24 @@ export function DashboardOverview() {
                 <action.icon className="size-[18px]" aria-hidden="true" />
               </span>
               <span className={cn("text-[12px] font-medium", action.primary ? "text-ink" : "text-ink-muted")}>{action.label}</span>
-            </Link>
-          </li>
-        ))}
+            </>
+          );
+          const className = "flex flex-col items-center gap-1.5 rounded-2xl py-1.5 transition-colors active:bg-muted/60";
+
+          return (
+            <li key={action.label}>
+              {action.href !== undefined ? (
+                <Link href={action.href} className={className}>
+                  {tile}
+                </Link>
+              ) : (
+                <button type="button" className={cn(className, "cursor-pointer")} onClick={() => setPayOpen(true)}>
+                  {tile}
+                </button>
+              )}
+            </li>
+          );
+        })}
       </ul>
 
       <Card className="gap-0 p-0">
@@ -81,6 +101,14 @@ export function DashboardOverview() {
           ))}
         </div>
       </Card>
+
+      <FeePaymentSheet
+        open={payOpen}
+        onOpenChange={setPayOpen}
+        clubId={clubs?.clubs[0]?.id ?? ""}
+        clubs={clubs?.clubs}
+        month={currentFeeMonth()}
+      />
     </div>
   );
 }

@@ -37,7 +37,7 @@ export function useClubStudentCount(id: string) {
 }
 
 export function useClubMembers(id: string) {
-  return useSWR(clubKeys.members(id), ([, clubId]) => fetchClubMembers(clubId), swrReadOptions);
+  return useSWR(id ? clubKeys.members(id) : null, ([, clubId]) => fetchClubMembers(clubId), swrReadOptions);
 }
 
 export function useClubStudentCounts(clubIds: string[]) {
