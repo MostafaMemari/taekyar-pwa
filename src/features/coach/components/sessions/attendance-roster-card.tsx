@@ -29,20 +29,16 @@ export function AttendanceRosterCard({
       <div className="flex items-center gap-3">
         <PersonAvatar name={name} className="size-9" fallbackClassName="text-[12px]" />
         <b className="min-w-0 flex-1 truncate text-[13px] font-extrabold text-ink-body">{name}</b>
-        {isGuest ? (
-          onRemove ? (
-            <button
-              type="button"
-              aria-label={`حذف ${name} از مهمان ها`}
-              onClick={onRemove}
-              className="flex shrink-0 cursor-pointer items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-[11px] font-bold text-ink-muted transition-colors hover:bg-danger-soft hover:text-danger"
-            >
-              مهمان
-              <X className="size-3" aria-hidden="true" />
-            </button>
-          ) : (
-            <span className="shrink-0 rounded-full bg-muted px-2.5 py-1 text-[11px] font-bold text-ink-muted">مهمان</span>
-          )
+        {isGuest && onRemove ? (
+          <button
+            type="button"
+            aria-label={`حذف ${name} از مهمان ها`}
+            onClick={onRemove}
+            className="flex shrink-0 cursor-pointer items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-[11px] font-bold text-ink-muted transition-colors hover:bg-danger-soft hover:text-danger"
+          >
+            مهمان
+            <X className="size-3" aria-hidden="true" />
+          </button>
         ) : null}
       </div>
 
@@ -63,7 +59,9 @@ export function AttendanceRosterCard({
             <NotebookPen className="size-3 shrink-0" aria-hidden="true" />
             <span className="truncate">{note}</span>
           </span>
-        ) : null}
+        ) : (
+          <span className="min-w-0 flex-1 truncate text-[12px] font-medium text-ink-subtle">یادداشتی ثبت نشده</span>
+        )}
       </div>
     </Card>
   );

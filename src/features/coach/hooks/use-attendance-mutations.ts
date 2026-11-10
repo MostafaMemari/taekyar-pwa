@@ -1,6 +1,6 @@
 import { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
-import { type SaveAttendanceInput, saveClassAttendance } from "@/features/coach/lib/attendance-api";
+import { removeClassAttendance, type SaveAttendanceInput, saveClassAttendance } from "@/features/coach/lib/attendance-api";
 
 // A save changes the roster of one date, so the whole attendance branch is revalidated.
 const revalidateAttendance = () => mutate((key) => Array.isArray(key) && key[0] === "attendance");
@@ -11,4 +11,14 @@ export function useSaveAttendance(classSessionId: string) {
     await revalidateAttendance();
     return result;
   });
+}
+
+export function useRemoveAttendance() {
+  return useSWRMutation(
+    ["attendance", "remove"] as const,
+    async (_key: unknown, { arg }: { arg: { classSessionId: string; studentId: string; sessionDate: string } }) => {
+      await removeClassAttendance(arg.classSessionId, arg.studentId, arg.sessionDate);
+      await revalidateAttendance();
+    },
+  );
 }

@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/button";
 import { ActionDock } from "@/features/coach/components/action-dock";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { StatusBadge } from "@/features/coach/components/status-badge";
+import { useRemoveAttendance } from "@/features/coach/hooks/use-attendance-mutations";
 import type { AttendanceItem, ClassAttendanceEntry } from "@/features/coach/lib/attendance-api";
 import { ATTENDANCE_META, type AttendanceStatus } from "@/features/coach/lib/coach-data";
+import { apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
 import { AttendanceGuestSheet } from "./attendance-guest-sheet";
 import { AttendanceNoteSheet } from "./attendance-note-sheet";
@@ -36,9 +38,12 @@ export function AttendanceForm({
     () => new Set(entries.filter((entry) => entry.attendance).map((entry) => entry.studentId)),
   );
   const [noteTarget, setNoteTarget] = useState<ClassAttendanceEntry | null>(null);
+  const remove = useRemoveAttendance();
 
   // Guests picked here are local until save; the roster refetch returns them as saved entries.
-  const allEntries = [...entries, ...guests];
+  // Entries win over local picks so a student can never render twice.
+  const entryIds = new Set(entries.map((entry) => entry.studentId));
+  const allEntries = [...entries, ...guests.filter((guest) => !entryIds.has(guest.studentId))];
 
   const statusOf = (entry: ClassAttendanceEntry): AttendanceStatus => overrides[entry.studentId] ?? entry.attendance?.status ?? "PRESENT";
 
@@ -84,6 +89,20 @@ export function AttendanceForm({
     );
     setGuestOpen(false);
   };
+
+  const removeGuest = (entry: ClassAttendanceEntry) => {
+    if (guests.some((guest) => guest.studentId === entry.studentId)) {
+      setGuests((current) => current.filter((guest) => guest.studentId !== entry.studentId));
+      return;
+    }
+
+    const sessionDate = entry.attendance?.sessionDate.slice(0, 10);
+    if (!sessionDate) return;
+
+    void remove.trigger({ classSessionId: entry.classSessionId, studentId: entry.studentId, sessionDate }).catch(() => undefined);
+  };
+
+  const removeError = remove.error ? apiErrorMessage(remove.error) : "";
 
   return (
     <>
@@ -147,20 +166,16 @@ export function AttendanceForm({
               note={notes[entry.studentId]}
               onStatusChange={(status) => changeStatus(entry.studentId, status)}
               onNoteOpen={() => setNoteTarget(entry)}
-              onRemove={
-                guests.some((guest) => guest.studentId === entry.studentId)
-                  ? () => setGuests((current) => current.filter((guest) => guest.studentId !== entry.studentId))
-                  : undefined
-              }
+              onRemove={entry.isGuest ? () => removeGuest(entry) : undefined}
             />
           ))}
         </div>
       </section>
 
       <ActionDock>
-        {error ? (
+        {error || removeError ? (
           <p role="alert" className="mb-2 rounded-xl bg-danger-soft px-3 py-2 text-[12px] font-bold leading-5 text-danger">
-            {error}
+            {error || removeError}
           </p>
         ) : null}
         <Button

@@ -70,3 +70,9 @@ export function fetchStudentAttendance(studentId: string): Promise<StudentAttend
 export function saveClassAttendance(classSessionId: string, input: SaveAttendanceInput): Promise<SaveAttendanceResponse> {
   return authRequest<SaveAttendanceResponse>(`attendance/class/${classSessionId}`, { method: "put", json: input });
 }
+
+export function removeClassAttendance(classSessionId: string, studentId: string, sessionDate: string): Promise<void> {
+  return authRequest<unknown>(`attendance/class/${classSessionId}/${studentId}?date=${sessionDate}`, { method: "delete" }).then(
+    () => undefined,
+  );
+}
