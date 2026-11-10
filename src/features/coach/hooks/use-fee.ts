@@ -1,14 +1,10 @@
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
-import { type FeePaymentRecord, fetchClubFee, fetchFeeDebtors, fetchFeePayments } from "@/features/coach/lib/fee-api";
+import { type FeePaymentRecord, fetchClubFee, fetchFeePayments } from "@/features/coach/lib/fee-api";
 import { swrReadOptions } from "@/lib/api/swr";
 
 export function useClubFee(clubId: string) {
   return useSWR(["fee", "club", clubId] as const, ([, , id]) => fetchClubFee(id), swrReadOptions);
-}
-
-export function useFeeDebtors(clubId: string, year: number, month: number) {
-  return useSWR(["fee", "debtors", clubId, year, month] as const, ([, , id, y, m]) => fetchFeeDebtors(id, y, m), swrReadOptions);
 }
 
 type FeePaymentsPage = { data: FeePaymentRecord[]; pager?: { page: number; totalPages: number } };

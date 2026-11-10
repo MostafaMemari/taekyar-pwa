@@ -1,14 +1,16 @@
 "use client";
 
 import { Fragment } from "react";
+import useSWR from "swr";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/features/coach/components/error-state";
 import { SectionHeading } from "@/features/coach/components/section-heading";
-import { useFeeDebtors } from "@/features/coach/hooks/use-fee";
-import type { FeeMonth } from "@/features/coach/lib/fee-api";
+import { useClubFee } from "@/features/coach/hooks/use-fee";
+import { type FeeMonth, fetchFeeDebtors } from "@/features/coach/lib/fee-api";
 import { apiErrorMessage } from "@/lib/api/client";
+import { swrReadOptions } from "@/lib/api/swr";
 import { formatMoney, toPersianDigits } from "@/lib/digits";
 import { FeeMonthSelect } from "./fee-month-select";
 
@@ -21,18 +23,38 @@ export function FeeDebtorsCard({
   month: FeeMonth;
   onMonthChange: (month: FeeMonth) => void;
 }) {
-  const { data, error, isLoading, mutate } = useFeeDebtors(clubId, month.year, month.month);
+  const { data: fee, error: feeError, isLoading: feeLoading, mutate: mutateFee } = useClubFee(clubId);
+
+  // The backend refuses debtors while no fee is set, so the request waits for the fee to exist.
+  const { data, error, isLoading, mutate } = useSWR(
+    fee ? (["fee", "debtors", clubId, month.year, month.month] as const) : null,
+    ([, , id, y, m]) => fetchFeeDebtors(id, y, m),
+    swrReadOptions,
+  );
 
   return (
     <section>
       <SectionHeading title="گزارش بدهکاران" />
       <Card className="flex flex-col gap-0 p-4">
-        {isLoading && !data ? (
+        {(feeLoading || isLoading) && !data ? (
           <div className="flex flex-col gap-2">
             {[0, 1, 2].map((row) => (
               <Skeleton key={row} className="h-6 w-full rounded-lg" />
             ))}
           </div>
+        ) : feeError ? (
+          <ErrorState
+            title="خواندن شهریه انجام نشد"
+            message={apiErrorMessage(feeError)}
+            onRetry={() => {
+              void mutateFee();
+              void mutate();
+            }}
+          />
+        ) : !fee ? (
+          <p className="rounded-xl bg-muted/60 p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
+            برای محاسبه بدهکاران، ابتدا مبلغ شهریه را در بخش تنظیم شهریه ثبت کنید
+          </p>
         ) : error ? (
           <ErrorState title="خواندن گزارش انجام نشد" message={apiErrorMessage(error)} onRetry={() => void mutate()} />
         ) : data ? (
