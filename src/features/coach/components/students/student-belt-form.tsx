@@ -216,7 +216,7 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
 
                   <div className="mt-2.5 h-2 overflow-hidden rounded-full bg-[var(--line-2)]">
                     <div
-                      className="h-full w-full origin-left rounded-full bg-gradient-to-l from-brand-400 to-brand-600 transition-transform duration-500"
+                      className="h-full w-full origin-left rounded-full bg-gradient-to-r from-brand-400 to-brand-600 transition-transform duration-500"
                       style={{ transform: `scaleX(${percent / 100})` }}
                     />
                   </div>

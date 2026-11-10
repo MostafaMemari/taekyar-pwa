@@ -3,7 +3,6 @@
 import { NotebookPen, StickyNote, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { AttendanceStatusText } from "@/features/coach/components/attendance-status-text";
 import { PersonAvatar } from "@/features/coach/components/person-avatar";
 import type { AttendanceStatus } from "@/features/coach/lib/coach-data";
 import { AttendanceStatusControl } from "./attendance-status-control";
@@ -31,21 +30,20 @@ export function AttendanceRosterCard({
         <PersonAvatar name={name} className="size-9" fallbackClassName="text-[12px]" />
         <b className="min-w-0 flex-1 truncate text-[13px] font-extrabold text-ink-body">{name}</b>
         {isGuest ? (
-          <span className="flex shrink-0 items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[11px] font-bold text-ink-muted">
-            مهمان
-            {onRemove ? (
-              <button
-                type="button"
-                aria-label={`حذف ${name} از مهمان ها`}
-                onClick={onRemove}
-                className="grid size-4 place-items-center rounded-full transition-colors hover:bg-background"
-              >
-                <X className="size-3" aria-hidden="true" />
-              </button>
-            ) : null}
-          </span>
+          onRemove ? (
+            <button
+              type="button"
+              aria-label={`حذف ${name} از مهمان ها`}
+              onClick={onRemove}
+              className="flex shrink-0 cursor-pointer items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-[11px] font-bold text-ink-muted transition-colors hover:bg-danger-soft hover:text-danger"
+            >
+              مهمان
+              <X className="size-3" aria-hidden="true" />
+            </button>
+          ) : (
+            <span className="shrink-0 rounded-full bg-muted px-2.5 py-1 text-[11px] font-bold text-ink-muted">مهمان</span>
+          )
         ) : null}
-        <AttendanceStatusText status={status} />
       </div>
 
       <AttendanceStatusControl name={name} value={status} onChange={onStatusChange} />

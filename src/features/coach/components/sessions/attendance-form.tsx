@@ -97,7 +97,7 @@ export function AttendanceForm({
           </div>
           <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
             <span
-              className="block h-full w-full origin-right rounded-full bg-gradient-to-l from-brand-400 to-brand-600 transition-transform duration-200"
+              className="block h-full w-full origin-left rounded-full bg-gradient-to-r from-brand-400 to-brand-600 transition-transform duration-200"
               style={{ transform: `scaleX(${total ? reviewed.size / total : 0})` }}
             />
           </div>
