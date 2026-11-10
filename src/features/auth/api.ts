@@ -96,7 +96,7 @@ export function refreshSession(): Promise<string> {
 
   refreshPromise = (async () => {
     const session = getSession();
-    if (!session) throw new ApiError("نشست شما پیدا نشد. دوباره وارد شوید.", 401);
+    if (!session) throw new ApiError("نشست شما پیدا نشد. دوباره وارد شوید", 401);
 
     try {
       const tokens = await apiRequest<TokenResponse>("auth/refresh", {
@@ -119,7 +119,7 @@ export function refreshSession(): Promise<string> {
 
 async function withAccessToken<T>(run: (accessToken: string) => Promise<T>): Promise<T> {
   const session = getSession();
-  if (!session) throw new ApiError("برای ادامه ابتدا وارد حساب کاربری شوید.", 401);
+  if (!session) throw new ApiError("برای ادامه ابتدا وارد حساب کاربری شوید", 401);
 
   try {
     return await run(session.accessToken);

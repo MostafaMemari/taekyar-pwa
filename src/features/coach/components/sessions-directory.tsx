@@ -186,7 +186,7 @@ export function SessionsDirectory() {
               </EmptyMedia>
               <EmptyTitle className="text-[13px] font-extrabold text-ink">هنوز کلاسی ثبت نشده</EmptyTitle>
               <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
-                برای هر باشگاه، یک کلاس با روزها و ساعت برگزاری بسازید.
+                برای هر باشگاه، یک کلاس با روزها و ساعت برگزاری بسازید
               </EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
@@ -218,9 +218,7 @@ export function SessionsDirectory() {
                 <CalendarDays aria-hidden="true" />
               </EmptyMedia>
               <EmptyTitle className="text-[13px] font-extrabold text-ink">کلاسی یافت نشد</EmptyTitle>
-              <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
-                عبارت جستجو یا بازه زمانی را تغییر دهید.
-              </EmptyDescription>
+              <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">عبارت جستجو یا بازه زمانی را تغییر دهید</EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
               <Button type="button" variant="outline" size="sm" className="rounded-lg" onClick={reset}>

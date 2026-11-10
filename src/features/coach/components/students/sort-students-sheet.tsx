@@ -23,7 +23,7 @@ export function SortStudentsSheet({
   onDirectionChange: (direction: StudentSortDirection) => void;
 }) {
   return (
-    <SheetFrame open={open} onOpenChange={onOpenChange} title="مرتب سازی هنرجویان" description="ترتیب نمایش هنرجویان را انتخاب کنید.">
+    <SheetFrame open={open} onOpenChange={onOpenChange} title="مرتب سازی هنرجویان" description="ترتیب نمایش هنرجویان را انتخاب کنید">
       <div className="flex flex-col gap-4">
         <RadioGroup value={sortBy} onValueChange={(value) => onFieldChange(value as StudentSortField)} className="gap-2">
           {SORT_FIELD_META.map((option) => (

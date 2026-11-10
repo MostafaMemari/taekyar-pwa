@@ -193,7 +193,7 @@ export function SecurityScreen() {
             <SectionHeading title="سایر نشست ها" />
             {others.length === 0 ? (
               <Card className="rounded-2xl px-4 py-6 text-center text-[12px] font-semibold text-ink-muted">
-                نشست دیگری روی این حساب ثبت نشده است.
+                نشست دیگری روی این حساب ثبت نشده است
               </Card>
             ) : (
               <div className="flex flex-col gap-2.5">
@@ -215,7 +215,7 @@ export function SecurityScreen() {
               منطقه خطر
             </h2>
             <p className="mt-1 text-[12px] leading-5 text-danger/90">
-              با لغو همه نشست ها از همه دستگاه ها خارج می شوید و باید دوباره وارد شوید.
+              با لغو همه نشست ها از همه دستگاه ها خارج می شوید و باید دوباره وارد شوید
             </p>
             <Button
               variant="destructive"
@@ -238,7 +238,7 @@ export function SecurityScreen() {
         description="تایید خروج از نشست انتخاب شده"
       >
         <p className="rounded-xl bg-danger-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
-          نشست {revokeTarget ? describeDevice(revokeTarget) : ""} بسته می شود و برای استفاده از این دستگاه باید دوباره وارد شوید.
+          نشست {revokeTarget ? describeDevice(revokeTarget) : ""} بسته می شود و برای استفاده از این دستگاه باید دوباره وارد شوید
         </p>
 
         {revoke.error ? <p className="pt-2 text-[12px] font-bold leading-5 text-danger">{apiErrorMessage(revoke.error)}</p> : null}
@@ -261,7 +261,7 @@ export function SecurityScreen() {
 
       <SheetFrame open={revokeAllOpen} onOpenChange={setRevokeAllOpen} title="لغو همه نشست ها" description="تایید لغو همه نشست ها">
         <p className="rounded-xl bg-danger-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
-          همه نشست ها از جمله نشست فعلی لغو می شوند و برای ادامه باید دوباره وارد حساب شوید.
+          همه نشست ها از جمله نشست فعلی لغو می شوند و برای ادامه باید دوباره وارد حساب شوید
         </p>
 
         {revokeAll.error ? <p className="pt-2 text-[12px] font-bold leading-5 text-danger">{apiErrorMessage(revokeAll.error)}</p> : null}

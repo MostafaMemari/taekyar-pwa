@@ -72,7 +72,7 @@ export function ClubClasses({ sessions, memberCounts }: { sessions: ClassSession
             </EmptyMedia>
             <EmptyTitle className="text-[13px] font-extrabold text-ink">هنوز کلاسی ثبت نشده</EmptyTitle>
             <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
-              اولین کلاس این باشگاه را بسازید تا حضور و غیاب شروع شود.
+              اولین کلاس این باشگاه را بسازید تا حضور و غیاب شروع شود
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>

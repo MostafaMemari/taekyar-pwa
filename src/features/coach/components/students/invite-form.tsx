@@ -27,22 +27,22 @@ const FLOW_NOTES = [
   {
     icon: IdCard,
     tone: "text-info",
-    text: "کد ملی هنرجو باید از قبل در سامانه ثبت شده باشد تا دعوت نامه برای او ارسال شود.",
+    text: "کد ملی هنرجو باید از قبل در سامانه ثبت شده باشد تا دعوت نامه برای او ارسال شود",
   },
   {
     icon: ShieldCheck,
     tone: "text-success",
-    text: "دعوت فقط برای هنرجوی بدون مربی و با جنسیت یکسان با شما قابل ارسال است.",
+    text: "دعوت فقط برای هنرجوی بدون مربی و با جنسیت یکسان با شما قابل ارسال است",
   },
   {
     icon: UserPlus,
     tone: "text-accent-ink",
-    text: "هنرجو دعوت را در اپ خود تایید یا رد می کند؛ پس از تایید، به فهرست شاگردان شما اضافه می شود.",
+    text: "هنرجو دعوت را در اپ خود تایید یا رد می کند؛ پس از تایید، به فهرست شاگردان شما اضافه می شود",
   },
   {
     icon: CircleAlert,
     tone: "text-warning",
-    text: "تا زمان پاسخ هنرجو، وضعیت دعوت نامه «در انتظار» باقی می ماند.",
+    text: "تا زمان پاسخ هنرجو، وضعیت دعوت نامه «در انتظار» باقی می ماند",
   },
 ];
 
@@ -58,7 +58,7 @@ export function InviteForm() {
     setFormError("");
 
     if (nationalCode.length !== 10) {
-      setFormError("کد ملی باید ۱۰ رقم باشد.");
+      setFormError("کد ملی باید ۱۰ رقم باشد");
       return;
     }
 
@@ -77,7 +77,7 @@ export function InviteForm() {
     <form className="mt-4 flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
       <FormSection icon={IdCard} title="کد ملی هنرجو">
         <p className="-mt-2 text-start text-[12px] font-medium leading-5 text-ink-muted">
-          کد ملی ۱۰ رقمی هنرجو را وارد کنید؛ دعوت نامه برای پروفایل موجود او در سامانه ارسال می شود.
+          کد ملی ۱۰ رقمی هنرجو را وارد کنید؛ دعوت نامه برای پروفایل موجود او در سامانه ارسال می شود
         </p>
 
         <AuthField label="کد ملی" htmlFor="inviteNationalCode" required>
@@ -118,7 +118,7 @@ export function InviteForm() {
               <Skeleton className="h-10 rounded-xl" />
             </div>
           ) : recentInvitations.length === 0 ? (
-            <p className="p-4 text-center text-[12px] font-semibold text-ink-muted">هنوز دعوت نامه ای ارسال نکرده اید.</p>
+            <p className="p-4 text-center text-[12px] font-semibold text-ink-muted">هنوز دعوت نامه ای ارسال نکرده اید</p>
           ) : (
             recentInvitations.map((invitation, index) => {
               const meta = INVITATION_STATUS_META[invitation.status];

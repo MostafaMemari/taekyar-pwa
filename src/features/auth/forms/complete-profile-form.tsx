@@ -120,7 +120,7 @@ export function CompleteProfileForm() {
               <AuthField
                 label="کد ملی"
                 htmlFor="nationalCode"
-                hint="اگر مربی شما پیش تر پروفایلی برای شما ساخته است، همان کد ملی را وارد کنید تا پروفایل به حساب شما متصل شود."
+                hint="اگر مربی شما پیش تر پروفایلی برای شما ساخته است، همان کد ملی را وارد کنید تا پروفایل به حساب شما متصل شود"
                 error={errors.nationalCode?.message}
               >
                 <Controller

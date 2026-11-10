@@ -94,7 +94,7 @@ export function SessionDetailActions({
 
       <SheetFrame open={deleteOpen} onOpenChange={setDeleteOpen} title="حذف کلاس" description="تایید حذف کلاس">
         <p className="rounded-xl bg-danger-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
-          با حذف {session.name}، سابقه حضور و غیاب آن هم از دست می رود. این کار قابل بازگشت نیست.
+          با حذف {session.name}، سابقه حضور و غیاب آن هم از دست می رود. این کار قابل بازگشت نیست
         </p>
 
         {deleteError ? <p className="pt-2 text-[12px] font-bold leading-5 text-danger">{deleteError}</p> : null}
@@ -123,8 +123,8 @@ export function SessionDetailActions({
       >
         <p className="rounded-xl bg-danger-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
           {isActive
-            ? `با غیرفعال کردن ${session.name}، این کلاس از فهرست کلاس های فعال خارج می شود. این کار قابل بازگشت است.`
-            : `با فعال کردن ${session.name}، دوباره می توانید این کلاس را مدیریت کنید.`}
+            ? `با غیرفعال کردن ${session.name}، این کلاس از فهرست کلاس های فعال خارج می شود. این کار قابل بازگشت است`
+            : `با فعال کردن ${session.name}، دوباره می توانید این کلاس را مدیریت کنید`}
         </p>
 
         {error ? <p className="pt-2 text-[12px] font-bold leading-5 text-danger">{error}</p> : null}

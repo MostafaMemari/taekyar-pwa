@@ -53,7 +53,7 @@ export function SessionScheduleFields({ control, weekDaysError, startTimeError, 
         />
         {weekDaysError ? <FieldError className="text-start text-[12px] font-semibold">{weekDaysError}</FieldError> : null}
         <FieldDescription className="text-start text-[12px] font-medium leading-5 text-ink-muted">
-          حداقل یک روز برگزاری را انتخاب کنید. ساعت پایان باید بعد از ساعت شروع باشد.
+          حداقل یک روز برگزاری را انتخاب کنید. ساعت پایان باید بعد از ساعت شروع باشد
         </FieldDescription>
       </Field>
 
@@ -82,7 +82,7 @@ export function SessionScheduleFields({ control, weekDaysError, startTimeError, 
       <Alert className="rounded-xl border-none bg-info-soft/60 p-3 text-start">
         <Info className="text-info" aria-hidden="true" />
         <AlertDescription className="text-[12px] leading-5 text-ink-muted">
-          بازه زمانی باید معتبر باشد (شروع قبل از پایان). برای هر کلاس سقف ظرفیت تعیین نمی شود و هنرجویان بعد از ساخت کلاس اضافه می شوند.
+          بازه زمانی باید معتبر باشد (شروع قبل از پایان). برای هر کلاس سقف ظرفیت تعیین نمی شود و هنرجویان بعد از ساخت کلاس اضافه می شوند
         </AlertDescription>
       </Alert>
     </FormSection>

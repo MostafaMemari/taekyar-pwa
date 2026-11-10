@@ -81,7 +81,7 @@ export function TimePicker({ id, title, value, onChange, defaultValue }: TimePic
           <SheetHeader className="gap-1 p-0 text-center">
             <SheetTitle className="text-base font-extrabold text-ink">انتخاب {title}</SheetTitle>
             <SheetDescription className="text-[12px] font-medium leading-5 text-ink-subtle">
-              ساعت را به صورت ۲۴ ساعته و با کشیدن ستون ها انتخاب کنید.
+              ساعت را به صورت ۲۴ ساعته و با کشیدن ستون ها انتخاب کنید
             </SheetDescription>
           </SheetHeader>
 

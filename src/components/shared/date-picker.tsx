@@ -127,7 +127,7 @@ export function DatePicker({ id, title, value, onChange, defaultValue, fromYear 
           <SheetHeader className="gap-1 p-0 text-center">
             <SheetTitle className="text-base font-extrabold text-ink">انتخاب {title}</SheetTitle>
             <SheetDescription className="text-[12px] font-medium leading-5 text-ink-subtle">
-              روز، ماه و سال را بالا یا پایین بکشید.
+              روز، ماه و سال را بالا یا پایین بکشید
             </SheetDescription>
           </SheetHeader>
 

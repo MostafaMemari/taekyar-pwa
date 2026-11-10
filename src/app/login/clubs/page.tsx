@@ -8,7 +8,7 @@ export default function CoachClubLoginPage() {
   return (
     <AuthScreen subtitle="ورود مربی" backHref="/verify">
       <AuthPageTitle>انتخاب باشگاه</AuthPageTitle>
-      <AuthPageLead>انتخاب باشگاه پس از تایید شماره موبایل در گام بعدی این پروژه ساخته می شود.</AuthPageLead>
+      <AuthPageLead>انتخاب باشگاه پس از تایید شماره موبایل در گام بعدی این پروژه ساخته می شود</AuthPageLead>
     </AuthScreen>
   );
 }

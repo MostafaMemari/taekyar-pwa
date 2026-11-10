@@ -106,7 +106,7 @@ export function SessionReport({
           <Alert className="rounded-xl border-none bg-info-soft/60 p-3 text-start">
             <Info className="text-info" aria-hidden="true" />
             <AlertDescription className="text-[12px] leading-5 text-ink-muted">
-              برای این تاریخ هنوز حضور و غیابی ثبت نشده است.
+              برای این تاریخ هنوز حضور و غیابی ثبت نشده است
             </AlertDescription>
             <Button
               variant="brand"

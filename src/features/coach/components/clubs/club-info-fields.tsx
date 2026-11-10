@@ -71,7 +71,7 @@ export function ClubInfoFields({ control, gender, nameError, addressError }: Fie
         <Info className="text-info" aria-hidden="true" />
         <AlertDescription className="text-[12px] leading-5 text-ink-muted">
           جنسیت باشگاه از پروفایل مربی گرفته می شود{gender ? ` و روی «${GENDER_META[gender].clubLabel}» ثابت است` : ""}؛ فقط هنرجویان هم جنس
-          قابل افزودن هستند.
+          قابل افزودن هستند
         </AlertDescription>
       </Alert>
     </FormSection>

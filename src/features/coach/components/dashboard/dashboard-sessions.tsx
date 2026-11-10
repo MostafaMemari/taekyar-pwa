@@ -58,7 +58,7 @@ export function DashboardSessions() {
             onRetry={() => void mutate()}
           />
         ) : today.length === 0 ? (
-          <p className="px-4 py-6 text-center text-[12px] font-medium text-ink-subtle">امروز کلاسی ثبت نشده است.</p>
+          <p className="px-4 py-6 text-center text-[12px] font-medium text-ink-subtle">امروز کلاسی ثبت نشده است</p>
         ) : (
           <ul>
             {today.map((session, index) => {

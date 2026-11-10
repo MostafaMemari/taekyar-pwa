@@ -48,7 +48,7 @@ export function DashboardAttendance() {
         {isLoading && !data ? (
           <Skeleton className="h-44 w-full" />
         ) : !hasRecords ? (
-          <p className="py-4 text-center text-[12px] font-medium text-ink-subtle">در دو هفته اخیر حضور و غیابی ثبت نشده است.</p>
+          <p className="py-4 text-center text-[12px] font-medium text-ink-subtle">در دو هفته اخیر حضور و غیابی ثبت نشده است</p>
         ) : (
           <>
             <div className="flex items-center gap-4">

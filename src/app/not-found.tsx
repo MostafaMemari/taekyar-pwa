@@ -6,7 +6,7 @@ export default function NotFound() {
       <NotFoundScreen
         className="w-full"
         title="صفحه پیدا نشد"
-        description="آدرسی که باز کرده اید در تک یار وجود ندارد. ممکن است نشانی عوض شده یا پیوند ناقص باشد."
+        description="آدرسی که باز کرده اید در تک یار وجود ندارد. ممکن است نشانی عوض شده یا پیوند ناقص باشد"
         backHref="/"
         backLabel="بازگشت به خانه"
       />

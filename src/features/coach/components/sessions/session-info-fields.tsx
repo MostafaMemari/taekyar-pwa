@@ -62,8 +62,8 @@ export function SessionInfoFields({ control, clubLocked, nameError, clubIdError 
 
       <p className="text-start text-[12px] font-medium leading-5 text-ink-muted">
         {clubLocked
-          ? "باشگاه کلاس پس از ساخت تغییر نمی کند؛ برای جابه جایی کلاس، یک کلاس در باشگاه دیگر بسازید."
-          : "کلاس به باشگاه انتخاب شده متصل می شود؛ افزودن هنرجو پس از ساخت کلاس انجام می شود."}
+          ? "باشگاه کلاس پس از ساخت تغییر نمی کند؛ برای جابه جایی کلاس، یک کلاس در باشگاه دیگر بسازید"
+          : "کلاس به باشگاه انتخاب شده متصل می شود؛ افزودن هنرجو پس از ساخت کلاس انجام می شود"}
       </p>
     </FormSection>
   );

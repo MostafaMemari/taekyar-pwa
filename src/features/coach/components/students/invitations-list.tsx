@@ -48,7 +48,7 @@ export function InvitationsList() {
         </div>
       ) : invitations.length === 0 ? (
         <Card className="rounded-2xl px-4 py-6 text-center text-[12px] font-semibold text-ink-muted">
-          هنوز دعوت نامه ای ارسال نکرده اید.
+          هنوز دعوت نامه ای ارسال نکرده اید
         </Card>
       ) : (
         <div className="flex flex-col gap-2.5">
@@ -96,7 +96,7 @@ export function InvitationsList() {
       </Button>
 
       <p className="text-center text-[12px] font-medium leading-5 text-ink-subtle">
-        برای دعوت مجدد هنرجویی که دعوت نامه اش رد شده، همان کد ملی را دوباره ثبت کنید.
+        برای دعوت مجدد هنرجویی که دعوت نامه اش رد شده، همان کد ملی را دوباره ثبت کنید
       </p>
     </div>
   );

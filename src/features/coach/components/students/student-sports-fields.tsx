@@ -36,7 +36,7 @@ export function StudentSportsFields({ control, errors, mode }: FieldsProps) {
                 groups={STUDENT_BELT_GROUPS}
                 onChange={(value) => field.onChange(value ?? "")}
                 error={errors.belt?.message}
-                hint="کمربند و تاریخ دریافت آن فقط هنگام ثبت اولیه تعیین می شود."
+                hint="کمربند و تاریخ دریافت آن فقط هنگام ثبت اولیه تعیین می شود"
               />
             )}
           />
@@ -125,7 +125,7 @@ export function StudentSportsFields({ control, errors, mode }: FieldsProps) {
 
           <p className="text-start text-[12px] font-medium leading-5 text-ink-muted">
             برای تغییر کمربند از دکمه «اختصاص کمربند» در تب اطلاعات پرونده استفاده کنید. قد و وزن جدید را با «ثبت اندازه گیری» در مشخصات
-            هنرجو ثبت کنید.
+            هنرجو ثبت کنید
           </p>
         </>
       )}

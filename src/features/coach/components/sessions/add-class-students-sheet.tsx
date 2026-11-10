@@ -87,7 +87,7 @@ export function AddClassStudentsSheet({
       open={open}
       onOpenChange={(next) => (next ? onOpenChange(true) : close())}
       title="افزودن هنرجو به کلاس"
-      description="هنرجویان ثبت شده را انتخاب کنید تا هم عضو باشگاه و هم عضو این کلاس شوند."
+      description="هنرجویان ثبت شده را انتخاب کنید تا هم عضو باشگاه و هم عضو این کلاس شوند"
     >
       <div className="mt-3 flex flex-col gap-3">
         {students.length > 0 || term ? (
@@ -115,12 +115,12 @@ export function AddClassStudentsSheet({
           ) : students.length === 0 ? (
             <p className="rounded-xl bg-muted/60 p-4 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
               {term
-                ? "هنرجویی با این نام پیدا نشد."
-                : "هنوز هنرجویی ثبت نشده است. ابتدا در بخش هنرجویان یک پرونده بسازید، بعد او را به این کلاس اضافه کنید."}
+                ? "هنرجویی با این نام پیدا نشد"
+                : "هنوز هنرجویی ثبت نشده است. ابتدا در بخش هنرجویان یک پرونده بسازید، بعد او را به این کلاس اضافه کنید"}
             </p>
           ) : visible.length === 0 ? (
             <p className="rounded-xl bg-muted/60 p-4 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
-              هنرجوی دیگری برای افزودن نمانده است.
+              هنرجوی دیگری برای افزودن نمانده است
             </p>
           ) : (
             <div className="flex flex-col gap-2">

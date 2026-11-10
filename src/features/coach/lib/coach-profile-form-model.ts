@@ -4,10 +4,10 @@ import { toLatinDigits } from "@/lib/digits";
 import { toGregorianDate, toJalaliDate } from "@/lib/jalali";
 
 export const coachProfileFormSchema = z.object({
-  fullName: z.string().trim().min(2, "نام و نام خانوادگی را کامل وارد کنید.").max(80, "نام و نام خانوادگی بیش از حد طولانی است."),
-  nationalCode: z.string().regex(/^\d{10}$/, "کد ملی باید ۱۰ رقم باشد."),
-  province: z.string().min(1, "استان را انتخاب کنید."),
-  birthDate: z.string().regex(/^$|^\d{4}\/\d{1,2}\/\d{1,2}$/, "تاریخ تولد معتبر نیست."),
+  fullName: z.string().trim().min(2, "نام و نام خانوادگی را کامل وارد کنید").max(80, "نام و نام خانوادگی بیش از حد طولانی است"),
+  nationalCode: z.string().regex(/^\d{10}$/, "کد ملی باید ۱۰ رقم باشد"),
+  province: z.string().min(1, "استان را انتخاب کنید"),
+  birthDate: z.string().regex(/^$|^\d{4}\/\d{1,2}\/\d{1,2}$/, "تاریخ تولد معتبر نیست"),
   belt: z.string(),
 });
 

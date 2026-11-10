@@ -63,7 +63,7 @@ export function LoginForm() {
       }
     >
       <AuthPageTitle>ورود به حساب</AuthPageTitle>
-      <AuthPageLead>شماره موبایل خود را وارد کنید تا کد تایید برای شما ارسال شود.</AuthPageLead>
+      <AuthPageLead>شماره موبایل خود را وارد کنید تا کد تایید برای شما ارسال شود</AuthPageLead>
 
       <form className="mt-7 flex flex-1 flex-col" onSubmit={submit} noValidate>
         <AuthField label="شماره موبایل" htmlFor="mobile" hint={`مثال: ${toPersianDigits("09121234567")}`}>

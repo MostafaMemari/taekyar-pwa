@@ -36,7 +36,7 @@ export function StudentDetail({ studentId }: { studentId: string }) {
           <NotFoundScreen
             className="mt-4"
             title="این هنرجو پیدا نشد"
-            description="پرونده ای با این نشانی در فهرست هنرجویان شما نیست. ممکن است حذف شده باشد یا متعلق به مربی دیگری باشد."
+            description="پرونده ای با این نشانی در فهرست هنرجویان شما نیست. ممکن است حذف شده باشد یا متعلق به مربی دیگری باشد"
             backHref="/coach/students"
             backLabel="بازگشت به هنرجویان"
           />

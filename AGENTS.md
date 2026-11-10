@@ -95,6 +95,7 @@ npx next typegen                 # generate route types without a full build
 - Prefer logical utilities — `ms-*`/`me-*`, `ps-*`/`pe-*`, `start-*`/`end-*`, `text-start`/`text-end` — over physical `left`/`right` equivalents, and logical CSS (`margin-inline`, `padding-inline`) in hand-written CSS.
 - Use the existing typography and font stack; don't introduce a second one.
 - Copy uses regular spaces, never ZWNJ (U+200C): write «سانتی متر», «ثبت نام», «می شود». The user reads ZWNJ-laden copy as machine-written, so don't reintroduce it in UI strings.
+- Descriptions, hints, and one-line copy never end with a period (نقطه پایانی نذار): «برگزاری ۱۴۰۵/۹/۲۲» — not «برگزاری ۱۴۰۵/۹/۲۲.». Join short clauses with « · » instead of sentences. Mid-paragraph periods inside longer multi-sentence copy are fine.
 - Numeric values follow one pattern everywhere: the model stores Latin digits, the UI displays Persian digits.
   - Sanitize with `digitsOnly(value, maxLength)` from `src/lib/digits.ts` — it converts Persian `۰-۹` and Arabic `٠-٩` to Latin before stripping non-digits. Use `decimalOnly(value, maxWhole, maxFraction)` for typed values with a decimal point.
   - Display with `toPersianDigits(...)`. Dates are chosen with the shared `DatePicker`; state keeps Latin `YYYY/MM/DD` while the trigger renders Persian digits.

@@ -20,7 +20,7 @@ export function StudentSignupStepOne({ form, onNext }: StudentSignupStepOneProps
       title="اطلاعات پایه"
       lead={
         <>
-          برای ساخت پروفایل هنرجو، <b className="font-extrabold text-ink-body">همه موارد اجباری</b> است.
+          برای ساخت پروفایل هنرجو، <b className="font-extrabold text-ink-body">همه موارد اجباری</b> است
         </>
       }
     >

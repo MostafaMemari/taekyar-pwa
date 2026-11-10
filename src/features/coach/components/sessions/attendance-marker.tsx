@@ -152,7 +152,7 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
         <Alert className="mt-4 rounded-xl border-none bg-info-soft/60 p-3 text-start">
           <Info className="text-info" aria-hidden="true" />
           <AlertDescription className="text-[12px] leading-5 text-ink-muted">
-            هنوز هنرجویی در این کلاس ثبت نشده است. بعد از افزودن هنرجو می توانید حضور و غیاب را ثبت کنید.
+            هنوز هنرجویی در این کلاس ثبت نشده است. بعد از افزودن هنرجو می توانید حضور و غیاب را ثبت کنید
           </AlertDescription>
         </Alert>
       )}

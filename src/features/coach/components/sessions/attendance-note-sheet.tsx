@@ -55,7 +55,7 @@ export function AttendanceNoteSheet({
           </span>
           <div className="min-w-0 flex-1">
             <b className="block truncate text-[12px] font-semibold text-ink">{studentName}</b>
-            <span className="mt-0.5 block text-[12px] font-semibold text-ink-subtle">دلیل یا توضیح این وضعیت را ثبت کنید.</span>
+            <span className="mt-0.5 block text-[12px] font-semibold text-ink-subtle">دلیل یا توضیح این وضعیت را ثبت کنید</span>
           </div>
         </div>
 

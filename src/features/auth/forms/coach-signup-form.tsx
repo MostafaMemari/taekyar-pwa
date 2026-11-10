@@ -86,7 +86,7 @@ export function CoachSignupForm() {
             <AuthPageTitle className="text-[22px] leading-8">مشخصات حرفه ای</AuthPageTitle>
             <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[12px] font-bold text-ink-subtle">اختیاری</span>
           </div>
-          <AuthPageLead>همه اختیاری؛ بعداً از پروفایل تکمیل کنید.</AuthPageLead>
+          <AuthPageLead>همه اختیاری؛ بعداً از پروفایل تکمیل کنید</AuthPageLead>
 
           <form className="mt-4 flex flex-1 flex-col" onSubmit={submit} noValidate>
             <div className="flex flex-col gap-4">
@@ -121,7 +121,7 @@ export function CoachSignupForm() {
                     value={field.value || null}
                     options={COACH_BELTS}
                     onChange={(value) => field.onChange(value ?? "")}
-                    hint="محدوده مجاز کمربند مربی از دان ۳ تا دان ۱۰ است؛ اگر در این محدوده نیستید، این بخش را خالی بگذارید."
+                    hint="محدوده مجاز کمربند مربی از دان ۳ تا دان ۱۰ است؛ اگر در این محدوده نیستید، این بخش را خالی بگذارید"
                   />
                 )}
               />
@@ -157,7 +157,7 @@ export function CoachSignupForm() {
       <div className="mt-6 flex flex-1 flex-col">
         <AuthPageTitle className="text-[22px] leading-8">مشخصات مربی</AuthPageTitle>
         <AuthPageLead>
-          برای ساخت حساب مربی، <b className="font-extrabold text-ink-body">همه موارد اجباری</b> است.
+          برای ساخت حساب مربی، <b className="font-extrabold text-ink-body">همه موارد اجباری</b> است
         </AuthPageLead>
 
         <form
@@ -175,7 +175,7 @@ export function CoachSignupForm() {
             withBirthDate={false}
             sampleName="محمدرضا یاری"
             genderLabel="جنسیت"
-            genderHint="نمایش باشگاه ها و هنرجویان به این بستگی دارد."
+            genderHint="نمایش باشگاه ها و هنرجویان به این بستگی دارد"
           />
 
           <div className="cta-dock cta-row mt-6 gap-3">

@@ -49,7 +49,7 @@ export function StudentClubsPanel({ memberships, isLoading }: { memberships: Clu
         </div>
       ) : (
         <p className="rounded-xl bg-muted/60 p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
-          این هنرجو هنوز در باشگاهی ثبت نشده است.
+          این هنرجو هنوز در باشگاهی ثبت نشده است
         </p>
       )}
 

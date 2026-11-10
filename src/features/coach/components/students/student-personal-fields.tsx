@@ -96,7 +96,7 @@ export function StudentPersonalFields({ control, errors, locked = false }: Field
             label="کد ملی"
             htmlFor="nationalCode"
             required
-            hint="کد ملی باید در سامانه یکتا باشد."
+            hint="کد ملی باید در سامانه یکتا باشد"
             error={errors.nationalCode?.message}
           >
             <Controller
@@ -132,7 +132,7 @@ export function StudentPersonalFields({ control, errors, locked = false }: Field
                 onChange={field.onChange}
                 required
                 error={errors.gender?.message}
-                hint="جنسیت هنرجو باید با جنسیت شما یکسان باشد."
+                hint="جنسیت هنرجو باید با جنسیت شما یکسان باشد"
               />
             )}
           />

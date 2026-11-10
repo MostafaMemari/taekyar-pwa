@@ -58,7 +58,7 @@ export function ResendControl({ mobile, fromSignup, onError }: ResendControlProp
 
     const signup = readPendingSignup();
     if (!signup?.mobile) {
-      onError("اطلاعات ثبت نام پیدا نشد. لطفاً دوباره ثبت نام کنید.");
+      onError("اطلاعات ثبت نام پیدا نشد. لطفاً دوباره ثبت نام کنید");
       return;
     }
 

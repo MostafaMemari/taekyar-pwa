@@ -190,7 +190,7 @@ export function SettingsScreen() {
             <StatusBadge tone="brand">فارسی و راست به چپ</StatusBadge>
           </div>
           <p className="text-[12px] leading-6 text-ink-muted">
-            این نسخه برای بررسی جریان های مربی ساخته شده است؛ اطلاعات از حساب شما در سرور خوانده می شود.
+            این نسخه برای بررسی جریان های مربی ساخته شده است؛ اطلاعات از حساب شما در سرور خوانده می شود
           </p>
         </div>
       </SheetFrame>

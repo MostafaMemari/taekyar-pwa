@@ -149,7 +149,7 @@ export function NotificationsScreen() {
           ))}
         </div>
       ) : visible.length === 0 ? (
-        <Card className="mt-4 rounded-2xl px-4 py-6 text-center text-[12px] font-semibold text-ink-muted">اعلانی برای نمایش نیست.</Card>
+        <Card className="mt-4 rounded-2xl px-4 py-6 text-center text-[12px] font-semibold text-ink-muted">اعلانی برای نمایش نیست</Card>
       ) : (
         <div className="mt-4 flex flex-col gap-2.5">
           {visible.map((notification) => (

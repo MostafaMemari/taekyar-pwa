@@ -65,7 +65,7 @@ export function CopyNamesSheet({
   };
 
   return (
-    <SheetFrame open={open} onOpenChange={onOpenChange} title={title} description="تعداد را انتخاب کن و فهرست را کپی کن.">
+    <SheetFrame open={open} onOpenChange={onOpenChange} title={title} description="تعداد را انتخاب کن و فهرست را کپی کن">
       <div className="flex flex-wrap gap-1.5">
         {COUNT_OPTIONS.map((option) => (
           <Button
@@ -94,7 +94,7 @@ export function CopyNamesSheet({
 
       {students.error ? (
         <p className="text-[12px] font-bold leading-5 text-danger">
-          {students.error instanceof Error ? students.error.message : "خواندن فهرست انجام نشد."}
+          {students.error instanceof Error ? students.error.message : "خواندن فهرست انجام نشد"}
         </p>
       ) : students.isLoading && !students.data ? (
         <div className="flex flex-col gap-1.5 rounded-xl bg-muted/60 p-3">
@@ -108,7 +108,7 @@ export function CopyNamesSheet({
         </pre>
       )}
 
-      {copyError ? <p className="text-[12px] font-bold leading-5 text-danger">کپی انجام نشد. دسترسی کلیپ‌بورد را بررسی کن.</p> : null}
+      {copyError ? <p className="text-[12px] font-bold leading-5 text-danger">کپی انجام نشد. دسترسی کلیپ‌بورد را بررسی کن</p> : null}
 
       <Button
         type="button"

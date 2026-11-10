@@ -136,7 +136,7 @@ export function AppearanceScreen() {
         <div className="min-w-0 flex-1">
           <b className="block text-[13px] font-extrabold text-accent-ink">ذخیره سازی محلی</b>
           <p className="mt-1 text-[12px] leading-5 text-ink-body">
-            انتخاب شما روی همین دستگاه نگه داشته می شود و در همه صفحه ها اعمال می شود.
+            انتخاب شما روی همین دستگاه نگه داشته می شود و در همه صفحه ها اعمال می شود
           </p>
         </div>
       </div>

@@ -60,7 +60,7 @@ export function StudentEnrollmentFields({ control, errors, mode, photo }: Fields
           label="تاریخ انقضای عکس پرونده"
           htmlFor="expireImageDate"
           optional
-          hint="یادآوری تمدید عکس، ۷ روز قبل از انقضا برای شما ارسال می شود."
+          hint="یادآوری تمدید عکس، ۷ روز قبل از انقضا برای شما ارسال می شود"
         >
           <Controller
             control={control}

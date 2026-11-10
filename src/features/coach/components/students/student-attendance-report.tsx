@@ -160,7 +160,7 @@ export function StudentAttendanceReport({ studentId }: { studentId: string }) {
                 <CalendarCheck2 aria-hidden="true" />
               </EmptyMedia>
               <EmptyTitle className="text-[13px] font-extrabold text-ink">رکوردی با این وضعیت یافت نشد</EmptyTitle>
-              <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">وضعیت دیگری را انتخاب کنید.</EmptyDescription>
+              <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">وضعیت دیگری را انتخاب کنید</EmptyDescription>
             </EmptyHeader>
           </Empty>
         )}

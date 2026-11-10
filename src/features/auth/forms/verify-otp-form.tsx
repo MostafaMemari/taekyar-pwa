@@ -61,10 +61,10 @@ export function VerifyOtpForm() {
             <b dir="ltr" className="inline-block font-extrabold text-ink">
               {formatMobileForDisplay(mobile)}
             </b>{" "}
-            را وارد کنید.
+            را وارد کنید
           </>
         ) : (
-          "کد ۵ رقمی ارسال شده به شماره موبایل خود را وارد کنید."
+          "کد ۵ رقمی ارسال شده به شماره موبایل خود را وارد کنید"
         )}
       </AuthPageLead>
 

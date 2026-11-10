@@ -45,7 +45,7 @@ export function DashboardExams() {
             <Skeleton className="h-12 w-full" />
           </div>
         ) : exams.length === 0 ? (
-          <p className="px-4 py-6 text-center text-[12px] font-medium text-ink-subtle">آزمون کمربندی پیش رو ثبت نشده است.</p>
+          <p className="px-4 py-6 text-center text-[12px] font-medium text-ink-subtle">آزمون کمربندی پیش رو ثبت نشده است</p>
         ) : (
           <ul>
             {exams.map((exam, index) => {

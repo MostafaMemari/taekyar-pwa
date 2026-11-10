@@ -180,7 +180,7 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
             />
           ) : (
             <p className="rounded-xl bg-muted/60 p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
-              هنوز هنرجویی در این کلاس ثبت نشده است.
+              هنوز هنرجویی در این کلاس ثبت نشده است
             </p>
           )}
         </section>
@@ -206,7 +206,7 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
         description="تایید حذف هنرجو از کلاس"
       >
         <p className="rounded-xl bg-danger-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
-          {removeTarget ? removeTarget.name : ""} از فهرست هنرجویان این کلاس حذف می شود. عضویت باشگاه او باقی می ماند.
+          {removeTarget ? removeTarget.name : ""} از فهرست هنرجویان این کلاس حذف می شود. عضویت باشگاه او باقی می ماند
         </p>
 
         {removeStudent.error ? (

@@ -10,7 +10,7 @@ export default function StudentHomePage() {
     <RequireSession forRole="STUDENT">
       <AuthScreen subtitle="خانه هنرجو" backHref="/">
         <AuthPageTitle>خانه هنرجو</AuthPageTitle>
-        <AuthPageLead>صفحه اصلی هنرجو در گام بعدی این پروژه ساخته می شود.</AuthPageLead>
+        <AuthPageLead>صفحه اصلی هنرجو در گام بعدی این پروژه ساخته می شود</AuthPageLead>
       </AuthScreen>
     </RequireSession>
   );

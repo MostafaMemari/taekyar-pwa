@@ -45,7 +45,7 @@ export function SignupMobileForm() {
 
     const signup = readPendingSignup();
     if (!signup || signup.kind !== role) {
-      setError("اطلاعات ثبت نام پیدا نشد. لطفاً فرم ثبت نام را دوباره تکمیل کنید.");
+      setError("اطلاعات ثبت نام پیدا نشد. لطفاً فرم ثبت نام را دوباره تکمیل کنید");
       return;
     }
 
@@ -80,7 +80,7 @@ export function SignupMobileForm() {
       }
     >
       <AuthPageTitle>شماره موبایل را وارد کنید</AuthPageTitle>
-      <AuthPageLead>کد تایید به این شماره ارسال می شود؛ در گام بعد آن را وارد می کنید.</AuthPageLead>
+      <AuthPageLead>کد تایید به این شماره ارسال می شود؛ در گام بعد آن را وارد می کنید</AuthPageLead>
 
       <form className="mt-7 flex flex-1 flex-col" onSubmit={submit} noValidate>
         <AuthField label="شماره موبایل" htmlFor="mobile" required hint={`مثال: ${toPersianDigits("09121234567")}`}>

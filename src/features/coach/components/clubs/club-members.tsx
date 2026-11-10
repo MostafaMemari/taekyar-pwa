@@ -65,7 +65,7 @@ export function ClubMembers({ clubId }: { clubId: string }) {
         </div>
       ) : members.length === 0 ? (
         <p className="rounded-xl bg-muted/60 p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
-          هنوز هنرجویی به این باشگاه اضافه نشده است.
+          هنوز هنرجویی به این باشگاه اضافه نشده است
         </p>
       ) : (
         <Card className="gap-0 px-4 py-1">
@@ -119,8 +119,8 @@ export function ClubMembers({ clubId }: { clubId: string }) {
       >
         <p className="rounded-xl bg-muted/60 p-3 text-[12px] leading-5 text-ink-muted">
           {target?.isActive
-            ? `با غیرفعال کردن عضویت، ${target ? target.student.fullName : ""} در فهرست هنرجویان فعال باشگاه نمی آید. این کار قابل بازگشت است.`
-            : `با فعال کردن عضویت، ${target ? target.student.fullName : ""} دوباره در فهرست هنرجویان باشگاه قرار می گیرد.`}
+            ? `با غیرفعال کردن عضویت، ${target ? target.student.fullName : ""} در فهرست هنرجویان فعال باشگاه نمی آید. این کار قابل بازگشت است`
+            : `با فعال کردن عضویت، ${target ? target.student.fullName : ""} دوباره در فهرست هنرجویان باشگاه قرار می گیرد`}
         </p>
 
         {changeStatus.error ? (

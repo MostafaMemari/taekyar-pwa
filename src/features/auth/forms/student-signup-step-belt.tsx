@@ -19,7 +19,7 @@ export function StudentSignupStepBelt({ form, onBack, onNext }: StudentSignupSte
   const errors = form.formState.errors;
 
   return (
-    <StudentSignupStep current={1} title="کمربند فعلی" lead="کمربند فعلی و تاریخ دریافت آن را انتخاب کنید.">
+    <StudentSignupStep current={1} title="کمربند فعلی" lead="کمربند فعلی و تاریخ دریافت آن را انتخاب کنید">
       <form
         className="mt-4 flex flex-1 flex-col"
         onSubmit={(event) => {

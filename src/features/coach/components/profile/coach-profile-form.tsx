@@ -159,7 +159,7 @@ export function CoachProfileForm() {
                   options={GENDER_OPTIONS}
                   onChange={() => undefined}
                   disabled
-                  hint={profile ? `${GENDER_META[profile.gender].label}؛ جنسیت پروفایل مربی قابل تغییر نیست.` : undefined}
+                  hint={profile ? `${GENDER_META[profile.gender].label}؛ جنسیت پروفایل مربی قابل تغییر نیست` : undefined}
                 />
 
                 <AuthField label="استان" htmlFor="province" required error={errors.province?.message}>
@@ -209,7 +209,7 @@ export function CoachProfileForm() {
                       value={field.value || null}
                       options={COACH_BELTS}
                       onChange={(value) => field.onChange(value ?? "")}
-                      hint="محدوده مجاز کمربند مربی از دان ۳ تا دان ۱۰ است."
+                      hint="محدوده مجاز کمربند مربی از دان ۳ تا دان ۱۰ است"
                     />
                   )}
                 />

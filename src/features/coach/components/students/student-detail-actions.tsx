@@ -77,7 +77,7 @@ export function StudentDetailActions({
           <div className="min-w-0 flex-1">
             <b className="block text-[13px] font-extrabold text-destructive">حذف پروفایل</b>
             <p className="mt-1 text-[12px] leading-5 text-ink-muted">
-              با حذف پروفایل، تمام سابقه حضور و غیاب و کمربند این هنرجو نیز حذف می شود.
+              با حذف پروفایل، تمام سابقه حضور و غیاب و کمربند این هنرجو نیز حذف می شود
             </p>
             <Button variant="destructive" size="sm" className="mt-3 rounded-lg text-[12px] font-semibold" onClick={openDelete}>
               حذف پروفایل
@@ -104,7 +104,7 @@ export function StudentDetailActions({
 
       <SheetFrame open={deleteOpen} onOpenChange={setDeleteOpen} title="حذف پروفایل" description="تایید حذف پروفایل هنرجو">
         <p className="rounded-xl bg-danger-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
-          با حذف پروفایل {fullName}، تمام سابقه حضور و غیاب و کمربند او نیز حذف می شود. این کار قابل بازگشت نیست.
+          با حذف پروفایل {fullName}، تمام سابقه حضور و غیاب و کمربند او نیز حذف می شود. این کار قابل بازگشت نیست
         </p>
         <AuthFormError message={remove.error ? apiErrorMessage(remove.error) : ""} />
         <div className="flex gap-2 pt-1">

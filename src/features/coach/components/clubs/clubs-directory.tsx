@@ -79,7 +79,7 @@ export function ClubsDirectory() {
                 </EmptyMedia>
                 <EmptyTitle className="text-[13px] font-extrabold text-ink">هنوز باشگاهی ثبت نشده</EmptyTitle>
                 <EmptyDescription className="text-[11px] leading-5 text-ink-subtle">
-                  اولین باشگاه خود را بسازید تا کلاس بندی و حضور و غیاب شروع شود.
+                  اولین باشگاه خود را بسازید تا کلاس بندی و حضور و غیاب شروع شود
                 </EmptyDescription>
               </EmptyHeader>
             </Empty>
@@ -115,7 +115,7 @@ export function ClubsDirectory() {
           <AlertTitle className="text-[12px] font-extrabold text-accent-ink">اینجا چطور کار می کند؟</AlertTitle>
           <AlertDescription className="text-[11px] leading-5 text-ink-muted">
             اول باشگاه را انتخاب و وارد می شوید؛ حضور و غیاب، کلاس بندی و هنرجویان همان باشگاه را می بینید. با «تغییر باشگاه» هر لحظه می
-            توانید فضای کاری را عوض کنید.
+            توانید فضای کاری را عوض کنید
           </AlertDescription>
         </Alert>
       </CoachSheet>

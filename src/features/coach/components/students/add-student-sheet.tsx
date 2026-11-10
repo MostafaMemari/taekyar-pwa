@@ -27,7 +27,7 @@ export function AddStudentSheet({ open, onOpenChange }: { open: boolean; onOpenC
   const router = useRouter();
 
   return (
-    <SheetFrame open={open} onOpenChange={onOpenChange} title="افزودن هنرجو" description="روش افزودن هنرجوی جدید را انتخاب کنید.">
+    <SheetFrame open={open} onOpenChange={onOpenChange} title="افزودن هنرجو" description="روش افزودن هنرجوی جدید را انتخاب کنید">
       <div className="flex flex-col gap-2">
         {ADD_OPTIONS.map((option) => (
           <Button

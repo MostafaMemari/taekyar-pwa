@@ -74,8 +74,8 @@ export function ClubDetailActions({
       >
         <p className="rounded-xl bg-danger-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
           {isActive
-            ? `با غیرفعال کردن ${club.name}، کلاس ها و حضور و غیاب این باشگاه از دسترس خارج می شود. این کار قابل بازگشت است.`
-            : `با فعال کردن ${club.name}، دوباره می توانید کلاس و حضور و غیاب آن را مدیریت کنید.`}
+            ? `با غیرفعال کردن ${club.name}، کلاس ها و حضور و غیاب این باشگاه از دسترس خارج می شود. این کار قابل بازگشت است`
+            : `با فعال کردن ${club.name}، دوباره می توانید کلاس و حضور و غیاب آن را مدیریت کنید`}
         </p>
 
         {error ? <p className="pt-2 text-[12px] font-bold leading-5 text-danger">{error}</p> : null}

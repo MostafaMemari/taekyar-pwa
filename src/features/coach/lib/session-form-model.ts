@@ -5,17 +5,17 @@ const TIME_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
 
 export const sessionFormSchema = z
   .object({
-    name: z.string().trim().min(2, "نام کلاس باید حداقل ۲ حرف باشد.").max(80, "نام کلاس بیش از حد طولانی است."),
-    clubId: z.string().min(1, "باشگاه کلاس را انتخاب کنید."),
+    name: z.string().trim().min(2, "نام کلاس باید حداقل ۲ حرف باشد").max(80, "نام کلاس بیش از حد طولانی است"),
+    clubId: z.string().min(1, "باشگاه کلاس را انتخاب کنید"),
     weekDays: z
       .array(z.enum(["SATURDAY", "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"]))
-      .min(1, "حداقل یک روز برگزاری را انتخاب کنید."),
-    startTime: z.string().regex(TIME_PATTERN, "ساعت شروع را انتخاب کنید."),
-    endTime: z.string().regex(TIME_PATTERN, "ساعت پایان را انتخاب کنید."),
+      .min(1, "حداقل یک روز برگزاری را انتخاب کنید"),
+    startTime: z.string().regex(TIME_PATTERN, "ساعت شروع را انتخاب کنید"),
+    endTime: z.string().regex(TIME_PATTERN, "ساعت پایان را انتخاب کنید"),
   })
   .refine((values) => values.startTime < values.endTime, {
     path: ["endTime"],
-    message: "ساعت پایان باید بعد از ساعت شروع باشد.",
+    message: "ساعت پایان باید بعد از ساعت شروع باشد",
   });
 
 export type SessionFormValues = z.infer<typeof sessionFormSchema>;

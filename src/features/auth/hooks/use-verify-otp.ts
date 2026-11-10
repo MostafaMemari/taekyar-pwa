@@ -8,7 +8,7 @@ import { saveSession } from "@/features/auth/session";
 import { clearDataCache } from "@/lib/api/cache";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 
-export const MISSING_MOBILE_MESSAGE = "شماره موبایل مشخص نیست. به صفحه ورود برگردید.";
+export const MISSING_MOBILE_MESSAGE = "شماره موبایل مشخص نیست. به صفحه ورود برگردید";
 
 export type VerifyOtpOutcome = "success" | "rejected" | "failed";
 
