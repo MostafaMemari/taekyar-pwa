@@ -136,7 +136,7 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
               </Button>
             </div>
           </div>
-          <DatePicker title="تاریخ جلسه" value={date} onChange={setDate} />
+          <DatePicker title="تاریخ جلسه" value={date} onChange={setDate} to={todayJalali()} />
         </div>
       </Card>
 

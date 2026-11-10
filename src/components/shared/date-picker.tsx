@@ -21,6 +21,8 @@ type DatePickerProps = {
   defaultValue?: string;
   fromYear?: number;
   toYear?: number;
+  /** Latin or Persian YYYY/MM/DD — the latest selectable date, e.g. today for attendance. */
+  to?: string;
 };
 
 function parseJalali(value: string): DateParts | null {
@@ -65,25 +67,42 @@ function clampDate(parts: DateParts, fromYear: number, toYear: number): DatePart
   return { year, month, day: Math.min(jalaaliMonthLength(year, month), Math.max(1, parts.day)) };
 }
 
-export function DatePicker({ id, title, value, onChange, defaultValue, fromYear = 1350, toYear = 1406 }: DatePickerProps) {
+export function DatePicker({ id, title, value, onChange, defaultValue, fromYear = 1350, toYear = 1406, to }: DatePickerProps) {
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<DateParts>({ year: fromYear, month: 1, day: 1 });
 
   const display = parseJalali(value);
+  const limit = parseJalali(to ?? "");
+  const yearMax = limit ? Math.min(toYear, limit.year) : toYear;
   const days = jalaaliMonthLength(draft.year, draft.month);
+  const monthMax = limit && draft.year === limit.year ? limit.month : 12;
+  const dayMax = limit && draft.year === limit.year && draft.month === limit.month ? Math.min(days, limit.day) : days;
+
+  const capDay = (year: number, month: number, day: number) => {
+    const capped = Math.min(day, jalaaliMonthLength(year, month));
+    return limit && year === limit.year && month === limit.month ? Math.min(capped, limit.day) : capped;
+  };
 
   const handleOpen = () => {
     const initial = parseJalali(value) ?? parseJalali(defaultValue ?? "") ?? todayJalali();
-    setDraft(clampDate(initial, fromYear, toYear));
+    const clamped = clampDate(initial, fromYear, yearMax);
+    setDraft({
+      year: clamped.year,
+      month: limit && clamped.year === limit.year ? Math.min(clamped.month, limit.month) : clamped.month,
+      day: capDay(clamped.year, clamped.month, clamped.day),
+    });
     setOpen(true);
   };
 
   const setYear = (year: number) => {
-    setDraft((current) => ({ ...current, year, day: Math.min(current.day, jalaaliMonthLength(year, current.month)) }));
+    setDraft((current) => {
+      const month = limit && year === limit.year ? Math.min(current.month, limit.month) : current.month;
+      return { year, month, day: capDay(year, month, current.day) };
+    });
   };
 
   const setMonth = (month: number) => {
-    setDraft((current) => ({ ...current, month, day: Math.min(current.day, jalaaliMonthLength(current.year, month)) }));
+    setDraft((current) => ({ ...current, month, day: capDay(current.year, month, current.day) }));
   };
 
   const setDay = (day: number) => {
@@ -149,10 +168,10 @@ export function DatePicker({ id, title, value, onChange, defaultValue, fromYear 
                   className="min-w-0"
                   ariaLabel="روز"
                   min={1}
-                  max={days}
+                  max={dayMax}
                   value={draft.day}
                   onChange={setDay}
-                  scrollKey={`${open}-${days}`}
+                  scrollKey={`${open}-${dayMax}`}
                   showBand={false}
                 />
 
@@ -160,11 +179,11 @@ export function DatePicker({ id, title, value, onChange, defaultValue, fromYear 
                   className="min-w-0"
                   ariaLabel="ماه"
                   min={1}
-                  max={12}
+                  max={monthMax}
                   value={draft.month}
                   onChange={setMonth}
                   formatValue={(month) => MONTHS[month - 1]}
-                  scrollKey={open}
+                  scrollKey={`${open}-${monthMax}`}
                   showBand={false}
                 />
 
@@ -172,7 +191,7 @@ export function DatePicker({ id, title, value, onChange, defaultValue, fromYear 
                   className="min-w-0"
                   ariaLabel="سال"
                   min={fromYear}
-                  max={toYear}
+                  max={yearMax}
                   value={draft.year}
                   onChange={setYear}
                   scrollKey={open}
