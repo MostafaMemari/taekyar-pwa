@@ -54,14 +54,13 @@ export function StudentMembershipRenew({ studentId, membershipYear }: { studentI
           )}
         </div>
 
-        {renewed ? <p className="mt-2 text-[12px] font-bold text-success">سال عضویت به سال جاری به روز شد.</p> : null}
+        {renewed ? <p className="mt-2 text-[12px] font-bold text-success">سال عضویت به سال جاری به روز شد</p> : null}
 
         {charge === null || charge.due > 0 ? (
           <Button
             type="button"
             variant="outline"
-            size="sm"
-            className="mt-3 w-full rounded-xl text-[12px] font-bold"
+            className="mt-3 h-11 w-full rounded-xl text-[12px] font-bold"
             onClick={() => {
               setOpen(true);
               setRenewed(false);
@@ -73,7 +72,7 @@ export function StudentMembershipRenew({ studentId, membershipYear }: { studentI
 
         <SheetFrame open={open} onOpenChange={setOpen} title="تمدید سال عضویت" description="تایید تمدید سال عضویت هنرجو">
           <p className="mt-3 rounded-xl bg-info-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
-            سال عضویت به سال جاری ({currentYear}) به روز می شود.
+            سال عضویت به سال جاری ({currentYear}) به روز می شود
           </p>
           <AuthFormError message={renew.error ? apiErrorMessage(renew.error) : ""} />
           <div className="flex gap-2 pt-1">

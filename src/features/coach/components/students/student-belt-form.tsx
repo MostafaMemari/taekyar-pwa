@@ -52,7 +52,7 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
           <NotFoundScreen
             className="mt-4"
             title="این هنرجو پیدا نشد"
-            description="پرونده ای با این نشانی در فهرست هنرجویان شما نیست. ممکن است حذف شده باشد یا متعلق به مربی دیگری باشد."
+            description="پرونده ای با این نشانی در فهرست هنرجویان شما نیست. ممکن است حذف شده باشد یا متعلق به مربی دیگری باشد"
             backHref="/coach/students"
             backLabel="بازگشت به هنرجویان"
           />
@@ -105,7 +105,7 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
     ? belts.data?.find((belt) => belt.name.toUpperCase() === nextKey.toUpperCase().replace("-", "_"))?.id
     : undefined;
 
-  // قرمز به بالا فقط با آزمون فدراسیون ثبت می شود و تاریخ کمربند از تاریخ برگزاری آزمون می آید.
+  // قرمز به بالا فقط با آزمون فدراسیون ثبت می شود و تاریخ کمربند از تاریخ برگزاری آزمون می آید
   const examBeltName =
     nextKey !== null && (nextKey === "red" || nextKey.startsWith("poom") || nextKey.startsWith("dan")) ? beltApiName(nextKey) : null;
   const needsExam = examBeltName !== null;
@@ -288,7 +288,7 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
 
         <FormSection icon={TrendingUp} title="کمربند بعدی" tone="amber">
           <p className="-mt-2 text-start text-[12px] font-medium leading-5 text-ink-muted">
-            کمربند بعدی هنرجو بر اساس کمربند فعلی و رده سنی او تعیین می شود و تنها همین کمربند قابل ثبت است.
+            کمربند بعدی هنرجو بر اساس کمربند فعلی و رده سنی او تعیین می شود و تنها همین کمربند قابل ثبت است
           </p>
 
           {nextKey && nextMeta && nextBeltId ? (
@@ -310,8 +310,8 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
               <Info className="text-info" aria-hidden="true" />
               <AlertDescription className="text-[12px] leading-5 text-ink-muted">
                 {current
-                  ? "این هنرجو در بالاترین کمربند ممکن است و کمربند بعدی برای او تعریف نشده است."
-                  : "برای این هنرجو کمربند فعلی ثبت نشده است، بنابراین کمربند بعدی قابل تعیین نیست."}
+                  ? "این هنرجو در بالاترین کمربند ممکن است و کمربند بعدی برای او تعریف نشده است"
+                  : "برای این هنرجو کمربند فعلی ثبت نشده است، بنابراین کمربند بعدی قابل تعیین نیست"}
               </AlertDescription>
             </Alert>
           )}
@@ -323,7 +323,7 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
               label="آزمون فدراسیون"
               htmlFor="beltExamId"
               required
-              hint="آزمون برگزار شده ای که هنرجو در آن این کمربند را گرفته است."
+              hint="آزمون برگزار شده ای که هنرجو در آن این کمربند را گرفته است"
             >
               {examsLoading ? (
                 <Skeleton className="h-12 w-full rounded-xl" />
@@ -341,21 +341,21 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
                 <Alert className="rounded-xl border-none bg-info-soft/60 p-3 text-start">
                   <Info className="text-info" aria-hidden="true" />
                   <AlertDescription className="text-[12px] leading-5 text-ink-muted">
-                    آزمون دوره {toPersianDigits(String(upcomingExam.examNumber))} برای این کمربند اعلام شده ولی هنوز برگزار نشده است.
-                    برگزاری {toJalaliDate(upcomingExam.eventDate)}.
+                    آزمون دوره {toPersianDigits(String(upcomingExam.examNumber))} برای این کمربند اعلام شده ولی هنوز برگزار نشده است ·
+                    برگزاری {toJalaliDate(upcomingExam.eventDate)}
                   </AlertDescription>
                 </Alert>
               ) : (
                 <Alert className="rounded-xl border-none bg-info-soft/60 p-3 text-start">
                   <Info className="text-info" aria-hidden="true" />
                   <AlertDescription className="text-[12px] leading-5 text-ink-muted">
-                    هنوز آزمون برگزار شده ای برای این کمربند ثبت نشده است.
+                    هنوز آزمون برگزار شده ای برای این کمربند ثبت نشده است
                   </AlertDescription>
                 </Alert>
               )}
             </AuthField>
           ) : (
-            <AuthField label="تاریخ دریافت کمربند" htmlFor="beltDate" required hint="تاریخ را مطابق آزمون فنی ثبت کنید.">
+            <AuthField label="تاریخ دریافت کمربند" htmlFor="beltDate" required hint="تاریخ را مطابق آزمون فنی ثبت کنید">
               <DatePicker
                 id="beltDate"
                 title="تاریخ دریافت کمربند"
@@ -373,13 +373,13 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
               <Info className="mt-0.5 size-3.5 shrink-0 text-accent-ink" aria-hidden="true" />
               <span>
                 {needsExam
-                  ? "تاریخ دریافت کمربند به صورت خودکار بر اساس تاریخ برگزاری آزمون ثبت می شود."
-                  : "تاریخ آزمون کمربند بعدی به صورت خودکار بر اساس مدت زمان کمربند جدید محاسبه می شود."}
+                  ? "تاریخ دریافت کمربند به صورت خودکار بر اساس تاریخ برگزاری آزمون ثبت می شود"
+                  : "تاریخ آزمون کمربند بعدی به صورت خودکار بر اساس مدت زمان کمربند جدید محاسبه می شود"}
               </span>
             </p>
             <p className="flex items-start gap-1.5">
               <Info className="mt-0.5 size-3.5 shrink-0 text-accent-ink" aria-hidden="true" />
-              <span>با ثبت، این کمربند به عنوان کمربند فعلی هنرجو ثبت و در سابقه کمربند او درج می شود.</span>
+              <span>با ثبت، این کمربند به عنوان کمربند فعلی هنرجو ثبت و در سابقه کمربند او درج می شود</span>
             </p>
           </Card>
         </FormSection>

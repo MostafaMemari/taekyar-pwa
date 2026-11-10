@@ -141,13 +141,19 @@ export function addStudentMetrics(id: string, height: number, weight: number): P
   return authRequest<unknown>(`student/${id}/metrics`, { method: "post", json: { height, weight } }).then(() => undefined);
 }
 
+export type StudentMetricRecord = { id: string; height: string; weight: string; recordedAt: string };
+
+export function fetchStudentMetrics(id: string): Promise<StudentMetricRecord[]> {
+  return authRequestWithMeta<StudentMetricRecord[]>(`student/${id}/metrics`).then(({ data }) => data);
+}
+
 export function uploadStudentImage(id: string, file: File): Promise<void> {
   const form = new FormData();
   form.append("image", file);
   return authRequest<unknown>(`student/${id}/image`, { method: "post", body: form }).then(() => undefined);
 }
 
-// سفید تا آبی با beltDate ثبت می شود؛ قرمز به بالا فقط beltExamId می گیرد و تاریخ از آزمون می آید.
+// سفید تا آبی با beltDate ثبت می شود؛ قرمز به بالا فقط beltExamId می گیرد و تاریخ از آزمون می آید
 export type AssignBeltInput = { beltId: string; beltDate?: string; beltExamId?: string };
 
 export function assignStudentBelt(id: string, input: AssignBeltInput): Promise<void> {

@@ -92,13 +92,12 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
           </div>
         ) : null}
 
-        {renewed ? <p className="mt-2 text-[12px] font-bold text-success">بیمه ثبت و تا یک سال آینده معتبر شد.</p> : null}
+        {renewed ? <p className="mt-2 text-[12px] font-bold text-success">بیمه ثبت و تا یک سال آینده معتبر شد</p> : null}
 
         <Button
           type="button"
           variant="outline"
-          size="sm"
-          className="mt-3 w-full rounded-xl text-[12px] font-bold"
+          className="mt-3 h-11 w-full rounded-xl text-[12px] font-bold"
           onClick={() => {
             setDate(addJalaliYears(todayJalali(), 1));
             setRenewed(false);
@@ -112,15 +111,15 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
           <Button
             type="button"
             variant="ghost"
-            className="mt-1.5 w-full rounded-xl text-[12px] font-bold text-danger hover:bg-danger-soft/60"
+            className="mt-1.5 h-11 w-full rounded-xl text-[12px] font-bold text-danger hover:bg-danger-soft/60"
             onClick={() => setDeleteOpen(true)}
           >
             حذف بیمه ورزشی
           </Button>
         ) : null}
 
-        <SheetFrame open={open} onOpenChange={setOpen} title="ثبت بیمه ورزشی" description="تاریخ اعتبار بیمه سالانه هنرجو را تایید کنید.">
-          <AuthField label="تاریخ اعتبار بیمه" htmlFor="insuranceDate" required hint="باید دقیقاً یک سال بعد از امروز باشد.">
+        <SheetFrame open={open} onOpenChange={setOpen} title="ثبت بیمه ورزشی" description="تاریخ اعتبار بیمه سالانه هنرجو را تایید کنید">
+          <AuthField label="تاریخ اعتبار بیمه" htmlFor="insuranceDate" required hint="باید دقیقاً یک سال بعد از امروز باشد">
             <DatePicker
               id="insuranceDate"
               title="تاریخ اعتبار بیمه"
@@ -133,7 +132,7 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
           </AuthField>
 
           <p className="rounded-xl bg-info-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
-            ۷ روز قبل از انقضای بیمه، یادآوری به مربی ارسال می شود.
+            ۷ روز قبل از انقضای بیمه، یادآوری به مربی ارسال می شود
           </p>
 
           <AuthFormError message={renew.error ? apiErrorMessage(renew.error) : ""} />
@@ -155,7 +154,7 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
 
         <SheetFrame open={deleteOpen} onOpenChange={setDeleteOpen} title="حذف بیمه ورزشی" description="تایید حذف بیمه هنرجو">
           <p className="rounded-xl bg-danger-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
-            با حذف، بیمه این هنرجو از پرونده برداشته می شود و در آمار و فیلترها بدون بیمه محسوب می شود. این کار قابل بازگشت نیست.
+            با حذف، بیمه این هنرجو از پرونده برداشته می شود و در آمار و فیلترها بدون بیمه محسوب می شود. این کار قابل بازگشت نیست
           </p>
           <AuthFormError message={remove.error ? apiErrorMessage(remove.error) : ""} />
           <div className="flex gap-2 pt-1">

@@ -30,7 +30,7 @@ export function StudentBeltPanel({
       <section>
         <SectionHeading title="کمربند و ارتقا" />
         <Card className="gap-0 p-4">
-          <p className="text-[12px] leading-5 text-ink-subtle">هنوز کمربندی برای این هنرجو ثبت نشده است.</p>
+          <p className="text-[12px] leading-5 text-ink-subtle">هنوز کمربندی برای این هنرجو ثبت نشده است</p>
         </Card>
       </section>
     );
@@ -141,21 +141,21 @@ export function StudentBeltPanel({
                     </b>
                   </div>
                 ) : (
-                  <p className="mt-1.5 text-[12px] font-medium text-ink-subtle">هنوز دوره ای برای این کمربند اعلام نشده است.</p>
+                  <p className="mt-1.5 text-[12px] font-medium text-ink-subtle">هنوز دوره ای برای این کمربند اعلام نشده است</p>
                 )}
               </div>
             ) : null}
           </div>
         ) : (
           <p className="mt-3 border-t border-[var(--line-2)] pt-3 text-[12px] font-medium text-ink-subtle">
-            این هنرجو بالاترین کمربند را گرفته است.
+            این هنرجو بالاترین کمربند را گرفته است
           </p>
         )}
 
         {nextKey !== null && isBeltAssignmentOpen(assignment) ? (
           <Button
-            variant="brand"
-            className="mt-4 h-11 w-full rounded-xl text-[13px] font-extrabold"
+            variant="outline"
+            className="mt-4 h-11 w-full rounded-xl text-[12px] font-bold"
             render={<Link href={`/coach/students/${studentId}/belt`} />}
             nativeButton={false}
           >

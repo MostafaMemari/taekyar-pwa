@@ -10,6 +10,7 @@ import { StudentAttendanceTrend } from "./student-attendance-trend";
 import { StudentBeltPanel } from "./student-belt-panel";
 import { StudentInsurancePanel } from "./student-insurance-panel";
 import { StudentMembershipRenew } from "./student-membership-renew";
+import { StudentMetricsPanel } from "./student-metrics-panel";
 
 export function StudentInfoPanel({
   student,
@@ -29,6 +30,8 @@ export function StudentInfoPanel({
       <StudentInsurancePanel expiryDate={student.sportsInsuranceDate} studentId={student.id} />
 
       <StudentMembershipRenew studentId={student.id} membershipYear={student.membershipYear} />
+
+      <StudentMetricsPanel studentId={student.id} />
 
       <section>
         <SectionHeading title="حضور و غیاب" />

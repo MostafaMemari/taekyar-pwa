@@ -49,7 +49,7 @@ export function StudentAttendancePanel({ studentId, attendance }: { studentId: s
         </div>
       ) : (
         <p className="rounded-xl bg-muted/60 p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
-          هنوز جلسه ای برای این هنرجو ثبت نشده است.
+          هنوز جلسه ای برای این هنرجو ثبت نشده است
         </p>
       )}
 
