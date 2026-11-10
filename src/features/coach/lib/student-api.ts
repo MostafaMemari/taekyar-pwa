@@ -55,6 +55,7 @@ export type StudentQuery = {
   insurance?: string[];
   beltExamId?: string;
   gender?: Gender;
+  excludeIds?: string[];
   sortBy?: string;
   sortDirection?: string;
 };
@@ -105,6 +106,7 @@ function toQueryString(query: StudentQuery) {
   for (const insurance of query.insurance ?? []) params.append("insurance", insurance);
   if (query.beltExamId) params.set("beltExamId", query.beltExamId);
   if (query.gender) params.set("gender", query.gender);
+  for (const id of query.excludeIds ?? []) params.append("excludeIds", id);
   if (query.sortBy) params.set("sortBy", query.sortBy);
   if (query.sortDirection) params.set("sortDirection", query.sortDirection);
 

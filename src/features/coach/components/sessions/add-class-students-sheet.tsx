@@ -14,10 +14,8 @@ import { PersonAvatar } from "@/features/coach/components/person-avatar";
 import { useAddStudentsToSession } from "@/features/coach/hooks/use-session-mutations";
 import { useStudentsFeed } from "@/features/coach/hooks/use-students";
 import type { Gender } from "@/features/coach/lib/coach-data";
-import { beltKeyOf } from "@/features/coach/lib/students-options";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
-import { studentBeltLabel } from "@/lib/student-belts";
 import { cn } from "@/lib/utils";
 
 const SEARCH_DEBOUNCE_MS = 500;
@@ -127,7 +125,6 @@ export function AddClassStudentsSheet({
             <div className="flex flex-col gap-2">
               {visible.map((student) => {
                 const isSelected = selected.includes(student.id);
-                const belt = student.currentBelt ? studentBeltLabel(beltKeyOf(student.currentBelt.belt.name)) : null;
 
                 return (
                   <Button
@@ -139,10 +136,7 @@ export function AddClassStudentsSheet({
                     className={cn("h-auto w-full justify-start gap-3 rounded-xl px-3 py-2.5", isSelected && "border-primary bg-primary/5")}
                   >
                     <PersonAvatar name={student.fullName} className="size-9" fallbackClassName="text-[12px]" />
-                    <span className="min-w-0 flex-1 text-start">
-                      <b className="block truncate text-[13px] font-extrabold text-ink-body">{student.fullName}</b>
-                      <span className="text-[11px] font-medium text-ink-subtle">{belt ?? "بدون کمربند"}</span>
-                    </span>
+                    <span className="min-w-0 flex-1 truncate text-start text-[13px] font-extrabold text-ink-body">{student.fullName}</span>
                     {isSelected ? <Check className="text-primary" aria-hidden="true" /> : null}
                   </Button>
                 );

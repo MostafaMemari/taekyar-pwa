@@ -37,14 +37,11 @@ export function AttendanceGuestSheet({
     return () => clearTimeout(timer);
   }, [search]);
 
-  const { students, hasMore, error, isLoading, isValidating, mutate, setSize } = useStudentsFeed({ search: term || undefined });
-
-  const visible = students.filter((student) => !excludeIds.has(student.id));
-
-  // A full page of already-marked students renders nothing; pull the next page instead of showing a dead end.
-  useEffect(() => {
-    if (open && !isLoading && !isValidating && !error && visible.length === 0 && hasMore) void setSize((current) => current + 1);
-  }, [error, hasMore, isLoading, isValidating, open, setSize, visible.length]);
+  // The backend drops excluded ids itself, so class members and picked guests never enter a page.
+  const { students, hasMore, error, isLoading, isValidating, mutate, setSize } = useStudentsFeed({
+    search: term || undefined,
+    excludeIds: [...excludeIds],
+  });
 
   const close = () => {
     setSearch("");
@@ -89,15 +86,15 @@ export function AttendanceGuestSheet({
             <ErrorState title="خواندن هنرجویان انجام نشد" message={apiErrorMessage(error)} onRetry={() => void mutate()} />
           ) : students.length === 0 ? (
             <p className="rounded-xl bg-muted/60 p-4 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
-              {term ? "هنرجویی با این نام یا کد ملی پیدا نشد" : "هنوز هنرجویی ثبت نشده است. ابتدا در بخش هنرجویان یک پرونده بسازید"}
-            </p>
-          ) : visible.length === 0 ? (
-            <p className="rounded-xl bg-muted/60 p-4 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
-              هنرجوی دیگری برای افزودن نمانده است
+              {term
+                ? "هنرجویی با این نام یا کد ملی پیدا نشد"
+                : excludeIds.size > 0
+                  ? "هنرجوی دیگری برای افزودن نمانده است"
+                  : "هنوز هنرجویی ثبت نشده است. ابتدا در بخش هنرجویان یک پرونده بسازید"}
             </p>
           ) : (
             <div className="flex flex-col gap-2">
-              {visible.map((student) => {
+              {students.map((student) => {
                 const isSelected = selected.includes(student.id);
 
                 return (
@@ -110,10 +107,7 @@ export function AttendanceGuestSheet({
                     className={cn("h-auto w-full justify-start gap-3 rounded-xl px-3 py-2.5", isSelected && "border-primary bg-primary/5")}
                   >
                     <PersonAvatar name={student.fullName} className="size-9" fallbackClassName="text-[12px]" />
-                    <span className="min-w-0 flex-1 text-start">
-                      <b className="block truncate text-[13px] font-extrabold text-ink-body">{student.fullName}</b>
-                      <span className="text-[11px] font-medium text-ink-subtle">کد ملی {toPersianDigits(student.nationalCode)}</span>
-                    </span>
+                    <span className="min-w-0 flex-1 truncate text-start text-[13px] font-extrabold text-ink-body">{student.fullName}</span>
                     {isSelected ? <Check className="text-primary" aria-hidden="true" /> : null}
                   </Button>
                 );
