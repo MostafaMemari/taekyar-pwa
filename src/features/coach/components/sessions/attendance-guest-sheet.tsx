@@ -4,6 +4,7 @@ import { Check, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { ErrorState } from "@/features/coach/components/error-state";
@@ -75,7 +76,7 @@ export function AttendanceGuestSheet({
           </div>
         ) : null}
 
-        <div className="max-h-[45vh] overflow-y-auto">
+        <ScrollArea className="max-h-[45vh] [&_[data-slot=scroll-area-scrollbar]]:end-auto! [&_[data-slot=scroll-area-scrollbar]]:start-0! [&_[data-slot=scroll-area-viewport]]:max-h-[45vh]">
           {isLoading ? (
             <div className="flex flex-col gap-2">
               {[0, 1, 2].map((row) => (
@@ -120,7 +121,7 @@ export function AttendanceGuestSheet({
               />
             </div>
           )}
-        </div>
+        </ScrollArea>
 
         <div className="flex items-center gap-2 border-t border-[var(--line-2)] pt-3">
           <Button type="button" variant="outline" className="h-11 rounded-xl" onClick={close}>
