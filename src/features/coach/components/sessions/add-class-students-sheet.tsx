@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Search, UserPlus } from "lucide-react";
+import { Check, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AuthFormError } from "@/components/shared/auth-form-error";
@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { ErrorState } from "@/features/coach/components/error-state";
 import { LoadMoreSentinel } from "@/features/coach/components/load-more-sentinel";
+import { PersonAvatar } from "@/features/coach/components/person-avatar";
 import { useAddStudentsToSession } from "@/features/coach/hooks/use-session-mutations";
 import { useStudentsFeed } from "@/features/coach/hooks/use-students";
 import type { Gender } from "@/features/coach/lib/coach-data";
@@ -96,8 +97,8 @@ export function AddClassStudentsSheet({
             <Input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="جستجوی نام هنرجو"
-              aria-label="جستجوی نام هنرجو"
+              placeholder="جستجوی نام یا کد ملی"
+              aria-label="جستجوی نام یا کد ملی"
               className="h-11 rounded-xl ps-10"
             />
           </div>
@@ -137,17 +138,10 @@ export function AddClassStudentsSheet({
                     onClick={() => toggle(student.id)}
                     className={cn("h-auto w-full justify-start gap-3 rounded-xl px-3 py-2.5", isSelected && "border-primary bg-primary/5")}
                   >
-                    <span
-                      className={cn(
-                        "grid size-9 shrink-0 place-items-center rounded-full",
-                        isSelected ? "bg-primary/10 text-primary" : "bg-muted text-ink-muted",
-                      )}
-                    >
-                      <UserPlus className="size-4" aria-hidden="true" />
-                    </span>
+                    <PersonAvatar name={student.fullName} className="size-9" fallbackClassName="text-[12px]" />
                     <span className="min-w-0 flex-1 text-start">
-                      <b className="block truncate text-[12px] font-semibold text-ink">{student.fullName}</b>
-                      <span className="text-[12px] font-medium text-ink-subtle">{belt ?? "بدون کمربند"}</span>
+                      <b className="block truncate text-[13px] font-extrabold text-ink-body">{student.fullName}</b>
+                      <span className="text-[11px] font-medium text-ink-subtle">{belt ?? "بدون کمربند"}</span>
                     </span>
                     {isSelected ? <Check className="text-primary" aria-hidden="true" /> : null}
                   </Button>

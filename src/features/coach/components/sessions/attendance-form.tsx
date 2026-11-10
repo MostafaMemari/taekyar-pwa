@@ -72,23 +72,20 @@ export function AttendanceForm({
     );
   };
 
-  const pickGuest = (student: { id: string; fullName: string }) => {
-    setGuests((current) =>
-      current.some((guest) => guest.studentId === student.id)
-        ? current
-        : [
-            ...current,
-            {
-              id: student.id,
-              classSessionId: "",
-              studentId: student.id,
-              student: { id: student.id, fullName: student.fullName },
-              attendance: null,
-              isGuest: true,
-            },
-          ],
-    );
-    setGuestOpen(false);
+  const addGuests = (picked: Array<{ id: string; fullName: string }>) => {
+    setGuests((current) => [
+      ...current,
+      ...picked
+        .filter((student) => !current.some((guest) => guest.studentId === student.id))
+        .map((student) => ({
+          id: student.id,
+          classSessionId: "",
+          studentId: student.id,
+          student: { id: student.id, fullName: student.fullName },
+          attendance: null,
+          isGuest: true,
+        })),
+    ]);
   };
 
   const removeGuest = (entry: ClassAttendanceEntry) => {
@@ -199,7 +196,7 @@ export function AttendanceForm({
         open={guestOpen}
         onOpenChange={setGuestOpen}
         excludeIds={new Set(allEntries.map((entry) => entry.studentId))}
-        onPick={pickGuest}
+        onConfirm={addGuests}
       />
 
       <AttendanceNoteSheet
