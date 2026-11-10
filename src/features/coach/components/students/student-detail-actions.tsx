@@ -1,6 +1,6 @@
 "use client";
 
-import { BarChart3, ChevronLeft, Medal, Pencil, Trash2 } from "lucide-react";
+import { ChevronLeft, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
@@ -14,22 +14,16 @@ import { SectionHeading } from "@/features/coach/components/section-heading";
 import { useDeleteStudent } from "@/features/coach/hooks/use-student-mutations";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 
-const ACTIONS = [
-  { icon: Pencil, label: "ویرایش اطلاعات هنرجو", href: (id: string) => `/coach/students/${id}/edit`, needsBeltDue: false },
-  { icon: Medal, label: "تخصیص کمربند", href: (id: string) => `/coach/students/${id}/belt`, needsBeltDue: true },
-  { icon: BarChart3, label: "گزارش حضور و غیاب", href: (id: string) => `/coach/students/${id}/attendance`, needsBeltDue: false },
-];
+const ACTIONS = [{ icon: Pencil, label: "ویرایش اطلاعات هنرجو", href: (id: string) => `/coach/students/${id}/edit` }];
 
 export function StudentDetailActions({
   studentId,
   fullName,
-  beltAssignable,
   menuOpen,
   onMenuOpenChange,
 }: {
   studentId: string;
   fullName: string;
-  beltAssignable: boolean;
   menuOpen: boolean;
   onMenuOpenChange: (open: boolean) => void;
 }) {
@@ -95,7 +89,7 @@ export function StudentDetailActions({
       <SheetFrame open={menuOpen} onOpenChange={onMenuOpenChange} title="عملیات" description={`عملیات قابل انجام برای پرونده ${fullName}`}>
         <CoachActionMenu
           items={[
-            ...ACTIONS.filter((action) => !action.needsBeltDue || beltAssignable).map((action) => ({
+            ...ACTIONS.map((action) => ({
               icon: action.icon,
               label: action.label,
               onSelect: () => {

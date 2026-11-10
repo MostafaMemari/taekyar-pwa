@@ -11,9 +11,8 @@ import { ErrorState } from "@/features/coach/components/error-state";
 import { useStudentAttendance } from "@/features/coach/hooks/use-attendance";
 import { useStudentClubs } from "@/features/coach/hooks/use-clubs";
 import { useStudent } from "@/features/coach/hooks/use-student";
-import { beltKeyOf, isBeltAssignmentOpen } from "@/features/coach/lib/students-options";
+import { beltKeyOf } from "@/features/coach/lib/students-options";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
-import { StudentAttendancePanel } from "./student-attendance-panel";
 import { StudentBand } from "./student-band";
 import { StudentClubsPanel } from "./student-clubs-panel";
 import { StudentDetailActions } from "./student-detail-actions";
@@ -82,15 +81,12 @@ export function StudentDetail({ studentId }: { studentId: string }) {
 
       <CoachSheet className="flex flex-col gap-4">
         <Tabs defaultValue="info" className="gap-3">
-          <TabsList className="grid h-10 w-full grid-cols-4">
+          <TabsList className="grid h-10 w-full grid-cols-3">
             <TabsTrigger value="info" className="px-1 text-[11px]">
               اطلاعات
             </TabsTrigger>
             <TabsTrigger value="specs" className="px-1 text-[11px]">
               مشخصات
-            </TabsTrigger>
-            <TabsTrigger value="attendance" className="px-1 text-[11px]">
-              حضور و غیاب
             </TabsTrigger>
             <TabsTrigger value="clubs" className="px-1 text-[11px]">
               باشگاه ها
@@ -98,28 +94,16 @@ export function StudentDetail({ studentId }: { studentId: string }) {
           </TabsList>
 
           <TabsContent value="info">
-            <StudentInfoPanel student={profile} attendance={attendance.data} />
+            <StudentInfoPanel
+              student={profile}
+              attendance={attendance.data}
+              attendanceError={attendance.error}
+              onAttendanceRetry={() => void attendance.mutate()}
+            />
           </TabsContent>
           <TabsContent value="specs" className="flex flex-col gap-4">
             <StudentSpecsPanel student={profile} />
-            <StudentDetailActions
-              studentId={studentId}
-              fullName={profile.fullName}
-              beltAssignable={isBeltAssignmentOpen(profile.currentBelt)}
-              menuOpen={menuOpen}
-              onMenuOpenChange={setMenuOpen}
-            />
-          </TabsContent>
-          <TabsContent value="attendance">
-            {attendance.error ? (
-              <ErrorState
-                title="خواندن حضور و غیاب انجام نشد"
-                message={apiErrorMessage(attendance.error)}
-                onRetry={() => void attendance.mutate()}
-              />
-            ) : (
-              <StudentAttendancePanel studentId={studentId} attendance={attendance.data} />
-            )}
+            <StudentDetailActions studentId={studentId} fullName={profile.fullName} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
           </TabsContent>
           <TabsContent value="clubs">
             {clubs.error ? (

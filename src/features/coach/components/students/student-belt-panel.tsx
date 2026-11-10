@@ -1,18 +1,28 @@
 import { Landmark } from "lucide-react";
+import Link from "next/link";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { StatusBadge } from "@/features/coach/components/status-badge";
 import { useBeltExams } from "@/features/coach/hooks/use-belt-exams";
 import type { StudentBeltAssignment } from "@/features/coach/lib/student-api";
-import { beltApiName, beltKeyOf } from "@/features/coach/lib/students-options";
+import { beltApiName, beltKeyOf, isBeltAssignmentOpen } from "@/features/coach/lib/students-options";
 import { toPersianDigits } from "@/lib/digits";
 import { durationLabel, toJalaliDate } from "@/lib/jalali";
 import { ageFromIso, beltDotStyle, getStudentBeltMeta, nextStudentBelt } from "@/lib/student-belts";
 
 const DAY_MS = 86_400_000;
 
-export function StudentBeltPanel({ assignment, birthDate }: { assignment: StudentBeltAssignment | null; birthDate: string | null }) {
+export function StudentBeltPanel({
+  studentId,
+  assignment,
+  birthDate,
+}: {
+  studentId: string;
+  assignment: StudentBeltAssignment | null;
+  birthDate: string | null;
+}) {
   const exams = useBeltExams();
 
   if (!assignment) {
@@ -141,6 +151,17 @@ export function StudentBeltPanel({ assignment, birthDate }: { assignment: Studen
             این هنرجو بالاترین کمربند را گرفته است.
           </p>
         )}
+
+        {nextKey !== null && isBeltAssignmentOpen(assignment) ? (
+          <Button
+            variant="brand"
+            className="mt-4 h-11 w-full rounded-xl text-[13px] font-extrabold"
+            render={<Link href={`/coach/students/${studentId}/belt`} />}
+            nativeButton={false}
+          >
+            اختصاص کمربند
+          </Button>
+        ) : null}
       </Card>
     </section>
   );
