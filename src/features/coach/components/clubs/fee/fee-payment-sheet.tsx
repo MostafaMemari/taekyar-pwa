@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { useClubMembers } from "@/features/coach/hooks/use-clubs";
 import { useClubFee } from "@/features/coach/hooks/use-fee";
-import { useRecordFeePayment } from "@/features/coach/hooks/use-fee-mutations";
+import { useRecordFeePayment, useSaveClubFee } from "@/features/coach/hooks/use-fee-mutations";
 import type { ClubRecord } from "@/features/coach/lib/club-api";
 import type { FeeMonth } from "@/features/coach/lib/fee-api";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
@@ -38,10 +38,12 @@ export function FeePaymentSheet({
   const { data: members, isLoading: membersLoading } = useClubMembers(activeClubId);
   const { data: fee } = useClubFee(activeClubId);
   const record = useRecordFeePayment();
+  const saveFee = useSaveClubFee();
   const [studentId, setStudentId] = useState<string | null>(null);
   const [picked, setPicked] = useState<FeeMonth>(month);
   // Stays null until the coach types, so the stored fee amount shows through untouched.
   const [amount, setAmount] = useState<string | null>(null);
+  const [feeAmount, setFeeAmount] = useState<string | null>(null);
   const [note, setNote] = useState("");
 
   const close = () => {
@@ -49,15 +51,28 @@ export function FeePaymentSheet({
     setStudentId(null);
     setPicked(month);
     setAmount(null);
+    setFeeAmount(null);
     setNote("");
     record.reset();
+    saveFee.reset();
     onOpenChange(false);
   };
 
   const clubOptions = (clubs ?? []).map((club) => ({ value: club.id, label: club.name }));
   const activeMembers = (members ?? []).filter((member) => member.isActive);
   const amountValue = amount ?? (fee ? String(Math.trunc(Number(fee.monthlyAmount))) : "");
-  const canSubmit = activeClubId !== "" && studentId !== null && !membersLoading && !record.isMutating;
+  const feeValue = feeAmount ?? "";
+  const canSubmit = activeClubId !== "" && studentId !== null && fee !== null && !membersLoading && !record.isMutating;
+
+  const submitFee = async () => {
+    if (activeClubId === "" || feeValue === "") return;
+    try {
+      await saveFee.trigger({ clubId: activeClubId, monthlyAmount: Number(feeValue) });
+      setFeeAmount(null);
+    } catch (requestError) {
+      if (requestError instanceof ApiError && requestError.status === 401) router.replace("/login");
+    }
+  };
 
   const submit = async () => {
     if (!studentId || activeClubId === "") return;
@@ -100,8 +115,35 @@ export function FeePaymentSheet({
           </AuthField>
         ) : null}
 
-        {fee ? null : (
-          <p className="rounded-xl bg-danger-soft/60 p-3 text-[12px] font-bold leading-5 text-danger">ابتدا شهریه باشگاه را تنظیم کنید</p>
+        {fee || activeClubId === "" ? null : (
+          <div className="flex flex-col gap-2.5 rounded-xl bg-muted/60 p-3">
+            <p className="text-[12px] font-bold leading-5 text-ink-muted">برای این باشگاه هنوز شهریه ای ثبت نشده است</p>
+            <AuthField label="مبلغ شهریه ماهانه (تومان)" htmlFor="feeInlineAmount">
+              <AuthInput
+                id="feeInlineAmount"
+                inputMode="numeric"
+                dir="ltr"
+                maxLength={15}
+                value={feeValue === "" ? "" : formatMoney(feeValue)}
+                onChange={(event) => setFeeAmount(digitsOnly(event.target.value, 12))}
+              />
+            </AuthField>
+            {saveFee.error ? (
+              <p role="alert" className="rounded-xl bg-danger-soft px-3 py-2 text-[12px] font-bold leading-5 text-danger">
+                {apiErrorMessage(saveFee.error)}
+              </p>
+            ) : null}
+            <Button
+              type="button"
+              variant="brand"
+              className="h-11 w-full rounded-xl text-[12px] font-extrabold"
+              disabled={feeValue === "" || Number(feeValue) <= 0 || saveFee.isMutating}
+              onClick={() => void submitFee()}
+            >
+              {saveFee.isMutating ? <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : null}
+              {saveFee.isMutating ? "در حال ثبت..." : "ثبت شهریه برای باشگاه"}
+            </Button>
+          </div>
         )}
 
         <AuthField label="هنرجو" htmlFor="feePaymentStudent" required>
@@ -120,16 +162,18 @@ export function FeePaymentSheet({
           <FeeMonthSelect value={picked} onChange={setPicked} />
         </AuthField>
 
-        <AuthField label="مبلغ (تومان)" htmlFor="feePaymentAmount" optional hint="خالی بماند مبلغ شهریه باشگاه ثبت می شود">
-          <AuthInput
-            id="feePaymentAmount"
-            inputMode="numeric"
-            dir="ltr"
-            maxLength={15}
-            value={amountValue === "" ? "" : formatMoney(amountValue)}
-            onChange={(event) => setAmount(digitsOnly(event.target.value, 12))}
-          />
-        </AuthField>
+        {fee ? (
+          <AuthField label="مبلغ (تومان)" htmlFor="feePaymentAmount" optional hint="خالی بماند مبلغ شهریه باشگاه ثبت می شود">
+            <AuthInput
+              id="feePaymentAmount"
+              inputMode="numeric"
+              dir="ltr"
+              maxLength={15}
+              value={amountValue === "" ? "" : formatMoney(amountValue)}
+              onChange={(event) => setAmount(digitsOnly(event.target.value, 12))}
+            />
+          </AuthField>
+        ) : null}
 
         <AuthField label="توضیح" htmlFor="feePaymentNote" optional>
           <AuthInput

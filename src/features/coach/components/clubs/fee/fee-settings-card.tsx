@@ -18,7 +18,7 @@ import { digitsOnly, formatMoney } from "@/lib/digits";
 export function FeeSettingsCard({ clubId }: { clubId: string }) {
   const router = useRouter();
   const { data: fee, error, isLoading, mutate } = useClubFee(clubId);
-  const save = useSaveClubFee(clubId);
+  const save = useSaveClubFee();
   // Stays null until the coach types, so the stored amount shows through untouched.
   const [amount, setAmount] = useState<string | null>(null);
 
@@ -28,7 +28,7 @@ export function FeeSettingsCard({ clubId }: { clubId: string }) {
 
   const submit = async () => {
     try {
-      await save.trigger(parsed);
+      await save.trigger({ clubId, monthlyAmount: parsed });
       setAmount(null);
     } catch (requestError) {
       if (requestError instanceof ApiError && requestError.status === 401) router.replace("/login");

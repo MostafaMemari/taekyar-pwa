@@ -5,9 +5,9 @@ import { type RecordFeePaymentInput, recordFeePayment, removeFeePayment, saveClu
 // Fee settings change the debtors math, so the whole fee branch is revalidated.
 const revalidateFees = () => mutate((key) => Array.isArray(key) && key[0] === "fee");
 
-export function useSaveClubFee(clubId: string) {
-  return useSWRMutation(["fee", "save", clubId] as const, async (_key: unknown, { arg }: { arg: number }) => {
-    await saveClubFee(clubId, arg);
+export function useSaveClubFee() {
+  return useSWRMutation(["fee", "save"] as const, async (_key: unknown, { arg }: { arg: { clubId: string; monthlyAmount: number } }) => {
+    await saveClubFee(arg.clubId, arg.monthlyAmount);
     await revalidateFees();
   });
 }
