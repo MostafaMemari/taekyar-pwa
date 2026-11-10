@@ -2,10 +2,12 @@ import { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
 import {
   type AssignBeltInput,
+  addStudentMetrics,
   assignStudentBelt,
   type CreateStudentInput,
   createStudent,
   deleteStudent,
+  removeStudentInsurance,
   renewStudentInsurance,
   renewStudentMembershipYear,
   type UpdateStudentInput,
@@ -41,10 +43,30 @@ export function useRenewStudentMembershipYear() {
 }
 
 export function useRenewStudentInsurance() {
-  return useSWRMutation(["student", "insurance-renew"] as const, async (_key: unknown, { arg }: { arg: string }) => {
-    await renewStudentInsurance(arg);
+  return useSWRMutation(
+    ["student", "insurance-renew"] as const,
+    async (_key: unknown, { arg }: { arg: { id: string; sportsInsuranceDate: string } }) => {
+      await renewStudentInsurance(arg.id, arg.sportsInsuranceDate);
+      await revalidateStudents();
+    },
+  );
+}
+
+export function useRemoveStudentInsurance() {
+  return useSWRMutation(["student", "insurance-remove"] as const, async (_key: unknown, { arg }: { arg: string }) => {
+    await removeStudentInsurance(arg);
     await revalidateStudents();
   });
+}
+
+export function useAddStudentMetrics() {
+  return useSWRMutation(
+    ["student", "metrics-add"] as const,
+    async (_key: unknown, { arg }: { arg: { id: string; height: number; weight: number } }) => {
+      await addStudentMetrics(arg.id, arg.height, arg.weight);
+      await revalidateStudents();
+    },
+  );
 }
 
 export function useAssignStudentBelt() {

@@ -123,13 +123,22 @@ export function updateStudent(id: string, input: UpdateStudentInput): Promise<vo
   return authRequest<unknown>(`student/${id}`, { method: "patch", json: input }).then(() => undefined);
 }
 
-// Both renewal endpoints take no body: the server sets membershipYear to the current Jalali year and insurance to today + 1 year.
+// Membership renewal takes no body: the server sets membershipYear to the current Jalali year.
 export function renewStudentMembershipYear(id: string): Promise<void> {
   return authRequest<unknown>(`student/${id}/membership-year`, { method: "patch" }).then(() => undefined);
 }
 
-export function renewStudentInsurance(id: string): Promise<void> {
-  return authRequest<unknown>(`student/${id}/insurance`, { method: "patch" }).then(() => undefined);
+// The insurance date must be exactly one Jalali year ahead of today, or the backend rejects the request.
+export function renewStudentInsurance(id: string, sportsInsuranceDate: string): Promise<void> {
+  return authRequest<unknown>(`student/${id}/insurance`, { method: "patch", json: { sportsInsuranceDate } }).then(() => undefined);
+}
+
+export function removeStudentInsurance(id: string): Promise<void> {
+  return authRequest<unknown>(`student/${id}/insurance`, { method: "delete" }).then(() => undefined);
+}
+
+export function addStudentMetrics(id: string, height: number, weight: number): Promise<void> {
+  return authRequest<unknown>(`student/${id}/metrics`, { method: "post", json: { height, weight } }).then(() => undefined);
 }
 
 export function uploadStudentImage(id: string, file: File): Promise<void> {

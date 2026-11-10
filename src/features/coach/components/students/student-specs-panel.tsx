@@ -1,15 +1,23 @@
 "use client";
 
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, Ruler, Scale } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { type ReactNode, useState } from "react";
+import { AuthField } from "@/components/shared/auth-field";
+import { AuthFormError } from "@/components/shared/auth-form-error";
+import { AuthInput } from "@/components/shared/auth-input";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { useAgeCategories } from "@/features/coach/hooks/use-age-categories";
+import { useAddStudentMetrics } from "@/features/coach/hooks/use-student-mutations";
 import { useWeightClassSuggestion } from "@/features/coach/hooks/use-weight-class";
 import { GENDER_META } from "@/features/coach/lib/coach-data";
 import type { AgeCategoryRecord, StudentDetailRecord } from "@/features/coach/lib/student-api";
-import { toPersianDigits } from "@/lib/digits";
+import { ApiError, apiErrorMessage } from "@/lib/api/client";
+import { digitsOnly, toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
 import { PROVINCES } from "@/lib/provinces";
 
@@ -101,6 +109,42 @@ function StudentWeightClassRow({ student }: { student: StudentDetailRecord }) {
 }
 
 export function StudentSpecsPanel({ student }: { student: StudentDetailRecord }) {
+  const router = useRouter();
+  const [metricsOpen, setMetricsOpen] = useState(false);
+  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState("");
+  const [heightError, setHeightError] = useState("");
+  const [weightError, setWeightError] = useState("");
+  const [saved, setSaved] = useState(false);
+  const metrics = useAddStudentMetrics();
+
+  const openMetrics = () => {
+    setHeight("");
+    setWeight("");
+    setHeightError("");
+    setWeightError("");
+    setSaved(false);
+    setMetricsOpen(true);
+  };
+
+  const submitMetrics = async () => {
+    const heightProblem =
+      height === "" ? "قد را وارد کنید." : Number(height) < 50 || Number(height) > 260 ? "قد باید بین ۵۰ تا ۲۶۰ سانتی متر باشد." : "";
+    const weightProblem =
+      weight === "" ? "وزن را وارد کنید." : Number(weight) < 10 || Number(weight) > 300 ? "وزن باید بین ۱۰ تا ۳۰۰ کیلوگرم باشد." : "";
+    setHeightError(heightProblem);
+    setWeightError(weightProblem);
+    if (heightProblem || weightProblem) return;
+
+    try {
+      await metrics.trigger({ id: student.id, height: Number(height), weight: Number(weight) });
+      setMetricsOpen(false);
+      setSaved(true);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 401) router.replace("/login");
+    }
+  };
+
   const dimensions =
     student.height && student.weight
       ? `${toPersianDigits(student.height)} سانتی متر · ${toPersianDigits(student.weight)} کیلوگرم`
@@ -129,14 +173,79 @@ export function StudentSpecsPanel({ student }: { student: StudentDetailRecord })
       </section>
 
       <section>
-        <SectionHeading title="پرونده" />
+        <SectionHeading
+          title="پرونده"
+          action={
+            <Button type="button" variant="outline" size="sm" className="rounded-lg text-[11px] font-bold" onClick={openMetrics}>
+              ثبت اندازه گیری
+            </Button>
+          }
+        />
         <Card className="gap-0 py-1">
           <InfoRow label="قد / وزن">{dimensions}</InfoRow>
           <StudentWeightClassRow student={student} />
           <InfoRow label="انقضای عکس پرونده">{student.expireImageDate ? toJalaliDate(student.expireImageDate) : NOT_SET}</InfoRow>
           <InfoRow label="تاریخ ثبت پرونده">{toJalaliDate(student.createdAt)}</InfoRow>
         </Card>
+        {saved ? <p className="mt-2 text-[12px] font-bold text-success">اندازه گیری جدید ثبت شد.</p> : null}
       </section>
+
+      <SheetFrame
+        open={metricsOpen}
+        onOpenChange={setMetricsOpen}
+        title="ثبت اندازه گیری"
+        description="قد و وزن جدید به سابقه اندازه گیری ها اضافه می شود."
+      >
+        <div className="grid grid-cols-2 gap-3">
+          <AuthField label="قد (سانتی متر)" htmlFor="metricHeight" required error={heightError}>
+            <AuthInput
+              id="metricHeight"
+              dir="ltr"
+              inputMode="numeric"
+              maxLength={3}
+              icon={Ruler}
+              placeholder={toPersianDigits("170")}
+              value={toPersianDigits(height)}
+              onChange={(event) => {
+                setHeight(digitsOnly(event.target.value, 3));
+                setHeightError("");
+              }}
+            />
+          </AuthField>
+
+          <AuthField label="وزن (کیلوگرم)" htmlFor="metricWeight" required error={weightError}>
+            <AuthInput
+              id="metricWeight"
+              dir="ltr"
+              inputMode="numeric"
+              maxLength={3}
+              icon={Scale}
+              placeholder={toPersianDigits("60")}
+              value={toPersianDigits(weight)}
+              onChange={(event) => {
+                setWeight(digitsOnly(event.target.value, 3));
+                setWeightError("");
+              }}
+            />
+          </AuthField>
+        </div>
+
+        <AuthFormError message={metrics.error ? apiErrorMessage(metrics.error) : ""} />
+
+        <div className="flex gap-2 pt-1">
+          <Button variant="outline" className="h-11 flex-1 rounded-xl" onClick={() => setMetricsOpen(false)}>
+            انصراف
+          </Button>
+          <Button
+            variant="brand"
+            className="h-11 flex-[2] rounded-xl text-[12px] font-semibold"
+            disabled={metrics.isMutating}
+            onClick={() => void submitMetrics()}
+          >
+            {metrics.isMutating ? "در حال ثبت..." : "ثبت اندازه گیری"}
+          </Button>
+        </div>
+      </SheetFrame>
     </div>
   );
 }
