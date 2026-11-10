@@ -3,7 +3,6 @@
 import { Check, Copy, Loader2, Wallet } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { useExamStudents } from "@/features/coach/hooks/use-exam-students";
@@ -104,11 +103,11 @@ export function CopyNamesSheet({
           ))}
         </div>
       ) : (
-        <ScrollArea className="max-h-44 [&_[data-slot=scroll-area-viewport]]:max-h-44">
+        <div className="max-h-44 overflow-y-auto no-scrollbar">
           <pre className="rounded-xl bg-muted/60 p-3 font-sans text-start text-[12px] leading-5 whitespace-pre-wrap text-ink-body">
             {text}
           </pre>
-        </ScrollArea>
+        </div>
       )}
 
       {copyError ? <p className="text-[12px] font-bold leading-5 text-danger">کپی انجام نشد. دسترسی کلیپ‌بورد را بررسی کن</p> : null}

@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { AuthFormError } from "@/components/shared/auth-form-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { ErrorState } from "@/features/coach/components/error-state";
@@ -103,7 +102,7 @@ export function AddClassStudentsSheet({
           </div>
         ) : null}
 
-        <ScrollArea className="max-h-[45vh] [&_[data-slot=scroll-area-viewport]]:max-h-[45vh]">
+        <div className="max-h-[45vh] overflow-y-auto no-scrollbar">
           {isLoading ? (
             <div className="flex flex-col gap-2">
               {[0, 1, 2].map((row) => (
@@ -150,7 +149,7 @@ export function AddClassStudentsSheet({
               />
             </div>
           )}
-        </ScrollArea>
+        </div>
 
         <AuthFormError message={save.error ? apiErrorMessage(save.error) : ""} />
 

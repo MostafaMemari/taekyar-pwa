@@ -4,7 +4,6 @@ import { Loader2, Medal, ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
 import { AuthSelect } from "@/components/shared/auth-select";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { useBeltExams } from "@/features/coach/hooks/use-belt-exams";
@@ -89,8 +88,8 @@ export function StudentsFiltersSheet({
       title="فیلتر هنرجویان"
       description="کمربند، رده سنی و وضعیت بیمه را برای محدود کردن فهرست انتخاب کنید"
     >
-      <ScrollArea className="mt-3 max-h-[60vh] [&_[data-slot=scroll-area-viewport]]:max-h-[60vh]">
-        <div className="flex flex-col gap-5 pb-1 pe-2 ps-3">
+      <div className="mt-3 max-h-[60vh] overflow-y-auto no-scrollbar">
+        <div className="flex flex-col gap-5 pb-1">
           <section className="flex flex-col gap-3">
             <SectionTitle icon={<span className="size-3 rounded-full bg-brand-500" aria-hidden="true" />}>کمربند</SectionTitle>
 
@@ -224,7 +223,7 @@ export function StudentsFiltersSheet({
             </ToggleGroup>
           </section>
         </div>
-      </ScrollArea>
+      </div>
 
       <div className="mt-4 flex items-center gap-2 border-t border-[var(--line-2)] pt-3">
         <Button
