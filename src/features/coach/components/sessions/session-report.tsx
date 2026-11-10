@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { AttendanceBars } from "@/features/coach/components/attendance-bars";
 import { AttendanceRing } from "@/features/coach/components/attendance-ring";
+import { FeePaymentButton } from "@/features/coach/components/clubs/fee/fee-payment-button";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { SessionTime } from "@/features/coach/components/session-time";
@@ -160,6 +161,8 @@ export function SessionReport({
           />
           <p className="mt-2 text-center text-[12px] font-bold text-ink-subtle">نمایش {toPersianDigits(String(entries.length))} هنرجو</p>
         </section>
+
+        <FeePaymentButton clubId={session.clubId} />
 
         <div className="grid grid-cols-2 gap-3">
           <Button
