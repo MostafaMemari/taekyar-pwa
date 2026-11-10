@@ -29,3 +29,8 @@ export function formatMobileForDisplay(value: string): string {
   const digits = digitsOnly(value).slice(0, 11);
   return toPersianDigits(`${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7, 11)}`.trim());
 }
+
+// fa-IR already renders Persian digits with the ٬ thousands separator.
+export function formatMoney(value: string | number): string {
+  return new Intl.NumberFormat("fa-IR").format(Number(value));
+}

@@ -7,9 +7,10 @@ import { WheelColumn } from "@/components/shared/wheel-column";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { toLatinDigits, toPersianDigits } from "@/lib/digits";
+import { JALALI_MONTHS } from "@/lib/jalali";
 import { cn } from "@/lib/utils";
 
-const MONTHS = ["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"] as const;
+const MONTHS = JALALI_MONTHS;
 
 type DateParts = { year: number; month: number; day: number };
 

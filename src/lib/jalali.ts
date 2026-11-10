@@ -52,6 +52,21 @@ export function todayJalali(): string {
   return jalaliFormatter.format(new Date());
 }
 
+export const JALALI_MONTHS = [
+  "فروردین",
+  "اردیبهشت",
+  "خرداد",
+  "تیر",
+  "مرداد",
+  "شهریور",
+  "مهر",
+  "آبان",
+  "آذر",
+  "دی",
+  "بهمن",
+  "اسفند",
+] as const;
+
 // Calendar-exact breakdown so 112 days reads like «۳ ماه و ۲۲ روز», borrowing real month lengths as it goes.
 export function durationLabel(from: Date, to: Date): string {
   let years = to.getFullYear() - from.getFullYear();

@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDays, EllipsisVertical, Pencil, Plus, Users } from "lucide-react";
+import { CalendarDays, EllipsisVertical, Pencil, Plus, Users, Wallet } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -120,6 +120,16 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
             </Card>
           ))}
         </div>
+
+        <Button
+          variant="outline"
+          className="h-12 w-full rounded-xl text-[12px] font-semibold"
+          render={<Link href={`/coach/clubs/${club.id}/fee`} />}
+          nativeButton={false}
+        >
+          <Wallet data-icon="inline-start" aria-hidden="true" />
+          شهریه باشگاه
+        </Button>
 
         {sessionError ? (
           <ErrorState title="خواندن کلاس ها انجام نشد" message={apiErrorMessage(sessionError)} onRetry={() => void mutateSessions()} />
