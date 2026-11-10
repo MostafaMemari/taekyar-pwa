@@ -361,8 +361,8 @@ COLOR | POOM | DAN
 | `fatherName` | string | خیر | 2 تا 80 |
 | `phoneNumber` | string | خیر | موبایل ایران |
 | `landlineNumber` | string | خیر | تلفن ثابت ایران |
-| `membershipYear` | number | خیر | عدد مثبت، مثال 1403 |
-| `sportsInsuranceDate` | string | خیر | میلادی |
+| `membershipYear` | number | خیر | عدد بین 1380 و 1406 |
+| `sportsInsuranceDate` | string | خیر | میلادی؛ باید دقیقاً یک سال جلالی بعد از امروز باشد، در غیر این صورت `400` با پیام «تاریخ بیمه باید دقیقاً یک سال بعد از امروز باشد» |
 | `imageKey` | string | خیر | کلید تصویر |
 | `height` | number | خیر | بین 50 تا 260 سانتی متر |
 | `weight` | number | خیر | بین 10 تا 300 کیلوگرم |
@@ -437,28 +437,18 @@ COLOR | POOM | DAN
 
 ### 4.4 `PATCH /student/:id`
 
-همه فیلدها اختیاری هستند. نقش `COACH` یا `ADMIN`.
+فقط فیلدهای تماس و تاریخ انقضای عکس قابل ویرایش هستند؛ بقیه فیلدها در DTO نیستند و با `whitelist` بی‌صدا حذف می شوند (بدون خطا). نقش `COACH` یا `ADMIN`.
 
 | فیلد | نوع | الزامی | قاعده |
 |---|---|---|---|
-| `fullName` | string | خیر | 2 تا 80 |
-| `nationalCode` | string | خیر | 10 و یکتا |
-| `gender` | enum | خیر | اگر هنرجو مربی داشته باشد قابل تغییر نیست |
-| `birthDate` | string | خیر | میلادی |
-| `fatherName` | string | خیر | 2 تا 80 |
 | `phoneNumber` | string | خیر | موبایل ایران |
 | `landlineNumber` | string | خیر | تلفن ثابت ایران |
-| `province` | enum | خیر | استان |
-| `membershipYear` | number | خیر | عدد مثبت |
-| `sportsInsuranceDate` | string | خیر | میلادی |
 | `expireImageDate` | string | خیر | میلادی |
 
 نکات مهم:
 
-- **کمربند، قد، وزن و `imageKey` در ویرایش پذیرفته نمی شوند.**
-- تغییر جنسیت هنرجوی دارای مربی: `400`.
-- کد ملی تکراری: `409`.
-- `birthDate` در ویرایش validator آینده بودن ندارد؛ ولی UI باید همان قاعده ثبت را حفظ کند.
+- **نام، کد ملی، جنسیت، تاریخ تولد، نام پدر، استان، سال عضویت و بیمه در ویرایش پذیرفته نمی شوند**؛ فرم ویرایش فرانت نیز فقط همین سه فیلد را می فرستد.
+- سال عضویت و بیمه از مسیرهای تمدید جداغق 4.9 و 4.10 تنظیم می شوند.
 - پاسخ: آبجکت `Student` به روزشده.
 
 ### 4.5 `DELETE /student/:id`
@@ -517,6 +507,20 @@ COLOR | POOM | DAN
 - عضویت او در همه باشگاه های این مربی غیرفعال و `removedAt` پر می شود.
 - عضویت او در همه کلاس های این مربی حذف می شود.
 - پاسخ: `200` با `data: {}`.
+
+### 4.9 `PATCH /student/:id/membership-year`
+
+تمدید سال عضویت. **بدون بدنه**؛ سال عضویت را سرور به سال جاری شمسی (`getJalaliParts(UTCDate).jYear`) ست می کند — فرانت مقداری نمی فرستد.
+
+- نقش `COACH` یا `ADMIN`؛ هنرجو باید متعلق به مربی جاری باشد.
+- پاسخ: `200` با پیام «سال عضویت هنرجو با موفقیت تمدید شد» و آبجکت `Student`.
+
+### 4.10 `PATCH /student/:id/insurance`
+
+تمدید بیمه ورزشی. **بدون بدنه**؛ `sportsInsuranceDate` را سرور به دقیقاً یک سال جلالی بعد از امروز ست می کند.
+
+- نقش `COACH` یا `ADMIN`؛ هنرجو باید متعلق به مربی جاری باشد.
+- پاسخ: `200` با پیام «بیمه ورزشی هنرجو با موفقیت تمدید شد» و آبجکت `Student`.
 
 ---
 
@@ -1014,9 +1018,9 @@ COLOR | POOM | DAN
 |---|---|---|
 | `/coach` داشبورد | `GET /class-session?page=1&take=100` (شمارش هر کلاس امروز از `GET /class-session/:id/students?take=1`)، `GET /club`، `GET /student/stats`، `GET /attendance/coach/summary`، `GET /student-coach-invitation/sent` و `GET /belt-exam` | وصل؛ کلاس های امروز، کاشی ها، درصد و نمودار حضور دو هفته، دعوت نامه های در انتظار و آزمون های نزدیک از سرور |
 | `/coach/students` | `GET /student` و `GET /student/stats` | وصل؛ فیلتر و مرتب سازی در URL و آمار کارت ها از `GET /student/stats` |
-| `/coach/students/new` | `POST /student` | وصل؛ react-hook-form و zod، تبدیل تاریخ شمسی به میلادی |
-| `/coach/students/[id]` | `GET /student/:id`، `GET /student?search=&take=1`، `GET /attendance/student/:id/summary`، `GET /attendance/student/:id?page=1&take=100`، `GET /club/by-student/:id`، `DELETE /student/:id` | وصل؛ کمربند، `nextBeltDate` و قد/وزن از آیتم لیست با همان کد ملی خوانده می شود (بخش 11.1)؛ کارت بیمه رنگ و وضعیت می دهد، کارت کمربند گیج دایره‌ای پیشرفت از `beltDate` تا `nextBeltDate` کنار کمربند فعلی و بعدی می سازد (کمربند بعدی سمت کلاینت از `nextStudentBelt` و سن هنرجو) و نمودار ماهانه حضور از همان رکوردهای `take=100`؛ «حذف» واقعی است و `403` حساب فعال را با پیام سرور نشان می دهد |
-| `/coach/students/[id]/edit` | `GET /student/:id` و `PATCH /student/:id` | وصل؛ مقادیر از پرونده واقعی پر می شود و کمربند/تاریخ کمربند/قد/وزن در ویرایش نمایش داده نمی شوند چون `PATCH` آن ها را نمی پذیرد |
+| `/coach/students/new` | `POST /student` | وصل؛ react-hook-form و zod، تبدیل تاریخ شمسی به میلادی؛ تاریخ بیمه در فرم ثبت وجود ندارد چون سرور آن را فقط از مسیر تمدید (بخش 4.10) ست می کند |
+| `/coach/students/[id]` | `GET /student/:id`، `GET /student?search=&take=1`، `GET /attendance/student/:id/summary`، `GET /attendance/student/:id?page=1&take=100`، `GET /club/by-student/:id`، `DELETE /student/:id`، `PATCH /student/:id/insurance` و `PATCH /student/:id/membership-year` (تمدید بدون بدنه) | وصل؛ کمربند، `nextBeltDate` و قد/وزن از آیتم لیست با همان کد ملی خوانده می شود (بخش 11.1)؛ تمدید بیمه در پنل بیمه و تمدید سال عضویت در پنل مشخصات با SheetFrame تایید انجام می شود و غلط ۴۰۱ به صفحه ورود می رود |
+| `/coach/students/[id]/edit` | `GET /student/:id` و `PATCH /student/:id` | وصل؛ مقادیر از پرونده واقعی پر می شود و در ویرایش فقط شماره تماس، تلفن ثابت و تاریخ انقضای عکس قابل ویرایش است چون `PATCH` بقیه فیلدها را نمی پذیرد |
 | `/coach/students/[id]/belt` | `GET /student/:id`، `GET /belt?page=1&take=100&sortBy=level&sortDirection=asc` و `PATCH /student/:id/belt` | وصل؛ کمربند بعدی از قاعده سنی `nextStudentBelt` و شناسه آن از لیست کمربندها؛ تاریخ شمسی به میلادی تبدیل می شود |
 | `/coach/students/[id]/attendance` | `GET /attendance/student/:id/summary` و `GET /attendance/student/:id?page=1&take=100` | وصل؛ خلاصه از `summary` و رکوردها یک صفحه ۱۰۰ تایی، گروه بندی ماهانه و فیلتر وضعیت سمت کلاینت |
 | `/coach/students/invite` | `POST /student-coach-invitation` | وصل؛ ارسال با کد ملی و فهرست دعوت نامه های اخیر از `GET /student-coach-invitation/sent` |

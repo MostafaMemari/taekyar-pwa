@@ -39,8 +39,10 @@ export const studentFormSchema = z.object({
     .string()
     .regex(/^$|^\d{2,3}$/, "وزن را با عدد وارد کنید.")
     .refine((value) => !value || (Number(value) >= 10 && Number(value) <= 300), "وزن باید بین ۱۰ تا ۳۰۰ کیلوگرم باشد."),
-  membershipYear: z.string().regex(/^$|^\d{4}$/, "سال عضویت باید ۴ رقم باشد."),
-  insuranceDate: z.string().regex(/^$|^\d{4}\/\d{1,2}\/\d{1,2}$/, "تاریخ بیمه معتبر نیست."),
+  membershipYear: z
+    .string()
+    .regex(/^$|^\d{4}$/, "سال عضویت باید ۴ رقم باشد.")
+    .refine((value) => !value || (Number(value) >= 1380 && Number(value) <= 1406), "سال عضویت باید بین ۱۳۸۰ و ۱۴۰۶ باشد."),
   expireImageDate: z.string(),
 });
 
@@ -63,7 +65,6 @@ export const emptyStudentForm: StudentFormValues = {
   height: "",
   weight: "",
   membershipYear: "",
-  insuranceDate: "",
   expireImageDate: "",
 };
 
@@ -84,30 +85,20 @@ export function studentDetailToForm(student: StudentDetailRecord): StudentFormVa
     height: student.height ?? "",
     weight: student.weight ?? "",
     membershipYear: student.membershipYear ? String(student.membershipYear) : "",
-    insuranceDate: toDateInput(student.sportsInsuranceDate),
     expireImageDate: toDateInput(student.expireImageDate),
   };
 }
 
+// PATCH /student/:id only accepts contact fields and the image expiry; every other field is stripped server-side.
 export function studentFormToUpdateInput(values: StudentFormValues): UpdateStudentInput {
   return {
-    fullName: values.fullName.trim(),
-    nationalCode: values.nationalCode,
-    gender: values.gender,
-    birthDate: toGregorianDate(values.birthDate) ?? "",
-    province: values.province,
-    fatherName: values.fatherName.trim() || null,
     phoneNumber: values.phone || null,
     landlineNumber: values.landline || null,
-    membershipYear: values.membershipYear ? Number(values.membershipYear) : null,
-    sportsInsuranceDate: values.insuranceDate ? toGregorianDate(values.insuranceDate) : null,
     expireImageDate: values.expireImageDate ? toGregorianDate(values.expireImageDate) : null,
   };
 }
 
 export function studentFormToInput(values: StudentFormValues): CreateStudentInput {
-  const insuranceDate = values.insuranceDate ? toGregorianDate(values.insuranceDate) : null;
-
   return {
     fullName: values.fullName.trim(),
     nationalCode: values.nationalCode,
@@ -120,7 +111,6 @@ export function studentFormToInput(values: StudentFormValues): CreateStudentInpu
     ...(values.phone ? { phoneNumber: values.phone } : {}),
     ...(values.landline ? { landlineNumber: values.landline } : {}),
     ...(values.membershipYear ? { membershipYear: Number(values.membershipYear) } : {}),
-    ...(insuranceDate ? { sportsInsuranceDate: insuranceDate } : {}),
     ...(values.height ? { height: Number(values.height) } : {}),
     ...(values.weight ? { weight: Number(values.weight) } : {}),
   };

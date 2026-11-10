@@ -6,7 +6,6 @@ import type { BaseSyntheticEvent } from "react";
 import { Controller } from "react-hook-form";
 import { AuthField } from "@/components/shared/auth-field";
 import { AuthInput } from "@/components/shared/auth-input";
-import { DatePicker } from "@/components/shared/date-picker";
 import { PhotoPicker } from "@/components/shared/photo-picker";
 import { Button } from "@/components/ui/button";
 import { type StudentSignupFormHandle, StudentSignupStep } from "@/features/auth/components/student-signup-step";
@@ -28,7 +27,7 @@ export function StudentSignupStepDocuments({ form, onBack, onSubmit, onSkip }: S
       title="مدارک و مشخصات"
       lead={
         <>
-          عکس، بیمه و مشخصات جسمی؛ <b className="font-extrabold text-ink-body">همه اختیاری</b>.
+          عکس و مشخصات جسمی؛ <b className="font-extrabold text-ink-body">همه اختیاری</b>.
         </>
       }
     >
@@ -36,23 +35,6 @@ export function StudentSignupStepDocuments({ form, onBack, onSubmit, onSkip }: S
         <PhotoPicker label="عکس پروفایل" hint="JPG یا PNG، حداکثر ۵ مگابایت" optional />
 
         <div className="mt-4 grid gap-4">
-          <AuthField label="تاریخ بیمه ورزشی" htmlFor="insuranceDate" optional hint="۷ روز قبل از انقضا یادآوری می شود.">
-            <Controller
-              control={form.control}
-              name="insuranceDate"
-              render={({ field }) => (
-                <DatePicker
-                  id="insuranceDate"
-                  title="تاریخ بیمه ورزشی"
-                  value={field.value}
-                  onChange={(value) => field.onChange(value)}
-                  fromYear={1395}
-                  toYear={1406}
-                />
-              )}
-            />
-          </AuthField>
-
           <div className="grid grid-cols-2 gap-3">
             <AuthField label="وزن (کیلوگرم)" htmlFor="weight" optional hint="تعیین رده وزنی" error={errors.weight?.message}>
               <Controller

@@ -13,7 +13,6 @@ export type StudentSignupData = {
   birthDate: string;
   belt: string;
   beltDate: string;
-  insuranceDate?: string;
   height?: number;
   weight?: number;
 };
@@ -74,7 +73,6 @@ export function toStudentSignupData(values: StudentSignupForm): StudentSignupDat
     birthDate: toGregorianDate(values.birthDate) ?? "",
     belt: toBeltName(values.belt),
     beltDate: toGregorianDate(values.beltDate) ?? "",
-    ...(values.insuranceDate ? { insuranceDate: toGregorianDate(values.insuranceDate) ?? undefined } : {}),
     ...(values.height ? { height: Number(values.height) } : {}),
     ...(values.weight ? { weight: Number(values.weight) } : {}),
   };

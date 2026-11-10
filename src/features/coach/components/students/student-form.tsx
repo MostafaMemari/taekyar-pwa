@@ -64,7 +64,7 @@ export function StudentForm({
     <form className="mt-4 flex flex-col gap-4" onSubmit={submit} noValidate>
       <StudentPersonalFields control={control} errors={errors} locked={mode === "edit"} />
       <StudentSportsFields control={control} errors={errors} mode={mode} />
-      <StudentEnrollmentFields control={control} errors={errors} showImageExpiry={mode === "edit"} photo={photo} />
+      <StudentEnrollmentFields control={control} errors={errors} mode={mode} photo={photo} />
 
       <AuthFormError message={failure ? apiErrorMessage(failure) : ""} />
 

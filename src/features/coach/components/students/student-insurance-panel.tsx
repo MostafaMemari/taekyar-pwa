@@ -1,35 +1,33 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AuthFormError } from "@/components/shared/auth-form-error";
-import { DatePicker } from "@/components/shared/date-picker";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { StatusBadge } from "@/features/coach/components/status-badge";
-import { useRegisterStudentInsurance } from "@/features/coach/hooks/use-student-mutations";
+import { useRenewStudentInsurance } from "@/features/coach/hooks/use-student-mutations";
 import { INSURANCE_META, insuranceStatusOf } from "@/features/coach/lib/students-options";
-import { apiErrorMessage } from "@/lib/api/client";
-import { digitsOnly } from "@/lib/digits";
-import { todayJalali, toGregorianDate, toJalaliDate } from "@/lib/jalali";
+import { ApiError, apiErrorMessage } from "@/lib/api/client";
+import { toJalaliDate } from "@/lib/jalali";
 import { cn } from "@/lib/utils";
 
-const DAY_MS = 86_400_000;
 const INSURING_DAYS = 30;
 const VALIDITY_DAYS = 365;
 
 function daysFromToday(date: string) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  return Math.round((new Date(date).getTime() - today.getTime()) / DAY_MS);
+  return Math.round((new Date(date).getTime() - today.getTime()) / 86_400_000);
 }
 
 export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: string | null; studentId: string }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState("");
-  const [error, setError] = useState("");
-  const register = useRegisterStudentInsurance();
+  const [renewed, setRenewed] = useState(false);
+  const renew = useRenewStudentInsurance();
 
   const status = insuranceStatusOf(expiryDate, INSURING_DAYS);
   const meta = INSURANCE_META[status];
@@ -37,34 +35,13 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
   const daysLeft = expiryDate ? daysFromToday(expiryDate) : null;
   const remaining = daysLeft === null ? 0 : Math.max(0, Math.min(VALIDITY_DAYS, daysLeft));
 
-  const currentJalaliYear = Number(digitsOnly(todayJalali().split("/")[0]));
-
   const submit = async () => {
-    const iso = toGregorianDate(date);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    if (iso === null) {
-      setError("تاریخ پایان اعتبار بیمه را انتخاب کنید.");
-      return;
-    }
-
-    const day = new Date(`${iso}T00:00:00`).getTime();
-    if (day <= today.getTime()) {
-      setError("تاریخ بیمه باید بعد از امروز باشد.");
-      return;
-    }
-    if (day > today.getTime() + VALIDITY_DAYS * DAY_MS) {
-      setError("بیمه حداکثر یک سال اعتبار دارد.");
-      return;
-    }
-
-    setError("");
     try {
-      await register.trigger({ id: studentId, isoDate: iso });
+      await renew.trigger(studentId);
       setOpen(false);
-    } catch {
-      // the hook error is surfaced through AuthFormError
+      setRenewed(true);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 401) router.replace("/login");
     }
   };
 
@@ -94,54 +71,39 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
               />
             </div>
           </div>
-        ) : (
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="mt-3 w-full rounded-xl text-[12px] font-bold"
-            onClick={() => {
-              setDate("");
-              setError("");
-              setOpen(true);
-            }}
-          >
-            ثبت بیمه ورزشی
-          </Button>
-        )}
+        ) : null}
 
-        <SheetFrame
-          open={open}
-          onOpenChange={(next) => {
-            setOpen(next);
-            if (next) setError("");
+        {renewed ? <p className="mt-2 text-[12px] font-bold text-success">بیمه ثبت و تا یک سال آینده معتبر شد.</p> : null}
+
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="mt-3 w-full rounded-xl text-[12px] font-bold"
+          onClick={() => {
+            setOpen(true);
+            setRenewed(false);
           }}
-          title="ثبت بیمه ورزشی"
-          description="تاریخ پایان اعتبار بیمه هنرجو را انتخاب کنید"
         >
-          <div className="mt-3 flex flex-col gap-3">
-            <DatePicker
-              title="تاریخ پایان اعتبار بیمه"
-              value={date}
-              onChange={(value) => {
-                setDate(value);
-                setError("");
-              }}
-              fromYear={currentJalaliYear}
-              toYear={currentJalaliYear + 1}
-            />
-            <p className="text-[12px] font-medium leading-5 text-ink-subtle">
-              بیمه یک ساله است؛ تاریخ انتخابی باید بعد از امروز و حداکثر یک سال آینده باشد
-            </p>
-            <AuthFormError message={error || (register.error ? apiErrorMessage(register.error) : "")} />
+          {expiryDate ? "تمدید بیمه ورزشی" : "ثبت بیمه ورزشی"}
+        </Button>
+
+        <SheetFrame open={open} onOpenChange={setOpen} title="ثبت بیمه ورزشی" description="تایید ثبت سالانه بیمه هنرجو">
+          <p className="rounded-xl bg-info-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
+            تاریخ بیمه به صورت خودکار توسط سامانه دقیقاً یک سال بعد از امروز ثبت می شود و ۷ روز قبل از انقضا یادآوری ارسال می گردد.
+          </p>
+          <AuthFormError message={renew.error ? apiErrorMessage(renew.error) : ""} />
+          <div className="flex gap-2 pt-1">
+            <Button variant="outline" className="h-11 flex-1 rounded-xl" onClick={() => setOpen(false)}>
+              انصراف
+            </Button>
             <Button
-              type="button"
               variant="brand"
-              className="h-11 w-full rounded-xl text-[12px]"
-              disabled={register.isMutating}
+              className="h-11 flex-1 rounded-xl text-[12px] font-semibold"
+              disabled={renew.isMutating}
               onClick={() => void submit()}
             >
-              {register.isMutating ? "در حال ثبت..." : "ثبت بیمه"}
+              {renew.isMutating ? "در حال ثبت..." : expiryDate ? "تمدید بیمه" : "ثبت بیمه"}
             </Button>
           </div>
         </SheetFrame>

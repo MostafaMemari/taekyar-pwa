@@ -5,9 +5,10 @@ import {
   type CreateStudentInput,
   createStudent,
   deleteStudent,
+  renewStudentInsurance,
+  renewStudentMembershipYear,
   type UpdateStudentInput,
   updateStudent,
-  updateStudentInsurance,
   uploadStudentImage,
 } from "@/features/coach/lib/student-api";
 
@@ -31,9 +32,16 @@ export function useUpdateStudent() {
   );
 }
 
-export function useRegisterStudentInsurance() {
-  return useSWRMutation(["student", "insurance"] as const, async (_key: unknown, { arg }: { arg: { id: string; isoDate: string } }) => {
-    await updateStudentInsurance(arg.id, arg.isoDate);
+export function useRenewStudentMembershipYear() {
+  return useSWRMutation(["student", "membership-year"] as const, async (_key: unknown, { arg }: { arg: string }) => {
+    await renewStudentMembershipYear(arg);
+    await revalidateStudents();
+  });
+}
+
+export function useRenewStudentInsurance() {
+  return useSWRMutation(["student", "insurance-renew"] as const, async (_key: unknown, { arg }: { arg: string }) => {
+    await renewStudentInsurance(arg);
     await revalidateStudents();
   });
 }

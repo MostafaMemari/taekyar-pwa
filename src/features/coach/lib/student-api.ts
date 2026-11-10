@@ -73,22 +73,13 @@ export type CreateStudentInput = {
   phoneNumber?: string;
   landlineNumber?: string;
   membershipYear?: number;
-  sportsInsuranceDate?: string;
   height?: number;
   weight?: number;
 };
 
 export type UpdateStudentInput = {
-  fullName: string;
-  nationalCode: string;
-  gender: Gender;
-  birthDate: string;
-  province: string;
-  fatherName: string | null;
   phoneNumber: string | null;
   landlineNumber: string | null;
-  membershipYear: number | null;
-  sportsInsuranceDate: string | null;
   expireImageDate: string | null;
 };
 
@@ -132,9 +123,13 @@ export function updateStudent(id: string, input: UpdateStudentInput): Promise<vo
   return authRequest<unknown>(`student/${id}`, { method: "patch", json: input }).then(() => undefined);
 }
 
-// PATCH /student/:id takes optional fields, so the quick insurance flow sends only the new expiry date.
-export function updateStudentInsurance(id: string, isoDate: string): Promise<void> {
-  return authRequest<unknown>(`student/${id}`, { method: "patch", json: { sportsInsuranceDate: isoDate } }).then(() => undefined);
+// Both renewal endpoints take no body: the server sets membershipYear to the current Jalali year and insurance to today + 1 year.
+export function renewStudentMembershipYear(id: string): Promise<void> {
+  return authRequest<unknown>(`student/${id}/membership-year`, { method: "patch" }).then(() => undefined);
+}
+
+export function renewStudentInsurance(id: string): Promise<void> {
+  return authRequest<unknown>(`student/${id}/insurance`, { method: "patch" }).then(() => undefined);
 }
 
 export function uploadStudentImage(id: string, file: File): Promise<void> {

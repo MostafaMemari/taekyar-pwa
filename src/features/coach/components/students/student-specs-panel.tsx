@@ -9,10 +9,10 @@ import { useAgeCategories } from "@/features/coach/hooks/use-age-categories";
 import { useWeightClassSuggestion } from "@/features/coach/hooks/use-weight-class";
 import { GENDER_META } from "@/features/coach/lib/coach-data";
 import type { AgeCategoryRecord, StudentDetailRecord } from "@/features/coach/lib/student-api";
-import { membershipChargeOf } from "@/features/coach/lib/students-options";
 import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
 import { PROVINCES } from "@/lib/provinces";
+import { StudentMembershipRenew } from "./student-membership-renew";
 
 const NOT_SET = "ثبت نشده";
 
@@ -102,7 +102,6 @@ function StudentWeightClassRow({ student }: { student: StudentDetailRecord }) {
 }
 
 export function StudentSpecsPanel({ student }: { student: StudentDetailRecord }) {
-  const charge = membershipChargeOf(student.membershipYear);
   const dimensions =
     student.height && student.weight
       ? `${toPersianDigits(student.height)} سانتی متر · ${toPersianDigits(student.weight)} کیلوگرم`
@@ -133,22 +132,14 @@ export function StudentSpecsPanel({ student }: { student: StudentDetailRecord })
       <section>
         <SectionHeading title="پرونده" />
         <Card className="gap-0 py-1">
-          <InfoRow label="سال عضویت">{student.membershipYear ? toPersianDigits(String(student.membershipYear)) : NOT_SET}</InfoRow>
-          <InfoRow label="شارژ بانک اطلاعاتی">
-            {charge === null ? (
-              NOT_SET
-            ) : charge.due === 0 ? (
-              <span className="text-success">معتبر</span>
-            ) : (
-              <span className="text-warning">{toPersianDigits(String(charge.due))} سال شارژ</span>
-            )}
-          </InfoRow>
           <InfoRow label="قد / وزن">{dimensions}</InfoRow>
           <StudentWeightClassRow student={student} />
           <InfoRow label="انقضای عکس پرونده">{student.expireImageDate ? toJalaliDate(student.expireImageDate) : NOT_SET}</InfoRow>
           <InfoRow label="تاریخ ثبت پرونده">{toJalaliDate(student.createdAt)}</InfoRow>
         </Card>
       </section>
+
+      <StudentMembershipRenew studentId={student.id} membershipYear={student.membershipYear} />
     </div>
   );
 }

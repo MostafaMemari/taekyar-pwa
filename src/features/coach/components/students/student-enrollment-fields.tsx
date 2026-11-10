@@ -13,14 +13,15 @@ import { digitsOnly, toPersianDigits } from "@/lib/digits";
 type FieldsProps = {
   control: Control<StudentFormValues>;
   errors: FieldErrors<StudentFormValues>;
-  showImageExpiry?: boolean;
+  mode: "create" | "edit";
   photo?: { imageSrc?: string | null; pending?: boolean; error?: string; onSelectFile?: (file: File) => void };
 };
 
-export function StudentEnrollmentFields({ control, errors, showImageExpiry = false, photo }: FieldsProps) {
+// Insurance never comes from this form: the server registers it for exactly one year via PATCH /student/:id/insurance.
+export function StudentEnrollmentFields({ control, errors, mode, photo }: FieldsProps) {
   return (
-    <FormSection icon={ShieldCheck} title="عضویت و بیمه" tone="sky">
-      <div className="grid grid-cols-2 gap-3">
+    <FormSection icon={ShieldCheck} title={mode === "create" ? "عضویت و بیمه" : "عکس پرونده"}>
+      {mode === "create" ? (
         <AuthField label="سال عضویت" htmlFor="membershipYear" optional error={errors.membershipYear?.message}>
           <Controller
             control={control}
@@ -42,27 +43,9 @@ export function StudentEnrollmentFields({ control, errors, showImageExpiry = fal
             )}
           />
         </AuthField>
+      ) : null}
 
-        <AuthField label="تاریخ بیمه ورزشی" htmlFor="insuranceDate" optional error={errors.insuranceDate?.message}>
-          <Controller
-            control={control}
-            name="insuranceDate"
-            render={({ field }) => (
-              <DatePicker
-                id="insuranceDate"
-                title="تاریخ بیمه ورزشی"
-                value={field.value}
-                onChange={field.onChange}
-                defaultValue="1405/02/19"
-                fromYear={1395}
-                toYear={1406}
-              />
-            )}
-          />
-        </AuthField>
-      </div>
-
-      {showImageExpiry ? (
+      {mode === "edit" ? (
         <AuthField
           label="تاریخ انقضای عکس پرونده"
           htmlFor="expireImageDate"

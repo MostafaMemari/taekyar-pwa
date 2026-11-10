@@ -19,7 +19,6 @@ const defaultValues: StudentSignupForm = {
   birthDate: "",
   belt: "",
   beltDate: "",
-  insuranceDate: "",
   weight: "",
   height: "",
 };
@@ -48,7 +47,7 @@ export function StudentSignupFlow() {
   const nextFromStepOne = async () => {
     const valid = await form.trigger(["fullName", "nationalCode", "gender", "province", "birthDate"]);
     // zodResolver validates the whole object, so drop errors from the later steps.
-    form.clearErrors(["belt", "beltDate", "insuranceDate", "weight", "height"]);
+    form.clearErrors(["belt", "beltDate", "weight", "height"]);
     if (valid) goTo(1);
   };
 

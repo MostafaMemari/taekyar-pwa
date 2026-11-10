@@ -28,7 +28,6 @@ export const studentSignupSchema = z.object({
   birthDate: requiredDate("تاریخ تولد را انتخاب کنید."),
   belt: z.string().min(1, "کمربند فعلی را انتخاب کنید."),
   beltDate: requiredDate("تاریخ دریافت کمربند را انتخاب کنید."),
-  insuranceDate: z.string(),
   weight: z.string().refine((value) => !value || (Number(value) >= 10 && Number(value) <= 300), "وزن باید بین ۱۰ تا ۳۰۰ کیلوگرم باشد."),
   height: z.string().refine((value) => !value || (Number(value) >= 50 && Number(value) <= 260), "قد باید بین ۵۰ تا ۲۶۰ سانتی متر باشد."),
 });
