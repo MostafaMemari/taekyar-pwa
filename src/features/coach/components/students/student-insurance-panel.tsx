@@ -94,29 +94,43 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
 
         {renewed ? <p className="mt-2 text-[12px] font-bold text-success">بیمه ثبت و تا یک سال آینده معتبر شد</p> : null}
 
-        <Button
-          type="button"
-          variant="outline"
-          className="mt-3 h-11 w-full rounded-xl text-[12px] font-bold"
-          onClick={() => {
-            setDate(addJalaliYears(todayJalali(), 1));
-            setRenewed(false);
-            setOpen(true);
-          }}
-        >
-          {expiryDate ? "تمدید بیمه ورزشی" : "ثبت بیمه ورزشی"}
-        </Button>
-
         {expiryDate ? (
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              className="h-11 w-full rounded-xl text-[12px] font-bold"
+              onClick={() => {
+                setDate(addJalaliYears(todayJalali(), 1));
+                setRenewed(false);
+                setOpen(true);
+              }}
+            >
+              تمدید بیمه
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-11 w-full rounded-xl text-[12px] font-bold text-danger hover:bg-danger-soft/60"
+              onClick={() => setDeleteOpen(true)}
+            >
+              حذف بیمه
+            </Button>
+          </div>
+        ) : (
           <Button
             type="button"
-            variant="ghost"
-            className="mt-1.5 h-11 w-full rounded-xl text-[12px] font-bold text-danger hover:bg-danger-soft/60"
-            onClick={() => setDeleteOpen(true)}
+            variant="outline"
+            className="mt-3 h-11 w-full rounded-xl text-[12px] font-bold"
+            onClick={() => {
+              setDate(addJalaliYears(todayJalali(), 1));
+              setRenewed(false);
+              setOpen(true);
+            }}
           >
-            حذف بیمه ورزشی
+            ثبت بیمه ورزشی
           </Button>
-        ) : null}
+        )}
 
         <SheetFrame open={open} onOpenChange={setOpen} title="ثبت بیمه ورزشی" description="تاریخ اعتبار بیمه سالانه هنرجو را تایید کنید">
           <AuthField label="تاریخ اعتبار بیمه" htmlFor="insuranceDate" required hint="باید دقیقاً یک سال بعد از امروز باشد">

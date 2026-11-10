@@ -9,12 +9,12 @@ import { AuthFormError } from "@/components/shared/auth-form-error";
 import { AuthInput } from "@/components/shared/auth-input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { type ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { SectionHeading } from "@/features/coach/components/section-heading";
-import { useAddStudentMetrics } from "@/features/coach/hooks/use-student-mutations";
 import { useStudentMetrics } from "@/features/coach/hooks/use-student-metrics";
+import { useAddStudentMetrics } from "@/features/coach/hooks/use-student-mutations";
 import type { StudentMetricRecord } from "@/features/coach/lib/student-api";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { digitsOnly, toPersianDigits } from "@/lib/digits";
@@ -57,8 +57,10 @@ export function StudentMetricsPanel({ studentId }: { studentId: string }) {
   };
 
   const submit = async () => {
-    const heightProblem = height === "" ? "قد را وارد کنید." : Number(height) < 50 || Number(height) > 260 ? "قد باید بین ۵۰ تا ۲۶۰ سانتی متر باشد." : "";
-    const weightProblem = weight === "" ? "وزن را وارد کنید." : Number(weight) < 10 || Number(weight) > 300 ? "وزن باید بین ۱۰ تا ۳۰۰ کیلوگرم باشد." : "";
+    const heightProblem =
+      height === "" ? "قد را وارد کنید." : Number(height) < 50 || Number(height) > 260 ? "قد باید بین ۵۰ تا ۲۶۰ سانتی متر باشد." : "";
+    const weightProblem =
+      weight === "" ? "وزن را وارد کنید." : Number(weight) < 10 || Number(weight) > 300 ? "وزن باید بین ۱۰ تا ۳۰۰ کیلوگرم باشد." : "";
     setHeightError(heightProblem);
     setWeightError(weightProblem);
     if (heightProblem || weightProblem) return;
@@ -81,16 +83,43 @@ export function StudentMetricsPanel({ studentId }: { studentId: string }) {
       <SectionHeading title="قد و وزن" />
 
       <Card className="gap-0 p-4">
+        {latest ? (
+          <div className="grid grid-cols-2 gap-2">
+            <div className="flex items-center gap-2.5 rounded-xl bg-muted/60 px-3 py-2.5">
+              <span className="size-2.5 shrink-0 rounded-full" style={{ background: "var(--color-height)" }} aria-hidden="true" />
+              <div className="min-w-0">
+                <span className="block text-[11px] font-medium text-ink-subtle">قد</span>
+                <b className="block truncate text-[13px] font-extrabold text-ink">
+                  {toPersianDigits(String(Number(latest.height)))} سانتی متر
+                </b>
+              </div>
+            </div>
+            <div className="flex items-center gap-2.5 rounded-xl bg-muted/60 px-3 py-2.5">
+              <span className="size-2.5 shrink-0 rounded-full" style={{ background: "var(--color-weight)" }} aria-hidden="true" />
+              <div className="min-w-0">
+                <span className="block text-[11px] font-medium text-ink-subtle">وزن</span>
+                <b className="block truncate text-[13px] font-extrabold text-ink">
+                  {toPersianDigits(String(Number(latest.weight)))} کیلوگرم
+                </b>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
         {metrics.error ? (
-          <p className="text-[12px] font-bold leading-5 text-danger">{apiErrorMessage(metrics.error)}</p>
+          <p className="mt-2 text-[12px] font-bold leading-5 text-danger">{apiErrorMessage(metrics.error)}</p>
         ) : !records ? (
-          <div className="flex flex-col gap-2" aria-busy="true" aria-label="در حال بارگذاری اندازه گیری ها">
+          <div
+            className={latest ? "mt-3 flex flex-col gap-2" : "flex flex-col gap-2"}
+            aria-busy="true"
+            aria-label="در حال بارگذاری اندازه گیری ها"
+          >
             <Skeleton className="h-6 w-40" />
             <Skeleton className="h-44 w-full rounded-xl" />
           </div>
         ) : trend ? (
-          <ChartContainer config={chartConfig} className="mx-auto h-48 w-full">
-            <AreaChart data={trend} margin={{ top: 8, right: 4, left: 4, bottom: 0 }}>
+          <ChartContainer config={chartConfig} className="mx-auto mt-3 h-44 w-full">
+            <AreaChart data={trend} margin={{ top: 12, right: 16, left: 16, bottom: 4 }}>
               <defs>
                 <linearGradient id="metricsHeightFill" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="var(--color-height)" stopOpacity={0.3} />
@@ -105,6 +134,7 @@ export function StudentMetricsPanel({ studentId }: { studentId: string }) {
               <XAxis
                 dataKey="label"
                 reversed
+                padding={{ left: 24, right: 24 }}
                 tickLine={false}
                 axisLine={false}
                 tickMargin={6}
@@ -147,7 +177,9 @@ export function StudentMetricsPanel({ studentId }: { studentId: string }) {
                           aria-hidden="true"
                         />
                         <span className="flex flex-1 items-center justify-between gap-3 leading-none">
-                          <span className="text-muted-foreground">{chartConfig[name as keyof typeof chartConfig]?.label ?? String(name)}</span>
+                          <span className="text-muted-foreground">
+                            {chartConfig[name as keyof typeof chartConfig]?.label ?? String(name)}
+                          </span>
                           <span className="font-medium tabular-nums text-foreground">
                             {toPersianDigits(String(value))} {name === "height" ? "سانتی متر" : "کیلوگرم"}
                           </span>
@@ -157,7 +189,6 @@ export function StudentMetricsPanel({ studentId }: { studentId: string }) {
                   />
                 }
               />
-              <ChartLegend content={<ChartLegendContent />} />
               <Area
                 yAxisId="height"
                 dataKey="height"
@@ -165,8 +196,8 @@ export function StudentMetricsPanel({ studentId }: { studentId: string }) {
                 stroke="var(--color-height)"
                 strokeWidth={2.5}
                 fill="url(#metricsHeightFill)"
-                dot={{ r: 2.5, strokeWidth: 1 }}
-                activeDot={{ r: 4 }}
+                dot={{ r: 3, strokeWidth: 2, stroke: "var(--card)" }}
+                activeDot={{ r: 4.5, strokeWidth: 2, stroke: "var(--card)" }}
               />
               <Area
                 yAxisId="weight"
@@ -175,23 +206,15 @@ export function StudentMetricsPanel({ studentId }: { studentId: string }) {
                 stroke="var(--color-weight)"
                 strokeWidth={2.5}
                 fill="url(#metricsWeightFill)"
-                dot={{ r: 2.5, strokeWidth: 1 }}
-                activeDot={{ r: 4 }}
+                dot={{ r: 3, strokeWidth: 2, stroke: "var(--card)" }}
+                activeDot={{ r: 4.5, strokeWidth: 2, stroke: "var(--card)" }}
               />
             </AreaChart>
           </ChartContainer>
         ) : latest ? (
-          <div>
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-[12px] font-medium text-ink-muted">آخرین اندازه گیری</span>
-              <b className="text-[13px] font-extrabold text-ink">
-                {toPersianDigits(Number(latest.height).toString())} سانتی متر · {toPersianDigits(Number(latest.weight).toString())} کیلوگرم
-              </b>
-            </div>
-            <p className="mt-1.5 text-[12px] font-medium leading-5 text-ink-subtle">
-              با ثبت اندازه گیری های بعدی، روند قد و وزن اینجا رسم می شود
-            </p>
-          </div>
+          <p className="mt-2 text-[12px] font-medium leading-5 text-ink-subtle">
+            با ثبت اندازه گیری های بعدی، روند قد و وزن اینجا رسم می شود
+          </p>
         ) : (
           <p className="rounded-xl bg-muted/60 p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
             هنوز اندازه گیری ای برای این هنرجو ثبت نشده است
@@ -200,17 +223,17 @@ export function StudentMetricsPanel({ studentId }: { studentId: string }) {
 
         {saved ? <p className="mt-2 text-[12px] font-bold text-success">اندازه گیری جدید ثبت شد</p> : null}
 
-        <Button
-          type="button"
-          variant="outline"
-          className="mt-3 h-11 w-full rounded-xl text-[12px] font-bold"
-          onClick={openForm}
-        >
+        <Button type="button" variant="outline" className="mt-3 h-11 w-full rounded-xl text-[12px] font-bold" onClick={openForm}>
           ثبت اندازه گیری
         </Button>
       </Card>
 
-      <SheetFrame open={open} onOpenChange={setOpen} title="ثبت اندازه گیری" description="قد و وزن جدید به سابقه اندازه گیری ها اضافه می شود">
+      <SheetFrame
+        open={open}
+        onOpenChange={setOpen}
+        title="ثبت اندازه گیری"
+        description="قد و وزن جدید به سابقه اندازه گیری ها اضافه می شود"
+      >
         <div className="grid grid-cols-2 gap-3">
           <AuthField label="قد (سانتی متر)" htmlFor="metricHeight" required error={heightError}>
             <AuthInput
