@@ -12,7 +12,6 @@ import { useClub } from "@/features/coach/hooks/use-clubs";
 import type { ClubInput } from "@/features/coach/lib/club-api";
 import { type ClubFormValues, clubFormSchema, clubToForm, emptyClubForm } from "@/features/coach/lib/club-form-model";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
-import { ClubCoverFields } from "./club-cover-fields";
 import { ClubFormFieldsSkeleton } from "./club-form-fields-skeleton";
 import { ClubInfoFields } from "./club-info-fields";
 
@@ -63,7 +62,6 @@ export function ClubForm({ mode, clubId }: { mode: "create" | "edit"; clubId?: s
       />
 
       <form className="mt-4 flex flex-col gap-4" onSubmit={submit} noValidate>
-        <ClubCoverFields />
         {isLoading ? (
           <ClubFormFieldsSkeleton />
         ) : (

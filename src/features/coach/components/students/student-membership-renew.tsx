@@ -72,8 +72,8 @@ export function StudentMembershipRenew({ studentId, membershipYear }: { studentI
         ) : null}
 
         <SheetFrame open={open} onOpenChange={setOpen} title="تمدید سال عضویت" description="تایید تمدید سال عضویت هنرجو">
-          <p className="rounded-xl bg-info-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
-            سال عضویت به سال جاری ({currentYear}) به روز می شود و شارژ بانک اطلاعاتی این هنرجو معتبر می شود.
+          <p className="mt-3 rounded-xl bg-info-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
+            سال عضویت به سال جاری ({currentYear}) به روز می شود.
           </p>
           <AuthFormError message={renew.error ? apiErrorMessage(renew.error) : ""} />
           <div className="flex gap-2 pt-1">
