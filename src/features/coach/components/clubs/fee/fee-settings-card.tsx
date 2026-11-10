@@ -13,7 +13,7 @@ import { SectionHeading } from "@/features/coach/components/section-heading";
 import { useClubFee } from "@/features/coach/hooks/use-fee";
 import { useSaveClubFee } from "@/features/coach/hooks/use-fee-mutations";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
-import { digitsOnly } from "@/lib/digits";
+import { digitsOnly, formatMoney } from "@/lib/digits";
 
 export function FeeSettingsCard({ clubId }: { clubId: string }) {
   const router = useRouter();
@@ -50,8 +50,8 @@ export function FeeSettingsCard({ clubId }: { clubId: string }) {
                 id="clubFeeAmount"
                 inputMode="numeric"
                 dir="ltr"
-                maxLength={12}
-                value={value}
+                maxLength={15}
+                value={value === "" ? "" : formatMoney(value)}
                 onChange={(event) => setAmount(digitsOnly(event.target.value, 12))}
               />
             </AuthField>

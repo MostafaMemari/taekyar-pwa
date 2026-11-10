@@ -14,7 +14,7 @@ import { useClubFee } from "@/features/coach/hooks/use-fee";
 import { useRecordFeePayment } from "@/features/coach/hooks/use-fee-mutations";
 import type { FeeMonth } from "@/features/coach/lib/fee-api";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
-import { digitsOnly } from "@/lib/digits";
+import { digitsOnly, formatMoney } from "@/lib/digits";
 import { FeeMonthSelect } from "./fee-month-select";
 
 export function FeePaymentSheet({
@@ -99,8 +99,8 @@ export function FeePaymentSheet({
             id="feePaymentAmount"
             inputMode="numeric"
             dir="ltr"
-            maxLength={12}
-            value={amountValue}
+            maxLength={15}
+            value={amountValue === "" ? "" : formatMoney(amountValue)}
             onChange={(event) => setAmount(digitsOnly(event.target.value, 12))}
           />
         </AuthField>
