@@ -1,4 +1,4 @@
-import { Check, Info, Landmark, LogIn, MapPin, Pencil } from "lucide-react";
+import { CalendarPlus, Check, Info, Landmark, MapPin, Pencil, Wallet } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -59,11 +59,21 @@ export function ClubCard({ club, studentCount }: { club: ClubRecord; studentCoun
           variant="brand"
           size="sm"
           className="h-9 flex-1 rounded-xl text-[12px] font-semibold"
-          render={<Link href="/coach" />}
+          render={<Link href={`/coach/sessions/new?clubId=${club.id}`} />}
           nativeButton={false}
         >
-          <LogIn data-icon="inline-start" aria-hidden="true" />
-          <span>ورود به باشگاه</span>
+          <CalendarPlus data-icon="inline-start" aria-hidden="true" />
+          <span>کلاس جدید</span>
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-9 flex-1 rounded-xl text-[12px] font-semibold"
+          render={<Link href={`/coach/clubs/${club.id}/fee`} />}
+          nativeButton={false}
+        >
+          <Wallet data-icon="inline-start" aria-hidden="true" />
+          <span>شهریه</span>
         </Button>
         <Button
           type="button"

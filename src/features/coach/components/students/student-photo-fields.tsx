@@ -1,50 +1,22 @@
 "use client";
 
-import { ShieldCheck } from "lucide-react";
-import { type Control, Controller, type FieldErrors } from "react-hook-form";
+import { Camera } from "lucide-react";
+import { type Control, Controller } from "react-hook-form";
 import { AuthField } from "@/components/shared/auth-field";
 import { DatePicker } from "@/components/shared/date-picker";
 import { PhotoPicker } from "@/components/shared/photo-picker";
-import { Input } from "@/components/ui/input";
 import { FormSection } from "@/features/coach/components/form-section";
 import type { StudentFormValues } from "@/features/coach/lib/student-form-model";
-import { digitsOnly, toPersianDigits } from "@/lib/digits";
 
 type FieldsProps = {
   control: Control<StudentFormValues>;
-  errors: FieldErrors<StudentFormValues>;
   mode: "create" | "edit";
   photo?: { imageSrc?: string | null; pending?: boolean; error?: string; onSelectFile?: (file: File) => void };
 };
 
-// Insurance never comes from this form: the server registers it for exactly one year via PATCH /student/:id/insurance.
-export function StudentEnrollmentFields({ control, errors, mode, photo }: FieldsProps) {
+export function StudentPhotoFields({ control, mode, photo }: FieldsProps) {
   return (
-    <FormSection icon={ShieldCheck} title={mode === "create" ? "عضویت و بیمه" : "عکس پرونده"}>
-      {mode === "create" ? (
-        <AuthField label="سال عضویت" htmlFor="membershipYear" optional error={errors.membershipYear?.message}>
-          <Controller
-            control={control}
-            name="membershipYear"
-            render={({ field }) => (
-              <Input
-                id="membershipYear"
-                name={field.name}
-                dir="ltr"
-                inputMode="numeric"
-                maxLength={4}
-                placeholder={toPersianDigits("1404")}
-                value={toPersianDigits(field.value)}
-                onChange={(event) => field.onChange(digitsOnly(event.target.value, 4))}
-                onBlur={field.onBlur}
-                ref={field.ref}
-                className="h-12 rounded-xl px-3 text-center text-sm font-semibold"
-              />
-            )}
-          />
-        </AuthField>
-      ) : null}
-
+    <FormSection icon={Camera} title="عکس پرونده">
       <PhotoPicker
         label="تصویر هنرجو"
         optional

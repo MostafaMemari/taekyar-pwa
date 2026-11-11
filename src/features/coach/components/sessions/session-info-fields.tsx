@@ -12,13 +12,16 @@ import type { SessionFormValues } from "@/features/coach/lib/session-form-model"
 type FieldsProps = {
   control: Control<SessionFormValues>;
   clubLocked?: boolean;
+  initialClubId?: string;
   nameError?: string;
   clubIdError?: string;
 };
 
-export function SessionInfoFields({ control, clubLocked, nameError, clubIdError }: FieldsProps) {
+export function SessionInfoFields({ control, clubLocked, initialClubId, nameError, clubIdError }: FieldsProps) {
   const { data } = useClubs();
   const clubOptions = (data?.clubs ?? []).map((club) => ({ value: club.id, label: club.name }));
+  // A club passed in the URL is locked once its option exists; until the list loads the select stays open.
+  const clubPinned = clubLocked || (initialClubId !== undefined && clubOptions.some((option) => option.value === initialClubId));
 
   return (
     <FormSection icon={CalendarDays} title="اطلاعات کلاس">
@@ -54,7 +57,7 @@ export function SessionInfoFields({ control, clubLocked, nameError, clubIdError 
               placeholder="انتخاب باشگاه"
               options={clubOptions}
               icon={Landmark}
-              disabled={clubLocked}
+              disabled={clubPinned}
             />
           )}
         />

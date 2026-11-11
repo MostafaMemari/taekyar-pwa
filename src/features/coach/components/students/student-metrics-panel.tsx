@@ -109,14 +109,14 @@ export function StudentMetricsPanel({ studentId }: { studentId: string }) {
         {metrics.error ? (
           <p className="mt-2 text-[12px] font-bold leading-5 text-danger">{apiErrorMessage(metrics.error)}</p>
         ) : !records ? (
-          <div
+          <output
             className={latest ? "mt-3 flex flex-col gap-2" : "flex flex-col gap-2"}
             aria-busy="true"
             aria-label="در حال بارگذاری اندازه گیری ها"
           >
             <Skeleton className="h-6 w-40" />
             <Skeleton className="h-44 w-full rounded-xl" />
-          </div>
+          </output>
         ) : trend ? (
           <ChartContainer config={chartConfig} className="mx-auto mt-3 h-44 w-full">
             <AreaChart data={trend} margin={{ top: 12, right: 16, left: 16, bottom: 4 }}>

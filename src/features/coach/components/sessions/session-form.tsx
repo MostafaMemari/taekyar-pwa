@@ -14,7 +14,7 @@ import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { SessionInfoFields } from "./session-info-fields";
 import { SessionScheduleFields } from "./session-schedule-fields";
 
-export function SessionForm({ mode, sessionId }: { mode: "create" | "edit"; sessionId?: string }) {
+export function SessionForm({ mode, sessionId, initialClubId }: { mode: "create" | "edit"; sessionId?: string; initialClubId?: string }) {
   const router = useRouter();
   const { data: session, error: loadError, isLoading } = useSession(sessionId);
   const save = useSaveSession(sessionId);
@@ -26,7 +26,7 @@ export function SessionForm({ mode, sessionId }: { mode: "create" | "edit"; sess
     formState: { errors, isSubmitting },
   } = useForm<SessionFormValues>({
     resolver: zodResolver(sessionFormSchema),
-    defaultValues: emptySessionForm,
+    defaultValues: initialClubId ? { ...emptySessionForm, clubId: initialClubId } : emptySessionForm,
   });
 
   // Revalidating the class while the coach types must not overwrite what they entered, so the form is filled once.
@@ -62,6 +62,7 @@ export function SessionForm({ mode, sessionId }: { mode: "create" | "edit"; sess
         <SessionInfoFields
           control={control}
           clubLocked={Boolean(sessionId)}
+          initialClubId={initialClubId}
           nameError={errors.name?.message}
           clubIdError={errors.clubId?.message}
         />

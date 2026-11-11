@@ -17,8 +17,9 @@ import {
   studentFormToUpdateInput,
 } from "@/features/coach/lib/student-form-model";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
-import { StudentEnrollmentFields } from "./student-enrollment-fields";
+import { StudentMembershipField } from "./student-membership-field";
 import { StudentPersonalFields } from "./student-personal-fields";
+import { StudentPhotoFields } from "./student-photo-fields";
 import { StudentSportsFields } from "./student-sports-fields";
 
 export function StudentForm({
@@ -64,13 +65,14 @@ export function StudentForm({
     <form className="mt-4 flex flex-col gap-4" onSubmit={submit} noValidate>
       {mode === "create" ? (
         <>
+          <StudentPhotoFields control={control} mode={mode} photo={photo} />
           <StudentPersonalFields control={control} errors={errors} />
           <StudentSportsFields control={control} errors={errors} mode={mode} />
-          <StudentEnrollmentFields control={control} errors={errors} mode={mode} photo={photo} />
+          <StudentMembershipField control={control} />
         </>
       ) : (
         <>
-          <StudentEnrollmentFields control={control} errors={errors} mode={mode} photo={photo} />
+          <StudentPhotoFields control={control} mode={mode} photo={photo} />
           <StudentPersonalFields control={control} errors={errors} locked />
         </>
       )}

@@ -94,7 +94,7 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
         <Button
           variant="brand"
           className="h-12 w-full rounded-xl text-[12px] font-semibold"
-          render={<Link href="/coach/sessions/new" />}
+          render={<Link href={`/coach/sessions/new?clubId=${club.id}`} />}
           nativeButton={false}
         >
           <Plus data-icon="inline-start" aria-hidden="true" />

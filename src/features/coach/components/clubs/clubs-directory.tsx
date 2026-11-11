@@ -1,9 +1,8 @@
 "use client";
 
-import { Info, Landmark, Plus } from "lucide-react";
+import { Landmark, Plus } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -109,15 +108,6 @@ export function ClubsDirectory() {
             <span className="text-[10px] font-medium leading-5 text-ink-subtle">هر تعداد باشگاه که داشته باشید، همین جا اضافه کنید</span>
           </Button>
         ) : null}
-
-        <Alert className="mt-5 rounded-2xl border-[var(--ak-tint-line)] bg-accent p-3.5 text-start">
-          <Info className="text-accent-ink" aria-hidden="true" />
-          <AlertTitle className="text-[12px] font-extrabold text-accent-ink">اینجا چطور کار می کند؟</AlertTitle>
-          <AlertDescription className="text-[11px] leading-5 text-ink-muted">
-            اول باشگاه را انتخاب و وارد می شوید؛ حضور و غیاب، کلاس بندی و هنرجویان همان باشگاه را می بینید. با «تغییر باشگاه» هر لحظه می
-            توانید فضای کاری را عوض کنید
-          </AlertDescription>
-        </Alert>
       </CoachSheet>
     </main>
   );

@@ -81,7 +81,7 @@ export function DashboardAttendance() {
               <div className="min-w-0 flex-1">
                 <p className="text-[13px] font-semibold text-ink">میانگین حضور این هفته</p>
                 <p className="mt-1 text-[12px] font-medium tabular-nums text-ink-muted">
-                  {toPersianDigits(String(data.thisWeek.present))} حاضر از {toPersianDigits(String(data.thisWeek.total))} رکورد
+                  {toPersianDigits(String(data.thisWeek.present))} حضور از {toPersianDigits(String(data.thisWeek.total))} ثبت
                 </p>
                 {comparable ? (
                   <p
@@ -98,15 +98,13 @@ export function DashboardAttendance() {
                     {isUp ? "+" : "−"}
                     {toPersianDigits(String(Math.abs(delta)))}٪ نسبت به هفته قبل
                   </p>
-                ) : (
-                  <p className="mt-1.5 text-[12px] font-medium text-ink-subtle">مقایسه ای با هفته قبل نیست</p>
-                )}
+                ) : null}
               </div>
             </div>
 
             <p className="sr-only">
               {days
-                .map((day) => `${day.label} ${toPersianDigits(String(day.percent))} درصد از ${toPersianDigits(String(day.total))} رکورد`)
+                .map((day) => `${day.label} ${toPersianDigits(String(day.present))} حضور از ${toPersianDigits(String(day.total))}`)
                 .join("، ")}
             </p>
 
@@ -132,8 +130,8 @@ export function DashboardAttendance() {
                           <span className="flex flex-1 items-center justify-between gap-3 leading-none">
                             <span className="text-muted-foreground">حضور</span>
                             <span className="font-medium tabular-nums text-foreground">
-                              {toPersianDigits(String(value))}٪ · {toPersianDigits(String(item?.payload?.present ?? 0))} از{" "}
-                              {toPersianDigits(String(item?.payload?.total ?? 0))}
+                              {toPersianDigits(String(item?.payload?.present ?? 0))} از {toPersianDigits(String(item?.payload?.total ?? 0))}
+                              {item?.payload?.total === 0 ? "" : ` · ${toPersianDigits(String(value))}٪`}
                             </span>
                           </span>
                         </>
@@ -147,7 +145,7 @@ export function DashboardAttendance() {
                       key={day.key}
                       fill={
                         day.total === 0
-                          ? "var(--line-3)"
+                          ? "transparent"
                           : day.isToday
                             ? "var(--color-percent)"
                             : "color-mix(in srgb, var(--ak-600) 22%, transparent)"

@@ -46,7 +46,7 @@ export function DashboardOverview() {
 
   return (
     <div className="flex flex-col gap-4">
-      <ul className="grid grid-cols-4 gap-1">
+      <ul className="grid grid-cols-4">
         {actions.map((action) => {
           const tile = (
             <>
@@ -61,7 +61,7 @@ export function DashboardOverview() {
               <span className={cn("text-[12px] font-medium", action.primary ? "text-ink" : "text-ink-muted")}>{action.label}</span>
             </>
           );
-          const className = "flex flex-col items-center gap-1.5 rounded-2xl py-1.5 transition-colors active:bg-muted/60";
+          const className = "flex w-full flex-col items-center gap-1.5 rounded-2xl py-2 transition-colors active:bg-muted/60";
 
           return (
             <li key={action.label}>
