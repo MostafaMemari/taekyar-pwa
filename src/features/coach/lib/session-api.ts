@@ -36,6 +36,14 @@ type ClassSessionResponse = { classSession: ClassSessionRecord };
 
 export const SESSIONS_PAGE_SIZE = 100;
 
+export type ClassSessionMembershipRecord = { id: string; classSessionId: string; studentId: string; classSession: ClassSessionRecord };
+
+export function fetchStudentSessions(studentId: string): Promise<ClassSessionRecord[]> {
+  return authRequest<ClassSessionMembershipRecord[]>(`class-session/by-student/${studentId}`).then((rows) =>
+    rows.map((row) => row.classSession),
+  );
+}
+
 export function fetchSessions(): Promise<{ sessions: ClassSessionRecord[]; total: number }> {
   return authRequestWithMeta<ClassSessionRecord[]>(`class-session?page=1&take=${SESSIONS_PAGE_SIZE}`).then(({ data, pager }) => ({
     sessions: data,

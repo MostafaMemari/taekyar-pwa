@@ -11,7 +11,7 @@ import { FeePaymentForm } from "@/features/coach/components/clubs/fee/fee-paymen
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { PersonAvatar } from "@/features/coach/components/person-avatar";
 import { StatusBadge } from "@/features/coach/components/status-badge";
-import { useStudentClubs } from "@/features/coach/hooks/use-clubs";
+import { useClubs, useStudentClubs } from "@/features/coach/hooks/use-clubs";
 import { currentFeeMonth } from "@/features/coach/lib/fee-api";
 import type { AgeCategoryRecord, StudentRecord } from "@/features/coach/lib/student-api";
 import { GENDER_OPTIONS } from "@/features/coach/lib/student-form-options";
@@ -73,12 +73,17 @@ export function StudentQuickSheet({
 }) {
   const router = useRouter();
   const [view, setView] = useState<QuickView>("info");
+  const [enrollClubId, setEnrollClubId] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const { data: memberships, isLoading: clubsLoading } = useStudentClubs(student?.id ?? "");
+  const { data: clubs } = useClubs();
 
   // Reopening starts from the info view even if the sheet was closed mid-form.
   useEffect(() => {
-    if (!open) setView("info");
+    if (!open) {
+      setView("info");
+      setEnrollClubId(null);
+    }
   }, [open]);
 
   const insurance = insuranceStatusOf(student?.sportsInsuranceDate ?? null, expiringDays);
@@ -103,6 +108,7 @@ export function StudentQuickSheet({
   const activeMemberships = (memberships ?? []).filter((membership) => membership.isActive);
   const feeClubId = activeMemberships[0]?.club.id ?? "";
   const feeClubs = activeMemberships.map((membership) => membership.club);
+  const clubNames = new Map((clubs?.clubs ?? []).map((club) => [club.id, club.name]));
 
   // One-tap fixes for whatever the sheet flags; each swaps the sheet's content or opens the belt flow.
   const actions = [
@@ -143,8 +149,15 @@ export function StudentQuickSheet({
     <SheetFrame
       open={open}
       onOpenChange={onOpenChange}
-      onBack={view === "info" ? undefined : () => setView("info")}
-      title={view === "info" ? "اطلاعات سریع هنرجو" : VIEW_META[view].title}
+      // Back unwinds the enroll drill first: sessions to clubs, then clubs to info.
+      onBack={view === "info" ? undefined : view === "enroll" && enrollClubId ? () => setEnrollClubId(null) : () => setView("info")}
+      title={
+        view === "info"
+          ? "اطلاعات سریع هنرجو"
+          : view === "enroll" && enrollClubId
+            ? `کلاس های ${clubNames.get(enrollClubId) ?? "باشگاه"}`
+            : VIEW_META[view].title
+      }
       description={view === "info" ? "اطلاعات پرونده هنرجو" : VIEW_META[view].description}
     >
       {view === "insurance" && student ? (
@@ -169,7 +182,15 @@ export function StudentQuickSheet({
           />
         )
       ) : view === "enroll" && student ? (
-        <StudentSessionEnrollForm studentId={student.id} onDone={() => setView("info")} />
+        <StudentSessionEnrollForm
+          studentId={student.id}
+          clubId={enrollClubId}
+          onPickClub={setEnrollClubId}
+          onDone={() => {
+            setView("info");
+            setEnrollClubId(null);
+          }}
+        />
       ) : (
         <div className="mt-3 flex flex-col gap-3">
           <div className="flex items-center gap-3">

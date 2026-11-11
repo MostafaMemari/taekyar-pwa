@@ -4,6 +4,7 @@ import {
   fetchSessionStudentCount,
   fetchSessionStudentTotals,
   fetchSessions,
+  fetchStudentSessions,
   SESSIONS_PAGE_SIZE,
 } from "@/features/coach/lib/session-api";
 import { swrReadOptions } from "@/lib/api/swr";
@@ -14,10 +15,15 @@ const sessionKeys = {
   detail: (id: string) => ["session", id] as const,
   students: (id: string) => ["session", id, "students"] as const,
   counts: (ids: string[]) => ["session", "counts", ids.join(",")] as const,
+  byStudent: (id: string) => ["session", "by-student", id] as const,
 };
 
 export function useSessions() {
   return useSWR(sessionKeys.list, fetchSessions, swrReadOptions);
+}
+
+export function useStudentSessions(studentId: string) {
+  return useSWR(studentId ? sessionKeys.byStudent(studentId) : null, ([, , id]) => fetchStudentSessions(id), swrReadOptions);
 }
 
 export function useSession(id?: string) {
