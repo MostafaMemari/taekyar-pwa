@@ -1,24 +1,18 @@
-import { Plus, Users } from "lucide-react";
+import { Plus, ShieldCheck, ShieldOff, ShieldX, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StatusBadge } from "@/features/coach/components/status-badge";
 import type { StudentInsuranceSummary } from "@/features/coach/lib/student-api";
-import {
-  FEE_META,
-  INSURANCE_META,
-  INSURANCE_STATUSES,
-  type StudentFeeStatus,
-  type StudentInsuranceStatus,
-} from "@/features/coach/lib/students-options";
+import { FEE_META, type StudentFeeStatus, type StudentInsuranceStatus } from "@/features/coach/lib/students-options";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
-const TONE_TEXT: Record<StudentInsuranceStatus, string> = {
-  valid: "text-success",
-  expiring: "text-warning",
-  expired: "text-danger",
-  none: "text-ink-muted",
-};
+// Filter chips group statuses: expiring and expired share one chip.
+const INSURANCE_FILTER_GROUPS: { label: string; icon: typeof ShieldCheck; tone: string; values: StudentInsuranceStatus[] }[] = [
+  { label: "معتبر", icon: ShieldCheck, tone: "text-success", values: ["valid"] },
+  { label: "منقضی و نزدیک انقضا", icon: ShieldX, tone: "text-danger", values: ["expired", "expiring"] },
+  { label: "بدون بیمه", icon: ShieldOff, tone: "text-ink-muted", values: ["none"] },
+];
 
 const FEE_TEXT: Record<StudentFeeStatus, string> = {
   PAID: "text-success",
@@ -68,30 +62,29 @@ export function StudentsOverview({
       <div className="mt-4 flex flex-col gap-2">
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           <span className="shrink-0 text-[11px] font-bold text-ink-subtle">بیمه ورزشی</span>
-          {INSURANCE_STATUSES.map((value) => {
-            const meta = INSURANCE_META[value];
-            const Icon = meta.icon;
-            const isActive = active.includes(value);
-            const count = stats?.[value];
+          {INSURANCE_FILTER_GROUPS.map((group) => {
+            const Icon = group.icon;
+            const isActive = group.values.every((value) => active.includes(value));
+            const count = group.values.reduce((sum, value) => sum + (stats?.[value] ?? 0), 0);
 
             return (
               <Button
-                key={value}
+                key={group.label}
                 type="button"
                 variant="field"
                 aria-pressed={isActive}
-                onClick={() => onToggle(value)}
+                onClick={() => group.values.forEach((value) => onToggle(value))}
                 className={cn(
                   "h-9 gap-1.5 rounded-xl px-2.5 text-[12px] font-bold",
                   isActive && "border-primary/35 bg-brand-50 text-accent-ink",
                 )}
               >
-                <Icon className={cn("size-3.5", TONE_TEXT[value])} aria-hidden="true" />
-                <span>{meta.shortLabel}</span>
-                {count === undefined ? (
+                <Icon className={cn("size-3.5", group.tone)} aria-hidden="true" />
+                <span>{group.label}</span>
+                {stats === undefined ? (
                   <Skeleton className="h-3 w-5" />
                 ) : (
-                  <b className={cn("leading-none tabular-nums", TONE_TEXT[value])}>{toPersianDigits(String(count))}</b>
+                  <b className={cn("leading-none tabular-nums", group.tone)}>{toPersianDigits(String(count))}</b>
                 )}
               </Button>
             );
