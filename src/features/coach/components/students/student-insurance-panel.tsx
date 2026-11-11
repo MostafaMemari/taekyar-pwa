@@ -11,7 +11,7 @@ import { StatusBadge } from "@/features/coach/components/status-badge";
 import { useRemoveStudentInsurance } from "@/features/coach/hooks/use-student-mutations";
 import { INSURANCE_META, insuranceStatusOf } from "@/features/coach/lib/students-options";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
-import { addJalaliYears, todayJalali, toJalaliDate } from "@/lib/jalali";
+import { toJalaliDate } from "@/lib/jalali";
 import { cn } from "@/lib/utils";
 import { StudentInsuranceSheet } from "./student-insurance-sheet";
 
@@ -29,7 +29,6 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
   const [open, setOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [renewed, setRenewed] = useState(false);
-  const [date, setDate] = useState(() => addJalaliYears(todayJalali(), 1));
   const remove = useRemoveStudentInsurance();
 
   const status = insuranceStatusOf(expiryDate, INSURING_DAYS);
@@ -85,7 +84,6 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
               variant="outline"
               className="h-11 w-full rounded-xl text-[12px] font-bold"
               onClick={() => {
-                setDate(addJalaliYears(todayJalali(), 1));
                 setRenewed(false);
                 setOpen(true);
               }}
@@ -107,7 +105,6 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
             variant="outline"
             className="mt-3 h-11 w-full rounded-xl text-[12px] font-bold"
             onClick={() => {
-              setDate(addJalaliYears(todayJalali(), 1));
               setRenewed(false);
               setOpen(true);
             }}

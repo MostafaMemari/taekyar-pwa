@@ -2,7 +2,6 @@
 
 import { ChevronLeft, Users } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { PersonAvatar } from "@/features/coach/components/person-avatar";
@@ -13,7 +12,6 @@ import { toPersianDigits } from "@/lib/digits";
 
 // The entry list is the picker: one tap opens that student's attendance report.
 export function ReportStudentPicker({ entries }: { entries: ClassAttendanceEntry[] }) {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
 
   return (

@@ -29,15 +29,19 @@ export function useClub(id?: string) {
 }
 
 export function useStudentClubs(studentId: string) {
-  return useSWR(clubKeys.byStudent(studentId), ([, , id]) => fetchStudentClubs(id), swrReadOptions);
+  return useSWR(studentId ? clubKeys.byStudent(studentId) : null, ([, , id]) => fetchStudentClubs(id), swrReadOptions);
 }
 
 export function useClubStudentCount(id: string) {
   return useSWR(clubKeys.students(id), ([, clubId]) => fetchClubStudentCount(clubId), swrReadOptions);
 }
 
-export function useClubMembers(id: string) {
-  return useSWR(id ? clubKeys.members(id) : null, ([, clubId]) => fetchClubMembers(clubId), swrReadOptions);
+export function useClubMembers(id: string, search?: string) {
+  return useSWR(
+    id ? ([...clubKeys.members(id), search ?? ""] as const) : null,
+    ([, , clubId, term]) => fetchClubMembers(clubId, term || undefined),
+    swrReadOptions,
+  );
 }
 
 export function useClubStudentCounts(clubIds: string[]) {

@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { AuthFormError } from "@/components/shared/auth-form-error";
 import { Button } from "@/components/ui/button";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";

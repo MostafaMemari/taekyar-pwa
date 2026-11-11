@@ -78,8 +78,12 @@ export type ClubMemberRecord = {
   student: { id: string; fullName: string };
 };
 
-export function fetchClubMembers(id: string): Promise<ClubMemberRecord[]> {
-  return authRequestWithMeta<ClubMemberRecord[]>(`club/${id}/students?page=1&take=100`).then(({ data }) => data);
+// shortcut: one page of 100 members feeds the member panels and pickers; add paging when a club outgrows it.
+export function fetchClubMembers(id: string, search?: string): Promise<ClubMemberRecord[]> {
+  const query = new URLSearchParams({ page: "1", take: "100" });
+  if (search) query.set("search", search);
+
+  return authRequestWithMeta<ClubMemberRecord[]>(`club/${id}/students?${query.toString()}`).then(({ data }) => data);
 }
 
 export function changeClubMemberStatus(id: string, studentId: string, isActive: boolean): Promise<void> {

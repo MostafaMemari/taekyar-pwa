@@ -1,4 +1,4 @@
-import { CircleAlert, CircleCheck, Plus, Users } from "lucide-react";
+import { Plus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StatusBadge } from "@/features/coach/components/status-badge";

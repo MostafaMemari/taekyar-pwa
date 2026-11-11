@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthField } from "@/components/shared/auth-field";
 import { AuthFormError } from "@/components/shared/auth-form-error";
 import { DatePicker } from "@/components/shared/date-picker";
@@ -27,6 +27,11 @@ export function StudentInsuranceSheet({
   const [date, setDate] = useState(() => addJalaliYears(todayJalali(), 1));
   const renew = useRenewStudentInsurance();
   const year = Number(date.split("/")[0]);
+
+  // Every open starts from the exact one-year-ahead date the backend expects.
+  useEffect(() => {
+    if (open) setDate(addJalaliYears(todayJalali(), 1));
+  }, [open]);
 
   const submit = async () => {
     const sportsInsuranceDate = toGregorianDate(date);

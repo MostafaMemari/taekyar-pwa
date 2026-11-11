@@ -1,13 +1,15 @@
 "use client";
 
-import { Landmark, Loader2, User } from "lucide-react";
+import { Check, Landmark, Loader2, Search, User } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthField } from "@/components/shared/auth-field";
 import { AuthFormError } from "@/components/shared/auth-form-error";
 import { AuthInput } from "@/components/shared/auth-input";
 import { AuthSelect } from "@/components/shared/auth-select";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { useClubMembers } from "@/features/coach/hooks/use-clubs";
 import { useClubFee } from "@/features/coach/hooks/use-fee";
@@ -16,7 +18,10 @@ import type { ClubRecord } from "@/features/coach/lib/club-api";
 import type { FeeMonth } from "@/features/coach/lib/fee-api";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { digitsOnly, formatMoney } from "@/lib/digits";
+import { cn } from "@/lib/utils";
 import { FeeMonthSelect } from "./fee-month-select";
+
+const SEARCH_DEBOUNCE_MS = 400;
 
 export function FeePaymentSheet({
   open,
@@ -38,7 +43,16 @@ export function FeePaymentSheet({
   const router = useRouter();
   const [pickedClubId, setPickedClubId] = useState<string | null>(null);
   const activeClubId = pickedClubId ?? clubId;
-  const { data: members, isLoading: membersLoading } = useClubMembers(activeClubId);
+  const [search, setSearch] = useState("");
+  const [term, setTerm] = useState("");
+
+  // The API does the search; typing waits for a pause so the list does not refetch per character.
+  useEffect(() => {
+    const timer = setTimeout(() => setTerm(search.trim()), SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  const { data: members, isLoading: membersLoading } = useClubMembers(activeClubId, term || undefined);
   const { data: fee } = useClubFee(activeClubId);
   const record = useRecordFeePayment();
   const saveFee = useSaveClubFee();
@@ -51,6 +65,8 @@ export function FeePaymentSheet({
 
   const close = () => {
     setPickedClubId(null);
+    setSearch("");
+    setTerm("");
     setStudentId(initialStudentId ?? null);
     setPicked(month);
     setAmount(null);
@@ -150,15 +166,50 @@ export function FeePaymentSheet({
         )}
 
         <AuthField label="هنرجو" htmlFor="feePaymentStudent" required>
-          <AuthSelect
-            id="feePaymentStudent"
-            icon={User}
-            placeholder="انتخاب هنرجو"
-            value={studentId}
-            onValueChange={setStudentId}
-            disabled={membersLoading}
-            options={activeMembers.map((member) => ({ value: member.studentId, label: member.student.fullName }))}
-          />
+          <div className="relative">
+            <Search className="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-subtle" aria-hidden="true" />
+            <Input
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="جستجوی نام یا کد ملی"
+              aria-label="جستجوی هنرجو"
+              className="h-11 rounded-xl ps-10"
+            />
+          </div>
+          <div className="mt-2 max-h-44 overflow-y-auto no-scrollbar rounded-xl border border-[var(--line-2)]">
+            {membersLoading && activeMembers.length === 0 ? (
+              <div className="flex flex-col gap-2 p-2.5">
+                {[0, 1, 2].map((row) => (
+                  <Skeleton key={row} className="h-9 w-full rounded-lg" />
+                ))}
+              </div>
+            ) : activeMembers.length === 0 ? (
+              <p className="p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
+                {term ? "هنرجویی با این نام یا کد ملی پیدا نشد" : "هنرجوی فعالی در این باشگاه نیست"}
+              </p>
+            ) : (
+              activeMembers.map((member) => {
+                const isSelected = studentId === member.studentId;
+
+                return (
+                  <button
+                    key={member.studentId}
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() => setStudentId(member.studentId)}
+                    className={cn(
+                      "flex w-full cursor-pointer items-center gap-2.5 px-3 py-2.5 text-start transition-colors hover:bg-muted/50",
+                      isSelected && "bg-brand-50 text-accent-ink",
+                    )}
+                  >
+                    <User className="size-4 shrink-0 text-ink-subtle" aria-hidden="true" />
+                    <span className="min-w-0 flex-1 truncate text-[12px] font-bold text-ink-body">{member.student.fullName}</span>
+                    {isSelected ? <Check className="size-4 shrink-0 text-accent-ink" aria-hidden="true" /> : null}
+                  </button>
+                );
+              })
+            )}
+          </div>
         </AuthField>
 
         <AuthField label="ماه پرداخت" htmlFor="feePaymentMonth">
