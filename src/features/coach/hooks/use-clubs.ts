@@ -39,7 +39,7 @@ export function useClubStudentCount(id: string) {
 export function useClubMembers(id: string, search?: string) {
   return useSWR(
     id ? ([...clubKeys.members(id), search ?? ""] as const) : null,
-    ([, , clubId, term]) => fetchClubMembers(clubId, term || undefined),
+    ([, clubId, , term]) => fetchClubMembers(clubId, term || undefined),
     swrReadOptions,
   );
 }
