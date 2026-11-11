@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AuthFormError } from "@/components/shared/auth-form-error";
+import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
@@ -120,19 +121,16 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
             با حذف، بیمه این هنرجو از پرونده برداشته می شود و در آمار و فیلترها بدون بیمه محسوب می شود. این کار قابل بازگشت نیست
           </p>
           <AuthFormError message={remove.error ? apiErrorMessage(remove.error) : ""} />
-          <div className="flex gap-2 pt-1">
-            <Button variant="outline" className="h-11 flex-1 rounded-xl" onClick={() => setDeleteOpen(false)}>
-              انصراف
-            </Button>
+          <SheetActions onSecondary={() => setDeleteOpen(false)}>
             <Button
               variant="destructive"
-              className="h-11 flex-[2] rounded-xl text-[12px] font-semibold"
+              className="h-11 flex-[2] rounded-xl text-[12px] font-bold"
               disabled={remove.isMutating}
               onClick={() => void confirmRemove()}
             >
               {remove.isMutating ? "در حال حذف..." : "حذف بیمه"}
             </Button>
-          </div>
+          </SheetActions>
         </SheetFrame>
       </Card>
     </section>

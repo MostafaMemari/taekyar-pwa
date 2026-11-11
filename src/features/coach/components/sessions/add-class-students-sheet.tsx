@@ -4,6 +4,7 @@ import { Check, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AuthFormError } from "@/components/shared/auth-form-error";
+import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -153,20 +154,17 @@ export function AddClassStudentsSheet({
 
         <AuthFormError message={save.error ? apiErrorMessage(save.error) : ""} />
 
-        <div className="flex items-center gap-2 border-t border-[var(--line-2)] pt-3">
-          <Button type="button" variant="outline" className="h-11 rounded-xl" onClick={close}>
-            بستن
-          </Button>
+        <SheetActions secondaryLabel="بستن" onSecondary={close}>
           <Button
             type="button"
             variant="brand"
-            className="h-11 flex-1 rounded-xl text-[12px]"
+            className="h-11 flex-[2] rounded-xl text-[12px] font-bold"
             disabled={!selected.length || save.isMutating}
             onClick={() => void submit()}
           >
             {save.isMutating ? "در حال افزودن..." : `افزودن ${toPersianDigits(String(selected.length))} هنرجو`}
           </Button>
-        </div>
+        </SheetActions>
       </div>
     </SheetFrame>
   );

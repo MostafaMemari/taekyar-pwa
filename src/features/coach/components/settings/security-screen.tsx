@@ -3,6 +3,7 @@
 import { AlertTriangle, Check, Loader2, Monitor, ShieldCheck, Smartphone, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -243,20 +244,17 @@ export function SecurityScreen() {
 
         {revoke.error ? <p className="pt-2 text-[12px] font-bold leading-5 text-danger">{apiErrorMessage(revoke.error)}</p> : null}
 
-        <div className="flex gap-2 pt-1">
-          <Button variant="outline" className="h-11 flex-1 rounded-xl" onClick={() => setRevokeTarget(null)} disabled={revoke.isMutating}>
-            انصراف
-          </Button>
+        <SheetActions onSecondary={() => setRevokeTarget(null)} secondaryDisabled={revoke.isMutating}>
           <Button
             variant="destructive"
-            className="h-11 flex-[2] rounded-xl bg-danger text-[12px] font-semibold text-white hover:bg-danger/90"
+            className="h-11 flex-[2] rounded-xl bg-danger text-[12px] font-bold text-white hover:bg-danger/90"
             onClick={applyRevoke}
             disabled={revoke.isMutating}
           >
             {revoke.isMutating ? <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : null}
             {revoke.isMutating ? "در حال خروج..." : "خروج از نشست"}
           </Button>
-        </div>
+        </SheetActions>
       </SheetFrame>
 
       <SheetFrame open={revokeAllOpen} onOpenChange={setRevokeAllOpen} title="لغو همه نشست ها" description="تایید لغو همه نشست ها">
@@ -266,25 +264,17 @@ export function SecurityScreen() {
 
         {revokeAll.error ? <p className="pt-2 text-[12px] font-bold leading-5 text-danger">{apiErrorMessage(revokeAll.error)}</p> : null}
 
-        <div className="flex gap-2 pt-1">
-          <Button
-            variant="outline"
-            className="h-11 flex-1 rounded-xl"
-            onClick={() => setRevokeAllOpen(false)}
-            disabled={revokeAll.isMutating}
-          >
-            انصراف
-          </Button>
+        <SheetActions onSecondary={() => setRevokeAllOpen(false)} secondaryDisabled={revokeAll.isMutating}>
           <Button
             variant="destructive"
-            className="h-11 flex-[2] rounded-xl bg-danger text-[12px] font-semibold text-white hover:bg-danger/90"
+            className="h-11 flex-[2] rounded-xl bg-danger text-[12px] font-bold text-white hover:bg-danger/90"
             onClick={applyRevokeAll}
             disabled={revokeAll.isMutating}
           >
             {revokeAll.isMutating ? <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : null}
             {revokeAll.isMutating ? "در حال لغو..." : "لغو همه نشست ها"}
           </Button>
-        </div>
+        </SheetActions>
       </SheetFrame>
     </main>
   );

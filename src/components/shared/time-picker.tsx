@@ -4,7 +4,8 @@ import { ChevronDown, Clock } from "lucide-react";
 import { useState } from "react";
 import { WheelColumn } from "@/components/shared/wheel-column";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { SheetActions } from "@/components/shared/sheet-actions";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
@@ -125,14 +126,11 @@ export function TimePicker({ id, title, value, onChange, defaultValue }: TimePic
             </div>
           </div>
 
-          <SheetFooter className="flex-row gap-3 p-0 pt-1">
-            <Button type="button" variant="outline" size="cta" className="flex-1" onClick={() => setOpen(false)}>
-              انصراف
-            </Button>
-            <Button type="button" variant="brand" size="cta" className="flex-[2]" onClick={confirm}>
+          <SheetActions onSecondary={() => setOpen(false)}>
+            <Button type="button" variant="brand" className="h-11 flex-[2] rounded-xl text-[12px] font-bold" onClick={confirm}>
               تایید
             </Button>
-          </SheetFooter>
+          </SheetActions>
         </SheetContent>
       </Sheet>
     </>

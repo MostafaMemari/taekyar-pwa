@@ -3,6 +3,7 @@
 import { Loader2, Medal, ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
 import { AuthSelect } from "@/components/shared/auth-select";
+import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
@@ -225,20 +226,21 @@ export function StudentsFiltersSheet({
         </div>
       </div>
 
-      <div className="mt-4 flex items-center gap-2 border-t border-[var(--line-2)] pt-3">
+      <SheetActions
+        className="mt-4"
+        secondaryLabel="پاک کردن"
+        secondaryDisabled={activeCount === 0}
+        onSecondary={() => {
+          onClear();
+          onOpenChange(false);
+        }}
+      >
         <Button
           type="button"
-          variant="outline"
-          className="h-11 rounded-xl"
-          disabled={activeCount === 0}
-          onClick={() => {
-            onClear();
-            onOpenChange(false);
-          }}
+          variant="brand"
+          className="h-11 flex-[2] rounded-xl text-[12px] font-bold"
+          onClick={() => onOpenChange(false)}
         >
-          پاک کردن
-        </Button>
-        <Button type="button" variant="brand" className="h-11 flex-1 rounded-xl" onClick={() => onOpenChange(false)}>
           {resultCount === undefined ? (
             <>
               <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" />
@@ -248,7 +250,7 @@ export function StudentsFiltersSheet({
             `نمایش ${toPersianDigits(String(resultCount))} هنرجو`
           )}
         </Button>
-      </div>
+      </SheetActions>
     </SheetFrame>
   );
 }

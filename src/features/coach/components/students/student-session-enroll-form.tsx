@@ -4,6 +4,7 @@ import { Check, ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AuthFormError } from "@/components/shared/auth-form-error";
+import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SessionTime } from "@/features/coach/components/session-time";
@@ -145,20 +146,17 @@ export function StudentSessionEnrollForm({
 
       <AuthFormError message={save.error ? apiErrorMessage(save.error) : ""} />
 
-      <div className="flex items-center gap-2 border-t border-[var(--line-2)] pt-3">
-        <Button type="button" variant="outline" className="h-11 rounded-xl" onClick={onDone} disabled={save.isMutating}>
-          انصراف
-        </Button>
+      <SheetActions onSecondary={onDone} secondaryDisabled={save.isMutating}>
         <Button
           type="button"
           variant="brand"
-          className="h-11 flex-1 rounded-xl text-[12px]"
+          className="h-11 flex-[2] rounded-xl text-[12px] font-bold"
           disabled={!picked || save.isMutating}
           onClick={() => void submit()}
         >
           {save.isMutating ? "در حال افزودن..." : "افزودن به کلاس"}
         </Button>
-      </div>
+      </SheetActions>
     </div>
   );
 }

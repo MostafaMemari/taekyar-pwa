@@ -7,6 +7,7 @@ import { AuthField } from "@/components/shared/auth-field";
 import { AuthFormError } from "@/components/shared/auth-form-error";
 import { AuthInput } from "@/components/shared/auth-input";
 import { AuthSelect } from "@/components/shared/auth-select";
+import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -235,21 +236,18 @@ export function FeePaymentForm({
 
       <AuthFormError message={record.error ? apiErrorMessage(record.error) : ""} />
 
-      <div className="flex items-center gap-2 border-t border-[var(--line-2)] pt-3">
-        <Button type="button" variant="outline" className="h-11 rounded-xl" onClick={onDone} disabled={record.isMutating}>
-          انصراف
-        </Button>
+      <SheetActions onSecondary={onDone} secondaryDisabled={record.isMutating}>
         <Button
           type="button"
           variant="brand"
-          className="h-11 flex-1 rounded-xl text-[12px]"
+          className="h-11 flex-[2] rounded-xl text-[12px] font-bold"
           disabled={!canSubmit || !fee}
           onClick={() => void submit()}
         >
           {record.isMutating ? <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : null}
           {record.isMutating ? "در حال ثبت..." : "ثبت پرداخت"}
         </Button>
-      </div>
+      </SheetActions>
     </div>
   );
 }

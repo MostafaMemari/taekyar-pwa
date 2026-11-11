@@ -4,6 +4,7 @@ import { Loader2, RotateCcw, UserMinus, Users } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
+import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -127,20 +128,17 @@ export function ClubMembers({ clubId }: { clubId: string }) {
           <p className="pt-2 text-[12px] font-bold leading-5 text-danger">{apiErrorMessage(changeStatus.error)}</p>
         ) : null}
 
-        <div className="flex gap-2 pt-1">
-          <Button variant="outline" className="h-11 flex-1 rounded-xl" onClick={() => setTarget(null)} disabled={changeStatus.isMutating}>
-            انصراف
-          </Button>
+        <SheetActions onSecondary={() => setTarget(null)} secondaryDisabled={changeStatus.isMutating}>
           <Button
             variant={target?.isActive ? "destructive" : "brand"}
-            className="h-11 flex-[2] rounded-xl text-[12px] font-semibold"
+            className="h-11 flex-[2] rounded-xl text-[12px] font-bold"
             onClick={() => void applyChange()}
             disabled={changeStatus.isMutating}
           >
             {changeStatus.isMutating ? <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : null}
             {changeStatus.isMutating ? "در حال ذخیره..." : target?.isActive ? "غیرفعال کردن" : "فعال کردن"}
           </Button>
-        </div>
+        </SheetActions>
       </SheetFrame>
     </section>
   );

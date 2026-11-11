@@ -4,6 +4,7 @@ import { CalendarDays, Check, ClipboardCheck, ClipboardList, EllipsisVertical, L
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useState } from "react";
+import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
@@ -213,25 +214,17 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
           <p className="pt-2 text-[12px] font-bold leading-5 text-danger">{apiErrorMessage(removeStudent.error)}</p>
         ) : null}
 
-        <div className="flex gap-2 pt-1">
-          <Button
-            variant="outline"
-            className="h-11 flex-1 rounded-xl"
-            onClick={() => setRemoveTarget(null)}
-            disabled={removeStudent.isMutating}
-          >
-            انصراف
-          </Button>
+        <SheetActions onSecondary={() => setRemoveTarget(null)} secondaryDisabled={removeStudent.isMutating}>
           <Button
             variant="destructive"
-            className="h-11 flex-[2] rounded-xl text-[12px] font-semibold"
+            className="h-11 flex-[2] rounded-xl text-[12px] font-bold"
             onClick={() => void applyRemove()}
             disabled={removeStudent.isMutating}
           >
             {removeStudent.isMutating ? <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : null}
             {removeStudent.isMutating ? "در حال حذف..." : "حذف از کلاس"}
           </Button>
-        </div>
+        </SheetActions>
       </SheetFrame>
     </main>
   );

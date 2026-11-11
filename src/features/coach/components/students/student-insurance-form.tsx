@@ -5,6 +5,7 @@ import { useState } from "react";
 import { AuthField } from "@/components/shared/auth-field";
 import { AuthFormError } from "@/components/shared/auth-form-error";
 import { DatePicker } from "@/components/shared/date-picker";
+import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { useRenewStudentInsurance } from "@/features/coach/hooks/use-student-mutations";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
@@ -22,9 +23,11 @@ export function StudentInsuranceForm({
 }) {
   const router = useRouter();
   // Fresh mount on every open, so the initializer alone starts from the exact one-year-ahead date the backend expects.
-  const [date, setDate] = useState(() => addJalaliYears(todayJalali(), 1));
+  const defaultDate = addJalaliYears(todayJalali(), 1);
+  const [date, setDate] = useState(defaultDate);
   const renew = useRenewStudentInsurance();
-  const year = Number(date.split("/")[0]);
+  // Bounds come from the default, so a cleared value can never collapse the year wheel.
+  const year = Number(defaultDate.split("/")[0]);
 
   const submit = async () => {
     const sportsInsuranceDate = toGregorianDate(date);
@@ -46,7 +49,7 @@ export function StudentInsuranceForm({
           title="تاریخ اعتبار بیمه"
           value={date}
           onChange={setDate}
-          defaultValue={addJalaliYears(todayJalali(), 1)}
+          defaultValue={defaultDate}
           fromYear={year - 1}
           toYear={year}
         />
@@ -58,19 +61,16 @@ export function StudentInsuranceForm({
 
       <AuthFormError message={renew.error ? apiErrorMessage(renew.error) : ""} />
 
-      <div className="flex gap-2 pt-1">
-        <Button variant="outline" className="h-11 flex-1 rounded-xl" onClick={onDone}>
-          انصراف
-        </Button>
+      <SheetActions onSecondary={onDone}>
         <Button
           variant="brand"
-          className="h-11 flex-1 rounded-xl text-[12px] font-semibold"
+          className="h-11 flex-[2] rounded-xl text-[12px] font-bold"
           disabled={renew.isMutating}
           onClick={() => void submit()}
         >
           {renew.isMutating ? "در حال ثبت..." : hasInsurance ? "تمدید بیمه" : "ثبت بیمه"}
         </Button>
-      </div>
+      </SheetActions>
     </>
   );
 }

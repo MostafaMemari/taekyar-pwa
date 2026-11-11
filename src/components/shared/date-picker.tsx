@@ -3,9 +3,10 @@
 import { jalaaliMonthLength } from "jalaali-js";
 import { CalendarDays, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { SheetActions } from "@/components/shared/sheet-actions";
 import { WheelColumn } from "@/components/shared/wheel-column";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { toLatinDigits, toPersianDigits } from "@/lib/digits";
 import { JALALI_MONTHS } from "@/lib/jalali";
 import { cn } from "@/lib/utils";
@@ -202,14 +203,11 @@ export function DatePicker({ id, title, value, onChange, defaultValue, fromYear 
             </div>
           </div>
 
-          <SheetFooter className="flex-row gap-3 p-0 pt-1">
-            <Button type="button" variant="outline" size="cta" className="flex-1" disabled={!value} onClick={clear}>
-              پاک کردن
-            </Button>
-            <Button type="button" variant="brand" size="cta" className="flex-[2]" onClick={confirm}>
+          <SheetActions secondaryLabel="پاک کردن" secondaryDisabled={!value} onSecondary={clear}>
+            <Button type="button" variant="brand" className="h-11 flex-[2] rounded-xl text-[12px] font-bold" onClick={confirm}>
               تایید
             </Button>
-          </SheetFooter>
+          </SheetActions>
         </SheetContent>
       </Sheet>
     </>

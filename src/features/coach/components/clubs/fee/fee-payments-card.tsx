@@ -2,6 +2,7 @@
 
 import { Banknote, Loader2, Trash2 } from "lucide-react";
 import { Fragment, useState } from "react";
+import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -126,20 +127,17 @@ export function FeePaymentsCard({ clubId, month }: { clubId: string; month: FeeM
           </p>
         ) : null}
 
-        <div className="flex gap-2 pt-1">
-          <Button variant="outline" className="h-11 flex-1 rounded-xl" onClick={() => setTarget(null)} disabled={remove.isMutating}>
-            انصراف
-          </Button>
+        <SheetActions onSecondary={() => setTarget(null)} secondaryDisabled={remove.isMutating}>
           <Button
             variant="destructive"
-            className="h-11 flex-[2] rounded-xl text-[12px] font-semibold"
+            className="h-11 flex-[2] rounded-xl text-[12px] font-bold"
             onClick={() => void confirmRemove()}
             disabled={remove.isMutating}
           >
             {remove.isMutating ? <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : null}
             {remove.isMutating ? "در حال حذف..." : "حذف"}
           </Button>
-        </div>
+        </SheetActions>
       </SheetFrame>
 
       <FeePaymentSheet open={sheetOpen} onOpenChange={setSheetOpen} clubId={clubId} month={month} />

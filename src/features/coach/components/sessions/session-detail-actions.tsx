@@ -3,6 +3,7 @@
 import { Loader2, Minus, Pencil, Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { CoachActionMenu } from "@/features/coach/components/coach-action-menu";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
@@ -99,20 +100,17 @@ export function SessionDetailActions({
 
         {deleteError ? <p className="pt-2 text-[12px] font-bold leading-5 text-danger">{deleteError}</p> : null}
 
-        <div className="flex gap-2 pt-1">
-          <Button variant="outline" className="h-11 flex-1 rounded-xl" onClick={() => setDeleteOpen(false)} disabled={deletePending}>
-            انصراف
-          </Button>
+        <SheetActions onSecondary={() => setDeleteOpen(false)} secondaryDisabled={deletePending}>
           <Button
             variant="destructive"
-            className="h-11 flex-[2] rounded-xl text-[12px] font-semibold"
+            className="h-11 flex-[2] rounded-xl text-[12px] font-bold"
             onClick={() => void applyDelete()}
             disabled={deletePending}
           >
             {deletePending ? <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : null}
             {deletePending ? "در حال حذف..." : "حذف کلاس"}
           </Button>
-        </div>
+        </SheetActions>
       </SheetFrame>
 
       <SheetFrame
@@ -129,20 +127,17 @@ export function SessionDetailActions({
 
         {error ? <p className="pt-2 text-[12px] font-bold leading-5 text-danger">{error}</p> : null}
 
-        <div className="flex gap-2 pt-1">
-          <Button variant="outline" className="h-11 flex-1 rounded-xl" onClick={() => setConfirmOpen(false)} disabled={pending}>
-            انصراف
-          </Button>
+        <SheetActions onSecondary={() => setConfirmOpen(false)} secondaryDisabled={pending}>
           <Button
             variant={isActive ? "destructive" : "brand"}
-            className="h-11 flex-[2] rounded-xl text-[12px] font-semibold"
+            className="h-11 flex-[2] rounded-xl text-[12px] font-bold"
             onClick={applyStatus}
             disabled={pending}
           >
             {pending ? <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : null}
             {pending ? "در حال ذخیره..." : isActive ? "غیرفعال کردن" : "فعال کردن"}
           </Button>
-        </div>
+        </SheetActions>
       </SheetFrame>
     </>
   );

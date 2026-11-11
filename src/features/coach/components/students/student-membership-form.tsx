@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { AuthFormError } from "@/components/shared/auth-form-error";
+import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { useRenewStudentMembershipYear } from "@/features/coach/hooks/use-student-mutations";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
@@ -29,19 +30,16 @@ export function StudentMembershipForm({ studentId, onDone }: { studentId: string
         سال عضویت به سال جاری ({currentYear}) به روز می شود
       </p>
       <AuthFormError message={renew.error ? apiErrorMessage(renew.error) : ""} />
-      <div className="flex gap-2 pt-1">
-        <Button variant="outline" className="h-11 flex-1 rounded-xl" onClick={onDone}>
-          انصراف
-        </Button>
+      <SheetActions onSecondary={onDone}>
         <Button
           variant="brand"
-          className="h-11 flex-1 rounded-xl text-[12px] font-semibold"
+          className="h-11 flex-[2] rounded-xl text-[12px] font-bold"
           disabled={renew.isMutating}
           onClick={() => void submit()}
         >
           {renew.isMutating ? "در حال تمدید..." : "تمدید عضویت"}
         </Button>
-      </div>
+      </SheetActions>
     </>
   );
 }

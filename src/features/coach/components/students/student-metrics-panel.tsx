@@ -7,6 +7,7 @@ import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { AuthField } from "@/components/shared/auth-field";
 import { AuthFormError } from "@/components/shared/auth-form-error";
 import { AuthInput } from "@/components/shared/auth-input";
+import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -270,19 +271,16 @@ export function StudentMetricsPanel({ studentId }: { studentId: string }) {
 
         <AuthFormError message={add.error ? apiErrorMessage(add.error) : ""} />
 
-        <div className="flex gap-2 pt-1">
-          <Button variant="outline" className="h-11 flex-1 rounded-xl" onClick={() => setOpen(false)}>
-            انصراف
-          </Button>
+        <SheetActions onSecondary={() => setOpen(false)}>
           <Button
             variant="brand"
-            className="h-11 flex-[2] rounded-xl text-[12px] font-semibold"
+            className="h-11 flex-[2] rounded-xl text-[12px] font-bold"
             disabled={add.isMutating}
             onClick={() => void submit()}
           >
             {add.isMutating ? "در حال ثبت..." : "ثبت اندازه گیری"}
           </Button>
-        </div>
+        </SheetActions>
       </SheetFrame>
     </section>
   );
