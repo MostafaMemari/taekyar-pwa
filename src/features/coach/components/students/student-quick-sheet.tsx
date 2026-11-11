@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FeePaymentForm } from "@/features/coach/components/clubs/fee/fee-payment-form";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
-import { PersonAvatar } from "@/features/coach/components/person-avatar";
 import { StatusBadge } from "@/features/coach/components/status-badge";
 import { useClubs, useStudentClubs } from "@/features/coach/hooks/use-clubs";
 import { currentFeeMonth } from "@/features/coach/lib/fee-api";
@@ -158,11 +157,12 @@ export function StudentQuickSheet({
       onBack={view === "info" ? undefined : view === "enroll" && enrollClubId ? () => setEnrollClubId(null) : () => setView("info")}
       title={
         view === "info"
-          ? "اطلاعات سریع هنرجو"
+          ? (student?.fullName ?? "اطلاعات سریع هنرجو")
           : view === "enroll" && enrollClubId
             ? `کلاس های ${clubNames.get(enrollClubId) ?? "باشگاه"}`
             : VIEW_META[view].title
       }
+      subtitle={view === "info" ? (student?.userId ? "حساب کاربری متصل" : "حساب کاربری ندارد") : undefined}
       description={view === "info" ? "اطلاعات پرونده هنرجو" : VIEW_META[view].description}
     >
       {view === "insurance" && student ? (
@@ -198,23 +198,6 @@ export function StudentQuickSheet({
         />
       ) : (
         <div className="mt-3 flex flex-col gap-2.5">
-          <div className="flex items-center gap-3">
-            <span className="relative shrink-0">
-              <PersonAvatar name={student?.fullName ?? ""} className="size-14" />
-              {student?.userId ? (
-                <span className="absolute -bottom-1 -end-1 grid size-[18px] place-items-center rounded-full bg-card">
-                  <BadgeCheck className="size-4 fill-sky-600 text-white" aria-hidden="true" />
-                </span>
-              ) : null}
-            </span>
-            <span className="min-w-0 flex-1">
-              <b className="block truncate text-[15px] font-extrabold text-ink">{student?.fullName}</b>
-              <span className="mt-0.5 block text-[12px] font-medium text-ink-subtle">
-                {student?.userId ? "حساب کاربری متصل" : "حساب کاربری ندارد"}
-              </span>
-            </span>
-          </div>
-
           {actions.length > 0 ? (
             // Centered pills hug the content, so any action count stays tight instead of leaving a lone tile.
             <div className="flex flex-wrap justify-center gap-1.5">

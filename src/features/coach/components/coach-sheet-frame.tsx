@@ -8,6 +8,7 @@ export function SheetFrame({
   onOpenChange,
   onBack,
   title,
+  subtitle,
   description,
   children,
 }: {
@@ -16,6 +17,8 @@ export function SheetFrame({
   // Shows a back chevron next to the title; for sheets that swap content in steps.
   onBack?: () => void;
   title: string;
+  // Small muted line under the title, e.g. a record name or status.
+  subtitle?: string;
   description: string;
   children: ReactNode;
 }) {
@@ -34,7 +37,10 @@ export function SheetFrame({
               <ChevronRight aria-hidden="true" />
             </Button>
           ) : null}
-          <SheetTitle className="flex-1 text-base font-extrabold text-ink">{title}</SheetTitle>
+          <span className="min-w-0 flex-1">
+            <SheetTitle className="block truncate text-base font-extrabold text-ink">{title}</SheetTitle>
+            {subtitle ? <span className="mt-0.5 block text-[11px] font-medium text-ink-subtle">{subtitle}</span> : null}
+          </span>
           <SheetClose render={<Button variant="ghost" size="icon-sm" aria-label="بستن" />}>
             <X aria-hidden="true" />
           </SheetClose>
