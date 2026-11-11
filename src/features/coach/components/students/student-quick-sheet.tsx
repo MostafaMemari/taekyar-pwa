@@ -79,9 +79,10 @@ export function StudentQuickSheet({
   const { data: memberships, isLoading: clubsLoading } = useStudentClubs(student?.id ?? "");
   const { data: clubs } = useClubs();
 
-  // Reopening starts from the info view even if the sheet was closed mid-form.
+  // Reset on open, not on close: a mid-form close keeps its content through the exit animation,
+  // and the enter animation already shows the info view.
   useEffect(() => {
-    if (!open) {
+    if (open) {
       setView("info");
       setEnrollClubId(null);
     }
@@ -165,153 +166,160 @@ export function StudentQuickSheet({
       subtitle={view === "info" ? (student?.userId ? "حساب کاربری متصل" : "حساب کاربری ندارد") : undefined}
       description={view === "info" ? "اطلاعات پرونده هنرجو" : VIEW_META[view].description}
     >
-      {view === "insurance" && student ? (
-        <StudentInsuranceForm studentId={student.id} hasInsurance={Boolean(student.sportsInsuranceDate)} onDone={() => setView("info")} />
-      ) : view === "membership" && student ? (
-        <StudentMembershipForm studentId={student.id} onDone={() => setView("info")} />
-      ) : view === "fee" && student ? (
-        // The no-club notice inside the form must not flash while the memberships load.
-        clubsLoading ? (
-          <output aria-busy="true" aria-label="خواندن باشگاه های هنرجو" className="mt-3 flex flex-col gap-2">
-            {[0, 1, 2].map((row) => (
-              <Skeleton key={row} className="h-12 w-full rounded-xl" />
-            ))}
-          </output>
-        ) : (
-          <FeePaymentForm
-            clubId={feeClubId}
-            clubs={feeClubs}
-            month={currentFeeMonth()}
-            initialStudentId={student.id}
-            onDone={() => setView("info")}
-          />
-        )
-      ) : view === "enroll" && student ? (
-        <StudentSessionEnrollForm
-          studentId={student.id}
-          clubId={enrollClubId}
-          onPickClub={setEnrollClubId}
-          onDone={() => {
-            setView("info");
-            setEnrollClubId(null);
-          }}
-        />
-      ) : (
-        <div className="mt-3 flex flex-col gap-2.5">
-          {actions.length > 0 ? (
-            // Centered pills hug the content, so any action count stays tight instead of leaving a lone tile.
-            <div className="flex flex-wrap justify-center gap-1.5">
-              {actions.map((action) => (
-                <button
-                  key={action.label}
-                  type="button"
-                  className="inline-flex h-9 items-center gap-1.5 rounded-full bg-brand-50/60 px-3 text-[12px] font-bold text-accent-ink transition-colors hover:bg-brand-50/90 active:bg-brand-50"
-                  onClick={action.onClick}
-                >
-                  <action.icon className="size-3.5" aria-hidden="true" />
-                  {action.label}
-                </button>
+      {/* Every view swap replays a soft entrance; the enroll drill re-animates per club too. */}
+      <div key={`${view}:${enrollClubId ?? ""}`} className="animate-in fade-in slide-in-from-bottom-2 duration-200 ease-out">
+        {view === "insurance" && student ? (
+          <StudentInsuranceForm studentId={student.id} hasInsurance={Boolean(student.sportsInsuranceDate)} onDone={() => setView("info")} />
+        ) : view === "membership" && student ? (
+          <StudentMembershipForm studentId={student.id} onDone={() => setView("info")} />
+        ) : view === "fee" && student ? (
+          // The no-club notice inside the form must not flash while the memberships load.
+          clubsLoading ? (
+            <output aria-busy="true" aria-label="خواندن باشگاه های هنرجو" className="mt-3 flex flex-col gap-2">
+              {[0, 1, 2].map((row) => (
+                <Skeleton key={row} className="h-12 w-full rounded-xl" />
               ))}
-            </div>
-          ) : null}
-
-          <div className="grid grid-cols-2 gap-2">
-            <Stat label="کد ملی">
-              <span className="min-w-0 truncate">{student ? toPersianDigits(student.nationalCode) : ""}</span>
-              <button
-                type="button"
-                aria-label="کپی کد ملی"
-                onClick={() => void copyNationalCode()}
-                className="grid size-5 shrink-0 place-items-center rounded-md text-ink-subtle transition-colors hover:bg-muted hover:text-ink"
-              >
-                {copied ? <Check className="size-3.5 text-success" aria-hidden="true" /> : <Copy className="size-3.5" aria-hidden="true" />}
-              </button>
-            </Stat>
-            <Stat
-              label="تاریخ تولد"
-              chip={
-                ageCategory ? (
-                  <StatusBadge tone="neutral" className="h-5 px-2 py-0 text-[10px]">
-                    {AGE_CATEGORY_LABELS[ageCategory]}
-                  </StatusBadge>
-                ) : null
-              }
-            >
-              <span className="min-w-0 truncate">{student?.birthDate ? toJalaliDate(student.birthDate) : "ثبت نشده"}</span>
-            </Stat>
-            <Stat
-              label="تاریخ بیمه"
-              chip={
-                <StatusBadge tone={insuranceMeta.tone} className="h-5 px-2 py-0 text-[10px]">
-                  {insuranceMeta.shortLabel}
-                </StatusBadge>
-              }
-            >
-              <span className="min-w-0 truncate">
-                {student?.sportsInsuranceDate ? toJalaliDate(student.sportsInsuranceDate) : "ثبت نشده"}
-              </span>
-            </Stat>
-            <Stat
-              label="شارژ بانک اطلاعاتی"
-              chip={
-                membershipDue !== null ? (
-                  membershipDue === 0 ? (
-                    <StatusBadge tone="success" className="h-5 px-2 py-0 text-[10px]">
-                      معتبر
-                    </StatusBadge>
-                  ) : (
-                    <StatusBadge tone="warning" className="h-5 px-2 py-0 text-[10px]">
-                      {toPersianDigits(String(membershipDue))} سال شارژ
-                    </StatusBadge>
-                  )
-                ) : null
-              }
-            >
-              <span className="min-w-0 truncate">{membershipYear ? `سال ${toPersianDigits(String(membershipYear))}` : "ثبت نشده"}</span>
-            </Stat>
-            {height || weight ? (
-              <Stat label="قد و وزن" className="col-span-2">
-                {[height ? `قد ${height}` : null, weight ? `وزن ${weight}` : null].filter(Boolean).join(" · ")}
-              </Stat>
+            </output>
+          ) : (
+            <FeePaymentForm
+              clubId={feeClubId}
+              clubs={feeClubs}
+              month={currentFeeMonth()}
+              initialStudentId={student.id}
+              onDone={() => setView("info")}
+            />
+          )
+        ) : view === "enroll" && student ? (
+          <StudentSessionEnrollForm
+            studentId={student.id}
+            clubId={enrollClubId}
+            onPickClub={setEnrollClubId}
+            onDone={() => {
+              setView("info");
+              setEnrollClubId(null);
+            }}
+          />
+        ) : (
+          <div className="mt-3 flex flex-col gap-2.5">
+            {actions.length > 0 ? (
+              // Centered pills hug the content, so any action count stays tight instead of leaving a lone tile.
+              <div className="flex flex-wrap justify-center gap-1.5">
+                {actions.map((action) => (
+                  <button
+                    key={action.label}
+                    type="button"
+                    className="inline-flex h-9 items-center gap-1.5 rounded-full bg-brand-50/60 px-3 text-[12px] font-bold text-accent-ink transition-colors hover:bg-brand-50/90 active:bg-brand-50"
+                    onClick={action.onClick}
+                  >
+                    <action.icon className="size-3.5" aria-hidden="true" />
+                    {action.label}
+                  </button>
+                ))}
+              </div>
             ) : null}
-            {!belt ? <Stat label="کمربند">ثبت نشده</Stat> : null}
-          </div>
 
-          {belt ? (
-            <div className="flex items-center gap-3 rounded-xl bg-brand-50/60 px-3 py-2">
-              <BeltStrip
-                color={belt.color}
-                bottomColor={belt.bottomColor}
-                outline={belt.outline}
-                stripes={belt.stripeCount}
-                className="size-auto w-10 shrink-0"
-              />
-              <span className="min-w-0 flex-1">
-                <b className="block text-[13px] font-extrabold text-ink">{belt.label}</b>
-                {beltDates ? <span className="mt-0.5 block truncate text-[11px] font-medium text-ink-muted">{beltDates}</span> : null}
-              </span>
-              {examDue ? (
-                <StatusBadge tone="danger" className="h-5 shrink-0 px-2 py-0 text-[10px]">
-                  وقت آزمون رسیده
-                </StatusBadge>
-              ) : examSoon ? (
-                <StatusBadge tone="warning" className="h-5 shrink-0 px-2 py-0 text-[10px]">
-                  نزدیک آزمون
-                </StatusBadge>
+            <div className="grid grid-cols-2 gap-2">
+              <Stat label="کد ملی">
+                <span className="min-w-0 truncate">{student ? toPersianDigits(student.nationalCode) : ""}</span>
+                <button
+                  type="button"
+                  aria-label="کپی کد ملی"
+                  onClick={() => void copyNationalCode()}
+                  className="grid size-5 shrink-0 place-items-center rounded-md text-ink-subtle transition-colors hover:bg-muted hover:text-ink"
+                >
+                  {copied ? (
+                    <Check className="size-3.5 text-success" aria-hidden="true" />
+                  ) : (
+                    <Copy className="size-3.5" aria-hidden="true" />
+                  )}
+                </button>
+              </Stat>
+              <Stat
+                label="تاریخ تولد"
+                chip={
+                  ageCategory ? (
+                    <StatusBadge tone="neutral" className="h-5 px-2 py-0 text-[10px]">
+                      {AGE_CATEGORY_LABELS[ageCategory]}
+                    </StatusBadge>
+                  ) : null
+                }
+              >
+                <span className="min-w-0 truncate">{student?.birthDate ? toJalaliDate(student.birthDate) : "ثبت نشده"}</span>
+              </Stat>
+              <Stat
+                label="تاریخ بیمه"
+                chip={
+                  <StatusBadge tone={insuranceMeta.tone} className="h-5 px-2 py-0 text-[10px]">
+                    {insuranceMeta.shortLabel}
+                  </StatusBadge>
+                }
+              >
+                <span className="min-w-0 truncate">
+                  {student?.sportsInsuranceDate ? toJalaliDate(student.sportsInsuranceDate) : "ثبت نشده"}
+                </span>
+              </Stat>
+              <Stat
+                label="شارژ بانک اطلاعاتی"
+                chip={
+                  membershipDue !== null ? (
+                    membershipDue === 0 ? (
+                      <StatusBadge tone="success" className="h-5 px-2 py-0 text-[10px]">
+                        معتبر
+                      </StatusBadge>
+                    ) : (
+                      <StatusBadge tone="warning" className="h-5 px-2 py-0 text-[10px]">
+                        {toPersianDigits(String(membershipDue))} سال شارژ
+                      </StatusBadge>
+                    )
+                  ) : null
+                }
+              >
+                <span className="min-w-0 truncate">{membershipYear ? `سال ${toPersianDigits(String(membershipYear))}` : "ثبت نشده"}</span>
+              </Stat>
+              {height || weight ? (
+                <Stat label="قد و وزن" className="col-span-2">
+                  {[height ? `قد ${height}` : null, weight ? `وزن ${weight}` : null].filter(Boolean).join(" · ")}
+                </Stat>
               ) : null}
+              {!belt ? <Stat label="کمربند">ثبت نشده</Stat> : null}
             </div>
-          ) : null}
 
-          <Button
-            variant="brand"
-            className="mt-2 h-11 w-full rounded-xl text-[12px]"
-            render={<Link href={`/coach/students/${student?.id ?? ""}`} />}
-            nativeButton={false}
-          >
-            مشاهده پرونده کامل
-          </Button>
-        </div>
-      )}
+            {belt ? (
+              <div className="flex items-center gap-3 rounded-xl bg-brand-50/60 px-3 py-2">
+                <BeltStrip
+                  color={belt.color}
+                  bottomColor={belt.bottomColor}
+                  outline={belt.outline}
+                  stripes={belt.stripeCount}
+                  className="size-auto w-10 shrink-0"
+                />
+                <span className="min-w-0 flex-1">
+                  <b className="block text-[13px] font-extrabold text-ink">{belt.label}</b>
+                  {beltDates ? <span className="mt-0.5 block truncate text-[11px] font-medium text-ink-muted">{beltDates}</span> : null}
+                </span>
+                {examDue ? (
+                  <StatusBadge tone="danger" className="h-5 shrink-0 px-2 py-0 text-[10px]">
+                    وقت آزمون رسیده
+                  </StatusBadge>
+                ) : examSoon ? (
+                  <StatusBadge tone="warning" className="h-5 shrink-0 px-2 py-0 text-[10px]">
+                    نزدیک آزمون
+                  </StatusBadge>
+                ) : null}
+              </div>
+            ) : null}
+
+            <Button
+              variant="brand"
+              className="mt-2 h-11 w-full rounded-xl text-[12px]"
+              render={<Link href={`/coach/students/${student?.id ?? ""}`} />}
+              nativeButton={false}
+            >
+              مشاهده پرونده کامل
+            </Button>
+          </div>
+        )}
+      </div>
     </SheetFrame>
   );
 }
