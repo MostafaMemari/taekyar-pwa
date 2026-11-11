@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { ChevronRight, X } from "lucide-react";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -6,12 +6,15 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTi
 export function SheetFrame({
   open,
   onOpenChange,
+  onBack,
   title,
   description,
   children,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  // Shows a back chevron next to the title; for sheets that swap content in steps.
+  onBack?: () => void;
   title: string;
   description: string;
   children: ReactNode;
@@ -26,6 +29,11 @@ export function SheetFrame({
         <div className="mx-auto h-1 w-10 shrink-0 rounded-full bg-muted-foreground/25" aria-hidden="true" />
 
         <SheetHeader className="flex-row items-center gap-2 p-0">
+          {onBack ? (
+            <Button variant="ghost" size="icon-sm" aria-label="بازگشت" onClick={onBack}>
+              <ChevronRight aria-hidden="true" />
+            </Button>
+          ) : null}
           <SheetTitle className="flex-1 text-base font-extrabold text-ink">{title}</SheetTitle>
           <SheetClose render={<Button variant="ghost" size="icon-sm" aria-label="بستن" />}>
             <X aria-hidden="true" />
