@@ -106,7 +106,7 @@ export function FeePaymentForm({
         </p>
       ) : (
         <>
-          {clubOptions.length > 1 ? (
+          {clubOptions.length > 1 || (fixedStudent && clubOptions.length === 1) ? (
             <AuthField label="باشگاه" htmlFor="feePaymentClub" required>
               <AuthSelect
                 id="feePaymentClub"
@@ -118,6 +118,7 @@ export function FeePaymentForm({
                   setStudentId(null);
                 }}
                 options={clubOptions}
+                disabled={fixedStudent && clubOptions.length === 1}
               />
             </AuthField>
           ) : null}
