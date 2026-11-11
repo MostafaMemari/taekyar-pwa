@@ -66,8 +66,8 @@ export function StudentsOverview({
       </header>
 
       <div className="mt-4 flex flex-col gap-2">
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-[11px] font-bold text-ink-subtle">بیمه ورزشی</span>
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+          <span className="shrink-0 text-[11px] font-bold text-ink-subtle">بیمه ورزشی</span>
           {INSURANCE_STATUSES.map((value) => {
             const meta = INSURANCE_META[value];
             const Icon = meta.icon;
@@ -98,8 +98,8 @@ export function StudentsOverview({
           })}
         </div>
 
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-[11px] font-bold text-ink-subtle">شهریه</span>
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+          <span className="shrink-0 text-[11px] font-bold text-ink-subtle">شهریه</span>
           {(Object.keys(FEE_META) as StudentFeeStatus[]).map((value) => {
             const meta = FEE_META[value];
             const Icon = meta.icon;
