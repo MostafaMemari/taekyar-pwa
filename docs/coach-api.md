@@ -394,6 +394,7 @@ COLOR | POOM | DAN
 | `belt` | enum[] | خیر | یک یا چند `BeltName` |
 | `ageCategory` | enum[] | خیر | یک یا چند رده سنی: `BLOSSOM`، `YOUTH`، `CADET`، `JUNIOR`، `YOUNG`، `SENIOR`، `ULTRA` |
 | `insurance` | enum[] | خیر | `valid`، `expiring`، `expired`، `none` |
+| `fee` | enum | خیر | `PAID` (شهریه این ماه پرداخت شده) یا `OWED` (عضو فعال باشگاه دارای حق شهریه و بدون پرداخت این ماه)؛ بر اساس `feePayments.periodStart` اولین روز ماه جلالی جاری |
 | `beltExamId` | uuid | خیر | هنرجویان واجد شرایط آزمون کمربندی انتخاب شده (جنسیت، کمربند بعدی و موعد) |
 | `gender` | enum | خیر | `MALE` یا `FEMALE` |
 | `sortBy` | enum | خیر | `createdAt`، `updatedAt`، `fullName`، `belt`، `beltDate`، `insurance` |
@@ -423,9 +424,13 @@ COLOR | POOM | DAN
 {
   "total": 34,
   "byInsurance": { "valid": 20, "expiring": 4, "expired": 6, "none": 4 },
-  "expiringDays": 30
+  "expiringDays": 30,
+  "feePaid": 18,
+  "feeOwed": 5
 }
 ```
+
+`feePaid`/`feeOwed` شمارش هنرجویان با وضعیت شهریه ماه جلالی جاری است (همان قاعده فیلتر `fee`).
 
 این مسیر قبل از `GET /student/:id` تعریف شده تا با شناسه تداخل نکند. نقش `COACH` یا `ADMIN`.
 
@@ -517,10 +522,15 @@ COLOR | POOM | DAN
 
 ### 4.10 `PATCH /student/:id/insurance`
 
-تمدید بیمه ورزشی. **بدون بدنه**؛ `sportsInsuranceDate` را سرور به دقیقاً یک سال جلالی بعد از امروز ست می کند.
+ثبت/تمدید بیمه ورزشی با بدنه: `sportsInsuranceDate` (میلادی) که باید **دقیقاً یک سال جلالی بعد از امروز** باشد و در غیر این صورت `400` با پیام «تاریخ بیمه باید دقیقاً یک سال بعد از امروز باشد» می دهد.
 
 - نقش `COACH` یا `ADMIN`؛ هنرجو باید متعلق به مربی جاری باشد.
+- فرانت تاریخ پیش فرض شیت را همین امروز + ۱ سال می گذارد.
 - پاسخ: `200` با پیام «بیمه ورزشی هنرجو با موفقیت تمدید شد» و آبجکت `Student`.
+
+### 4.11 `DELETE /student/:id/insurance`
+
+حذف تاریخ بیمه (بیمه را به حالت «بدون بیمه» می برد). **بدون بدنه**؛ نقش و مالکیت مثل 4.10. پاسخ `200` با آبجکت `Student`.
 
 ---
 
@@ -666,6 +676,7 @@ COLOR | POOM | DAN
 | `page` | number | خیر | پیش فرض 1 |
 | `take` | number | خیر | پیش فرض 20 |
 | `isActive` | boolean | خیر | فیلتر عضویت فعال |
+| `search` | string | خیر | جستجو روی نام کامل یا کد ملی هنرجو (بدون حساسیت به بزرگی حروف) |
 
 - هر آیتم `ClubStudent` است و فیلد `student` شامل پروفایل کامل هنرجو می شود.
 - ترتیب: `joinedAt` نزولی.
@@ -1027,7 +1038,7 @@ COLOR | POOM | DAN
 | `/coach/invitations` | `GET /student-coach-invitation/sent` | وصل؛ آمار و ردیف ها از سرور |
 | `/coach/clubs` | `GET /club` و `GET /club/:id/students?take=1` | وصل؛ شمارش هنرجو از `meta.pager.total` و آمار کلاس حذف شد |
 | `/coach/clubs/new` | `POST /club` | وصل؛ react-hook-form و zod |
-| `/coach/clubs/[id]` | `GET /club/:id`، `GET /club/:id/students`، `PATCH /club/:id/status`، `GET /class-session` | وصل؛ کلاس های باشگاه از `GET /class-session` و شمارش هنرجوی هر کلاس از `GET /class-session/:id/students?take=1` |
+| `/coach/clubs/[id]` | `GET /club/:id`، `GET /club/:id/students` و `GET /class-session` | وصل؛ کلاس های باشگاه از `GET /class-session` و شمارش هنرجوی هر کلاس از `GET /class-session/:id/students?take=1`؛ کنترل فعال/غیرفعال باشگاه در UI فعلا حذف شده |
 | `/coach/clubs/[id]/edit` | `GET /club/:id` و `PATCH /club/:id` | وصل؛ react-hook-form و zod |
 | `/coach/sessions` | `GET /class-session` | وصل؛ نام باشگاه از `GET /club` و شمارش هنرجو از `GET /class-session/:id/students?take=1` |
 | `/coach/sessions/new` | `POST /class-session` | وصل؛ react-hook-form و zod، `clubId` از `GET /club` |
