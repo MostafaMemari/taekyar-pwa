@@ -38,10 +38,10 @@ export function useChangeSessionStatus(sessionId: string) {
   });
 }
 
-export function useAddStudentsToSession(sessionId: string) {
+export function useAddStudentsToSession() {
   return useSWRMutation(
-    ["session", "students", "add", sessionId] as const,
-    async (_key: unknown, { arg }: { arg: { clubId: string; studentIds: string[] } }) => {
+    ["session", "students", "add"] as const,
+    async (_key: unknown, { arg }: { arg: { sessionId: string; clubId: string; studentIds: string[] } }) => {
       for (const studentId of arg.studentIds) {
         try {
           await addStudentToClub(arg.clubId, studentId);
@@ -51,7 +51,7 @@ export function useAddStudentsToSession(sessionId: string) {
         }
       }
 
-      await addStudentsToSession(sessionId, arg.studentIds);
+      await addStudentsToSession(arg.sessionId, arg.studentIds);
       await revalidateSessions();
       await mutate((key) => Array.isArray(key) && key[0] === "attendance");
       await mutate((key) => Array.isArray(key) && key[0] === "club");

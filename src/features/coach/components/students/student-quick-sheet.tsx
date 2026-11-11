@@ -1,6 +1,6 @@
 "use client";
 
-import { BadgeCheck, Check, ChevronLeft, Copy, Medal, ShieldCheck, Wallet } from "lucide-react";
+import { BadgeCheck, CalendarPlus, Check, ChevronLeft, Copy, Medal, ShieldCheck, Wallet } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
@@ -29,14 +29,16 @@ import { getStudentBeltMeta } from "@/lib/student-belts";
 import { cn } from "@/lib/utils";
 import { StudentInsuranceForm } from "./student-insurance-form";
 import { StudentMembershipForm } from "./student-membership-form";
+import { StudentSessionEnrollForm } from "./student-session-enroll-form";
 
-type QuickView = "info" | "insurance" | "membership" | "fee";
+type QuickView = "info" | "insurance" | "membership" | "fee" | "enroll";
 
 // Actions swap this sheet's content instead of stacking a second sheet on top.
 const VIEW_META: Record<Exclude<QuickView, "info">, { title: string; description: string }> = {
   insurance: { title: "ثبت بیمه ورزشی", description: "تاریخ اعتبار بیمه سالانه هنرجو را تایید کنید" },
   membership: { title: "تمدید سال عضویت", description: "تایید تمدید سال عضویت هنرجو" },
   fee: { title: "ثبت پرداخت شهریه", description: "پرداخت هنرجو برای ماه انتخاب شده ثبت می شود" },
+  enroll: { title: "افزودن به کلاس", description: "هنرجو به کلاس انتخاب شده اضافه می شود" },
 };
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
@@ -123,6 +125,7 @@ export function StudentQuickSheet({
       ? [{ icon: BadgeCheck, label: "تمدید شارژ", onClick: () => setView("membership") }]
       : []),
     { icon: Wallet, label: "ثبت شهریه", onClick: () => setView("fee") },
+    { icon: CalendarPlus, label: "افزودن به کلاس", onClick: () => setView("enroll") },
   ];
 
   const copyNationalCode = async () => {
@@ -165,6 +168,8 @@ export function StudentQuickSheet({
             onDone={() => setView("info")}
           />
         )
+      ) : view === "enroll" && student ? (
+        <StudentSessionEnrollForm studentId={student.id} onDone={() => setView("info")} />
       ) : (
         <div className="mt-3 flex flex-col gap-3">
           <div className="flex items-center gap-3">

@@ -50,7 +50,7 @@ export function AddClassStudentsSheet({
     search: term || undefined,
     gender: clubGender,
   });
-  const save = useAddStudentsToSession(sessionId);
+  const save = useAddStudentsToSession();
 
   const existing = new Set(existingStudentIds);
   const visible = students.filter((student) => !existing.has(student.id));
@@ -74,7 +74,7 @@ export function AddClassStudentsSheet({
 
   const submit = async () => {
     try {
-      await save.trigger({ clubId, studentIds: selected });
+      await save.trigger({ sessionId, clubId, studentIds: selected });
       close();
     } catch (requestError) {
       if (requestError instanceof ApiError && requestError.status === 401) router.replace("/login");
