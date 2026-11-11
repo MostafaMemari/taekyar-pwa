@@ -26,6 +26,7 @@ import {
 import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
 import { getStudentBeltMeta } from "@/lib/student-belts";
+import { cn } from "@/lib/utils";
 import { StudentInsuranceForm } from "./student-insurance-form";
 import { StudentMembershipForm } from "./student-membership-form";
 import { StudentSessionEnrollForm } from "./student-session-enroll-form";
@@ -40,11 +41,11 @@ const VIEW_META: Record<Exclude<QuickView, "info">, { title: string; description
   enroll: { title: "افزودن به کلاس", description: "هنرجو به کلاس انتخاب شده اضافه می شود" },
 };
 
-function Row({ label, children }: { label: string; children: ReactNode }) {
+function Stat({ label, className, children }: { label: string; className?: string; children: ReactNode }) {
   return (
-    <div className="flex min-h-10 items-center justify-between gap-3 px-3">
-      <span className="shrink-0 text-[12px] font-medium text-ink-muted">{label}</span>
-      <span className="min-w-0 text-end text-[13px] font-bold text-ink">{children}</span>
+    <div className={cn("min-w-0 rounded-xl bg-muted/40 px-3 py-2", className)}>
+      <span className="block text-[11px] font-medium text-ink-muted">{label}</span>
+      <span className="mt-0.5 flex min-h-5 items-center gap-1 text-[13px] font-bold text-ink">{children}</span>
     </div>
   );
 }
@@ -108,6 +109,13 @@ export function StudentQuickSheet({
   const feeClubId = activeMemberships[0]?.club.id ?? "";
   const feeClubs = activeMemberships.map((membership) => membership.club);
   const clubNames = new Map((clubs?.clubs ?? []).map((club) => [club.id, club.name]));
+
+  const beltDates = [
+    student?.currentBelt?.beltDate ? `اخذ ${toJalaliDate(student.currentBelt.beltDate)}` : null,
+    student?.currentBelt?.nextBeltDate ? `آزمون بعدی ${toJalaliDate(student.currentBelt.nextBeltDate)}` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   // One-tap fixes for whatever the sheet flags; each swaps the sheet's content or opens the belt flow.
   const actions = [
@@ -191,7 +199,7 @@ export function StudentQuickSheet({
           }}
         />
       ) : (
-        <div className="mt-3 flex flex-col gap-3">
+        <div className="mt-3 flex flex-col gap-2.5">
           <div className="flex items-center gap-3">
             <span className="relative shrink-0">
               <PersonAvatar name={student?.fullName ?? ""} className="size-14" />
@@ -249,27 +257,23 @@ export function StudentQuickSheet({
             </ul>
           ) : null}
 
-          <div className="divide-y divide-[var(--line-3)] rounded-2xl bg-muted/40 py-1">
-            <Row label="کد ملی">
-              <span className="inline-flex items-center gap-1.5">
-                {student ? toPersianDigits(student.nationalCode) : ""}
-                <button
-                  type="button"
-                  aria-label="کپی کد ملی"
-                  onClick={() => void copyNationalCode()}
-                  className="grid size-6 place-items-center rounded-md text-ink-subtle transition-colors hover:bg-muted hover:text-ink"
-                >
-                  {copied ? (
-                    <Check className="size-3.5 text-success" aria-hidden="true" />
-                  ) : (
-                    <Copy className="size-3.5" aria-hidden="true" />
-                  )}
-                </button>
-              </span>
-            </Row>
-            <Row label="تاریخ تولد">{student?.birthDate ? toJalaliDate(student.birthDate) : "ثبت نشده"}</Row>
-            <Row label="جنسیت">{genderLabel ?? "ثبت نشده"}</Row>
-            <Row label="شارژ بانک اطلاعاتی">
+          <div className="grid grid-cols-2 gap-2">
+            <Stat label="کد ملی">
+              <span className="min-w-0 truncate">{student ? toPersianDigits(student.nationalCode) : ""}</span>
+              <button
+                type="button"
+                aria-label="کپی کد ملی"
+                onClick={() => void copyNationalCode()}
+                className="grid size-5 shrink-0 place-items-center rounded-md text-ink-subtle transition-colors hover:bg-muted hover:text-ink"
+              >
+                {copied ? <Check className="size-3.5 text-success" aria-hidden="true" /> : <Copy className="size-3.5" aria-hidden="true" />}
+              </button>
+            </Stat>
+            <Stat label="تاریخ تولد">
+              <span className="min-w-0 truncate">{student?.birthDate ? toJalaliDate(student.birthDate) : "ثبت نشده"}</span>
+            </Stat>
+            <Stat label="جنسیت">{genderLabel ?? "ثبت نشده"}</Stat>
+            <Stat label="شارژ بانک اطلاعاتی">
               {membershipDue === null ? (
                 "ثبت نشده"
               ) : membershipDue === 0 ? (
@@ -277,38 +281,34 @@ export function StudentQuickSheet({
               ) : (
                 <span className="text-warning">{toPersianDigits(String(membershipDue))} سال شارژ</span>
               )}
-            </Row>
+            </Stat>
             {height || weight ? (
-              <Row label="قد و وزن">{[height ? `قد ${height}` : null, weight ? `وزن ${weight}` : null].filter(Boolean).join(" · ")}</Row>
+              <Stat label="قد و وزن" className="col-span-2">
+                {[height ? `قد ${height}` : null, weight ? `وزن ${weight}` : null].filter(Boolean).join(" · ")}
+              </Stat>
             ) : null}
-            {!belt ? <Row label="کمربند">ثبت نشده</Row> : null}
+            {!belt ? <Stat label="کمربند">ثبت نشده</Stat> : null}
           </div>
 
           {belt ? (
-            <div className="rounded-2xl bg-brand-50/60 py-1">
-              <div className="flex min-h-10 items-center gap-3 px-3">
-                <BeltStrip
-                  color={belt.color}
-                  bottomColor={belt.bottomColor}
-                  outline={belt.outline}
-                  stripes={belt.stripeCount}
-                  className="size-auto w-14"
-                />
-                <span className="min-w-0">
-                  <b className="block text-[13px] font-extrabold text-ink">{belt.label}</b>
-                  <span className="text-[12px] font-medium text-ink-muted">کمربند فعلی</span>
-                </span>
-              </div>
-              <div className="divide-y divide-[var(--line-3)]">
-                {student?.currentBelt?.beltDate ? <Row label="تاریخ اخذ">{toJalaliDate(student.currentBelt.beltDate)}</Row> : null}
-                {student?.currentBelt?.nextBeltDate ? <Row label="آزمون بعدی">{toJalaliDate(student.currentBelt.nextBeltDate)}</Row> : null}
-              </div>
+            <div className="flex items-center gap-3 rounded-xl bg-brand-50/60 px-3 py-2">
+              <BeltStrip
+                color={belt.color}
+                bottomColor={belt.bottomColor}
+                outline={belt.outline}
+                stripes={belt.stripeCount}
+                className="size-auto w-10 shrink-0"
+              />
+              <span className="min-w-0 flex-1">
+                <b className="block text-[13px] font-extrabold text-ink">{belt.label}</b>
+                {beltDates ? <span className="mt-0.5 block truncate text-[11px] font-medium text-ink-muted">{beltDates}</span> : null}
+              </span>
             </div>
           ) : null}
 
           <Button
             variant="brand"
-            className="mt-4 h-11 w-full rounded-xl text-[12px]"
+            className="mt-2 h-11 w-full rounded-xl text-[12px]"
             render={<Link href={`/coach/students/${student?.id ?? ""}`} />}
             nativeButton={false}
           >
