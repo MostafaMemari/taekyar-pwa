@@ -112,8 +112,10 @@ export function StudentQuickSheet({
     .filter(Boolean)
     .join(" · ");
 
-  // One-tap fixes for whatever the sheet flags; each swaps the sheet's content or opens the belt flow.
+  // Always-available actions lead; the conditional fixes follow, so the top of the sheet never reshuffles.
   const actions = [
+    { icon: Wallet, label: "ثبت شهریه", onClick: () => setView("fee") },
+    { icon: CalendarPlus, label: "افزودن به کلاس", onClick: () => setView("enroll") },
     ...(insurance === "none" || insurance === "expired"
       ? [{ icon: ShieldCheck, label: insurance === "none" ? "ثبت بیمه" : "تمدید بیمه", onClick: () => setView("insurance") }]
       : []),
@@ -132,8 +134,6 @@ export function StudentQuickSheet({
     ...(membershipDue === null || membershipDue > 0
       ? [{ icon: BadgeCheck, label: "تمدید شارژ", onClick: () => setView("membership") }]
       : []),
-    { icon: Wallet, label: "ثبت شهریه", onClick: () => setView("fee") },
-    { icon: CalendarPlus, label: "افزودن به کلاس", onClick: () => setView("enroll") },
   ];
 
   const copyNationalCode = async () => {
@@ -213,23 +213,20 @@ export function StudentQuickSheet({
           </div>
 
           {actions.length > 0 ? (
-            // Compact quick-action tiles (same anatomy as the dashboard tiles) so more actions stay one row tall.
-            <ul className="grid grid-cols-3">
+            // Centered pills hug the content, so any action count stays tight instead of leaving a lone tile.
+            <div className="flex flex-wrap justify-center gap-1.5">
               {actions.map((action) => (
-                <li key={action.label}>
-                  <button
-                    type="button"
-                    className="flex w-full flex-col items-center gap-1.5 rounded-2xl py-2 transition-colors active:bg-muted/60"
-                    onClick={action.onClick}
-                  >
-                    <span className="grid size-11 place-items-center rounded-full bg-brand-50 text-accent-ink">
-                      <action.icon className="size-[18px]" aria-hidden="true" />
-                    </span>
-                    <span className="text-center text-[11px] font-bold leading-4 text-ink-body">{action.label}</span>
-                  </button>
-                </li>
+                <button
+                  key={action.label}
+                  type="button"
+                  className="inline-flex h-9 items-center gap-1.5 rounded-full bg-brand-50/60 px-3 text-[12px] font-bold text-accent-ink transition-colors hover:bg-brand-50/90 active:bg-brand-50"
+                  onClick={action.onClick}
+                >
+                  <action.icon className="size-3.5" aria-hidden="true" />
+                  {action.label}
+                </button>
               ))}
-            </ul>
+            </div>
           ) : null}
 
           <div className="grid grid-cols-2 gap-2">
