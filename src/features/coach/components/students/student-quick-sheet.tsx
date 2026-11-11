@@ -1,6 +1,6 @@
 "use client";
 
-import { BadgeCheck, CalendarPlus, Check, ChevronLeft, Copy, Medal, ShieldCheck, Wallet } from "lucide-react";
+import { BadgeCheck, CalendarPlus, Check, Copy, Medal, ShieldCheck, Wallet } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
@@ -26,7 +26,6 @@ import {
 import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
 import { getStudentBeltMeta } from "@/lib/student-belts";
-import { cn } from "@/lib/utils";
 import { StudentInsuranceForm } from "./student-insurance-form";
 import { StudentMembershipForm } from "./student-membership-form";
 import { StudentSessionEnrollForm } from "./student-session-enroll-form";
@@ -231,25 +230,23 @@ export function StudentQuickSheet({
           </div>
 
           {actions.length > 0 ? (
-            <div className="overflow-hidden rounded-2xl border border-[var(--line-2)]">
-              {actions.map((action, index) => (
-                <button
-                  key={action.label}
-                  type="button"
-                  className={cn(
-                    "flex w-full cursor-pointer items-center gap-3 px-3 py-2.5 text-start transition-colors hover:bg-muted/50 active:bg-muted",
-                    index > 0 && "border-t border-[var(--line-3)]",
-                  )}
-                  onClick={action.onClick}
-                >
-                  <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-brand-50 text-accent-ink">
-                    <action.icon className="size-4" aria-hidden="true" />
-                  </span>
-                  <span className="min-w-0 flex-1 text-[13px] font-bold text-ink">{action.label}</span>
-                  <ChevronLeft className="size-4 shrink-0 text-ink-subtle" aria-hidden="true" />
-                </button>
+            // Compact quick-action tiles (same anatomy as the dashboard tiles) so more actions stay one row tall.
+            <ul className="grid grid-cols-3">
+              {actions.map((action) => (
+                <li key={action.label}>
+                  <button
+                    type="button"
+                    className="flex w-full flex-col items-center gap-1.5 rounded-2xl py-2 transition-colors active:bg-muted/60"
+                    onClick={action.onClick}
+                  >
+                    <span className="grid size-11 place-items-center rounded-full bg-brand-50 text-accent-ink">
+                      <action.icon className="size-[18px]" aria-hidden="true" />
+                    </span>
+                    <span className="text-center text-[11px] font-bold leading-4 text-ink-body">{action.label}</span>
+                  </button>
+                </li>
               ))}
-            </div>
+            </ul>
           ) : null}
 
           <div className="divide-y divide-[var(--line-3)] rounded-2xl bg-muted/40 py-1">
