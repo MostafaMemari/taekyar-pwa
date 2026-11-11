@@ -40,11 +40,14 @@ const VIEW_META: Record<Exclude<QuickView, "info">, { title: string; description
   enroll: { title: "افزودن به کلاس", description: "هنرجو به کلاس انتخاب شده اضافه می شود" },
 };
 
-function Stat({ label, className, children }: { label: string; className?: string; children: ReactNode }) {
+function Stat({ label, chip, className, children }: { label: string; chip?: ReactNode; className?: string; children: ReactNode }) {
   return (
     <div className={cn("min-w-0 rounded-xl bg-muted/40 px-3 py-2", className)}>
-      <span className="block text-[11px] font-medium text-ink-muted">{label}</span>
-      <span className="mt-0.5 flex min-h-5 flex-wrap items-center gap-x-1.5 gap-y-1 text-[13px] font-bold text-ink">{children}</span>
+      <span className="flex items-center justify-between gap-1.5">
+        <span className="min-w-0 truncate text-[11px] font-medium text-ink-muted">{label}</span>
+        {chip ? <span className="shrink-0">{chip}</span> : null}
+      </span>
+      <span className="mt-1 flex min-h-5 items-center text-[13px] font-bold text-ink">{children}</span>
     </div>
   );
 }
@@ -241,35 +244,47 @@ export function StudentQuickSheet({
                 {copied ? <Check className="size-3.5 text-success" aria-hidden="true" /> : <Copy className="size-3.5" aria-hidden="true" />}
               </button>
             </Stat>
-            <Stat label="تاریخ تولد">
+            <Stat
+              label="تاریخ تولد"
+              chip={
+                ageCategory ? (
+                  <StatusBadge tone="neutral" className="h-5 px-2 py-0 text-[10px]">
+                    {AGE_CATEGORY_LABELS[ageCategory]}
+                  </StatusBadge>
+                ) : null
+              }
+            >
               <span className="min-w-0 truncate">{student?.birthDate ? toJalaliDate(student.birthDate) : "ثبت نشده"}</span>
-              {ageCategory ? (
-                <StatusBadge tone="neutral" className="shrink-0 px-1.5 py-0.5 text-[10px]">
-                  {AGE_CATEGORY_LABELS[ageCategory]}
-                </StatusBadge>
-              ) : null}
             </Stat>
-            <Stat label="تاریخ بیمه">
+            <Stat
+              label="تاریخ بیمه"
+              chip={
+                <StatusBadge tone={insuranceMeta.tone} className="h-5 px-2 py-0 text-[10px]">
+                  {insuranceMeta.shortLabel}
+                </StatusBadge>
+              }
+            >
               <span className="min-w-0 truncate">
                 {student?.sportsInsuranceDate ? toJalaliDate(student.sportsInsuranceDate) : "ثبت نشده"}
               </span>
-              <StatusBadge tone={insuranceMeta.tone} className="shrink-0 px-1.5 py-0.5 text-[10px]">
-                {insuranceMeta.shortLabel}
-              </StatusBadge>
             </Stat>
-            <Stat label="شارژ بانک اطلاعاتی">
+            <Stat
+              label="شارژ بانک اطلاعاتی"
+              chip={
+                membershipDue !== null ? (
+                  membershipDue === 0 ? (
+                    <StatusBadge tone="success" className="h-5 px-2 py-0 text-[10px]">
+                      معتبر
+                    </StatusBadge>
+                  ) : (
+                    <StatusBadge tone="warning" className="h-5 px-2 py-0 text-[10px]">
+                      {toPersianDigits(String(membershipDue))} سال شارژ
+                    </StatusBadge>
+                  )
+                ) : null
+              }
+            >
               <span className="min-w-0 truncate">{membershipYear ? `سال ${toPersianDigits(String(membershipYear))}` : "ثبت نشده"}</span>
-              {membershipDue !== null ? (
-                membershipDue === 0 ? (
-                  <StatusBadge tone="success" className="shrink-0 px-1.5 py-0.5 text-[10px]">
-                    معتبر
-                  </StatusBadge>
-                ) : (
-                  <StatusBadge tone="warning" className="shrink-0 px-1.5 py-0.5 text-[10px]">
-                    {toPersianDigits(String(membershipDue))} سال شارژ
-                  </StatusBadge>
-                )
-              ) : null}
             </Stat>
             {height || weight ? (
               <Stat label="قد و وزن" className="col-span-2">
@@ -293,11 +308,11 @@ export function StudentQuickSheet({
                 {beltDates ? <span className="mt-0.5 block truncate text-[11px] font-medium text-ink-muted">{beltDates}</span> : null}
               </span>
               {examDue ? (
-                <StatusBadge tone="danger" className="shrink-0 px-1.5 py-0.5 text-[10px]">
+                <StatusBadge tone="danger" className="h-5 shrink-0 px-2 py-0 text-[10px]">
                   وقت آزمون رسیده
                 </StatusBadge>
               ) : examSoon ? (
-                <StatusBadge tone="warning" className="shrink-0 px-1.5 py-0.5 text-[10px]">
+                <StatusBadge tone="warning" className="h-5 shrink-0 px-2 py-0 text-[10px]">
                   نزدیک آزمون
                 </StatusBadge>
               ) : null}
