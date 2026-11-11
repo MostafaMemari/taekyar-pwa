@@ -14,7 +14,6 @@ import { StatusBadge } from "@/features/coach/components/status-badge";
 import { useClubs, useStudentClubs } from "@/features/coach/hooks/use-clubs";
 import { currentFeeMonth } from "@/features/coach/lib/fee-api";
 import type { AgeCategoryRecord, StudentRecord } from "@/features/coach/lib/student-api";
-import { GENDER_OPTIONS } from "@/features/coach/lib/student-form-options";
 import {
   AGE_CATEGORY_LABELS,
   ageCategoryOf,
@@ -45,7 +44,7 @@ function Stat({ label, className, children }: { label: string; className?: strin
   return (
     <div className={cn("min-w-0 rounded-xl bg-muted/40 px-3 py-2", className)}>
       <span className="block text-[11px] font-medium text-ink-muted">{label}</span>
-      <span className="mt-0.5 flex min-h-5 items-center gap-1 text-[13px] font-bold text-ink">{children}</span>
+      <span className="mt-0.5 flex min-h-5 flex-wrap items-center gap-x-1.5 gap-y-1 text-[13px] font-bold text-ink">{children}</span>
     </div>
   );
 }
@@ -88,18 +87,14 @@ export function StudentQuickSheet({
 
   const insurance = insuranceStatusOf(student?.sportsInsuranceDate ?? null, expiringDays);
   const insuranceMeta = INSURANCE_META[insurance];
-  const insuranceLabel =
-    insurance === "none"
-      ? insuranceMeta.shortLabel
-      : `${insurance === "expired" ? "منقضی" : "تا"} ${toPersianDigits(toJalaliDate(student?.sportsInsuranceDate ?? ""))}`;
   const ageCategory = student ? ageCategoryOf(student.birthDate, ageCategories) : null;
   const belt = student?.currentBelt ? getStudentBeltMeta(beltKeyOf(student.currentBelt.belt.name)) : null;
   const metric = student?.metrics[0];
   const height = metricText(metric?.height);
   const weight = metricText(metric?.weight);
-  const genderLabel = GENDER_OPTIONS.find((option) => option.value === student?.gender)?.label;
 
-  const membershipDue = membershipChargeOf(student?.membershipYear)?.due ?? null;
+  const membershipYear = student?.membershipYear ?? null;
+  const membershipDue = membershipChargeOf(membershipYear)?.due ?? null;
 
   const nextBeltTime = student?.currentBelt?.nextBeltDate ? new Date(student.currentBelt.nextBeltDate).getTime() : null;
   const examDue = nextBeltTime !== null && nextBeltTime < Date.now();
@@ -217,26 +212,6 @@ export function StudentQuickSheet({
             </span>
           </div>
 
-          <div className="flex flex-wrap gap-1.5">
-            {ageCategory ? (
-              <StatusBadge tone="neutral" className="px-1.5 py-1 text-[12px]">
-                {AGE_CATEGORY_LABELS[ageCategory]}
-              </StatusBadge>
-            ) : null}
-            <StatusBadge tone={insuranceMeta.tone} className="px-1.5 py-1 text-[12px]">
-              {insuranceLabel}
-            </StatusBadge>
-            {examDue ? (
-              <StatusBadge tone="danger" className="px-1.5 py-1 text-[12px]">
-                وقت آزمون رسیده
-              </StatusBadge>
-            ) : examSoon ? (
-              <StatusBadge tone="warning" className="px-1.5 py-1 text-[12px]">
-                نزدیک آزمون
-              </StatusBadge>
-            ) : null}
-          </div>
-
           {actions.length > 0 ? (
             // Compact quick-action tiles (same anatomy as the dashboard tiles) so more actions stay one row tall.
             <ul className="grid grid-cols-3">
@@ -271,16 +246,33 @@ export function StudentQuickSheet({
             </Stat>
             <Stat label="تاریخ تولد">
               <span className="min-w-0 truncate">{student?.birthDate ? toJalaliDate(student.birthDate) : "ثبت نشده"}</span>
+              {ageCategory ? (
+                <StatusBadge tone="neutral" className="shrink-0 px-1.5 py-0.5 text-[10px]">
+                  {AGE_CATEGORY_LABELS[ageCategory]}
+                </StatusBadge>
+              ) : null}
             </Stat>
-            <Stat label="جنسیت">{genderLabel ?? "ثبت نشده"}</Stat>
+            <Stat label="تاریخ بیمه">
+              <span className="min-w-0 truncate">
+                {student?.sportsInsuranceDate ? toJalaliDate(student.sportsInsuranceDate) : "ثبت نشده"}
+              </span>
+              <StatusBadge tone={insuranceMeta.tone} className="shrink-0 px-1.5 py-0.5 text-[10px]">
+                {insuranceMeta.shortLabel}
+              </StatusBadge>
+            </Stat>
             <Stat label="شارژ بانک اطلاعاتی">
-              {membershipDue === null ? (
-                "ثبت نشده"
-              ) : membershipDue === 0 ? (
-                <span className="text-success">معتبر</span>
-              ) : (
-                <span className="text-warning">{toPersianDigits(String(membershipDue))} سال شارژ</span>
-              )}
+              <span className="min-w-0 truncate">{membershipYear ? `سال ${toPersianDigits(String(membershipYear))}` : "ثبت نشده"}</span>
+              {membershipDue !== null ? (
+                membershipDue === 0 ? (
+                  <StatusBadge tone="success" className="shrink-0 px-1.5 py-0.5 text-[10px]">
+                    معتبر
+                  </StatusBadge>
+                ) : (
+                  <StatusBadge tone="warning" className="shrink-0 px-1.5 py-0.5 text-[10px]">
+                    {toPersianDigits(String(membershipDue))} سال شارژ
+                  </StatusBadge>
+                )
+              ) : null}
             </Stat>
             {height || weight ? (
               <Stat label="قد و وزن" className="col-span-2">
@@ -303,6 +295,15 @@ export function StudentQuickSheet({
                 <b className="block text-[13px] font-extrabold text-ink">{belt.label}</b>
                 {beltDates ? <span className="mt-0.5 block truncate text-[11px] font-medium text-ink-muted">{beltDates}</span> : null}
               </span>
+              {examDue ? (
+                <StatusBadge tone="danger" className="shrink-0 px-1.5 py-0.5 text-[10px]">
+                  وقت آزمون رسیده
+                </StatusBadge>
+              ) : examSoon ? (
+                <StatusBadge tone="warning" className="shrink-0 px-1.5 py-0.5 text-[10px]">
+                  نزدیک آزمون
+                </StatusBadge>
+              ) : null}
             </div>
           ) : null}
 
