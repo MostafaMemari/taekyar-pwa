@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { FeePaymentForm } from "@/features/coach/components/clubs/fee/fee-payment-form";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { PersonAvatar } from "@/features/coach/components/person-avatar";
@@ -71,7 +72,7 @@ export function StudentQuickSheet({
   const router = useRouter();
   const [view, setView] = useState<QuickView>("info");
   const [copied, setCopied] = useState(false);
-  const { data: memberships } = useStudentClubs(student?.id ?? "");
+  const { data: memberships, isLoading: clubsLoading } = useStudentClubs(student?.id ?? "");
 
   // Reopening starts from the info view even if the sheet was closed mid-form.
   useEffect(() => {
@@ -148,13 +149,22 @@ export function StudentQuickSheet({
       ) : view === "membership" && student ? (
         <StudentMembershipForm studentId={student.id} onDone={() => setView("info")} />
       ) : view === "fee" && student ? (
-        <FeePaymentForm
-          clubId={feeClubId}
-          clubs={feeClubs}
-          month={currentFeeMonth()}
-          initialStudentId={student.id}
-          onDone={() => setView("info")}
-        />
+        // The no-club notice inside the form must not flash while the memberships load.
+        clubsLoading ? (
+          <output aria-busy="true" aria-label="خواندن باشگاه های هنرجو" className="mt-3 flex flex-col gap-2">
+            {[0, 1, 2].map((row) => (
+              <Skeleton key={row} className="h-12 w-full rounded-xl" />
+            ))}
+          </output>
+        ) : (
+          <FeePaymentForm
+            clubId={feeClubId}
+            clubs={feeClubs}
+            month={currentFeeMonth()}
+            initialStudentId={student.id}
+            onDone={() => setView("info")}
+          />
+        )
       ) : (
         <div className="mt-3 flex flex-col gap-3">
           <div className="flex items-center gap-3">

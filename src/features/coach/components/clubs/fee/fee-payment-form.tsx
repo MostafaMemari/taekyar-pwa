@@ -34,13 +34,14 @@ export function FeePaymentForm({
   // Pass the coach's clubs so the form can offer a picker; a single club needs none.
   clubs?: ClubRecord[];
   month: FeeMonth;
-  // Preselects one student, e.g. when the form opens from a student's quick info.
+  // Pins the payment to one student: the picker disappears and a missing club shows a notice instead.
   initialStudentId?: string;
   onDone: () => void;
 }) {
   const router = useRouter();
   const [pickedClubId, setPickedClubId] = useState<string | null>(null);
   const activeClubId = pickedClubId ?? clubId;
+  const fixedStudent = initialStudentId !== undefined;
   const [search, setSearch] = useState("");
   const [term, setTerm] = useState("");
 
@@ -50,7 +51,8 @@ export function FeePaymentForm({
     return () => clearTimeout(timer);
   }, [search]);
 
-  const { data: members, isLoading: membersLoading } = useClubMembers(activeClubId, term || undefined);
+  // A pinned student skips the member fetch entirely.
+  const { data: members, isLoading: membersLoading } = useClubMembers(fixedStudent ? "" : activeClubId, term || undefined);
   const { data: fee } = useClubFee(activeClubId);
   const record = useRecordFeePayment();
   const saveFee = useSaveClubFee();
@@ -62,6 +64,7 @@ export function FeePaymentForm({
   const [note, setNote] = useState("");
 
   const clubOptions = (clubs ?? []).map((club) => ({ value: club.id, label: club.name }));
+  const clubMissing = fixedStudent && clubOptions.length === 0;
   const activeMembers = (members ?? []).filter((member) => member.isActive);
   const amountValue = amount ?? (fee ? String(Math.trunc(Number(fee.monthlyAmount))) : "");
   const feeValue = feeAmount ?? "";
@@ -96,126 +99,139 @@ export function FeePaymentForm({
 
   return (
     <div className="mt-3 flex flex-col gap-3">
-      {clubOptions.length > 1 ? (
-        <AuthField label="باشگاه" htmlFor="feePaymentClub" required>
-          <AuthSelect
-            id="feePaymentClub"
-            icon={Landmark}
-            placeholder="انتخاب باشگاه"
-            value={activeClubId}
-            onValueChange={(value) => {
-              setPickedClubId(value);
-              setStudentId(null);
-            }}
-            options={clubOptions}
-          />
-        </AuthField>
-      ) : null}
+      {clubMissing ? (
+        <p className="rounded-xl bg-muted/60 p-3 text-[12px] font-bold leading-5 text-ink-muted">
+          این هنرجو عضو هیچ باشگاه فعالی نیست · برای ثبت شهریه، ابتدا او را در یک باشگاه عضو کنید
+        </p>
+      ) : (
+        <>
+          {clubOptions.length > 1 ? (
+            <AuthField label="باشگاه" htmlFor="feePaymentClub" required>
+              <AuthSelect
+                id="feePaymentClub"
+                icon={Landmark}
+                placeholder="انتخاب باشگاه"
+                value={activeClubId}
+                onValueChange={(value) => {
+                  setPickedClubId(value);
+                  setStudentId(null);
+                }}
+                options={clubOptions}
+              />
+            </AuthField>
+          ) : null}
 
-      {fee || activeClubId === "" ? null : (
-        <div className="flex flex-col gap-2.5 rounded-xl bg-muted/60 p-3">
-          <p className="text-[12px] font-bold leading-5 text-ink-muted">برای این باشگاه هنوز شهریه ای ثبت نشده است</p>
-          <AuthField label="مبلغ شهریه ماهانه (تومان)" htmlFor="feeInlineAmount">
+          {fee || activeClubId === "" ? null : (
+            <div className="flex flex-col gap-2.5 rounded-xl bg-muted/60 p-3">
+              <p className="text-[12px] font-bold leading-5 text-ink-muted">برای این باشگاه هنوز شهریه ای ثبت نشده است</p>
+              <AuthField label="مبلغ شهریه ماهانه (تومان)" htmlFor="feeInlineAmount">
+                <AuthInput
+                  id="feeInlineAmount"
+                  inputMode="numeric"
+                  dir="ltr"
+                  maxLength={15}
+                  value={feeValue === "" ? "" : formatMoney(feeValue)}
+                  onChange={(event) => setFeeAmount(digitsOnly(event.target.value, 12))}
+                />
+              </AuthField>
+              {saveFee.error ? (
+                <p role="alert" className="rounded-xl bg-danger-soft px-3 py-2 text-[12px] font-bold leading-5 text-danger">
+                  {apiErrorMessage(saveFee.error)}
+                </p>
+              ) : null}
+              <Button
+                type="button"
+                variant="brand"
+                className="h-11 w-full rounded-xl text-[12px] font-extrabold"
+                disabled={feeValue === "" || Number(feeValue) <= 0 || saveFee.isMutating}
+                onClick={() => void submitFee()}
+              >
+                {saveFee.isMutating ? <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : null}
+                {saveFee.isMutating ? "در حال ثبت..." : "ثبت شهریه برای باشگاه"}
+              </Button>
+            </div>
+          )}
+
+          {fixedStudent ? null : (
+            <AuthField label="هنرجو" htmlFor="feePaymentStudent" required>
+              <div className="relative">
+                <Search
+                  className="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-subtle"
+                  aria-hidden="true"
+                />
+                <Input
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
+                  placeholder="جستجوی نام یا کد ملی"
+                  aria-label="جستجوی هنرجو"
+                  className="h-11 rounded-xl ps-10"
+                />
+              </div>
+              <div className="mt-2 max-h-44 overflow-y-auto no-scrollbar rounded-xl border border-[var(--line-2)]">
+                {membersLoading && activeMembers.length === 0 ? (
+                  <div className="flex flex-col gap-2 p-2.5">
+                    {[0, 1, 2].map((row) => (
+                      <Skeleton key={row} className="h-9 w-full rounded-lg" />
+                    ))}
+                  </div>
+                ) : activeMembers.length === 0 ? (
+                  <p className="p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
+                    {term ? "هنرجویی با این نام یا کد ملی پیدا نشد" : "هنرجوی فعالی در این باشگاه نیست"}
+                  </p>
+                ) : (
+                  activeMembers.map((member) => {
+                    const isSelected = studentId === member.studentId;
+
+                    return (
+                      <button
+                        key={member.studentId}
+                        type="button"
+                        aria-pressed={isSelected}
+                        onClick={() => setStudentId(member.studentId)}
+                        className={cn(
+                          "flex w-full cursor-pointer items-center gap-2.5 px-3 py-2.5 text-start transition-colors hover:bg-muted/50",
+                          isSelected && "bg-brand-50 text-accent-ink",
+                        )}
+                      >
+                        <User className="size-4 shrink-0 text-ink-subtle" aria-hidden="true" />
+                        <span className="min-w-0 flex-1 truncate text-[12px] font-bold text-ink-body">{member.student.fullName}</span>
+                        {isSelected ? <Check className="size-4 shrink-0 text-accent-ink" aria-hidden="true" /> : null}
+                      </button>
+                    );
+                  })
+                )}
+              </div>
+            </AuthField>
+          )}
+
+          <AuthField label="ماه پرداخت" htmlFor="feePaymentMonth">
+            <FeeMonthSelect value={picked} onChange={setPicked} />
+          </AuthField>
+
+          {fee ? (
+            <AuthField label="مبلغ (تومان)" htmlFor="feePaymentAmount" optional hint="خالی بماند مبلغ شهریه باشگاه ثبت می شود">
+              <AuthInput
+                id="feePaymentAmount"
+                inputMode="numeric"
+                dir="ltr"
+                maxLength={15}
+                value={amountValue === "" ? "" : formatMoney(amountValue)}
+                onChange={(event) => setAmount(digitsOnly(event.target.value, 12))}
+              />
+            </AuthField>
+          ) : null}
+
+          <AuthField label="توضیح" htmlFor="feePaymentNote" optional>
             <AuthInput
-              id="feeInlineAmount"
-              inputMode="numeric"
-              dir="ltr"
-              maxLength={15}
-              value={feeValue === "" ? "" : formatMoney(feeValue)}
-              onChange={(event) => setFeeAmount(digitsOnly(event.target.value, 12))}
+              id="feePaymentNote"
+              maxLength={200}
+              value={note}
+              onChange={(event) => setNote(event.target.value)}
+              placeholder="مثلا قسط اول"
             />
           </AuthField>
-          {saveFee.error ? (
-            <p role="alert" className="rounded-xl bg-danger-soft px-3 py-2 text-[12px] font-bold leading-5 text-danger">
-              {apiErrorMessage(saveFee.error)}
-            </p>
-          ) : null}
-          <Button
-            type="button"
-            variant="brand"
-            className="h-11 w-full rounded-xl text-[12px] font-extrabold"
-            disabled={feeValue === "" || Number(feeValue) <= 0 || saveFee.isMutating}
-            onClick={() => void submitFee()}
-          >
-            {saveFee.isMutating ? <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : null}
-            {saveFee.isMutating ? "در حال ثبت..." : "ثبت شهریه برای باشگاه"}
-          </Button>
-        </div>
+        </>
       )}
-
-      <AuthField label="هنرجو" htmlFor="feePaymentStudent" required>
-        <div className="relative">
-          <Search className="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-subtle" aria-hidden="true" />
-          <Input
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder="جستجوی نام یا کد ملی"
-            aria-label="جستجوی هنرجو"
-            className="h-11 rounded-xl ps-10"
-          />
-        </div>
-        <div className="mt-2 max-h-44 overflow-y-auto no-scrollbar rounded-xl border border-[var(--line-2)]">
-          {membersLoading && activeMembers.length === 0 ? (
-            <div className="flex flex-col gap-2 p-2.5">
-              {[0, 1, 2].map((row) => (
-                <Skeleton key={row} className="h-9 w-full rounded-lg" />
-              ))}
-            </div>
-          ) : activeMembers.length === 0 ? (
-            <p className="p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
-              {term ? "هنرجویی با این نام یا کد ملی پیدا نشد" : "هنرجوی فعالی در این باشگاه نیست"}
-            </p>
-          ) : (
-            activeMembers.map((member) => {
-              const isSelected = studentId === member.studentId;
-
-              return (
-                <button
-                  key={member.studentId}
-                  type="button"
-                  aria-pressed={isSelected}
-                  onClick={() => setStudentId(member.studentId)}
-                  className={cn(
-                    "flex w-full cursor-pointer items-center gap-2.5 px-3 py-2.5 text-start transition-colors hover:bg-muted/50",
-                    isSelected && "bg-brand-50 text-accent-ink",
-                  )}
-                >
-                  <User className="size-4 shrink-0 text-ink-subtle" aria-hidden="true" />
-                  <span className="min-w-0 flex-1 truncate text-[12px] font-bold text-ink-body">{member.student.fullName}</span>
-                  {isSelected ? <Check className="size-4 shrink-0 text-accent-ink" aria-hidden="true" /> : null}
-                </button>
-              );
-            })
-          )}
-        </div>
-      </AuthField>
-
-      <AuthField label="ماه پرداخت" htmlFor="feePaymentMonth">
-        <FeeMonthSelect value={picked} onChange={setPicked} />
-      </AuthField>
-
-      {fee ? (
-        <AuthField label="مبلغ (تومان)" htmlFor="feePaymentAmount" optional hint="خالی بماند مبلغ شهریه باشگاه ثبت می شود">
-          <AuthInput
-            id="feePaymentAmount"
-            inputMode="numeric"
-            dir="ltr"
-            maxLength={15}
-            value={amountValue === "" ? "" : formatMoney(amountValue)}
-            onChange={(event) => setAmount(digitsOnly(event.target.value, 12))}
-          />
-        </AuthField>
-      ) : null}
-
-      <AuthField label="توضیح" htmlFor="feePaymentNote" optional>
-        <AuthInput
-          id="feePaymentNote"
-          maxLength={200}
-          value={note}
-          onChange={(event) => setNote(event.target.value)}
-          placeholder="مثلا قسط اول"
-        />
-      </AuthField>
 
       <AuthFormError message={record.error ? apiErrorMessage(record.error) : ""} />
 
