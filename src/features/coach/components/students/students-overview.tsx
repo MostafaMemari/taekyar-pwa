@@ -65,64 +65,70 @@ export function StudentsOverview({
         </Button>
       </header>
 
-      <div className="mt-4 flex flex-wrap gap-1.5">
-        {INSURANCE_STATUSES.map((value) => {
-          const meta = INSURANCE_META[value];
-          const Icon = meta.icon;
-          const isActive = active.includes(value);
-          const count = stats?.[value];
+      <div className="mt-4 flex flex-col gap-2">
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="text-[11px] font-bold text-ink-subtle">بیمه ورزشی</span>
+          {INSURANCE_STATUSES.map((value) => {
+            const meta = INSURANCE_META[value];
+            const Icon = meta.icon;
+            const isActive = active.includes(value);
+            const count = stats?.[value];
 
-          return (
-            <Button
-              key={value}
-              type="button"
-              variant="field"
-              aria-pressed={isActive}
-              onClick={() => onToggle(value)}
-              className={cn(
-                "h-9 gap-1.5 rounded-xl px-2.5 text-[12px] font-bold",
-                isActive && "border-primary/35 bg-brand-50 text-accent-ink",
-              )}
-            >
-              <Icon className={cn("size-3.5", TONE_TEXT[value])} aria-hidden="true" />
-              <span>{meta.shortLabel}</span>
-              {count === undefined ? (
-                <Skeleton className="h-3 w-5" />
-              ) : (
-                <b className={cn("leading-none tabular-nums", TONE_TEXT[value])}>{toPersianDigits(String(count))}</b>
-              )}
-            </Button>
-          );
-        })}
+            return (
+              <Button
+                key={value}
+                type="button"
+                variant="field"
+                aria-pressed={isActive}
+                onClick={() => onToggle(value)}
+                className={cn(
+                  "h-9 gap-1.5 rounded-xl px-2.5 text-[12px] font-bold",
+                  isActive && "border-primary/35 bg-brand-50 text-accent-ink",
+                )}
+              >
+                <Icon className={cn("size-3.5", TONE_TEXT[value])} aria-hidden="true" />
+                <span>{meta.shortLabel}</span>
+                {count === undefined ? (
+                  <Skeleton className="h-3 w-5" />
+                ) : (
+                  <b className={cn("leading-none tabular-nums", TONE_TEXT[value])}>{toPersianDigits(String(count))}</b>
+                )}
+              </Button>
+            );
+          })}
+        </div>
 
-        {(Object.keys(FEE_META) as StudentFeeStatus[]).map((value) => {
-          const meta = FEE_META[value];
-          const Icon = meta.icon;
-          const isActive = fee === value;
-          const count = feeCounts?.[value === "PAID" ? "paid" : "owed"];
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="text-[11px] font-bold text-ink-subtle">شهریه</span>
+          {(Object.keys(FEE_META) as StudentFeeStatus[]).map((value) => {
+            const meta = FEE_META[value];
+            const Icon = meta.icon;
+            const isActive = fee === value;
+            const count = feeCounts?.[value === "PAID" ? "paid" : "owed"];
 
-          return (
-            <Button
-              key={value}
-              type="button"
-              variant="field"
-              aria-pressed={isActive}
-              onClick={() => onFeeToggle(value)}
-              className={cn(
-                "h-9 gap-1.5 rounded-xl px-2.5 text-[12px] font-bold",
-                isActive && "border-primary/35 bg-brand-50 text-accent-ink",
-              )}
-            >
-              <Icon className={cn("size-3.5", FEE_TEXT[value])} aria-hidden="true" />
-              <span>{meta.shortLabel}</span>
-              {count === undefined ? (
-                <Skeleton className="h-3 w-5" />
-              ) : (
-                <b className={cn("leading-none tabular-nums", FEE_TEXT[value])}>{toPersianDigits(String(count))}</b>
-              )}
-            </Button>
-          );
-        })}
+            return (
+              <Button
+                key={value}
+                type="button"
+                variant="field"
+                aria-pressed={isActive}
+                onClick={() => onFeeToggle(value)}
+                className={cn(
+                  "h-9 gap-1.5 rounded-xl px-2.5 text-[12px] font-bold",
+                  isActive && "border-primary/35 bg-brand-50 text-accent-ink",
+                )}
+              >
+                <Icon className={cn("size-3.5", FEE_TEXT[value])} aria-hidden="true" />
+                <span>{meta.shortLabel}</span>
+                {count === undefined ? (
+                  <Skeleton className="h-3 w-5" />
+                ) : (
+                  <b className={cn("leading-none tabular-nums", FEE_TEXT[value])}>{toPersianDigits(String(count))}</b>
+                )}
+              </Button>
+            );
+          })}
+        </div>
       </div>
     </>
   );

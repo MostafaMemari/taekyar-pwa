@@ -17,7 +17,9 @@ export function StudentInsuranceSheet({
 }) {
   return (
     <SheetFrame open={open} onOpenChange={onOpenChange} title="ثبت بیمه ورزشی" description="تاریخ اعتبار بیمه سالانه هنرجو را تایید کنید">
-      <StudentInsuranceForm studentId={studentId} hasInsurance={hasInsurance} onDone={() => onOpenChange(false)} />
+      <div className="animate-in fade-in slide-in-from-bottom-2 duration-200 ease-out">
+        <StudentInsuranceForm studentId={studentId} hasInsurance={hasInsurance} onDone={() => onOpenChange(false)} />
+      </div>
     </SheetFrame>
   );
 }

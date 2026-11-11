@@ -25,13 +25,17 @@ export function StudentInsuranceForm({
   // Fresh mount on every open, so the initializer alone starts from the exact one-year-ahead date the backend expects.
   const defaultDate = addJalaliYears(todayJalali(), 1);
   const [date, setDate] = useState(defaultDate);
+  const [dateError, setDateError] = useState("");
   const renew = useRenewStudentInsurance();
   // Bounds come from the default, so a cleared value can never collapse the year wheel.
   const year = Number(defaultDate.split("/")[0]);
 
   const submit = async () => {
     const sportsInsuranceDate = toGregorianDate(date);
-    if (!sportsInsuranceDate) return;
+    if (!sportsInsuranceDate) {
+      setDateError("تاریخ اعتبار بیمه را انتخاب کنید");
+      return;
+    }
 
     try {
       await renew.trigger({ id: studentId, sportsInsuranceDate });
@@ -48,7 +52,10 @@ export function StudentInsuranceForm({
           id="insuranceDate"
           title="تاریخ اعتبار بیمه"
           value={date}
-          onChange={setDate}
+          onChange={(next) => {
+            setDate(next);
+            setDateError("");
+          }}
           defaultValue={defaultDate}
           fromYear={year - 1}
           toYear={year}
@@ -59,7 +66,7 @@ export function StudentInsuranceForm({
         ۷ روز قبل از انقضای بیمه، یادآوری به مربی ارسال می شود
       </p>
 
-      <AuthFormError message={renew.error ? apiErrorMessage(renew.error) : ""} />
+      <AuthFormError message={dateError || (renew.error ? apiErrorMessage(renew.error) : "")} />
 
       <SheetActions onSecondary={onDone}>
         <Button

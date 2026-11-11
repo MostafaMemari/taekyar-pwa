@@ -22,7 +22,15 @@ export function FeePaymentSheet({
 }) {
   return (
     <SheetFrame open={open} onOpenChange={onOpenChange} title="ثبت پرداخت شهریه" description="پرداخت هنرجو برای ماه انتخاب شده ثبت می شود">
-      <FeePaymentForm clubId={clubId} clubs={clubs} month={month} initialStudentId={initialStudentId} onDone={() => onOpenChange(false)} />
+      <div className="animate-in fade-in slide-in-from-bottom-2 duration-200 ease-out">
+        <FeePaymentForm
+          clubId={clubId}
+          clubs={clubs}
+          month={month}
+          initialStudentId={initialStudentId}
+          onDone={() => onOpenChange(false)}
+        />
+      </div>
     </SheetFrame>
   );
 }
