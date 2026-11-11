@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarClock, CalendarDays, Check, ChevronLeft, ClipboardCheck, Clock, Minus, Plus, Search, Users } from "lucide-react";
+import { CalendarDays, Check, ChevronLeft, ClipboardCheck, Clock, Minus, Plus, Search, Users } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -51,21 +51,18 @@ function SessionCard({ session, clubName, memberCount }: { session: ClassSession
                 {session.isActive ? <Check aria-hidden="true" /> : <Minus aria-hidden="true" />}
                 {session.isActive ? "فعال" : "غیرفعال"}
               </StatusBadge>
+              <span className="ms-auto flex shrink-0 items-center gap-1 text-[12px] font-extrabold tabular-nums text-accent-ink">
+                <Users className="size-3.5" aria-hidden="true" />
+                {memberCount === undefined ? "" : toPersianDigits(String(memberCount))}
+              </span>
             </div>
             <p className="mt-0.5 truncate text-[12px] text-ink-subtle">{clubName}</p>
 
-            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] font-semibold text-ink-muted">
-              <span className="flex items-center gap-1">
-                <CalendarClock className="size-3.5 shrink-0 text-ink-subtle" aria-hidden="true" />
-                {weekDayLabels(session.weekDays).join(" · ")}
-              </span>
-              <span className="flex items-center gap-1 tabular-nums">
+            <div className="mt-1.5 flex items-center gap-x-2 text-[12px] font-semibold text-ink-muted">
+              <span className="truncate">{weekDayLabels(session.weekDays).join(" · ")}</span>
+              <span className="flex shrink-0 items-center gap-1 tabular-nums">
                 <Clock className="size-3.5 shrink-0 text-ink-subtle" aria-hidden="true" />
                 <SessionTime start={session.startTime} end={session.endTime} />
-              </span>
-              <span className="flex items-center gap-1 tabular-nums">
-                <Users className="size-3.5 shrink-0 text-ink-subtle" aria-hidden="true" />
-                {memberCount === undefined ? "" : `${toPersianDigits(String(memberCount))} هنرجو`}
               </span>
             </div>
           </div>
@@ -136,6 +133,17 @@ export function SessionsDirectory() {
               : `${toPersianDigits(String(visible.length))} کلاس یافت شد`}
           </StatusBadge>
         ) : null}
+        <Button
+          type="button"
+          variant="brand"
+          size="sm"
+          className="ms-auto h-8 gap-1.5 rounded-xl px-3.5 text-[12px] font-bold"
+          render={<Link href="/coach/sessions/new" />}
+          nativeButton={false}
+        >
+          <Plus data-icon="inline-start" aria-hidden="true" />
+          کلاس جدید
+        </Button>
       </header>
 
       <div className="sticky top-0 z-20 -mx-4 mt-4 border-b border-[var(--line-2)] bg-[var(--canvas)]/95 px-4 pb-3 pt-2 backdrop-blur">
@@ -227,19 +235,6 @@ export function SessionsDirectory() {
             </EmptyContent>
           </Empty>
         ) : null}
-      </div>
-
-      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-40 mx-auto flex max-w-[var(--app-max-width)] justify-end px-5">
-        <Button
-          variant="brand"
-          size="icon"
-          aria-label="کلاس جدید"
-          className="pointer-events-auto size-14 rounded-2xl shadow-brand-xl"
-          render={<Link href="/coach/sessions/new" />}
-          nativeButton={false}
-        >
-          <Plus className="size-6" aria-hidden="true" />
-        </Button>
       </div>
     </>
   );

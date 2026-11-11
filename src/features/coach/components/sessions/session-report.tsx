@@ -1,4 +1,4 @@
-import { CalendarDays, ChevronLeft, ChevronRight, ClipboardCheck, Info, Users } from "lucide-react";
+import { CalendarDays, ChevronRight, ClipboardCheck, Info, Users } from "lucide-react";
 import Link from "next/link";
 import { DatePicker } from "@/components/shared/date-picker";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -16,6 +16,7 @@ import { weekDayLabels } from "@/features/coach/lib/coach-data";
 import type { ClassSessionRecord } from "@/features/coach/lib/session-api";
 import { toPersianDigits } from "@/lib/digits";
 import { toGregorianDate, toJalaliDate } from "@/lib/jalali";
+import { ReportStudentPicker } from "./report-student-picker";
 import { SessionBand } from "./session-band";
 import { SessionRoster } from "./session-roster";
 
@@ -46,7 +47,6 @@ export function SessionReport({
   const rate = attendanceRate(counts);
   const notes = entries.filter((entry) => entry.attendance?.note);
   const clubName = session.club?.name ?? "باشگاه حذف شده";
-  const reportStudent = entries[0];
 
   return (
     <main className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300">
@@ -138,18 +138,7 @@ export function SessionReport({
         ) : null}
 
         <section>
-          <SectionHeading
-            title="وضعیت هنرجویان"
-            action={
-              <Link
-                href={reportStudent ? `/coach/students/${reportStudent.studentId}/attendance` : "/coach/students"}
-                className="inline-flex items-center gap-0.5 text-[12px] font-semibold text-accent-ink"
-              >
-                گزارش تک هنرجو
-                <ChevronLeft className="size-3" aria-hidden="true" />
-              </Link>
-            }
-          />
+          <SectionHeading title="وضعیت هنرجویان" action={<ReportStudentPicker entries={entries} />} />
           <SessionRoster
             entries={entries.map((entry) => ({
               studentId: entry.studentId,

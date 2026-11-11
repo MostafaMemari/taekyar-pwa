@@ -1,4 +1,4 @@
-import { CalendarPlus, Check, Info, Landmark, MapPin, Pencil, Wallet } from "lucide-react";
+import { CalendarPlus, Info, Landmark, MapPin, Pencil, Wallet } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -21,24 +21,24 @@ export function ClubCard({ club, studentCount }: { club: ClubRecord; studentCoun
 
   return (
     <Card className="gap-0 p-0">
-      <div className="flex items-center gap-3 p-4 pb-3">
+      <Link
+        href={`/coach/clubs/${club.id}`}
+        className="flex items-center gap-3 rounded-t-xl p-4 pb-3 transition-colors active:bg-muted/40"
+        aria-label={`جزئیات ${club.name}`}
+      >
         <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-brand-50 text-accent-ink">
           <Landmark className="size-5" aria-hidden="true" />
         </span>
         <div className="min-w-0 flex-1">
           <b className="block truncate text-[14px] font-extrabold text-ink">{club.name}</b>
           <div className="mt-1 flex flex-wrap gap-1.5">
-            <StatusBadge tone={club.isActive ? "success" : "neutral"}>
-              {club.isActive ? <Check aria-hidden="true" /> : null}
-              {club.isActive ? "فعال" : "غیرفعال"}
-            </StatusBadge>
             <StatusBadge>{GENDER_META[club.gender].clubLabel}</StatusBadge>
           </div>
         </div>
         <span className="text-[44px] font-extrabold leading-none text-brand-600/10" aria-hidden="true">
           {club.name.slice(0, 1)}
         </span>
-      </div>
+      </Link>
 
       <div className="grid grid-cols-2 border-y border-[var(--line-2)] bg-[var(--surface-2)]">
         {stats.map((stat, index) => (

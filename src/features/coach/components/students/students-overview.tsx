@@ -1,9 +1,15 @@
-import { UserPlus, Users } from "lucide-react";
+import { CircleAlert, CircleCheck, Plus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StatusBadge } from "@/features/coach/components/status-badge";
 import type { StudentInsuranceSummary } from "@/features/coach/lib/student-api";
-import { INSURANCE_META, INSURANCE_STATUSES, type StudentInsuranceStatus } from "@/features/coach/lib/students-options";
+import {
+  FEE_META,
+  INSURANCE_META,
+  INSURANCE_STATUSES,
+  type StudentFeeStatus,
+  type StudentInsuranceStatus,
+} from "@/features/coach/lib/students-options";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
@@ -14,17 +20,28 @@ const TONE_TEXT: Record<StudentInsuranceStatus, string> = {
   none: "text-ink-muted",
 };
 
+const FEE_TEXT: Record<StudentFeeStatus, string> = {
+  PAID: "text-success",
+  OWED: "text-danger",
+};
+
 export function StudentsOverview({
   total,
   stats,
+  feeCounts,
   active,
   onToggle,
+  fee,
+  onFeeToggle,
   onAdd,
 }: {
   total?: number;
   stats?: StudentInsuranceSummary;
+  feeCounts?: { paid: number; owed: number };
   active: StudentInsuranceStatus[];
   onToggle: (value: StudentInsuranceStatus) => void;
+  fee?: StudentFeeStatus | null;
+  onFeeToggle: (value: StudentFeeStatus) => void;
   onAdd: () => void;
 }) {
   return (
@@ -43,8 +60,8 @@ export function StudentsOverview({
           className="ms-auto h-8 gap-1.5 rounded-xl px-3.5 text-[12px] font-bold"
           onClick={onAdd}
         >
-          <UserPlus data-icon="inline-start" aria-hidden="true" />
-          افزودن
+          <Plus data-icon="inline-start" aria-hidden="true" />
+          هنرجو جدید
         </Button>
       </header>
 
@@ -73,6 +90,35 @@ export function StudentsOverview({
                 <Skeleton className="h-3 w-5" />
               ) : (
                 <b className={cn("leading-none tabular-nums", TONE_TEXT[value])}>{toPersianDigits(String(count))}</b>
+              )}
+            </Button>
+          );
+        })}
+
+        {(Object.keys(FEE_META) as StudentFeeStatus[]).map((value) => {
+          const meta = FEE_META[value];
+          const Icon = meta.icon;
+          const isActive = fee === value;
+          const count = feeCounts?.[value === "PAID" ? "paid" : "owed"];
+
+          return (
+            <Button
+              key={value}
+              type="button"
+              variant="field"
+              aria-pressed={isActive}
+              onClick={() => onFeeToggle(value)}
+              className={cn(
+                "h-9 gap-1.5 rounded-xl px-2.5 text-[12px] font-bold",
+                isActive && "border-primary/35 bg-brand-50 text-accent-ink",
+              )}
+            >
+              <Icon className={cn("size-3.5", FEE_TEXT[value])} aria-hidden="true" />
+              <span>{meta.shortLabel}</span>
+              {count === undefined ? (
+                <Skeleton className="h-3 w-5" />
+              ) : (
+                <b className={cn("leading-none tabular-nums", FEE_TEXT[value])}>{toPersianDigits(String(count))}</b>
               )}
             </Button>
           );

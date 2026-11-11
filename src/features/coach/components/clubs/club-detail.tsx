@@ -1,8 +1,7 @@
 "use client";
 
-import { CalendarDays, EllipsisVertical, Pencil, Plus, Users, Wallet } from "lucide-react";
+import { CalendarDays, Pencil, Plus, Users, Wallet } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -19,7 +18,6 @@ import { cn } from "@/lib/utils";
 import { ClubBand } from "./club-band";
 import { ClubClasses } from "./club-classes";
 import { ClubClassesSkeleton } from "./club-classes-skeleton";
-import { ClubDetailActions } from "./club-detail-actions";
 import { ClubDetailSkeleton } from "./club-detail-skeleton";
 import { ClubInfoCard } from "./club-info-card";
 import { ClubMembers } from "./club-members";
@@ -54,7 +52,6 @@ export function ClubDetail({ clubId }: { clubId: string }) {
 }
 
 function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCount?: number }) {
-  const [menuOpen, setMenuOpen] = useState(false);
   const { data: sessionData, error: sessionError, isLoading: sessionsLoading, mutate: mutateSessions } = useSessions();
   const sessions = (sessionData?.sessions ?? []).filter((session) => session.clubId === club.id);
   const { data: memberCounts } = useSessionStudentCounts(sessions.map((session) => session.id));
@@ -71,22 +68,7 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
 
   return (
     <main className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300">
-      <ClubBand
-        club={club}
-        studentCount={studentCount}
-        backHref="/coach/clubs"
-        action={
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="عملیات بیشتر"
-            className="size-10 rounded-full border border-white/20 bg-white/10 text-white hover:bg-white/20"
-            onClick={() => setMenuOpen(true)}
-          >
-            <EllipsisVertical aria-hidden="true" />
-          </Button>
-        }
-      />
+      <ClubBand club={club} studentCount={studentCount} backHref="/coach/clubs" />
 
       <CoachSheet className="flex flex-col gap-4">
         <ClubInfoCard club={club} />
@@ -162,8 +144,6 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
           </Button>
         </div>
       </CoachSheet>
-
-      <ClubDetailActions club={club} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
     </main>
   );
 }

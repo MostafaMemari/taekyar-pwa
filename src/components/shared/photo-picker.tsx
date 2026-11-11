@@ -25,19 +25,21 @@ export function PhotoPicker({ label, hint, optional = false, imageSrc, pending =
       <Button
         type="button"
         variant="outline"
-        className="relative size-[72px] shrink-0 overflow-hidden rounded-full border-dashed p-0"
+        className="relative size-[72px] shrink-0 rounded-full border-dashed p-0"
         aria-label={`انتخاب ${label}`}
         onClick={onSelectFile ? open : undefined}
         disabled={pending}
       >
-        {imageSrc ? (
-          <Avatar className="size-full rounded-full">
-            <AvatarImage src={imageSrc} alt={label} className="size-full object-cover" />
-          </Avatar>
-        ) : (
-          <Camera className="size-7" aria-hidden="true" />
-        )}
-        <span className="absolute -end-0.5 -bottom-0.5 grid size-6 place-items-center rounded-full bg-primary text-primary-foreground ring-2 ring-background">
+        <span className="absolute inset-0 grid place-items-center overflow-hidden rounded-full">
+          {imageSrc ? (
+            <Avatar className="size-full rounded-full">
+              <AvatarImage src={imageSrc} alt={label} className="size-full object-cover" />
+            </Avatar>
+          ) : (
+            <Camera className="size-7" aria-hidden="true" />
+          )}
+        </span>
+        <span className="absolute -bottom-0.5 -end-0.5 grid size-6 place-items-center rounded-full bg-primary text-primary-foreground ring-2 ring-background">
           {pending ? <Loader2 className="size-3.5 animate-spin" aria-hidden="true" /> : <Plus className="size-3.5" aria-hidden="true" />}
         </span>
       </Button>

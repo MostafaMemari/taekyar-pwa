@@ -1,4 +1,16 @@
-import { CalendarDays, ListOrdered, type LucideIcon, Medal, ShieldAlert, ShieldCheck, ShieldOff, ShieldX, Type } from "lucide-react";
+import {
+  CalendarDays,
+  CircleAlert,
+  CircleCheck,
+  ListOrdered,
+  type LucideIcon,
+  Medal,
+  ShieldAlert,
+  ShieldCheck,
+  ShieldOff,
+  ShieldX,
+  Type,
+} from "lucide-react";
 import type { AgeCategoryRecord, StudentBeltAssignment } from "@/features/coach/lib/student-api";
 import { digitsOnly } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
@@ -24,6 +36,15 @@ export const INSURANCE_META: Record<
   expiring: { label: "نزدیک انقضا", shortLabel: "نزدیک انقضا", tone: "warning", icon: ShieldAlert, tile: "bg-warning-soft text-warning" },
   expired: { label: "بیمه منقضی", shortLabel: "منقضی", tone: "danger", icon: ShieldX, tile: "bg-danger-soft text-danger" },
   none: { label: "بدون بیمه", shortLabel: "بدون بیمه", tone: "neutral", icon: ShieldOff, tile: "bg-muted text-ink-muted" },
+};
+
+export type StudentFeeStatus = "PAID" | "OWED";
+
+export const STUDENT_FEE_STATUSES = ["PAID", "OWED"] as const;
+
+export const FEE_META: Record<StudentFeeStatus, { label: string; shortLabel: string; tone: "success" | "danger"; icon: LucideIcon }> = {
+  PAID: { label: "شهریه این ماه پرداخت شده", shortLabel: "پرداخت شده", tone: "success", icon: CircleCheck },
+  OWED: { label: "بدهکار شهریه این ماه", shortLabel: "بدهکار", tone: "danger", icon: CircleAlert },
 };
 
 const DAY_MS = 86_400_000;

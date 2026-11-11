@@ -1,4 +1,4 @@
-import { CalendarDays, Check, Landmark, MapPin, Minus } from "lucide-react";
+import { CalendarDays, Landmark, MapPin } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { StatusBadge } from "@/features/coach/components/status-badge";
 import type { ClubRecord } from "@/features/coach/lib/club-api";
@@ -15,10 +15,6 @@ export function ClubInfoCard({ club }: { club: ClubRecord }) {
       <div className="flex flex-col gap-3 p-4">
         <div className="flex flex-wrap items-center gap-2">
           <h2 className="text-[16px] font-extrabold text-ink">{club.name}</h2>
-          <StatusBadge tone={club.isActive ? "success" : "neutral"}>
-            {club.isActive ? <Check aria-hidden="true" /> : <Minus aria-hidden="true" />}
-            {club.isActive ? "فعال" : "غیرفعال"}
-          </StatusBadge>
           <StatusBadge>{GENDER_META[club.gender].clubLabel}</StatusBadge>
         </div>
 

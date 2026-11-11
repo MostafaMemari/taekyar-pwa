@@ -32,7 +32,6 @@ export function ClubsDirectory() {
   const clubs = data?.clubs ?? [];
   const readError = error ?? countsError;
   const isReady = Boolean(data) && !readError;
-  const activeCount = clubs.filter((club) => club.isActive).length;
   const studentTotal = Object.values(counts ?? {}).reduce((sum, count) => sum + count, 0);
 
   const retry = () => {
@@ -48,10 +47,6 @@ export function ClubsDirectory() {
         <p className="mt-2 text-[12px] font-semibold text-white/55">هر باشگاه، حضور و غیاب و کلاس بندی مستقل خودش را دارد</p>
 
         <div className="mt-3 flex items-center gap-2.5">
-          <GlassStat
-            value={data ? toPersianDigits(String(activeCount)) : <Skeleton className="h-4 w-8 bg-white/25" />}
-            label="باشگاه فعال"
-          />
           <GlassStat value={data ? toPersianDigits(String(data.total)) : <Skeleton className="h-4 w-8 bg-white/25" />} label="باشگاه" />
           <GlassStat
             value={data && counts ? toPersianDigits(String(studentTotal)) : <Skeleton className="h-4 w-8 bg-white/25" />}
@@ -61,7 +56,20 @@ export function ClubsDirectory() {
       </CoachBand>
 
       <CoachSheet>
-        <h2 className="text-[17px] font-extrabold text-ink">وارد کدام باشگاه می شوید؟</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-[17px] font-extrabold text-ink">وارد کدام باشگاه می شوید؟</h2>
+          <Button
+            type="button"
+            variant="brand"
+            size="sm"
+            className="ms-auto h-8 gap-1.5 rounded-xl px-3.5 text-[12px] font-bold"
+            render={<Link href="/coach/clubs/new" />}
+            nativeButton={false}
+          >
+            <Plus data-icon="inline-start" aria-hidden="true" />
+            باشگاه جدید
+          </Button>
+        </div>
 
         <div aria-busy={isLoading && !readError}>
           {isLoading && !readError ? <ClubsSkeleton /> : null}
@@ -92,22 +100,6 @@ export function ClubsDirectory() {
             </div>
           ) : null}
         </div>
-
-        {!readError ? (
-          <Button
-            type="button"
-            variant="outline"
-            className="mt-3.5 h-auto w-full flex-col gap-1.5 whitespace-normal rounded-2xl border-dashed py-5 text-center"
-            render={<Link href="/coach/clubs/new" />}
-            nativeButton={false}
-          >
-            <span className="grid size-11 place-items-center rounded-2xl bg-accent text-accent-ink">
-              <Plus className="size-5" aria-hidden="true" />
-            </span>
-            <span className="text-[13px] font-extrabold text-ink">ثبت باشگاه جدید</span>
-            <span className="text-[10px] font-medium leading-5 text-ink-subtle">هر تعداد باشگاه که داشته باشید، همین جا اضافه کنید</span>
-          </Button>
-        ) : null}
       </CoachSheet>
     </main>
   );

@@ -1,13 +1,17 @@
 "use client";
 
-import { BadgeCheck, Check, Copy } from "lucide-react";
+import { BadgeCheck, Check, Copy, Medal, ShieldCheck, Wallet } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { type ReactNode, useState } from "react";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { Button } from "@/components/ui/button";
+import { FeePaymentSheet } from "@/features/coach/components/clubs/fee/fee-payment-sheet";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { PersonAvatar } from "@/features/coach/components/person-avatar";
 import { StatusBadge } from "@/features/coach/components/status-badge";
+import { useStudentClubs } from "@/features/coach/hooks/use-clubs";
+import { currentFeeMonth } from "@/features/coach/lib/fee-api";
 import type { AgeCategoryRecord, StudentRecord } from "@/features/coach/lib/student-api";
 import { GENDER_OPTIONS } from "@/features/coach/lib/student-form-options";
 import {
@@ -21,6 +25,8 @@ import {
 import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
 import { getStudentBeltMeta } from "@/lib/student-belts";
+import { StudentInsuranceSheet } from "./student-insurance-sheet";
+import { StudentMembershipSheet } from "./student-membership-sheet";
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
@@ -52,7 +58,12 @@ export function StudentQuickSheet({
   ageCategories: AgeCategoryRecord[];
   expiringDays: number;
 }) {
+  const router = useRouter();
   const [copied, setCopied] = useState(false);
+  const [insuranceOpen, setInsuranceOpen] = useState(false);
+  const [membershipOpen, setMembershipOpen] = useState(false);
+  const [feeOpen, setFeeOpen] = useState(false);
+  const { data: memberships } = useStudentClubs(student?.id ?? "");
 
   const insurance = insuranceStatusOf(student?.sportsInsuranceDate ?? null, expiringDays);
   const insuranceMeta = INSURANCE_META[insurance];
@@ -72,6 +83,33 @@ export function StudentQuickSheet({
   const nextBeltTime = student?.currentBelt?.nextBeltDate ? new Date(student.currentBelt.nextBeltDate).getTime() : null;
   const examDue = nextBeltTime !== null && nextBeltTime < Date.now();
   const examSoon = !examDue && nextBeltTime !== null && nextBeltTime < Date.now() + 30 * DAY_MS;
+
+  const activeMemberships = (memberships ?? []).filter((membership) => membership.isActive);
+  const feeClubId = activeMemberships[0]?.club.id ?? "";
+  const feeClubs = activeMemberships.map((membership) => membership.club);
+
+  // One-tap fixes for whatever the sheet flags; each opens its own sheet or the belt flow.
+  const actions = [
+    ...(insurance === "none" || insurance === "expired"
+      ? [{ icon: ShieldCheck, label: insurance === "none" ? "ثبت بیمه" : "تمدید بیمه", onClick: () => setInsuranceOpen(true) }]
+      : []),
+    ...(examDue && student
+      ? [
+          {
+            icon: Medal,
+            label: "اختصاص کمربند",
+            onClick: () => {
+              onOpenChange(false);
+              router.push(`/coach/students/${student.id}/belt`);
+            },
+          },
+        ]
+      : []),
+    ...(membershipDue === null || membershipDue > 0
+      ? [{ icon: BadgeCheck, label: "تمدید شارژ", onClick: () => setMembershipOpen(true) }]
+      : []),
+    { icon: Wallet, label: "ثبت شهریه", onClick: () => setFeeOpen(true) },
+  ];
 
   const copyNationalCode = async () => {
     if (!student) return;
@@ -123,6 +161,23 @@ export function StudentQuickSheet({
             </StatusBadge>
           ) : null}
         </div>
+
+        {actions.length > 0 ? (
+          <div className={cnActionGrid(actions.length)}>
+            {actions.map((action) => (
+              <Button
+                key={action.label}
+                type="button"
+                variant="outline"
+                className="h-10 gap-1.5 rounded-xl text-[12px] font-bold"
+                onClick={action.onClick}
+              >
+                <action.icon data-icon="inline-start" aria-hidden="true" />
+                {action.label}
+              </Button>
+            ))}
+          </div>
+        ) : null}
 
         <div className="divide-y divide-[var(--line-3)] rounded-2xl bg-muted/40 py-1">
           <Row label="کد ملی">
@@ -186,6 +241,31 @@ export function StudentQuickSheet({
       >
         مشاهده پرونده کامل
       </Button>
+
+      {student ? (
+        <>
+          <StudentInsuranceSheet
+            open={insuranceOpen}
+            onOpenChange={setInsuranceOpen}
+            studentId={student.id}
+            hasInsurance={Boolean(student.sportsInsuranceDate)}
+          />
+          <StudentMembershipSheet open={membershipOpen} onOpenChange={setMembershipOpen} studentId={student.id} />
+          <FeePaymentSheet
+            open={feeOpen}
+            onOpenChange={setFeeOpen}
+            clubId={feeClubId}
+            clubs={feeClubs}
+            month={currentFeeMonth()}
+            initialStudentId={student.id}
+          />
+        </>
+      ) : null}
     </SheetFrame>
   );
+}
+
+// Four actions fill a 2x2 grid; fewer stay single-column so buttons never stretch awkwardly.
+function cnActionGrid(count: number) {
+  return count > 1 ? "grid grid-cols-2 gap-2" : "grid grid-cols-1 gap-2";
 }

@@ -56,6 +56,7 @@ export type StudentQuery = {
   beltExamId?: string;
   gender?: Gender;
   excludeIds?: string[];
+  fee?: "PAID" | "OWED";
   sortBy?: string;
   sortDirection?: string;
 };
@@ -86,7 +87,7 @@ export type UpdateStudentInput = {
 
 export type StudentInsuranceSummary = { valid: number; expiring: number; expired: number; none: number };
 
-export type StudentStats = { total: number; byInsurance: StudentInsuranceSummary; expiringDays: number };
+export type StudentStats = { total: number; byInsurance: StudentInsuranceSummary; expiringDays: number; feePaid: number; feeOwed: number };
 
 export type AgeCategoryRecord = {
   id: string;
@@ -107,6 +108,7 @@ function toQueryString(query: StudentQuery) {
   if (query.beltExamId) params.set("beltExamId", query.beltExamId);
   if (query.gender) params.set("gender", query.gender);
   for (const id of query.excludeIds ?? []) params.append("excludeIds", id);
+  if (query.fee) params.set("fee", query.fee);
   if (query.sortBy) params.set("sortBy", query.sortBy);
   if (query.sortDirection) params.set("sortDirection", query.sortDirection);
 

@@ -79,7 +79,7 @@ export function StudentsDirectory() {
   const isDirty = filterCount > 0 || filters.q.trim().length > 0;
   const sortActive = filters.sort !== "beltDate" || filters.dir !== "desc";
 
-  const clearFilters = () => void setFilters({ q: "", belt: [], age: [], ins: [], exam: "" });
+  const clearFilters = () => void setFilters({ q: "", belt: [], age: [], ins: [], fee: null, exam: "" });
 
   const onSortFieldChange = (field: StudentSortField) => void setFilters({ sort: field, dir: DEFAULT_SORT_DIRECTIONS[field] });
   const onSortDirectionChange = (direction: StudentSortDirection) => void setFilters({ dir: direction });
@@ -91,6 +91,9 @@ export function StudentsDirectory() {
         stats={stats?.byInsurance}
         active={filters.ins}
         onToggle={(value) => void setFilters({ ins: toggleValue(filters.ins, value) })}
+        fee={filters.fee}
+        feeCounts={stats ? { paid: stats.feePaid, owed: stats.feeOwed } : undefined}
+        onFeeToggle={(value) => void setFilters({ fee: filters.fee === value ? null : value })}
         onAdd={() => setAddOpen(true)}
       />
 
@@ -107,10 +110,12 @@ export function StudentsDirectory() {
         belts={filters.belt}
         ages={filters.age}
         insurances={filters.ins}
+        fee={filters.fee}
         exam={filters.exam ? { label: examChipLabel ?? "آزمون" } : null}
         onRemoveBelt={(value) => void setFilters({ belt: filters.belt.filter((item) => item !== value) })}
         onRemoveAge={(value) => void setFilters({ age: filters.age.filter((item) => item !== value) })}
         onRemoveInsurance={(value) => void setFilters({ ins: filters.ins.filter((item) => item !== value) })}
+        onRemoveFee={() => void setFilters({ fee: null })}
         onRemoveExam={() => void setFilters({ exam: "" })}
         onClear={clearFilters}
       />

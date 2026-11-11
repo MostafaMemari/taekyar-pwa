@@ -4,8 +4,10 @@ import {
   AGE_CATEGORY_LABELS,
   type AgeCategoryName,
   beltKeyOf,
+  FEE_META,
   INSURANCE_META,
   type StudentBeltApiName,
+  type StudentFeeStatus,
   type StudentInsuranceStatus,
 } from "@/features/coach/lib/students-options";
 import { getStudentBeltMeta } from "@/lib/student-belts";
@@ -30,24 +32,28 @@ export function StudentsActiveFilters({
   belts,
   ages,
   insurances,
+  fee,
   exam,
   onRemoveBelt,
   onRemoveAge,
   onRemoveInsurance,
+  onRemoveFee,
   onRemoveExam,
   onClear,
 }: {
   belts: StudentBeltApiName[];
   ages: AgeCategoryName[];
   insurances: StudentInsuranceStatus[];
+  fee: StudentFeeStatus | null;
   exam: { label: string } | null;
   onRemoveBelt: (value: StudentBeltApiName) => void;
   onRemoveAge: (value: AgeCategoryName) => void;
   onRemoveInsurance: (value: StudentInsuranceStatus) => void;
+  onRemoveFee: () => void;
   onRemoveExam: () => void;
   onClear: () => void;
 }) {
-  if (belts.length + ages.length + insurances.length + (exam ? 1 : 0) === 0) return null;
+  if (belts.length + ages.length + insurances.length + (fee ? 1 : 0) + (exam ? 1 : 0) === 0) return null;
 
   return (
     <div className="no-scrollbar mt-3 flex items-center gap-1.5 overflow-x-auto pb-0.5">
@@ -62,6 +68,8 @@ export function StudentsActiveFilters({
       {insurances.map((insurance) => (
         <FilterChip key={insurance} label={INSURANCE_META[insurance].shortLabel} onRemove={() => onRemoveInsurance(insurance)} />
       ))}
+
+      {fee ? <FilterChip label={FEE_META[fee].shortLabel} onRemove={onRemoveFee} /> : null}
 
       {exam ? <FilterChip label={exam.label} onRemove={onRemoveExam} /> : null}
 

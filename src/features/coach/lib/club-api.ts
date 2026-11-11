@@ -66,10 +66,6 @@ export function updateClub(id: string, input: ClubInput): Promise<ClubRecord> {
   return authRequest<ClubResponse>(`club/${id}`, { method: "patch", json: input }).then((result) => result.club);
 }
 
-export function changeClubStatus(id: string, isActive: boolean): Promise<ClubRecord> {
-  return authRequest<ClubResponse>(`club/${id}/status`, { method: "patch", json: { isActive } }).then((result) => result.club);
-}
-
 export function addStudentToClub(id: string, studentId: string): Promise<void> {
   return authRequest<unknown>(`club/${id}/students`, { method: "post", json: { studentId } }).then(() => undefined);
 }

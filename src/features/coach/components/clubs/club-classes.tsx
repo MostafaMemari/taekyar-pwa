@@ -40,22 +40,20 @@ export function ClubClasses({ sessions, memberCounts }: { sessions: ClassSession
                         غیرفعال
                       </StatusBadge>
                     )}
-                  </span>
-                  <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
-                    {weekDayLabels(session.weekDays).map((day) => (
-                      <StatusBadge key={day}>{day}</StatusBadge>
-                    ))}
-                    <StatusBadge>
-                      <SessionTime start={session.startTime} end={session.endTime} />
-                    </StatusBadge>
-                    <StatusBadge tone="brand">
-                      <Users aria-hidden="true" />
+                    <span className="ms-auto flex shrink-0 items-center gap-1 text-[12px] font-extrabold tabular-nums text-accent-ink">
+                      <Users className="size-3.5" aria-hidden="true" />
                       {memberCounts?.[session.id] === undefined ? (
                         <Skeleton className="h-3 w-7" />
                       ) : (
-                        `${toPersianDigits(String(memberCounts[session.id]))} هنرجو`
+                        toPersianDigits(String(memberCounts[session.id]))
                       )}
-                    </StatusBadge>
+                    </span>
+                  </span>
+                  <span className="mt-1 flex items-center gap-x-2 text-[12px] font-semibold text-ink-muted">
+                    <span className="truncate">{weekDayLabels(session.weekDays).join(" · ")}</span>
+                    <span className="shrink-0 tabular-nums">
+                      <SessionTime start={session.startTime} end={session.endTime} />
+                    </span>
                   </span>
                 </span>
 

@@ -24,6 +24,7 @@ export function FeePaymentSheet({
   clubId,
   clubs,
   month,
+  initialStudentId,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -31,6 +32,8 @@ export function FeePaymentSheet({
   // Pass the coach's clubs so the sheet can offer a picker; a single club needs none.
   clubs?: ClubRecord[];
   month: FeeMonth;
+  // Preselects one student, e.g. when the sheet opens from a student's quick info.
+  initialStudentId?: string;
 }) {
   const router = useRouter();
   const [pickedClubId, setPickedClubId] = useState<string | null>(null);
@@ -39,7 +42,7 @@ export function FeePaymentSheet({
   const { data: fee } = useClubFee(activeClubId);
   const record = useRecordFeePayment();
   const saveFee = useSaveClubFee();
-  const [studentId, setStudentId] = useState<string | null>(null);
+  const [studentId, setStudentId] = useState<string | null>(initialStudentId ?? null);
   const [picked, setPicked] = useState<FeeMonth>(month);
   // Stays null until the coach types, so the stored fee amount shows through untouched.
   const [amount, setAmount] = useState<string | null>(null);
@@ -48,7 +51,7 @@ export function FeePaymentSheet({
 
   const close = () => {
     setPickedClubId(null);
-    setStudentId(null);
+    setStudentId(initialStudentId ?? null);
     setPicked(month);
     setAmount(null);
     setFeeAmount(null);

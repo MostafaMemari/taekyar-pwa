@@ -5,6 +5,8 @@ import {
   BELT_API_NAMES,
   INSURANCE_STATUSES,
   SORT_FIELDS,
+  STUDENT_FEE_STATUSES,
+  type StudentFeeStatus,
   type StudentSortDirection,
 } from "@/features/coach/lib/students-options";
 
@@ -13,6 +15,7 @@ export const studentFilterParsers = {
   belt: parseAsArrayOf(parseAsStringEnum([...BELT_API_NAMES])).withDefault([]),
   age: parseAsArrayOf(parseAsStringEnum([...AGE_CATEGORY_NAMES])).withDefault([]),
   ins: parseAsArrayOf(parseAsStringEnum([...INSURANCE_STATUSES])).withDefault([]),
+  fee: parseAsStringEnum<StudentFeeStatus>([...STUDENT_FEE_STATUSES]),
   exam: parseAsString.withDefault(""),
   sort: parseAsStringEnum([...SORT_FIELDS]).withDefault("beltDate"),
   dir: parseAsStringEnum<StudentSortDirection>(["asc", "desc"]).withDefault("desc"),
@@ -26,6 +29,7 @@ export function toStudentQuery(filters: StudentFilters, search: string): Student
     belt: filters.belt.length > 0 ? filters.belt : undefined,
     ageCategory: filters.age.length > 0 ? filters.age : undefined,
     insurance: filters.ins.length > 0 ? filters.ins : undefined,
+    fee: filters.fee ?? undefined,
     beltExamId: filters.exam || undefined,
     sortBy: filters.sort,
     sortDirection: filters.dir,
@@ -33,7 +37,7 @@ export function toStudentQuery(filters: StudentFilters, search: string): Student
 }
 
 export function activeFilterCount(filters: StudentFilters) {
-  return filters.belt.length + filters.age.length + filters.ins.length + (filters.exam ? 1 : 0);
+  return filters.belt.length + filters.age.length + filters.ins.length + (filters.fee ? 1 : 0) + (filters.exam ? 1 : 0);
 }
 
 export function toggleValue<T>(list: T[], value: T): T[] {
