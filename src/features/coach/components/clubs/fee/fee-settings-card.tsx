@@ -13,8 +13,10 @@ import { ErrorState } from "@/features/coach/components/error-state";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { useClubFee } from "@/features/coach/hooks/use-fee";
 import { useSaveClubFee } from "@/features/coach/hooks/use-fee-mutations";
+import { currentFeeMonth, feeMonthLabel, nextFeeMonth, rateAppliesNextMonth } from "@/features/coach/lib/fee-api";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { digitsOnly, formatMoney } from "@/lib/digits";
+import { toJalaliDate } from "@/lib/jalali";
 
 export function FeeSettingsCard({ clubId }: { clubId: string }) {
   const router = useRouter();
@@ -59,6 +61,13 @@ export function FeeSettingsCard({ clubId }: { clubId: string }) {
               />
             </AuthField>
             {fee ? null : <p className="text-[12px] font-semibold leading-5 text-ink-subtle">شهریه برای این باشگاه تعیین نشده است</p>}
+            {fee ? (
+              <p className="text-[12px] font-semibold leading-5 text-ink-subtle">
+                {rateAppliesNextMonth(fee)
+                  ? `تغییر نرخ از ${feeMonthLabel(nextFeeMonth(currentFeeMonth()))} اعمال می شود`
+                  : `نرخ فعلی از ${toJalaliDate(fee.effectiveFrom)} فعال است`}
+              </p>
+            ) : null}
             {save.error ? (
               <p role="alert" className="rounded-xl bg-danger-soft px-3 py-2 text-[12px] font-bold leading-5 text-danger">
                 {apiErrorMessage(save.error)}

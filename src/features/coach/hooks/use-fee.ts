@@ -1,6 +1,13 @@
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
-import { type FeePaymentRecord, fetchClubFee, fetchFeePayments } from "@/features/coach/lib/fee-api";
+import {
+  type FeeDebtorFilters,
+  type FeeDebtors,
+  type FeePaymentRecord,
+  fetchClubFee,
+  fetchFeeDebtors,
+  fetchFeePayments,
+} from "@/features/coach/lib/fee-api";
 import { swrReadOptions } from "@/lib/api/swr";
 
 export function useClubFee(clubId: string) {
@@ -29,6 +36,55 @@ export function useFeePayments(clubId: string, year: number, month: number) {
   return {
     ...feed,
     payments,
+    total: pages[0]?.pager?.total,
+    hasMore,
+  };
+}
+
+type FeeDebtorsPage = FeeDebtors;
+
+// Endless feed of the debtor report; filters are in the key, so a change restarts at page 1.
+export function useFeeDebtors(clubId: string | null, filters: FeeDebtorFilters) {
+  const feed = useSWRInfinite(
+    (index, previous: FeeDebtorsPage | undefined) => {
+      if (!clubId) return null;
+      if (previous && (previous.debtors.length === 0 || previous.pager.page >= previous.pager.totalPages)) return null;
+      return [
+        "fee",
+        "debtors",
+        clubId,
+        filters.year,
+        filters.month,
+        filters.status ?? "",
+        filters.minMonthsOwed ?? 0,
+        filters.search ?? "",
+        filters.membershipStatus ?? "",
+        index + 1,
+      ] as const;
+    },
+    ([, , id, year, month, status, minMonthsOwed, search, membershipStatus, page]) =>
+      fetchFeeDebtors(id, {
+        year,
+        month,
+        ...(status && { status: status as FeeDebtorFilters["status"] }),
+        ...(minMonthsOwed > 0 && { minMonthsOwed }),
+        ...(search && { search }),
+        ...(membershipStatus && { membershipStatus: membershipStatus as FeeDebtorFilters["membershipStatus"] }),
+        page,
+      }),
+    swrReadOptions,
+  );
+
+  const pages = feed.data ?? [];
+  const lastPage = pages[pages.length - 1];
+  const hasMore = Boolean(lastPage && lastPage.debtors.length > 0 && lastPage.pager.page < lastPage.pager.totalPages);
+
+  const debtors = pages.flatMap((page) => page.debtors);
+
+  return {
+    ...feed,
+    summary: pages[0]?.summary,
+    debtors,
     total: pages[0]?.pager?.total,
     hasMore,
   };
