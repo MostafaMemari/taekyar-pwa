@@ -24,7 +24,7 @@ export function StudentsOverview({
   stats,
   feeCounts,
   active,
-  onToggle,
+  onToggleValues,
   fee,
   onFeeToggle,
   onAdd,
@@ -33,7 +33,7 @@ export function StudentsOverview({
   stats?: StudentInsuranceSummary;
   feeCounts?: { paid: number; owed: number };
   active: StudentInsuranceStatus[];
-  onToggle: (value: StudentInsuranceStatus) => void;
+  onToggleValues: (values: StudentInsuranceStatus[]) => void;
   fee?: StudentFeeStatus | null;
   onFeeToggle: (value: StudentFeeStatus) => void;
   onAdd: () => void;
@@ -73,7 +73,7 @@ export function StudentsOverview({
                 type="button"
                 variant="field"
                 aria-pressed={isActive}
-                onClick={() => group.values.forEach((value) => onToggle(value))}
+                onClick={() => onToggleValues(group.values)}
                 className={cn(
                   "h-9 gap-1.5 rounded-xl px-2.5 text-[12px] font-bold",
                   isActive && "border-primary/35 bg-brand-50 text-accent-ink",

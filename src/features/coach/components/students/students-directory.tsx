@@ -11,7 +11,7 @@ import { useAgeCategories } from "@/features/coach/hooks/use-age-categories";
 import { useBeltExams } from "@/features/coach/hooks/use-belt-exams";
 import { useStudentStats } from "@/features/coach/hooks/use-student-stats";
 import { useStudentsFeed } from "@/features/coach/hooks/use-students";
-import { activeFilterCount, studentFilterParsers, toggleValue, toStudentQuery } from "@/features/coach/lib/student-filters";
+import { activeFilterCount, studentFilterParsers, toggleValues, toStudentQuery } from "@/features/coach/lib/student-filters";
 import {
   DEFAULT_SORT_DIRECTIONS,
   examBeltRangeOf,
@@ -90,7 +90,7 @@ export function StudentsDirectory() {
         total={stats?.total}
         stats={stats?.byInsurance}
         active={filters.ins}
-        onToggle={(value) => void setFilters({ ins: toggleValue(filters.ins, value) })}
+        onToggleValues={(values) => void setFilters({ ins: toggleValues(filters.ins, values) })}
         fee={filters.fee}
         feeCounts={stats ? { paid: stats.feePaid, owed: stats.feeOwed } : undefined}
         onFeeToggle={(value) => void setFilters({ fee: filters.fee === value ? null : value })}

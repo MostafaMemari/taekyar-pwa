@@ -40,6 +40,12 @@ export function activeFilterCount(filters: StudentFilters) {
   return filters.belt.length + filters.age.length + filters.ins.length + (filters.fee ? 1 : 0) + (filters.exam ? 1 : 0);
 }
 
+// Adds every value when none (or some) is active, removes all once the whole group is active.
+export function toggleValues<T>(list: T[], values: T[]): T[] {
+  const allActive = values.every((value) => list.includes(value));
+  return allActive ? list.filter((value) => !values.includes(value)) : [...new Set([...list, ...values])];
+}
+
 export function toggleValue<T>(list: T[], value: T): T[] {
   return list.includes(value) ? list.filter((item) => item !== value) : [...list, value];
 }
