@@ -4,6 +4,7 @@ import { Loader2, RotateCcw, UserMinus, Users } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
+import { toast } from "@/components/ding-toaster";
 import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -41,6 +42,7 @@ export function ClubMembers({ clubId }: { clubId: string }) {
       setTarget(null);
     } catch (requestError) {
       if (requestError instanceof ApiError && requestError.status === 401) router.replace("/login");
+      else toast.error(apiErrorMessage(requestError));
     }
   };
 

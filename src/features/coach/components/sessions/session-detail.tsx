@@ -4,6 +4,7 @@ import { CalendarDays, Check, ClipboardCheck, ClipboardList, EllipsisVertical, L
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useState } from "react";
+import { toast } from "@/components/ding-toaster";
 import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -69,8 +70,10 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
     try {
       await removeStudent.trigger(removeTarget.studentId);
       setRemoveTarget(null);
+      toast.success("هنرجو از کلاس حذف شد");
     } catch (requestError) {
       if (requestError instanceof ApiError && requestError.status === 401) router.replace("/login");
+      else toast.error(apiErrorMessage(requestError));
     }
   };
 

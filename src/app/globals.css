@@ -750,3 +750,21 @@
     display: none;
   }
 }
+
+/* Ding toast, painted with the app tokens. The doubled class out-ranks ding's runtime-injected sheet,
+   and color-scheme follows the app's .dark class instead of the OS. */
+.tst-viewport.tst-viewport {
+  color-scheme: light;
+  font-family: inherit;
+  --tst-radius: 28px;
+  --tst-bg: var(--popover);
+  --tst-fg: var(--popover-foreground);
+  --tst-success: var(--st-green);
+  --tst-error: var(--st-red);
+  --tst-warning: var(--st-amber);
+  --tst-info: var(--st-sky);
+}
+
+.dark .tst-viewport {
+  color-scheme: dark;
+}

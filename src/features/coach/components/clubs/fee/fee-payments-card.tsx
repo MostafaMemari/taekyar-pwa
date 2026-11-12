@@ -2,6 +2,7 @@
 
 import { Banknote, Loader2, Trash2 } from "lucide-react";
 import { Fragment, useState } from "react";
+import { toast } from "@/components/ding-toaster";
 import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -32,8 +33,9 @@ export function FeePaymentsCard({ clubId, month }: { clubId: string; month: FeeM
     try {
       await remove.trigger({ paymentId: target.id });
       setTarget(null);
-    } catch {
-      // the error stays visible on the sheet; keep it open so the coach can retry
+      toast.success("پرداخت حذف شد");
+    } catch (requestError) {
+      toast.error(apiErrorMessage(requestError));
     }
   };
 

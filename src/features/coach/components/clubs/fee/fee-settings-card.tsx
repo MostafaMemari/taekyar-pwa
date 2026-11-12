@@ -3,6 +3,7 @@
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "@/components/ding-toaster";
 import { AuthField } from "@/components/shared/auth-field";
 import { AuthInput } from "@/components/shared/auth-input";
 import { Button } from "@/components/ui/button";
@@ -30,8 +31,10 @@ export function FeeSettingsCard({ clubId }: { clubId: string }) {
     try {
       await save.trigger({ clubId, monthlyAmount: parsed });
       setAmount(null);
+      toast.success("شهریه ذخیره شد");
     } catch (requestError) {
       if (requestError instanceof ApiError && requestError.status === 401) router.replace("/login");
+      else toast.error(apiErrorMessage(requestError));
     }
   };
 

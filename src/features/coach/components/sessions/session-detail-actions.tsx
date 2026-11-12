@@ -3,6 +3,7 @@
 import { Loader2, Minus, Pencil, Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "@/components/ding-toaster";
 import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { CoachActionMenu } from "@/features/coach/components/coach-action-menu";
@@ -51,6 +52,7 @@ export function SessionDetailActions({
       if (isActive) router.push("/coach/sessions");
     } catch (requestError) {
       if (requestError instanceof ApiError && requestError.status === 401) router.replace("/login");
+      else toast.error(apiErrorMessage(requestError));
     }
   };
 
@@ -58,9 +60,11 @@ export function SessionDetailActions({
     try {
       await deleteSession.trigger(session.id);
       setDeleteOpen(false);
+      toast.success("کلاس حذف شد");
       router.push("/coach/sessions");
     } catch (requestError) {
       if (requestError instanceof ApiError && requestError.status === 401) router.replace("/login");
+      else toast.error(apiErrorMessage(requestError));
     }
   };
 

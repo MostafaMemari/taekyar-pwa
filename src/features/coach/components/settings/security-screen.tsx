@@ -3,6 +3,7 @@
 import { AlertTriangle, Check, Loader2, Monitor, ShieldCheck, Smartphone, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "@/components/ding-toaster";
 import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -156,6 +157,7 @@ export function SecurityScreen() {
       setRevokeTarget(null);
     } catch (requestError) {
       if (requestError instanceof ApiError && requestError.status === 401) router.replace("/login");
+      else toast.error(apiErrorMessage(requestError));
     }
   };
 
@@ -167,6 +169,7 @@ export function SecurityScreen() {
       router.replace("/login");
     } catch (requestError) {
       if (requestError instanceof ApiError && requestError.status === 401) router.replace("/login");
+      else toast.error(apiErrorMessage(requestError));
     }
   };
 

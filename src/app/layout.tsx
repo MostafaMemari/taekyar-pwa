@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { DingToaster } from "@/components/ding-toaster";
 import { ThemeProvider } from "@/components/shared/theme-provider";
 import { THEME_INIT_SOURCE } from "@/lib/theme";
 import "./globals.css";
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SOURCE }} />
         <NuqsAdapter>
           <ThemeProvider>{children}</ThemeProvider>
+          <DingToaster position="top-center" />
         </NuqsAdapter>
       </body>
     </html>
