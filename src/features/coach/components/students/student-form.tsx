@@ -68,7 +68,7 @@ export function StudentForm({
           <StudentPhotoFields control={control} mode={mode} photo={photo} />
           <StudentPersonalFields control={control} errors={errors} />
           <StudentSportsFields control={control} errors={errors} mode={mode} />
-          <StudentMembershipField control={control} />
+          <StudentMembershipField control={control} errors={errors} />
         </>
       ) : (
         <>

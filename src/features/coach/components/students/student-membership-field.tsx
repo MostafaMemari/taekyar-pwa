@@ -1,7 +1,7 @@
 "use client";
 
 import { ShieldCheck } from "lucide-react";
-import { type Control, Controller } from "react-hook-form";
+import { type Control, Controller, type FieldErrors } from "react-hook-form";
 import { AuthField } from "@/components/shared/auth-field";
 import { Input } from "@/components/ui/input";
 import { FormSection } from "@/features/coach/components/form-section";
@@ -9,10 +9,16 @@ import type { StudentFormValues } from "@/features/coach/lib/student-form-model"
 import { digitsOnly, toPersianDigits } from "@/lib/digits";
 
 // Insurance never comes from this form: the server registers it for exactly one year via PATCH /student/:id/insurance.
-export function StudentMembershipField({ control }: { control: Control<StudentFormValues> }) {
+export function StudentMembershipField({
+  control,
+  errors,
+}: {
+  control: Control<StudentFormValues>;
+  errors: FieldErrors<StudentFormValues>;
+}) {
   return (
     <FormSection icon={ShieldCheck} title="عضویت">
-      <AuthField label="سال عضویت" htmlFor="membershipYear" optional>
+      <AuthField label="سال عضویت" htmlFor="membershipYear" optional error={errors.membershipYear?.message}>
         <Controller
           control={control}
           name="membershipYear"
