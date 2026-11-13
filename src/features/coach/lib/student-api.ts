@@ -21,6 +21,8 @@ export type StudentRecord = {
   birthDate: string | null;
   sportsInsuranceDate: string | null;
   membershipYear?: number | null;
+  // Current-month fee state from the list response; null when the student has no fee-paying club.
+  feeStatus?: "PAID" | "OWED" | null;
   currentBelt: StudentBeltAssignment | null;
   metrics: StudentMetricsRecord[];
 };

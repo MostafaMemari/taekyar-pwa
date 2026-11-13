@@ -49,7 +49,14 @@ export function StudentsListItem({
         </span>
 
         <span className="min-w-0 flex-1">
-          <b className="block truncate text-[13px] font-extrabold text-ink">{student.fullName}</b>
+          <span className="flex min-w-0 items-center gap-1.5">
+            <b className="min-w-0 truncate text-[13px] font-extrabold text-ink">{student.fullName}</b>
+            {student.feeStatus ? (
+              <StatusBadge tone={student.feeStatus === "OWED" ? "danger" : "success"} className="shrink-0 px-1.5 py-[3px] text-[12px]">
+                {student.feeStatus === "OWED" ? "بدهکار" : "تسویه"}
+              </StatusBadge>
+            ) : null}
+          </span>
           <span className="mt-1.5 flex items-center gap-1.5">
             <StatusBadge tone={insuranceMeta.tone} className="shrink-0 px-1.5 py-[3px] text-[12px]">
               <InsuranceIcon aria-hidden="true" />
