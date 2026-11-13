@@ -16,10 +16,13 @@ export function SessionDetailActions({
   session,
   menuOpen,
   onMenuOpenChange,
+  onEdit,
 }: {
   session: ClassSessionRecord;
   menuOpen: boolean;
   onMenuOpenChange: (open: boolean) => void;
+  // Opens the edit sheet hosted by the detail screen; the edit route no longer exists.
+  onEdit: () => void;
 }) {
   const router = useRouter();
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -83,7 +86,7 @@ export function SessionDetailActions({
               label: "ویرایش کلاس",
               onSelect: () => {
                 onMenuOpenChange(false);
-                router.push(`/coach/sessions/${session.id}/edit`);
+                onEdit();
               },
             },
             {

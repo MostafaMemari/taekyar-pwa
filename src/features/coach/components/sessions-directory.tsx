@@ -10,6 +10,7 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/in
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { ErrorState } from "@/features/coach/components/error-state";
 import { SessionTime } from "@/features/coach/components/session-time";
+import { SessionSaveSheet } from "@/features/coach/components/sessions/session-save-sheet";
 import { StatusBadge } from "@/features/coach/components/status-badge";
 import { useClubs } from "@/features/coach/hooks/use-clubs";
 import { useSessionStudentCounts, useSessions } from "@/features/coach/hooks/use-sessions";
@@ -90,6 +91,7 @@ function SessionCard({ session, clubName, memberCount }: { session: ClassSession
 export function SessionsDirectory() {
   const [query, setQuery] = useState("");
   const [period, setPeriod] = useState<Period>("all");
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   const { data, error, isLoading, mutate } = useSessions();
   const { data: clubData } = useClubs();
@@ -138,8 +140,7 @@ export function SessionsDirectory() {
           variant="brand"
           size="sm"
           className="ms-auto h-8 gap-1.5 rounded-xl px-3.5 text-[12px] font-bold"
-          render={<Link href="/coach/sessions/new" />}
-          nativeButton={false}
+          onClick={() => setSheetOpen(true)}
         >
           <Plus data-icon="inline-start" aria-hidden="true" />
           کلاس جدید
@@ -198,7 +199,7 @@ export function SessionsDirectory() {
               </EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
-              <Button variant="outline" size="sm" className="rounded-lg" render={<Link href="/coach/sessions/new" />} nativeButton={false}>
+              <Button variant="outline" size="sm" className="rounded-lg" type="button" onClick={() => setSheetOpen(true)}>
                 <Plus data-icon="inline-start" aria-hidden="true" />
                 کلاس جدید
               </Button>
@@ -235,6 +236,8 @@ export function SessionsDirectory() {
             </EmptyContent>
           </Empty>
         ) : null}
+
+        <SessionSaveSheet open={sheetOpen} onOpenChange={setSheetOpen} />
       </div>
     </>
   );

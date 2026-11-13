@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FeePaymentSheet } from "@/features/coach/components/clubs/fee/fee-payment-sheet";
+import { SessionSaveSheet } from "@/features/coach/components/sessions/session-save-sheet";
 import { useClubs } from "@/features/coach/hooks/use-clubs";
 import { useInvitations } from "@/features/coach/hooks/use-invitations";
 import { useSessions } from "@/features/coach/hooks/use-sessions";
@@ -19,6 +20,7 @@ import { cn } from "@/lib/utils";
 export function DashboardOverview() {
   const [now] = useState(() => new Date());
   const [payOpen, setPayOpen] = useState(false);
+  const [sessionOpen, setSessionOpen] = useState(false);
   const { data: sessions } = useSessions();
   const { data: studentStats } = useStudentStats();
   const { data: invitations } = useInvitations();
@@ -31,11 +33,11 @@ export function DashboardOverview() {
     ? invitations.invitations.filter((invitation) => invitation.status === "PENDING").length
     : undefined;
 
-  const actions: Array<{ label: string; icon: LucideIcon; primary?: boolean; href?: string; payment?: true }> = [
+  const actions: Array<{ label: string; icon: LucideIcon; primary?: boolean; href?: string; payment?: true; session?: true }> = [
     { href: attendanceHref, label: "حضور", icon: ClipboardCheck, primary: true },
     { href: "/coach/students/new", label: "هنرجو", icon: UserPlus, primary: false },
     { label: "شهریه", icon: Wallet, payment: true },
-    { href: "/coach/sessions/new", label: "کلاس", icon: CalendarPlus, primary: false },
+    { label: "کلاس", icon: CalendarPlus, primary: false, session: true },
   ];
 
   const stats = [
@@ -69,6 +71,10 @@ export function DashboardOverview() {
                 <Link href={action.href} className={className}>
                   {tile}
                 </Link>
+              ) : action.session ? (
+                <button type="button" className={cn(className, "cursor-pointer")} onClick={() => setSessionOpen(true)}>
+                  {tile}
+                </button>
               ) : (
                 <button type="button" className={cn(className, "cursor-pointer")} onClick={() => setPayOpen(true)}>
                   {tile}
@@ -103,6 +109,8 @@ export function DashboardOverview() {
         clubs={clubs?.clubs}
         month={currentFeeMonth()}
       />
+
+      <SessionSaveSheet open={sessionOpen} onOpenChange={setSessionOpen} />
     </div>
   );
 }

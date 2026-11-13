@@ -2,11 +2,8 @@ const FORM_ROUTES = [
   /^\/coach\/students\/new$/,
   /^\/coach\/students\/invite$/,
   /^\/coach\/students\/[^/]+\/(?:edit|belt)$/,
-  /^\/coach\/clubs\/new$/,
-  /^\/coach\/clubs\/[^/]+\/edit$/,
   /^\/coach\/profile\/edit$/,
-  /^\/coach\/sessions\/new$/,
-  /^\/coach\/sessions\/[^/]+\/(?:edit|attendance)$/,
+  /^\/coach\/sessions\/[^/]+\/attendance$/,
 ];
 
 export function isCoachFormRoute(pathname: string) {

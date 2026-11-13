@@ -1,8 +1,7 @@
 "use client";
 
 import { Landmark, Plus } from "lucide-react";
-import Link from "next/link";
-import type { ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -10,10 +9,12 @@ import { CoachBand } from "@/features/coach/components/coach-band";
 import { CoachBandBar } from "@/features/coach/components/coach-band-bar";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
 import { ErrorState } from "@/features/coach/components/error-state";
+import { SessionSaveSheet } from "@/features/coach/components/sessions/session-save-sheet";
 import { useClubStudentCounts, useClubs } from "@/features/coach/hooks/use-clubs";
 import { apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
 import { ClubCard } from "./club-card";
+import { ClubSaveSheet } from "./club-save-sheet";
 import { ClubsSkeleton } from "./clubs-skeleton";
 
 function GlassStat({ value, label }: { value: ReactNode; label: string }) {
@@ -33,6 +34,11 @@ export function ClubsDirectory() {
   const readError = error ?? countsError;
   const isReady = Boolean(data) && !readError;
   const studentTotal = Object.values(counts ?? {}).reduce((sum, count) => sum + count, 0);
+
+  const [clubSheetOpen, setClubSheetOpen] = useState(false);
+  const [clubSheetId, setClubSheetId] = useState<string | null>(null);
+  const [sessionSheetOpen, setSessionSheetOpen] = useState(false);
+  const [sessionSheetClubId, setSessionSheetClubId] = useState<string | null>(null);
 
   const retry = () => {
     void mutate();
@@ -63,8 +69,10 @@ export function ClubsDirectory() {
             variant="brand"
             size="sm"
             className="ms-auto h-8 gap-1.5 rounded-xl px-3.5 text-[12px] font-bold"
-            render={<Link href="/coach/clubs/new" />}
-            nativeButton={false}
+            onClick={() => {
+              setClubSheetId(null);
+              setClubSheetOpen(true);
+            }}
           >
             <Plus data-icon="inline-start" aria-hidden="true" />
             باشگاه جدید
@@ -95,12 +103,29 @@ export function ClubsDirectory() {
           {isReady ? (
             <div className="mt-4 flex flex-col gap-3.5">
               {clubs.map((club) => (
-                <ClubCard key={club.id} club={club} studentCount={counts?.[club.id]} />
+                <ClubCard
+                  key={club.id}
+                  club={club}
+                  studentCount={counts?.[club.id]}
+                  onEdit={(target) => {
+                    setClubSheetId(target.id);
+                    setClubSheetOpen(true);
+                  }}
+                  onAddSession={(target) => {
+                    setSessionSheetClubId(target.id);
+                    setSessionSheetOpen(true);
+                  }}
+                />
               ))}
             </div>
           ) : null}
         </div>
       </CoachSheet>
+
+      {/* Both stay mounted so Base UI runs the slide animations; the last id is kept through the close
+          animation so the content does not swap while the sheet slides out. */}
+      <ClubSaveSheet open={clubSheetOpen} onOpenChange={setClubSheetOpen} clubId={clubSheetId ?? undefined} />
+      <SessionSaveSheet open={sessionSheetOpen} onOpenChange={setSessionSheetOpen} clubId={sessionSheetClubId ?? undefined} />
     </main>
   );
 }

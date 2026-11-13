@@ -1,18 +1,30 @@
 import { CalendarDays, ChevronLeft, Minus, Plus, Users } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { SessionTime } from "@/features/coach/components/session-time";
+import { SessionSaveSheet } from "@/features/coach/components/sessions/session-save-sheet";
 import { StatusBadge } from "@/features/coach/components/status-badge";
 import { weekDayLabels } from "@/features/coach/lib/coach-data";
 import type { ClassSessionRecord } from "@/features/coach/lib/session-api";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 
-export function ClubClasses({ sessions, memberCounts }: { sessions: ClassSessionRecord[]; memberCounts?: Record<string, number> }) {
+export function ClubClasses({
+  clubId,
+  sessions,
+  memberCounts,
+}: {
+  clubId: string;
+  sessions: ClassSessionRecord[];
+  memberCounts?: Record<string, number>;
+}) {
+  const [sheetOpen, setSheetOpen] = useState(false);
+
   return (
     <section>
       <SectionHeading title="کلاس های باشگاه" action={<StatusBadge>{toPersianDigits(String(sessions.length))} کلاس</StatusBadge>} />
@@ -74,13 +86,15 @@ export function ClubClasses({ sessions, memberCounts }: { sessions: ClassSession
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
-            <Button variant="outline" size="sm" className="rounded-lg" render={<Link href="/coach/sessions/new" />} nativeButton={false}>
+            <Button variant="outline" size="sm" className="rounded-lg" type="button" onClick={() => setSheetOpen(true)}>
               <Plus data-icon="inline-start" aria-hidden="true" />
               کلاس جدید
             </Button>
           </EmptyContent>
         </Empty>
       )}
+
+      <SessionSaveSheet open={sheetOpen} onOpenChange={setSheetOpen} clubId={clubId} />
     </section>
   );
 }

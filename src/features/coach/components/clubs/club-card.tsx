@@ -10,7 +10,18 @@ import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
 import { cn } from "@/lib/utils";
 
-export function ClubCard({ club, studentCount }: { club: ClubRecord; studentCount?: number }) {
+export function ClubCard({
+  club,
+  studentCount,
+  onAddSession,
+  onEdit,
+}: {
+  club: ClubRecord;
+  studentCount?: number;
+  // Open the session/club sheets hosted by the directory instead of navigating to form routes.
+  onAddSession: (club: ClubRecord) => void;
+  onEdit: (club: ClubRecord) => void;
+}) {
   const stats = [
     {
       value: studentCount === undefined ? <Skeleton className="h-3.5 w-8" /> : toPersianDigits(String(studentCount)),
@@ -56,11 +67,11 @@ export function ClubCard({ club, studentCount }: { club: ClubRecord; studentCoun
 
       <div className="flex items-center gap-2 px-4 pb-4 pt-3">
         <Button
+          type="button"
           variant="brand"
           size="sm"
           className="h-9 flex-1 rounded-xl text-[12px] font-semibold"
-          render={<Link href={`/coach/sessions/new?clubId=${club.id}`} />}
-          nativeButton={false}
+          onClick={() => onAddSession(club)}
         >
           <CalendarPlus data-icon="inline-start" aria-hidden="true" />
           <span>کلاس جدید</span>
@@ -92,8 +103,7 @@ export function ClubCard({ club, studentCount }: { club: ClubRecord; studentCoun
           size="icon"
           className="size-10 rounded-xl"
           aria-label={`ویرایش ${club.name}`}
-          render={<Link href={`/coach/clubs/${club.id}/edit`} />}
-          nativeButton={false}
+          onClick={() => onEdit(club)}
         >
           <Pencil aria-hidden="true" />
         </Button>

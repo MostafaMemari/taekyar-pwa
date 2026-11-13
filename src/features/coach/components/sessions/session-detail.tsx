@@ -14,6 +14,7 @@ import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { ErrorState } from "@/features/coach/components/error-state";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { SessionTime } from "@/features/coach/components/session-time";
+import { SessionSaveSheet } from "@/features/coach/components/sessions/session-save-sheet";
 import { StatusBadge } from "@/features/coach/components/status-badge";
 import { useRemoveSessionStudent } from "@/features/coach/hooks/use-session-mutations";
 import { useSession } from "@/features/coach/hooks/use-sessions";
@@ -56,6 +57,7 @@ export function SessionDetailView({ sessionId }: { sessionId: string }) {
 function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [removeTarget, setRemoveTarget] = useState<{ studentId: string; name: string } | null>(null);
   const removeStudent = useRemoveSessionStudent(session.id);
@@ -190,7 +192,7 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
         </section>
       </CoachSheet>
 
-      <SessionDetailActions session={session} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
+      <SessionDetailActions session={session} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} onEdit={() => setEditOpen(true)} />
 
       <AddClassStudentsSheet
         open={addOpen}
@@ -200,6 +202,8 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
         clubGender={session.club?.gender}
         existingStudentIds={members.map((member) => member.studentId)}
       />
+
+      <SessionSaveSheet open={editOpen} onOpenChange={setEditOpen} sessionId={session.id} />
 
       <SheetFrame
         open={removeTarget !== null}

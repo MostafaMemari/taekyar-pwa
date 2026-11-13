@@ -2,12 +2,14 @@
 
 import { CalendarDays, Pencil, Plus, Users, Wallet } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
 import { ErrorState } from "@/features/coach/components/error-state";
+import { SessionSaveSheet } from "@/features/coach/components/sessions/session-save-sheet";
 import { useClub, useClubStudentCount } from "@/features/coach/hooks/use-clubs";
 import { useSessionStudentCounts, useSessions } from "@/features/coach/hooks/use-sessions";
 import type { ClubRecord } from "@/features/coach/lib/club-api";
@@ -21,6 +23,7 @@ import { ClubClassesSkeleton } from "./club-classes-skeleton";
 import { ClubDetailSkeleton } from "./club-detail-skeleton";
 import { ClubInfoCard } from "./club-info-card";
 import { ClubMembers } from "./club-members";
+import { ClubSaveSheet } from "./club-save-sheet";
 
 export function ClubDetail({ clubId }: { clubId: string }) {
   const { data: club, error, mutate } = useClub(clubId);
@@ -56,6 +59,9 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
   const sessions = (sessionData?.sessions ?? []).filter((session) => session.clubId === club.id);
   const { data: memberCounts } = useSessionStudentCounts(sessions.map((session) => session.id));
 
+  const [editOpen, setEditOpen] = useState(false);
+  const [sessionOpen, setSessionOpen] = useState(false);
+
   const stats = [
     {
       icon: Users,
@@ -74,10 +80,10 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
         <ClubInfoCard club={club} />
 
         <Button
+          type="button"
           variant="brand"
           className="h-12 w-full rounded-xl text-[12px] font-semibold"
-          render={<Link href={`/coach/sessions/new?clubId=${club.id}`} />}
-          nativeButton={false}
+          onClick={() => setSessionOpen(true)}
         >
           <Plus data-icon="inline-start" aria-hidden="true" />
           کلاس جدید
@@ -118,18 +124,13 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
         ) : sessionsLoading ? (
           <ClubClassesSkeleton />
         ) : (
-          <ClubClasses sessions={sessions} memberCounts={memberCounts} />
+          <ClubClasses clubId={club.id} sessions={sessions} memberCounts={memberCounts} />
         )}
 
         <ClubMembers clubId={club.id} />
 
         <div className="grid grid-cols-2 gap-3">
-          <Button
-            variant="outline"
-            className="h-12 rounded-xl text-[12px] font-semibold"
-            render={<Link href={`/coach/clubs/${club.id}/edit`} />}
-            nativeButton={false}
-          >
+          <Button type="button" variant="outline" className="h-12 rounded-xl text-[12px] font-semibold" onClick={() => setEditOpen(true)}>
             <Pencil data-icon="inline-start" aria-hidden="true" />
             ویرایش باشگاه
           </Button>
@@ -144,6 +145,9 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
           </Button>
         </div>
       </CoachSheet>
+
+      <ClubSaveSheet open={editOpen} onOpenChange={setEditOpen} clubId={club.id} />
+      <SessionSaveSheet open={sessionOpen} onOpenChange={setSessionOpen} clubId={club.id} />
     </main>
   );
 }
