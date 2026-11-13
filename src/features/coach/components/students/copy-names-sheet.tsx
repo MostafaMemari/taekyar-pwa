@@ -2,6 +2,7 @@
 
 import { Check, Copy, Loader2, Wallet } from "lucide-react";
 import { useState } from "react";
+import { toast } from "@/components/ding-toaster";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
@@ -55,6 +56,7 @@ export function CopyNamesSheet({
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
+      toast.success("اسامی کپی شد");
       setTimeout(() => {
         setCopied(false);
         onOpenChange(false);
@@ -110,7 +112,7 @@ export function CopyNamesSheet({
         </div>
       )}
 
-      {copyError ? <p className="text-[12px] font-bold leading-5 text-danger">کپی انجام نشد. دسترسی کلیپ‌بورد را بررسی کن</p> : null}
+      {copyError ? <p className="text-[12px] font-bold leading-5 text-danger">کپی انجام نشد. دسترسی کلیپ بورد را بررسی کن</p> : null}
 
       <Button
         type="button"
@@ -126,7 +128,7 @@ export function CopyNamesSheet({
         ) : (
           <Copy data-icon="inline-start" aria-hidden="true" />
         )}
-        {copied ? "کپی شد" : students.isLoading ? "در حال آماده سازی..." : `کپی ${toPersianDigits(String(list.length))} نام`}
+        {copied ? "کپی شد" : students.isLoading ? "در حال آماده سازی..." : "کپی فهرست"}
       </Button>
     </SheetFrame>
   );

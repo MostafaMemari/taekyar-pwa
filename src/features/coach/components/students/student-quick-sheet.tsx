@@ -4,6 +4,7 @@ import { BadgeCheck, CalendarPlus, Check, Copy, Medal, ShieldCheck, Wallet } fro
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
+import { toast } from "@/components/ding-toaster";
 import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -144,6 +145,7 @@ export function StudentQuickSheet({
     try {
       await navigator.clipboard.writeText(student.nationalCode);
       setCopied(true);
+      toast.success("کد ملی کپی شد");
       setTimeout(() => setCopied(false), 1500);
     } catch {
       // clipboard unavailable (insecure context); nothing to recover

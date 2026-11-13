@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { toast } from "@/components/ding-toaster";
 import { AuthFormError } from "@/components/shared/auth-form-error";
 import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,7 @@ export function StudentMembershipForm({ studentId, onDone }: { studentId: string
   const submit = async () => {
     try {
       await renew.trigger(studentId);
+      toast.success("سال عضویت تمدید شد");
       onDone();
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) router.replace("/login");

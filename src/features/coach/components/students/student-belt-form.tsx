@@ -4,6 +4,7 @@ import { CalendarDays, Hourglass, Info, Landmark, TrendingUp } from "lucide-reac
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
+import { toast } from "@/components/ding-toaster";
 import { AuthField } from "@/components/shared/auth-field";
 import { AuthFormError } from "@/components/shared/auth-form-error";
 import { AuthSelect } from "@/components/shared/auth-select";
@@ -254,6 +255,7 @@ export function StudentBeltForm({ studentId }: { studentId: string }) {
         if (!beltDate) return;
         await assign.trigger({ id: studentId, beltId: nextBeltId, beltDate });
       }
+      toast.success("کمربند ثبت شد");
       router.push(`/coach/students/${studentId}`);
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) router.replace("/login");

@@ -1,7 +1,7 @@
 "use client";
 
 import { SearchX, Users } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import type { AgeCategoryRecord, StudentRecord } from "@/features/coach/lib/student-api";
@@ -22,7 +22,13 @@ export function StudentsList({
   onClear: () => void;
 }) {
   const [quickOpen, setQuickOpen] = useState(false);
-  const [selected, setSelected] = useState<StudentRecord | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  // Derived from the live list so mutations inside the sheet (fee, insurance, membership) update it
+  // instantly; the ref keeps the last record through close and for a refetch that drops the row.
+  const selectedRef = useRef<StudentRecord | null>(null);
+  const liveSelected = students.find((student) => student.id === selectedId) ?? null;
+  if (liveSelected) selectedRef.current = liveSelected;
+  const selected = liveSelected ?? selectedRef.current;
 
   if (students.length === 0) {
     return (
@@ -59,7 +65,7 @@ export function StudentsList({
             ageCategories={ageCategories}
             expiringDays={expiringDays}
             onSelect={(item) => {
-              setSelected(item);
+              setSelectedId(item.id);
               setQuickOpen(true);
             }}
           />

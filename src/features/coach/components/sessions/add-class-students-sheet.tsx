@@ -3,6 +3,7 @@
 import { Check, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "@/components/ding-toaster";
 import { AuthFormError } from "@/components/shared/auth-form-error";
 import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
@@ -76,6 +77,7 @@ export function AddClassStudentsSheet({
   const submit = async () => {
     try {
       await save.trigger({ sessionId, clubId, studentIds: selected });
+      toast.success("هنرجو به کلاس اضافه شد");
       close();
     } catch (requestError) {
       if (requestError instanceof ApiError && requestError.status === 401) router.replace("/login");

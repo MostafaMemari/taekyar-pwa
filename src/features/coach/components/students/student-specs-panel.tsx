@@ -2,6 +2,7 @@
 
 import { Check, Copy } from "lucide-react";
 import { type ReactNode, useState } from "react";
+import { toast } from "@/components/ding-toaster";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SectionHeading } from "@/features/coach/components/section-heading";
@@ -31,6 +32,7 @@ function NationalCodeRow({ nationalCode }: { nationalCode: string }) {
     try {
       await navigator.clipboard.writeText(nationalCode);
       setCopied(true);
+      toast.success("کد ملی کپی شد");
       setTimeout(() => setCopied(false), 1500);
     } catch {
       // clipboard unavailable (insecure context); nothing to recover

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "@/components/ding-toaster";
 import { AuthField } from "@/components/shared/auth-field";
 import { AuthFormError } from "@/components/shared/auth-form-error";
 import { DatePicker } from "@/components/shared/date-picker";
@@ -39,6 +40,7 @@ export function StudentInsuranceForm({
 
     try {
       await renew.trigger({ id: studentId, sportsInsuranceDate });
+      toast.success("بیمه ثبت شد");
       onDone();
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) router.replace("/login");

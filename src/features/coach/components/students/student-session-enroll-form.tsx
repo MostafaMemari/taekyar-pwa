@@ -3,6 +3,7 @@
 import { Check, ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "@/components/ding-toaster";
 import { AuthFormError } from "@/components/shared/auth-form-error";
 import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
@@ -51,6 +52,7 @@ export function StudentSessionEnrollForm({
     if (!picked) return;
     try {
       await save.trigger({ sessionId: picked.id, clubId: picked.clubId, studentIds: [studentId] });
+      toast.success("هنرجو به کلاس اضافه شد");
       onDone();
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) router.replace("/login");
