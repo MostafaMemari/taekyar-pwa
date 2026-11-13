@@ -1,14 +1,17 @@
+import { useEffect } from "react";
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
 import {
   type FeeDebtorFilters,
   type FeeDebtors,
+  type FeeMonth,
   type FeePaymentRecord,
   fetchClubFee,
   fetchFeeDebtors,
+  fetchFeeMonthConfirmedStudents,
   fetchFeePayments,
 } from "@/features/coach/lib/fee-api";
-import { swrReadOptions } from "@/lib/api/swr";
+import { subscribeResource, swrReadOptions } from "@/lib/api/swr";
 
 export function useClubFee(clubId: string) {
   return useSWR(["fee", "club", clubId] as const, ([, , id]) => fetchClubFee(id), swrReadOptions);
@@ -32,6 +35,9 @@ export function useFeePayments(clubId: string, year: number, month: number) {
   const hasMore = Boolean(lastPage?.data.length && (!lastPage.pager || lastPage.pager.page < lastPage.pager.totalPages));
 
   const payments = [...new Map(pages.flatMap((page) => page.data).map((payment) => [payment.id, payment])).values()];
+
+  // Filter mutates skip infinite keys, so the feed refreshes itself when the fee resource is revalidated.
+  useEffect(() => subscribeResource("fee", () => feed.mutate()), [feed.mutate]);
 
   return {
     ...feed,
@@ -79,7 +85,11 @@ export function useFeeDebtors(clubId: string | null, filters: FeeDebtorFilters) 
   const lastPage = pages[pages.length - 1];
   const hasMore = Boolean(lastPage && lastPage.debtors.length > 0 && lastPage.pager.page < lastPage.pager.totalPages);
 
-  const debtors = pages.flatMap((page) => page.debtors);
+  // Debtors are ordered by a shifting aggregate, so offset pages can overlap; keep the freshest occurrence.
+  const debtors = [...new Map(pages.flatMap((page) => page.debtors).map((debtor) => [debtor.studentId, debtor])).values()];
+
+  // Filter mutates skip infinite keys, so the feed refreshes itself when the fee resource is revalidated.
+  useEffect(() => subscribeResource("fee", () => feed.mutate()), [feed.mutate]);
 
   return {
     ...feed,
@@ -88,4 +98,17 @@ export function useFeeDebtors(clubId: string | null, filters: FeeDebtorFilters) 
     total: pages[0]?.pager?.total,
     hasMore,
   };
+}
+
+// Months (of one year) the student already has a confirmed payment for; the payment picker disables them.
+export function useFeePaidMonths(clubId: string | null, studentId: string | null, months: FeeMonth[]) {
+  const monthsKey = months.map((month) => `${month.year}-${month.month}`).join(",");
+  return useSWR(
+    clubId && studentId && months.length > 0 ? (["fee", "paid-months", clubId, studentId, monthsKey] as const) : null,
+    async ([, , id, sid]) => {
+      const confirmed = await Promise.all(months.map((month) => fetchFeeMonthConfirmedStudents(id, month.year, month.month)));
+      return months.filter((_month, index) => confirmed[index].has(sid)).map((month) => month.month);
+    },
+    swrReadOptions,
+  );
 }

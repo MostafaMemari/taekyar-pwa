@@ -1,6 +1,6 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { Banknote, ListFilter, Search } from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -11,59 +11,52 @@ import { ErrorState } from "@/features/coach/components/error-state";
 import { LoadMoreSentinel } from "@/features/coach/components/load-more-sentinel";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { StatusBadge } from "@/features/coach/components/status-badge";
+import { useClub } from "@/features/coach/hooks/use-clubs";
 import { useClubFee, useFeeDebtors } from "@/features/coach/hooks/use-fee";
-import type { FeeDebtorFilters, FeeDebtorStatusFilter, FeeMonth } from "@/features/coach/lib/fee-api";
+import {
+  currentFeeMonth,
+  type FeeDebtorFilters,
+  type FeeDebtorStatusFilter,
+  type FeeDebtors,
+  type FeeMonth,
+  feeMonthLabel,
+} from "@/features/coach/lib/fee-api";
 import { apiErrorMessage } from "@/lib/api/client";
 import { formatMoney, toPersianDigits } from "@/lib/digits";
-import { cn } from "@/lib/utils";
-import { FeeMonthSelect } from "./fee-month-select";
+import { FeeDebtorsFiltersSheet } from "./fee-debtors-filters-sheet";
+import { FeePaymentSheet } from "./fee-payment-sheet";
 
 const SEARCH_DEBOUNCE_MS = 500;
 
-const STATUS_CHIPS: { label: string; value: FeeDebtorStatusFilter | "" }[] = [
-  { label: "همه", value: "" },
-  { label: "پرداخت نشده", value: "UNPAID" },
-  { label: "ناقص", value: "PARTIAL" },
-];
+type DebtorRow = FeeDebtors["debtors"][number];
 
-const MEMBERSHIP_CHIPS: { label: string; value: "" | "active" | "inactive" }[] = [
-  { label: "همه", value: "" },
-  { label: "فعال", value: "active" },
-  { label: "غیرفعال", value: "inactive" },
-];
+// The debtor's first owed month presets the payment sheet; the backend formats it as "1405/08".
+function owedMonthOf(debtor: DebtorRow): FeeMonth {
+  const [year, month] = debtor.firstUnpaidMonth.split("/");
+  return { year: Number(year), month: Number(month) };
+}
 
-const MIN_MONTHS_OPTIONS = [1, 2, 3, 6];
-
-function FilterChip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+function DebtorStat({ label, value }: { label: string; value: string }) {
   return (
-    <Button
-      type="button"
-      variant="field"
-      aria-pressed={active}
-      onClick={onClick}
-      className={cn("h-8 shrink-0 rounded-xl px-2.5 text-[12px] font-bold", active && "border-primary/35 bg-brand-50 text-accent-ink")}
-    >
-      {label}
-    </Button>
+    <div className="rounded-xl bg-muted/40 px-3 py-2">
+      <span className="block text-[11px] font-semibold text-ink-subtle">{label}</span>
+      <b className="mt-0.5 block text-[12px] font-extrabold tabular-nums text-ink-body">{value}</b>
+    </div>
   );
 }
 
-export function FeeDebtorsCard({
-  clubId,
-  month,
-  onMonthChange,
-}: {
-  clubId: string;
-  month: FeeMonth;
-  onMonthChange: (month: FeeMonth) => void;
-}) {
+export function FeeDebtorsCard({ clubId, month }: { clubId: string; month: FeeMonth }) {
   const { data: fee, error: feeError, isLoading: feeLoading, mutate: mutateFee } = useClubFee(clubId);
+  const { data: club } = useClub(clubId);
 
-  const [status, setStatus] = useState<FeeDebtorStatusFilter | "">("");
-  const [membership, setMembership] = useState<"" | "active" | "inactive">("");
-  const [minMonths, setMinMonths] = useState(1);
+  const [status, setStatus] = useState("ALL");
+  const [membership, setMembership] = useState("ALL");
+  const [minMonths, setMinMonths] = useState("1");
   const [search, setSearch] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [payTarget, setPayTarget] = useState<DebtorRow | null>(null);
+  const [payOpen, setPayOpen] = useState(false);
 
   // The URL keeps every keystroke; the request waits for a pause so the list does not refetch per character.
   useEffect(() => {
@@ -74,16 +67,17 @@ export function FeeDebtorsCard({
   const filters: FeeDebtorFilters = {
     year: month.year,
     month: month.month,
-    ...(status && { status }),
-    ...(minMonths > 1 && { minMonthsOwed: minMonths }),
+    ...(status !== "ALL" && { status: status as FeeDebtorStatusFilter }),
+    ...(minMonths !== "1" && { minMonthsOwed: Number(minMonths) }),
     ...(searchTerm && { search: searchTerm }),
-    ...(membership && { membershipStatus: membership }),
+    ...(membership !== "ALL" && { membershipStatus: membership as FeeDebtorFilters["membershipStatus"] }),
   };
 
   // The backend refuses debtors while no fee is set, so the request waits for the fee to exist.
   const { summary, debtors, hasMore, error, isLoading, isValidating, mutate, setSize } = useFeeDebtors(fee ? clubId : null, filters);
 
-  const hasFilters = Boolean(status || membership || minMonths > 1 || searchTerm);
+  const filterCount = (status !== "ALL" ? 1 : 0) + (membership !== "ALL" ? 1 : 0) + (minMonths !== "1" ? 1 : 0);
+  const hasFilters = filterCount > 0 || searchTerm !== "";
 
   return (
     <section>
@@ -112,102 +106,123 @@ export function FeeDebtorsCard({
           <ErrorState title="خواندن گزارش انجام نشد" message={apiErrorMessage(error)} onRetry={() => void mutate()} />
         ) : summary ? (
           <>
-            <div className="flex flex-col gap-0">
-              {[
-                { label: "مبلغ شهریه ماهانه", value: `${formatMoney(summary.monthlyAmount)} تومان` },
-                { label: "تعداد بدهکار", value: `${toPersianDigits(String(summary.debtorCount))} نفر` },
-                { label: "بدهی کل", value: `${formatMoney(summary.totalDebt)} تومان` },
-              ].map((row, index) => (
-                <Fragment key={row.label}>
-                  {index > 0 ? <Separator className="my-2" /> : null}
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="text-[12px] font-semibold text-ink-subtle">{row.label}</span>
-                    <b className="text-[12px] font-extrabold tabular-nums text-ink-body">{row.value}</b>
-                  </div>
-                </Fragment>
-              ))}
+            <div className="grid grid-cols-3 gap-2">
+              <DebtorStat label="شهریه ماهانه" value={`${formatMoney(summary.monthlyAmount)} تومان`} />
+              <DebtorStat label="بدهکار" value={`${toPersianDigits(String(summary.debtorCount))} نفر`} />
+              <DebtorStat label="بدهی کل" value={`${formatMoney(summary.totalDebt)} تومان`} />
             </div>
 
             <div className="border-t border-[var(--line-2)] pt-3">
-              <p className="mb-2 text-[12px] font-semibold text-ink-subtle">مشاهده ماه</p>
-              <FeeMonthSelect value={month} onChange={onMonthChange} />
-            </div>
-
-            <div className="border-t border-[var(--line-2)] pt-3">
-              <InputGroup className="h-11 rounded-xl">
-                <InputGroupInput
-                  type="search"
-                  placeholder="جستجوی نام هنرجو..."
-                  aria-label="جستجوی هنرجو در بدهکاران"
-                  className="text-[13px]"
-                  value={search}
-                  onChange={(event) => setSearch(event.target.value)}
-                />
-                <InputGroupAddon align="inline-end">
-                  <Search className="size-4 text-ink-subtle" aria-hidden="true" />
-                </InputGroupAddon>
-              </InputGroup>
-
-              <div className="mt-2.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-                <span className="shrink-0 text-[11px] font-bold text-ink-subtle">وضعیت</span>
-                {STATUS_CHIPS.map((chip) => (
-                  <FilterChip key={chip.label} label={chip.label} active={status === chip.value} onClick={() => setStatus(chip.value)} />
-                ))}
-                <Separator orientation="vertical" className="mx-0.5 h-5" />
-                <span className="shrink-0 text-[11px] font-bold text-ink-subtle">عضویت</span>
-                {MEMBERSHIP_CHIPS.map((chip) => (
-                  <FilterChip
-                    key={chip.label}
-                    label={chip.label}
-                    active={membership === chip.value}
-                    onClick={() => setMembership(chip.value)}
+              <div className="flex items-center gap-2">
+                <InputGroup className="h-11 min-w-0 flex-1 rounded-xl">
+                  <InputGroupInput
+                    type="search"
+                    placeholder="جستجوی نام هنرجو..."
+                    aria-label="جستجوی هنرجو در بدهکاران"
+                    className="text-[13px]"
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
                   />
-                ))}
-                <Separator orientation="vertical" className="mx-0.5 h-5" />
-                <span className="shrink-0 text-[11px] font-bold text-ink-subtle">بدهی</span>
-                {MIN_MONTHS_OPTIONS.map((months) => (
-                  <FilterChip
-                    key={months}
-                    label={months === 1 ? "همه ماه ها" : `${toPersianDigits(String(months))}+ ماه`}
-                    active={minMonths === months}
-                    onClick={() => setMinMonths(months)}
-                  />
-                ))}
+                  <InputGroupAddon align="inline-end">
+                    <Search className="size-4 text-ink-subtle" aria-hidden="true" />
+                  </InputGroupAddon>
+                </InputGroup>
+                <Button
+                  type="button"
+                  variant="field"
+                  size="icon"
+                  aria-label="فیلترها"
+                  aria-haspopup="dialog"
+                  className="relative size-11 shrink-0 rounded-xl"
+                  onClick={() => setFiltersOpen(true)}
+                >
+                  <ListFilter aria-hidden="true" />
+                  {filterCount > 0 ? (
+                    <span className="absolute -top-1 -end-1 grid min-w-[16px] place-items-center rounded-full bg-brand-500 px-1 text-[12px] font-semibold leading-4 text-white tabular-nums">
+                      {toPersianDigits(String(filterCount))}
+                    </span>
+                  ) : null}
+                </Button>
               </div>
             </div>
+
+            {debtors.length > 0 ? (
+              <div className="border-t border-[var(--line-2)] pt-1">
+                {debtors.map((debtor, index) => (
+                  <Fragment key={debtor.studentId}>
+                    {index > 0 ? <Separator /> : null}
+                    <div className="py-2.5">
+                      <div className="flex items-center gap-2">
+                        <b className="min-w-0 flex-1 truncate text-[12px] font-semibold text-ink-body">{debtor.fullName}</b>
+                        {debtor.membershipActive ? <StatusBadge tone="success">فعال</StatusBadge> : <StatusBadge>غیرفعال</StatusBadge>}
+                        <b className="shrink-0 text-[12px] font-extrabold tabular-nums text-ink-body">{formatMoney(debtor.totalDebt)}</b>
+                      </div>
+                      <div className="mt-1.5 flex items-center gap-2">
+                        <span className="min-w-0 flex-1 truncate text-[12px] font-medium tabular-nums text-ink-subtle">
+                          اولین ماه بدهی {toPersianDigits(debtor.firstUnpaidMonth)} · {toPersianDigits(String(debtor.monthsOwed))} ماه
+                        </span>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="h-7 shrink-0 gap-1 rounded-lg px-2.5 text-[11px] font-bold"
+                          onClick={() => {
+                            setPayTarget(debtor);
+                            setPayOpen(true);
+                          }}
+                        >
+                          <Banknote data-icon="inline-start" aria-hidden="true" />
+                          ثبت پرداخت
+                        </Button>
+                      </div>
+                    </div>
+                  </Fragment>
+                ))}
+
+                {isValidating && hasMore ? <Skeleton className="h-14 w-full rounded-xl" /> : null}
+                <LoadMoreSentinel
+                  disabled={!hasMore || isValidating || Boolean(error)}
+                  onLoadMore={() => void setSize((current) => current + 1)}
+                />
+              </div>
+            ) : (
+              <p className="rounded-xl bg-muted/60 p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
+                {hasFilters ? "با این فیلترها هنرجویی پیدا نشد" : "بدهی معوقه ای برای این ماه وجود ندارد"}
+              </p>
+            )}
           </>
         ) : null}
       </Card>
 
-      {summary && debtors.length > 0 ? (
-        <Card className="mt-3 gap-0 px-4 py-1">
-          {debtors.map((debtor, index) => (
-            <Fragment key={debtor.studentId}>
-              {index > 0 ? <Separator /> : null}
-              <div className="py-2.5">
-                <div className="flex items-center gap-2">
-                  <b className="min-w-0 flex-1 truncate text-[12px] font-semibold text-ink-body">{debtor.fullName}</b>
-                  {debtor.membershipActive ? <StatusBadge tone="success">فعال</StatusBadge> : <StatusBadge>غیرفعال</StatusBadge>}
-                  <b className="shrink-0 text-[12px] font-extrabold tabular-nums text-ink-body">{formatMoney(debtor.totalDebt)}</b>
-                </div>
-                <span className="mt-0.5 block text-[12px] font-medium tabular-nums text-ink-subtle">
-                  اولین ماه بدهی {toPersianDigits(debtor.firstUnpaidMonth)} · {toPersianDigits(String(debtor.monthsOwed))} ماه
-                </span>
-              </div>
-            </Fragment>
-          ))}
+      <FeeDebtorsFiltersSheet
+        open={filtersOpen}
+        onOpenChange={setFiltersOpen}
+        status={status}
+        membership={membership}
+        minMonths={minMonths}
+        onStatusChange={setStatus}
+        onMembershipChange={setMembership}
+        onMinMonthsChange={setMinMonths}
+        onClear={() => {
+          setStatus("ALL");
+          setMembership("ALL");
+          setMinMonths("1");
+        }}
+      />
 
-          {isValidating && hasMore ? <Skeleton className="h-14 w-full rounded-xl" /> : null}
-          <LoadMoreSentinel
-            disabled={!hasMore || isValidating || Boolean(error)}
-            onLoadMore={() => void setSize((current) => current + 1)}
-          />
-        </Card>
-      ) : summary ? (
-        <p className="mt-3 rounded-xl bg-muted/60 p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
-          {hasFilters ? "با این فیلترها هنرجویی پیدا نشد" : "بدهی معوقه ای برای این ماه وجود ندارد"}
-        </p>
-      ) : null}
+      {/* Stays mounted so Base UI runs the slide animations; the last target is kept through the close
+          animation so the content does not swap while the sheet slides out. */}
+      <FeePaymentSheet
+        open={payOpen}
+        onOpenChange={(open) => {
+          if (!open) setPayOpen(false);
+        }}
+        clubId={clubId}
+        clubs={club ? [club] : undefined}
+        month={payTarget ? owedMonthOf(payTarget) : currentFeeMonth()}
+        initialStudentId={payTarget?.studentId}
+        subtitle={payTarget ? `${payTarget.fullName} · ${feeMonthLabel(owedMonthOf(payTarget))}` : undefined}
+      />
     </section>
   );
 }

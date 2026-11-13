@@ -13,7 +13,7 @@ import { ErrorState } from "@/features/coach/components/error-state";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { useClubFee } from "@/features/coach/hooks/use-fee";
 import { useSaveClubFee } from "@/features/coach/hooks/use-fee-mutations";
-import { currentFeeMonth, feeMonthLabel, nextFeeMonth, rateAppliesNextMonth } from "@/features/coach/lib/fee-api";
+import { currentFeeMonth, feeMonthLabel, feeRateState, nextFeeMonth } from "@/features/coach/lib/fee-api";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { digitsOnly, formatMoney } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
@@ -30,10 +30,12 @@ export function FeeSettingsCard({ clubId }: { clubId: string }) {
   const canSave = value !== "" && Number.isFinite(parsed) && parsed > 0;
 
   const submit = async () => {
+    // A stale rate is charged as a new row from next month; the toast says so.
+    const staleRate = fee ? feeRateState(fee) === "stale" : false;
     try {
       await save.trigger({ clubId, monthlyAmount: parsed });
       setAmount(null);
-      toast.success("شهریه ذخیره شد");
+      toast.success(staleRate ? `نرخ جدید از ${feeMonthLabel(nextFeeMonth(currentFeeMonth()))} اعمال می شود` : "شهریه ذخیره شد");
     } catch (requestError) {
       if (requestError instanceof ApiError && requestError.status === 401) router.replace("/login");
       else toast.error(apiErrorMessage(requestError));
@@ -51,21 +53,40 @@ export function FeeSettingsCard({ clubId }: { clubId: string }) {
         ) : (
           <>
             <AuthField label="مبلغ شهریه ماهانه (تومان)" htmlFor="clubFeeAmount">
-              <AuthInput
-                id="clubFeeAmount"
-                inputMode="numeric"
-                dir="ltr"
-                maxLength={15}
-                value={value === "" ? "" : formatMoney(value)}
-                onChange={(event) => setAmount(digitsOnly(event.target.value, 12))}
-              />
+              <div className="flex items-center gap-2">
+                <div className="min-w-0 flex-1">
+                  <AuthInput
+                    id="clubFeeAmount"
+                    inputMode="numeric"
+                    dir="ltr"
+                    maxLength={15}
+                    value={value === "" ? "" : formatMoney(value)}
+                    onChange={(event) => setAmount(digitsOnly(event.target.value, 12))}
+                  />
+                </div>
+                <Button
+                  variant="brand"
+                  className="h-12 shrink-0 rounded-xl px-4 text-[12px] font-extrabold"
+                  disabled={!canSave || save.isMutating}
+                  onClick={() => void submit()}
+                >
+                  {save.isMutating ? <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : null}
+                  {fee ? "ذخیره" : "ثبت"}
+                </Button>
+              </div>
             </AuthField>
-            {fee ? null : <p className="text-[12px] font-semibold leading-5 text-ink-subtle">شهریه برای این باشگاه تعیین نشده است</p>}
+            {fee ? null : (
+              <p className="text-[12px] font-semibold leading-5 text-ink-subtle">
+                شهریه برای این باشگاه تعیین نشده است · اولین نرخ از همین ماه اعمال می شود
+              </p>
+            )}
             {fee ? (
               <p className="text-[12px] font-semibold leading-5 text-ink-subtle">
-                {rateAppliesNextMonth(fee)
+                {feeRateState(fee) === "stale"
                   ? `تغییر نرخ از ${feeMonthLabel(nextFeeMonth(currentFeeMonth()))} اعمال می شود`
-                  : `نرخ فعلی از ${toJalaliDate(fee.effectiveFrom)} فعال است`}
+                  : feeRateState(fee) === "scheduled"
+                    ? `نرخ جدید از ${toJalaliDate(fee.effectiveFrom)} اعمال می شود`
+                    : `نرخ فعلی از ${toJalaliDate(fee.effectiveFrom)} فعال است`}
               </p>
             ) : null}
             {save.error ? (
@@ -73,15 +94,6 @@ export function FeeSettingsCard({ clubId }: { clubId: string }) {
                 {apiErrorMessage(save.error)}
               </p>
             ) : null}
-            <Button
-              variant="brand"
-              className="h-11 w-full rounded-xl text-[12px] font-extrabold"
-              disabled={!canSave || save.isMutating}
-              onClick={() => void submit()}
-            >
-              {save.isMutating ? <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : null}
-              {fee ? "ذخیره" : "ثبت شهریه"}
-            </Button>
           </>
         )}
       </Card>

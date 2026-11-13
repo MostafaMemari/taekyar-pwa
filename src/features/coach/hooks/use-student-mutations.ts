@@ -1,4 +1,3 @@
-import { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
 import {
   type AssignBeltInput,
@@ -14,9 +13,10 @@ import {
   updateStudent,
   uploadStudentImage,
 } from "@/features/coach/lib/student-api";
+import { revalidateResource } from "@/lib/api/swr";
 
 // A new student changes the list, the stats and every picker fed by them, so the whole student branch is revalidated.
-const revalidateStudents = () => mutate((key) => Array.isArray(key) && key[0] === "student");
+const revalidateStudents = () => revalidateResource("student");
 
 export function useCreateStudent() {
   return useSWRMutation(["student", "create"] as const, async (_key: unknown, { arg }: { arg: CreateStudentInput }) => {

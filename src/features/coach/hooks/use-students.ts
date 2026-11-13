@@ -1,6 +1,7 @@
+import { useEffect } from "react";
 import useSWRInfinite from "swr/infinite";
 import { fetchStudents, STUDENTS_PAGE_SIZE, type StudentFeedQuery } from "@/features/coach/lib/student-api";
-import { swrReadOptions } from "@/lib/api/swr";
+import { subscribeResource, swrReadOptions } from "@/lib/api/swr";
 
 // Endless feed: each scroll near the bottom appends the next page; a new query restarts at page 1.
 export function useStudentsFeed(query: StudentFeedQuery) {
@@ -12,6 +13,9 @@ export function useStudentsFeed(query: StudentFeedQuery) {
     ([, , params]) => fetchStudents({ ...params, take: STUDENTS_PAGE_SIZE }),
     swrReadOptions,
   );
+
+  // Filter mutates skip infinite keys, so the feed refreshes itself when the student resource is revalidated.
+  useEffect(() => subscribeResource("student", () => feed.mutate()), [feed.mutate]);
 
   const pages = feed.data ?? [];
   const lastPage = pages[pages.length - 1];

@@ -60,7 +60,6 @@ export type RecordFeePaymentInput = {
   studentId: string;
   year: number;
   month: number;
-  amount?: number;
   note?: string;
 };
 
@@ -77,12 +76,26 @@ export function feeMonthLabel(month: FeeMonth): string {
   return `${JALALI_MONTHS[month.month - 1]} ${toPersianDigits(String(month.year))}`;
 }
 
-// A rate that starts before the current month can no longer be edited in place; a save moves it to next month.
-export function rateAppliesNextMonth(fee: ClubFeeRecord | null): boolean {
-  if (!fee) return false;
-  const [year, month] = toLatinDigits(toJalaliDate(fee.effectiveFrom)).split("/");
+// "current" is editable in place, "scheduled" starts in a future month, "stale" moves a save to next month.
+export type FeeRateState = "current" | "scheduled" | "stale";
+
+function feeRateMonth(fee: ClubFeeRecord): { year: number; month: number } {
+  const [year, month] = toLatinDigits(toJalaliDate(fee.effectiveFrom)).split("/").map(Number);
+  return { year, month };
+}
+
+export function feeRateState(fee: ClubFeeRecord): FeeRateState {
+  const rate = feeRateMonth(fee);
   const current = currentFeeMonth();
-  return Number(year) < current.year || (Number(year) === current.year && Number(month) < current.month);
+  if (rate.year > current.year || (rate.year === current.year && rate.month > current.month)) return "scheduled";
+  if (rate.year === current.year && rate.month === current.month) return "current";
+  return "stale";
+}
+
+// Whether the latest rate is the one the backend charges for this month.
+export function rateCoversMonth(fee: ClubFeeRecord, month: FeeMonth): boolean {
+  const rate = feeRateMonth(fee);
+  return rate.year < month.year || (rate.year === month.year && rate.month <= month.month);
 }
 
 export function fetchClubFee(clubId: string): Promise<ClubFeeRecord | null> {
@@ -111,6 +124,12 @@ export function fetchFeeDebtors(clubId: string, filters: FeeDebtorFilters): Prom
   params.set("page", String(filters.page ?? 1));
   params.set("take", String(filters.take ?? 20));
   return authRequest<FeeDebtors>(`club/${clubId}/fee/debtors?${params.toString()}`);
+}
+
+// shortcut: assumes at most 100 payments in one club-month (the API take cap); a payment beyond page 1 would be missed.
+export async function fetchFeeMonthConfirmedStudents(clubId: string, year: number, month: number): Promise<Set<string>> {
+  const { data } = await authRequestWithMeta<FeePaymentRecord[]>(`club/${clubId}/fee/payments?year=${year}&month=${month}&page=1&take=100`);
+  return new Set(data.filter((payment) => payment.status === "CONFIRMED").map((payment) => payment.studentId));
 }
 
 export function recordFeePayment(clubId: string, input: RecordFeePaymentInput): Promise<void> {

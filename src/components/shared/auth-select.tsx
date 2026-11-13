@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-export type AuthSelectOption = { value: string; label: string; description?: string };
+export type AuthSelectOption = { value: string; label: string; description?: string; disabled?: boolean };
 
 type AuthSelectProps = {
   id?: string;
@@ -12,12 +12,24 @@ type AuthSelectProps = {
   icon?: LucideIcon;
   disabled?: boolean;
   itemGap?: boolean;
+  // Filters that always hold a value hide the placeholder row; selects that clear on it keep showing it.
+  placeholderAsOption?: boolean;
 };
 
-type AuthSelectItem = { value: string | null; label: string; description?: string };
+type AuthSelectItem = { value: string | null; label: string; description?: string; disabled?: boolean };
 
-export function AuthSelect({ id, value, onValueChange, placeholder, options, icon: Icon, disabled, itemGap }: AuthSelectProps) {
-  const items: AuthSelectItem[] = [{ label: placeholder, value: null }, ...options];
+export function AuthSelect({
+  id,
+  value,
+  onValueChange,
+  placeholder,
+  options,
+  icon: Icon,
+  disabled,
+  itemGap,
+  placeholderAsOption = true,
+}: AuthSelectProps) {
+  const items: AuthSelectItem[] = [...(placeholderAsOption ? [{ label: placeholder, value: null }] : []), ...options];
 
   return (
     <Select items={items} value={value} onValueChange={onValueChange} disabled={disabled}>
@@ -33,7 +45,7 @@ export function AuthSelect({ id, value, onValueChange, placeholder, options, ico
       <SelectContent alignItemWithTrigger={false}>
         <SelectGroup className={itemGap ? "flex flex-col gap-1.5" : undefined}>
           {items.map((item) => (
-            <SelectItem key={item.value ?? "placeholder"} value={item.value}>
+            <SelectItem key={item.value ?? "placeholder"} value={item.value} disabled={item.disabled}>
               <div className="flex min-w-0 flex-1 flex-col gap-1">
                 <div className="truncate">{item.label}</div>
                 {item.description ? <div className="truncate text-[11px] font-medium text-ink-subtle">{item.description}</div> : null}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Banknote, Loader2, RotateCcw, Trash2 } from "lucide-react";
+import { Loader2, RotateCcw, Trash2 } from "lucide-react";
 import { Fragment, useState } from "react";
 import { toast } from "@/components/ding-toaster";
 import { AuthField } from "@/components/shared/auth-field";
@@ -21,9 +21,8 @@ import type { FeeMonth, FeePaymentRecord } from "@/features/coach/lib/fee-api";
 import { feeMonthLabel } from "@/features/coach/lib/fee-api";
 import { apiErrorMessage } from "@/lib/api/client";
 import { formatMoney, toPersianDigits } from "@/lib/digits";
-import { toJalaliDate } from "@/lib/jalali";
+import { toJalaliDateTime } from "@/lib/jalali";
 import { cn } from "@/lib/utils";
-import { FeePaymentSheet } from "./fee-payment-sheet";
 
 const SETTLED_META: Record<
   "CANCELLED" | "REFUNDED",
@@ -37,7 +36,6 @@ export function FeePaymentsCard({ clubId, month }: { clubId: string; month: FeeM
   const { payments, total, hasMore, error, isLoading, isValidating, mutate, setSize } = useFeePayments(clubId, month.year, month.month);
   const cancel = useCancelFeePayment(clubId);
   const refund = useRefundFeePayment(clubId);
-  const [sheetOpen, setSheetOpen] = useState(false);
   const [cancelTarget, setCancelTarget] = useState<FeePaymentRecord | null>(null);
   const [refundTarget, setRefundTarget] = useState<FeePaymentRecord | null>(null);
   const [cancelReason, setCancelReason] = useState("");
@@ -69,21 +67,7 @@ export function FeePaymentsCard({ clubId, month }: { clubId: string; month: FeeM
     <section>
       <SectionHeading
         title={`پرداخت های ${feeMonthLabel(month)}`}
-        action={
-          <div className="flex items-center gap-1.5">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="h-7 gap-1 rounded-lg px-2.5 text-[11px] font-bold"
-              onClick={() => setSheetOpen(true)}
-            >
-              <Banknote data-icon="inline-start" aria-hidden="true" />
-              ثبت پرداخت
-            </Button>
-            {total !== undefined ? <StatusBadge>{toPersianDigits(String(total))} پرداخت</StatusBadge> : null}
-          </div>
-        }
+        action={total !== undefined ? <StatusBadge>{toPersianDigits(String(total))} پرداخت</StatusBadge> : null}
       />
 
       {error ? (
@@ -114,7 +98,7 @@ export function FeePaymentsCard({ clubId, month }: { clubId: string; month: FeeM
                       {settled ? <StatusBadge tone={settled.tone}>{settled.label}</StatusBadge> : null}
                     </b>
                     <span className="mt-0.5 block truncate text-[12px] font-medium tabular-nums text-ink-subtle">
-                      {toJalaliDate(payment.paidAt)}
+                      {toJalaliDateTime(payment.paidAt)}
                       {payment.note ? ` · ${payment.note}` : ""}
                       {reason ? ` · ${reason}` : ""}
                     </span>
@@ -230,8 +214,6 @@ export function FeePaymentsCard({ clubId, month }: { clubId: string; month: FeeM
           </Button>
         </SheetActions>
       </SheetFrame>
-
-      <FeePaymentSheet open={sheetOpen} onOpenChange={setSheetOpen} clubId={clubId} month={month} />
     </section>
   );
 }

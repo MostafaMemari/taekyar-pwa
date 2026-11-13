@@ -1,7 +1,8 @@
 import { d2j, isValidJalaaliDate, j2d, jalaaliMonthLength, toGregorian } from "jalaali-js";
 import { toLatinDigits, toPersianDigits } from "@/lib/digits";
 
-const jalaliFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { dateStyle: "short" });
+// dateStyle "short" drops the month/day zero padding, so the numeric date is built from explicit parts.
+const jalaliFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { year: "numeric", month: "2-digit", day: "2-digit" });
 const jalaliDayFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { weekday: "long", day: "numeric", month: "long" });
 const jalaliMonthFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { month: "long", year: "numeric" });
 const jalaliDayMonthFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { day: "numeric", month: "long" });
@@ -26,6 +27,13 @@ export function toGregorianDate(jalali: string): string | null {
 export function toJalaliDate(isoDate: string): string {
   const date = new Date(isoDate);
   return Number.isNaN(date.getTime()) ? "" : jalaliFormatter.format(date);
+}
+
+const jalaliTimeFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { hour: "2-digit", minute: "2-digit" });
+
+export function toJalaliDateTime(isoDate: string): string {
+  const date = new Date(isoDate);
+  return Number.isNaN(date.getTime()) ? "" : `${jalaliFormatter.format(date)}، ${jalaliTimeFormatter.format(date)}`;
 }
 
 export function toJalaliDay(isoDate: string): string {

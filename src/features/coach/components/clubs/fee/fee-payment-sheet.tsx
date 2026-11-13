@@ -12,6 +12,7 @@ export function FeePaymentSheet({
   clubs,
   month,
   initialStudentId,
+  subtitle,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -19,18 +20,26 @@ export function FeePaymentSheet({
   clubs?: ClubRecord[];
   month: FeeMonth;
   initialStudentId?: string;
+  // Names the pinned student and month, e.g. from the debtor list.
+  subtitle?: string;
 }) {
   return (
-    <SheetFrame open={open} onOpenChange={onOpenChange} title="ثبت پرداخت شهریه" description="پرداخت هنرجو برای ماه انتخاب شده ثبت می شود">
-      <div className="animate-in fade-in slide-in-from-bottom-2 duration-200 ease-out">
-        <FeePaymentForm
-          clubId={clubId}
-          clubs={clubs}
-          month={month}
-          initialStudentId={initialStudentId}
-          onDone={() => onOpenChange(false)}
-        />
-      </div>
+    <SheetFrame
+      open={open}
+      onOpenChange={onOpenChange}
+      title="ثبت پرداخت شهریه"
+      subtitle={subtitle}
+      description="پرداخت هنرجو برای ماه انتخاب شده ثبت می شود"
+    >
+      {/* A fresh form per pinned student; the sheet itself stays mounted so its open animation runs. */}
+      <FeePaymentForm
+        key={initialStudentId ?? "none"}
+        clubId={clubId}
+        clubs={clubs}
+        month={month}
+        initialStudentId={initialStudentId}
+        onDone={() => onOpenChange(false)}
+      />
     </SheetFrame>
   );
 }

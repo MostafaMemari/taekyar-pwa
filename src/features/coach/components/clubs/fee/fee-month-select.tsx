@@ -9,26 +9,53 @@ import { JALALI_MONTHS } from "@/lib/jalali";
 // shortcut: the year window starts at 1400; widen it when an older ledger needs review.
 const FIRST_YEAR = 1400;
 
-export function FeeMonthSelect({ value, onChange }: { value: FeeMonth; onChange: (month: FeeMonth) => void }) {
+export function FeeMonthSelect({
+  value,
+  onChange,
+  fromMonth,
+  disabledMonths,
+}: {
+  value: FeeMonth;
+  onChange: (month: FeeMonth) => void;
+  // Payment picker: restricts the months to fromMonth..12 of value.year and hides the year select.
+  fromMonth?: number;
+  // Months the student already paid; rendered as unselectable with a label.
+  disabledMonths?: number[];
+}) {
   const lastYear = currentFeeMonth().year + 1;
   const years = Array.from({ length: lastYear - FIRST_YEAR + 1 }, (_, index) => String(FIRST_YEAR + index));
 
+  const months = JALALI_MONTHS.map((label, index) => {
+    const month = index + 1;
+    if (fromMonth !== undefined && month < fromMonth) return null;
+    if (disabledMonths?.includes(month)) return { value: String(month), label: `${label} (پرداخت شده)`, disabled: true };
+    return { value: String(month), label, disabled: false };
+  }).filter((option) => option !== null);
+
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <div className={fromMonth !== undefined ? "grid grid-cols-1 gap-2" : "grid grid-cols-2 gap-2"}>
       <AuthSelect
         icon={CalendarDays}
         placeholder="ماه"
         value={String(value.month)}
-        onValueChange={(month) => onChange({ ...value, month: Number(month) })}
-        options={JALALI_MONTHS.map((label, index) => ({ value: String(index + 1), label }))}
+        onValueChange={(month) => {
+          if (month !== null) onChange({ ...value, month: Number(month) });
+        }}
+        options={months}
+        placeholderAsOption={false}
       />
-      <AuthSelect
-        icon={CalendarRange}
-        placeholder="سال"
-        value={String(value.year)}
-        onValueChange={(year) => onChange({ ...value, year: Number(year) })}
-        options={years.map((year) => ({ value: year, label: toPersianDigits(year) }))}
-      />
+      {fromMonth !== undefined ? null : (
+        <AuthSelect
+          icon={CalendarRange}
+          placeholder="سال"
+          value={String(value.year)}
+          onValueChange={(year) => {
+            if (year !== null) onChange({ ...value, year: Number(year) });
+          }}
+          options={years.map((year) => ({ value: year, label: toPersianDigits(year) }))}
+          placeholderAsOption={false}
+        />
+      )}
     </div>
   );
 }

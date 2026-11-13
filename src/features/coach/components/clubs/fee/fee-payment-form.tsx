@@ -3,6 +3,7 @@
 import { Check, Landmark, Loader2, Search, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "@/components/ding-toaster";
 import { AuthField } from "@/components/shared/auth-field";
 import { AuthFormError } from "@/components/shared/auth-form-error";
 import { AuthInput } from "@/components/shared/auth-input";
@@ -12,10 +13,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useClubMembers } from "@/features/coach/hooks/use-clubs";
-import { useClubFee } from "@/features/coach/hooks/use-fee";
+import { useClubFee, useFeePaidMonths } from "@/features/coach/hooks/use-fee";
 import { useRecordFeePayment, useSaveClubFee } from "@/features/coach/hooks/use-fee-mutations";
 import type { ClubRecord } from "@/features/coach/lib/club-api";
-import type { FeeMonth } from "@/features/coach/lib/fee-api";
+import { currentFeeMonth, type FeeMonth, rateCoversMonth } from "@/features/coach/lib/fee-api";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { digitsOnly, formatMoney } from "@/lib/digits";
 import { cn } from "@/lib/utils";
@@ -58,24 +59,41 @@ export function FeePaymentForm({
   const record = useRecordFeePayment();
   const saveFee = useSaveClubFee();
   const [studentId, setStudentId] = useState<string | null>(initialStudentId ?? null);
-  const [picked, setPicked] = useState<FeeMonth>(month);
-  // Stays null until the coach types, so the stored fee amount shows through untouched.
-  const [amount, setAmount] = useState<string | null>(null);
+
+  // The picker normally starts at the current month, but a preset owed month (debtor list) may reach into the past.
+  const now = currentFeeMonth();
+  const start = month.year < now.year || (month.year === now.year && month.month < now.month) ? month : now;
+  const [picked, setPicked] = useState<FeeMonth>(start);
+  // The inline first-rate input keeps its own draft; the payment amount is not editable at all.
   const [feeAmount, setFeeAmount] = useState<string | null>(null);
   const [note, setNote] = useState("");
+
+  const paidMonths = useFeePaidMonths(
+    studentId !== null ? activeClubId : null,
+    studentId,
+    Array.from({ length: 12 - start.month + 1 }, (_, index) => ({ year: start.year, month: start.month + index })),
+  );
 
   const clubOptions = (clubs ?? []).map((club) => ({ value: club.id, label: club.name }));
   const clubMissing = fixedStudent && clubOptions.length === 0;
   const activeMembers = (members ?? []).filter((member) => member.isActive);
-  const amountValue = amount ?? (fee ? String(Math.trunc(Number(fee.monthlyAmount))) : "");
   const feeValue = feeAmount ?? "";
-  const canSubmit = activeClubId !== "" && studentId !== null && fee !== null && !membersLoading && !record.isMutating;
+  const monthPaid = paidMonths.data?.includes(picked.month) ?? false;
+  const canSubmit =
+    activeClubId !== "" &&
+    studentId !== null &&
+    fee !== null &&
+    !membersLoading &&
+    paidMonths.data !== undefined &&
+    !monthPaid &&
+    !record.isMutating;
 
   const submitFee = async () => {
     if (activeClubId === "" || feeValue === "") return;
     try {
       await saveFee.trigger({ clubId: activeClubId, monthlyAmount: Number(feeValue) });
       setFeeAmount(null);
+      toast.success("شهریه ذخیره شد");
     } catch (requestError) {
       if (requestError instanceof ApiError && requestError.status === 401) router.replace("/login");
     }
@@ -89,9 +107,9 @@ export function FeePaymentForm({
         studentId,
         year: picked.year,
         month: picked.month,
-        ...(amountValue !== "" && { amount: Number(amountValue) }),
         ...(note.trim() && { note: note.trim() }),
       });
+      toast.success("پرداخت ثبت شد");
       onDone();
     } catch (requestError) {
       if (requestError instanceof ApiError && requestError.status === 401) router.replace("/login");
@@ -149,7 +167,7 @@ export function FeePaymentForm({
                 onClick={() => void submitFee()}
               >
                 {saveFee.isMutating ? <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : null}
-                {saveFee.isMutating ? "در حال ثبت..." : "ثبت شهریه برای باشگاه"}
+                ثبت شهریه برای باشگاه
               </Button>
             </div>
           )}
@@ -207,20 +225,15 @@ export function FeePaymentForm({
           )}
 
           <AuthField label="ماه پرداخت" htmlFor="feePaymentMonth">
-            <FeeMonthSelect value={picked} onChange={setPicked} />
+            <FeeMonthSelect value={picked} onChange={setPicked} fromMonth={start.month} disabledMonths={paidMonths.data} />
           </AuthField>
 
           {fee ? (
-            <AuthField label="مبلغ (تومان)" htmlFor="feePaymentAmount" optional hint="خالی بماند مبلغ شهریه باشگاه ثبت می شود">
-              <AuthInput
-                id="feePaymentAmount"
-                inputMode="numeric"
-                dir="ltr"
-                maxLength={15}
-                value={amountValue === "" ? "" : formatMoney(amountValue)}
-                onChange={(event) => setAmount(digitsOnly(event.target.value, 12))}
-              />
-            </AuthField>
+            <p className="text-[12px] font-semibold leading-5 text-ink-subtle">
+              {rateCoversMonth(fee, picked)
+                ? `مبلغ قابل پرداخت: ${formatMoney(fee.monthlyAmount)} تومان`
+                : "مبلغ این ماه بر اساس نرخ پیشین این باشگاه محاسبه می شود"}
+            </p>
           ) : null}
 
           <AuthField label="توضیح" htmlFor="feePaymentNote" optional>
@@ -229,7 +242,7 @@ export function FeePaymentForm({
               maxLength={200}
               value={note}
               onChange={(event) => setNote(event.target.value)}
-              placeholder="مثلا قسط اول"
+              placeholder="مثلا پرداخت نقدی"
             />
           </AuthField>
         </>
@@ -242,11 +255,11 @@ export function FeePaymentForm({
           type="button"
           variant="brand"
           className="h-11 flex-[2] rounded-xl text-[12px] font-bold"
-          disabled={!canSubmit || !fee}
+          disabled={!canSubmit}
           onClick={() => void submit()}
         >
           {record.isMutating ? <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : null}
-          {record.isMutating ? "در حال ثبت..." : "ثبت پرداخت"}
+          {monthPaid ? "این ماه پرداخت شده است" : "ثبت پرداخت"}
         </Button>
       </SheetActions>
     </div>
