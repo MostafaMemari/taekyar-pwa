@@ -413,6 +413,7 @@ COLOR | POOM | DAN
 
 - `currentBelt` با `belt` کامل (`name`، `label`، `level`، رنگ ها)
 - `metrics` با آخرین رکورد (`take: 1`، مرتب بر `recordedAt` نزولی)
+- `feeStatus`: وضعیت شهریه ماه جاری هر ردیف — `PAID` (یک پرداخت `CONFIRMED` برای این ماه)، `OWED` (عضو فعال باشگاه دارای نرخ و بدون پرداخت این ماه) یا `null` (بدون باشگاه فعال یا باشگاه بدون نرخ). همان قواعد فیلتر `fee` و شمارش های `feePaid`/`feeOwed` آمار است.
 
 مرتب سازی `belt` روی `currentBelt.belt.level` و `insurance` روی `sportsInsuranceDate` با `nulls: last` انجام می شود؛ در `sortDirection=desc` هنرجویان بدون کمربند اول می آیند (محدودیت ترتیب NULL در Postgres برای رابطه).
 
@@ -1036,14 +1037,10 @@ COLOR | POOM | DAN
 | `/coach/students/[id]/attendance` | `GET /attendance/student/:id/summary` و `GET /attendance/student/:id?page=1&take=100` | وصل؛ خلاصه از `summary` و رکوردها یک صفحه ۱۰۰ تایی، گروه بندی ماهانه و فیلتر وضعیت سمت کلاینت |
 | `/coach/students/invite` | `POST /student-coach-invitation` | وصل؛ ارسال با کد ملی و فهرست دعوت نامه های اخیر از `GET /student-coach-invitation/sent` |
 | `/coach/invitations` | `GET /student-coach-invitation/sent` | وصل؛ آمار و ردیف ها از سرور |
-| `/coach/clubs` | `GET /club` و `GET /club/:id/students?take=1` | وصل؛ شمارش هنرجو از `meta.pager.total` و آمار کلاس حذف شد |
-| `/coach/clubs/new` | `POST /club` | وصل؛ react-hook-form و zod |
+| `/coach/clubs` | `GET /club` و `GET /club/:id/students?take=1` | وصل؛ شمارش هنرجو از `meta.pager.total`؛ ثبت و ویرایش باشگاه با شیت `club-save-sheet` روی همین صفحه و صفحه جزئیات انجام می شود و در شیت ثبت، فیلد اختیاری شهریه پس از موفق شدن `POST /club` با `PUT /club/:id/fee` ثبت می شود |
 | `/coach/clubs/[id]` | `GET /club/:id`، `GET /club/:id/students` و `GET /class-session` | وصل؛ کلاس های باشگاه از `GET /class-session` و شمارش هنرجوی هر کلاس از `GET /class-session/:id/students?take=1`؛ کنترل فعال/غیرفعال باشگاه در UI فعلا حذف شده |
-| `/coach/clubs/[id]/edit` | `GET /club/:id` و `PATCH /club/:id` | وصل؛ react-hook-form و zod |
-| `/coach/sessions` | `GET /class-session` | وصل؛ نام باشگاه از `GET /club` و شمارش هنرجو از `GET /class-session/:id/students?take=1` |
-| `/coach/sessions/new` | `POST /class-session` | وصل؛ react-hook-form و zod، `clubId` از `GET /club` |
+| `/coach/sessions` | `GET /class-session` | وصل؛ نام باشگاه از `GET /club` و شمارش هنرجو از `GET /class-session/:id/students?take=1`؛ ثبت و ویرایش کلاس با شیت `session-save-sheet` روی فهرست کلاس ها، داشبورد، صفحه باشگاه و جزئیات کلاس انجام می شود |
 | `/coach/sessions/[id]` | `GET /class-session/:id`، `POST /club/:id/students` و `POST /class-session/:id/students` | وصل؛ roster از `students[].student.fullName` در همان پاسخ؛ دکمه «افزودن» با شیت انتخاب هنرجو اول عضویت باشگاه و بعد عضویت کلاس را می نویسد |
-| `/coach/sessions/[id]/edit` | `GET /class-session/:id` و `PATCH /class-session/:id` | وصل؛ `clubId` فقط در ساخت خوانده می شود، در ویرایش غیرفعال است |
 | `/coach/sessions/[id]/attendance` | `GET /attendance/class/:id/daily?date=`، `GET /class-session/:id` و `PUT /attendance/class/:id` | وصل؛ تاریخ پیش فرض امروز و وضعیت/توضیح هر هنرجو از رکورد همان تاریخ؛ ذخیره با `note: null` برای توضیح پاک شده |
 | `/coach/sessions/[id]/report` | `GET /attendance/class/:id?date=` و `GET /class-session/:id` | وصل؛ تاریخ از `?date=` و آمار روی رکوردهای ذخیره شده همان تاریخ |
 | `/coach/profile` | `GET /auth/profile`، `GET /notifications/unread-count` و `POST /auth/logout` | وصل؛ اطلاعات، موبایل، کمربند و شمارنده اعلان از سرور |
