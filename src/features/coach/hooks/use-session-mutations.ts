@@ -3,6 +3,7 @@ import useSWRMutation from "swr/mutation";
 import { addStudentToClub } from "@/features/coach/lib/club-api";
 import {
   addStudentsToSession,
+  type ClassSessionRecord,
   type CreateClassSessionInput,
   changeSessionStatus,
   createSession,
@@ -69,7 +70,18 @@ export function useRemoveSessionStudent(sessionId: string) {
 export function useDeleteSession() {
   return useSWRMutation(["session", "delete"] as const, async (_key: unknown, { arg }: { arg: string }) => {
     await deleteSession(arg);
-    await revalidateSessions();
-    await mutate((key) => Array.isArray(key) && key[0] === "club");
+
+    // A plain filter-mutate keeps the deleted session inside the cached list, and the next screen's
+    // per-id count fetches would 404 and flash the error screen. Drop its own caches and cut it from
+    // the cached list before the refetch lands.
+    await mutate((key) => Array.isArray(key) && (key[0] === "session" || key[0] === "attendance") && key.includes(arg), undefined, {
+      revalidate: false,
+    });
+    await mutate(
+      (key) => Array.isArray(key) && key[0] === "session" && key[1] === "list",
+      (current: { sessions: ClassSessionRecord[] } | undefined) =>
+        current ? { ...current, sessions: current.sessions.filter((session) => session.id !== arg) } : current,
+      { revalidate: true },
+    );
   });
 }

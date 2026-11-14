@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDays, Pencil, Plus, Users, Wallet } from "lucide-react";
+import { CalendarDays, EllipsisVertical, Pencil, Plus, Users, Wallet } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { ClubBand } from "./club-band";
 import { ClubClasses } from "./club-classes";
 import { ClubClassesSkeleton } from "./club-classes-skeleton";
+import { ClubDetailActions } from "./club-detail-actions";
 import { ClubDetailSkeleton } from "./club-detail-skeleton";
 import { ClubInfoCard } from "./club-info-card";
 import { ClubMembers } from "./club-members";
@@ -59,8 +60,11 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
   const sessions = (sessionData?.sessions ?? []).filter((session) => session.clubId === club.id);
   const { data: memberCounts } = useSessionStudentCounts(sessions.map((session) => session.id));
 
+  const [menuOpen, setMenuOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [sessionOpen, setSessionOpen] = useState(false);
+  // An inactive club takes no new records; editing its info and cancelling payments stay allowed.
+  const clubInactive = !club.isActive;
 
   const stats = [
     {
@@ -74,7 +78,22 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
 
   return (
     <main className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300">
-      <ClubBand club={club} studentCount={studentCount} backHref="/coach/clubs" />
+      <ClubBand
+        club={club}
+        studentCount={studentCount}
+        backHref="/coach/clubs"
+        action={
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="عملیات بیشتر"
+            className="size-10 rounded-full border border-white/20 bg-white/10 text-white hover:bg-white/20"
+            onClick={() => setMenuOpen(true)}
+          >
+            <EllipsisVertical aria-hidden="true" />
+          </Button>
+        }
+      />
 
       <CoachSheet className="flex flex-col gap-4">
         <ClubInfoCard club={club} />
@@ -84,10 +103,17 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
           variant="brand"
           className="h-12 w-full rounded-xl text-[12px] font-semibold"
           onClick={() => setSessionOpen(true)}
+          disabled={clubInactive}
         >
           <Plus data-icon="inline-start" aria-hidden="true" />
           کلاس جدید
         </Button>
+
+        {clubInactive ? (
+          <p className="rounded-xl bg-muted/60 p-3 text-[12px] font-semibold leading-5 text-ink-subtle">
+            این باشگاه غیرفعال است و امکان ثبت کلاس، هنرجو یا شهریه وجود ندارد
+          </p>
+        ) : null}
 
         <div className="grid grid-cols-2 gap-3">
           {stats.map((stat) => (
@@ -148,6 +174,8 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
 
       <ClubSaveSheet open={editOpen} onOpenChange={setEditOpen} clubId={club.id} />
       <SessionSaveSheet open={sessionOpen} onOpenChange={setSessionOpen} clubId={club.id} />
+
+      <ClubDetailActions club={club} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
     </main>
   );
 }

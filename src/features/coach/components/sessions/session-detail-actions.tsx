@@ -66,8 +66,8 @@ export function SessionDetailActions({
       toast.success("کلاس حذف شد");
       router.push("/coach/sessions");
     } catch (requestError) {
+      // The sheet renders the failure inline, so a ding would just duplicate it.
       if (requestError instanceof ApiError && requestError.status === 401) router.replace("/login");
-      else toast.error(apiErrorMessage(requestError));
     }
   };
 
@@ -102,7 +102,7 @@ export function SessionDetailActions({
 
       <SheetFrame open={deleteOpen} onOpenChange={setDeleteOpen} title="حذف کلاس" description="تایید حذف کلاس">
         <p className="rounded-xl bg-danger-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
-          با حذف {session.name}، سابقه حضور و غیاب آن هم از دست می رود. این کار قابل بازگشت نیست
+          با حذف {session.name}، هنرجوهای ثبت شده در آن از کلاس حذف می شوند. کلاسی که سابقه حضور و غیاب داشته باشد حذف نمی شود
         </p>
 
         {deleteError ? <p className="pt-2 text-[12px] font-bold leading-5 text-danger">{deleteError}</p> : null}

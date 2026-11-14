@@ -89,3 +89,7 @@ export function fetchClubMembers(id: string, search?: string): Promise<ClubMembe
 export function changeClubMemberStatus(id: string, studentId: string, isActive: boolean): Promise<void> {
   return authRequest<unknown>(`club/${id}/students/${studentId}/status`, { method: "patch", json: { isActive } }).then(() => undefined);
 }
+
+export function deleteClub(id: string): Promise<void> {
+  return authRequest<unknown>(`club/${id}`, { method: "delete" }).then(() => undefined);
+}
