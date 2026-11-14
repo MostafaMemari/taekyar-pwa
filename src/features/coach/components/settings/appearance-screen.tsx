@@ -4,7 +4,7 @@ import { Check, Info, Moon, Sun } from "lucide-react";
 import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
 import { DashboardHero } from "@/features/coach/components/dashboard/dashboard-hero";
 import { SectionHeading } from "@/features/coach/components/section-heading";
-import { ACCENT_SWATCH, ACCENTS, RADII, type ThemeMode } from "@/lib/theme";
+import { ACCENT_SWATCH, ACCENTS, FONTS, RADII, type ThemeMode } from "@/lib/theme";
 import { useThemeStore } from "@/lib/theme-store";
 import { cn } from "@/lib/utils";
 
@@ -17,9 +17,11 @@ export function AppearanceScreen() {
   const mode = useThemeStore((state) => state.mode);
   const accent = useThemeStore((state) => state.accent);
   const radius = useThemeStore((state) => state.radius);
+  const font = useThemeStore((state) => state.font);
   const setMode = useThemeStore((state) => state.setMode);
   const setAccent = useThemeStore((state) => state.setAccent);
   const setRadius = useThemeStore((state) => state.setRadius);
+  const setFont = useThemeStore((state) => state.setFont);
 
   return (
     <main className="min-h-dvh px-4 pb-44 pt-[max(1rem,env(safe-area-inset-top))] motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300">
@@ -119,6 +121,43 @@ export function AppearanceScreen() {
                   style={{ borderRadius: `calc(${option.value} * 1.4)` }}
                   aria-hidden="true"
                 />
+                <span className="flex items-center gap-1">
+                  {active ? <Check className="size-3.5" aria-hidden="true" /> : null}
+                  {option.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="mt-7">
+        <SectionHeading title="فونت" action={<span className="text-[12px] font-bold text-ink-subtle">۲ فونت</span>} />
+        <div className="grid grid-cols-2 gap-3">
+          {FONTS.map((option) => {
+            const active = font === option.id;
+
+            return (
+              <button
+                key={option.id}
+                type="button"
+                aria-pressed={active}
+                onClick={() => setFont(option.id)}
+                className={cn(
+                  "flex flex-col items-center gap-2 rounded-2xl border px-4 py-4 text-[12px] font-semibold transition-colors",
+                  active ? "border-brand-600 bg-brand-50 text-accent-ink" : "border-[var(--line-2)] bg-card text-ink-muted hover:text-ink",
+                )}
+              >
+                <span
+                  className={cn(
+                    "grid h-9 place-items-center rounded-xl px-4 text-[16px] font-bold",
+                    active ? "bg-brand-100 text-ink" : "bg-muted text-ink-muted",
+                  )}
+                  style={{ fontFamily: `"${option.family}", sans-serif` }}
+                  aria-hidden="true"
+                >
+                  تک یار
+                </span>
                 <span className="flex items-center gap-1">
                   {active ? <Check className="size-3.5" aria-hidden="true" /> : null}
                   {option.label}

@@ -26,15 +26,23 @@ export const RADII = [
 
 export type RadiusId = (typeof RADII)[number]["id"];
 
+export const FONTS = [
+  { id: "vazirmatn", label: "وزیرمتن", family: "Vazirmatn" },
+  { id: "iranyekan", label: "ایران یکان", family: "IRANYekan" },
+] as const;
+
+export type FontId = (typeof FONTS)[number]["id"];
+
 export const STORAGE_KEYS = {
   theme: "ty-theme",
   accent: "ty-accent",
   radius: "ty-radius",
+  font: "ty-font",
 } as const;
 
 export const META_THEME_COLORS = { dark: "#11151d", light: "#ce004f" } as const;
 
-export const THEME_INIT_SOURCE = `!function(){try{var d=document.documentElement,t=localStorage.getItem("${STORAGE_KEYS.theme}"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("${STORAGE_KEYS.accent}");if(a)d.setAttribute("data-accent",a);var r=localStorage.getItem("${STORAGE_KEYS.radius}");if(r)d.style.setProperty("--radius",r)}catch(e){}}();`;
+export const THEME_INIT_SOURCE = `!function(){try{var d=document.documentElement,t=localStorage.getItem("${STORAGE_KEYS.theme}"),m=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m))d.classList.add("dark");var a=localStorage.getItem("${STORAGE_KEYS.accent}");if(a)d.setAttribute("data-accent",a);var r=localStorage.getItem("${STORAGE_KEYS.radius}");if(r)d.style.setProperty("--radius",r);var f=localStorage.getItem("${STORAGE_KEYS.font}");if(f)d.setAttribute("data-font",f)}catch(e){}}();`;
 
 export function applyTheme(mode: ThemeMode) {
   document.documentElement.classList.toggle("dark", mode === "dark");
@@ -66,5 +74,18 @@ export function applyRadius(radius: RadiusId) {
   try {
     if (option.id === "default") localStorage.removeItem(STORAGE_KEYS.radius);
     else localStorage.setItem(STORAGE_KEYS.radius, option.value);
+  } catch {}
+}
+
+export function applyFont(font: FontId) {
+  if (font === "vazirmatn") {
+    document.documentElement.removeAttribute("data-font");
+  } else {
+    document.documentElement.setAttribute("data-font", font);
+  }
+
+  try {
+    if (font === "vazirmatn") localStorage.removeItem(STORAGE_KEYS.font);
+    else localStorage.setItem(STORAGE_KEYS.font, font);
   } catch {}
 }

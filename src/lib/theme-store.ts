@@ -1,16 +1,28 @@
 "use client";
 
 import { create } from "zustand";
-import { type AccentId, applyAccent, applyRadius, applyTheme, RADII, type RadiusId, type ThemeMode } from "@/lib/theme";
+import {
+  type AccentId,
+  applyAccent,
+  applyFont,
+  applyRadius,
+  applyTheme,
+  type FontId,
+  RADII,
+  type RadiusId,
+  type ThemeMode,
+} from "@/lib/theme";
 
 type ThemeState = {
   mode: ThemeMode;
   accent: AccentId;
   radius: RadiusId;
+  font: FontId;
   setMode: (mode: ThemeMode) => void;
   toggleMode: () => void;
   setAccent: (accent: AccentId) => void;
   setRadius: (radius: RadiusId) => void;
+  setFont: (font: FontId) => void;
   sync: () => void;
 };
 
@@ -27,10 +39,15 @@ function readRadius(): RadiusId {
   return RADII.find((option) => option.value === value)?.id ?? "default";
 }
 
+function readFont(): FontId {
+  return (document.documentElement.getAttribute("data-font") as FontId | null) ?? "vazirmatn";
+}
+
 export const useThemeStore = create<ThemeState>((set, get) => ({
   mode: "light",
   accent: "crimson",
   radius: "default",
+  font: "vazirmatn",
   setMode: (mode) => {
     applyTheme(mode);
     set({ mode });
@@ -44,5 +61,9 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
     applyRadius(radius);
     set({ radius });
   },
-  sync: () => set({ mode: readMode(), accent: readAccent(), radius: readRadius() }),
+  setFont: (font) => {
+    applyFont(font);
+    set({ font });
+  },
+  sync: () => set({ mode: readMode(), accent: readAccent(), radius: readRadius(), font: readFont() }),
 }));
