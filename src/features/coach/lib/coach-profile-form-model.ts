@@ -33,9 +33,6 @@ export function coachProfileToForm(profile: CoachProfileRecord): CoachProfileFor
 
 export function coachProfileFormToInput(values: CoachProfileFormValues): CoachProfileInput {
   return {
-    fullName: values.fullName.trim(),
-    nationalCode: values.nationalCode,
-    province: values.province,
     ...(values.birthDate ? { birthDate: toGregorianDate(values.birthDate) ?? undefined } : {}),
     belt: values.belt || null,
   };

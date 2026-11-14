@@ -16,10 +16,9 @@ export type CoachProfileRecord = {
   updatedAt: string;
 };
 
+// Identity fields (fullName, nationalCode, gender, province) are not self-editable; the backend
+// whitelist strips them, so only these reach PATCH /coach/:id.
 export type CoachProfileInput = {
-  fullName: string;
-  nationalCode: string;
-  province: string;
   birthDate?: string;
   belt: string | null;
 };

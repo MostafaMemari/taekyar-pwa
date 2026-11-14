@@ -124,6 +124,7 @@ export function CoachProfileForm() {
                         onChange={(event) => field.onChange(event.target.value)}
                         onBlur={field.onBlur}
                         ref={field.ref}
+                        disabled
                       />
                     )}
                   />
@@ -148,6 +149,7 @@ export function CoachProfileForm() {
                         onChange={(event) => field.onChange(digitsOnly(event.target.value, 10))}
                         onBlur={field.onBlur}
                         ref={field.ref}
+                        disabled
                       />
                     )}
                   />
@@ -174,6 +176,7 @@ export function CoachProfileForm() {
                         onValueChange={(value) => field.onChange(value ?? "")}
                         placeholder="انتخاب استان"
                         options={PROVINCES}
+                        disabled
                       />
                     )}
                   />
