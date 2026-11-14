@@ -1,11 +1,10 @@
 "use client";
 
-import { CalendarDays, Landmark } from "lucide-react";
+import { Landmark } from "lucide-react";
 import { type Control, Controller } from "react-hook-form";
 import { AuthField } from "@/components/shared/auth-field";
+import { AuthInput } from "@/components/shared/auth-input";
 import { AuthSelect } from "@/components/shared/auth-select";
-import { Input } from "@/components/ui/input";
-import { FormSection } from "@/features/coach/components/form-section";
 import { useClubs } from "@/features/coach/hooks/use-clubs";
 import type { SessionFormValues } from "@/features/coach/lib/session-form-model";
 
@@ -17,20 +16,25 @@ type FieldsProps = {
   clubIdError?: string;
 };
 
+// Plain field flow, matching the other form sheets — no bordered section cards inside SheetFrame.
 export function SessionInfoFields({ control, clubLocked, initialClubId, nameError, clubIdError }: FieldsProps) {
   const { data } = useClubs();
-  const clubOptions = (data?.clubs ?? []).map((club) => ({ value: club.id, label: club.name }));
-  // A club passed in the URL is locked once its option exists; until the list loads the select stays open.
+  // Inactive clubs take no new classes; a pinned club stays visible so the locked select shows its name.
+  const clubOptions = (data?.clubs ?? [])
+    .filter((club) => club.isActive || club.id === initialClubId)
+    .map((club) => ({ value: club.id, label: club.name }));
+  // A club passed from the club context is locked once its option exists; until the list loads the select stays open.
   const clubPinned = clubLocked || (initialClubId !== undefined && clubOptions.some((option) => option.value === initialClubId));
+  const presetLabel = clubOptions.find((option) => option.value === initialClubId)?.label;
 
   return (
-    <FormSection icon={CalendarDays} title="اطلاعات کلاس">
-      <AuthField label="نام کلاس" htmlFor="name" required hint="۲ تا ۸۰ کاراکتر" error={nameError}>
+    <div className="flex flex-col gap-3.5">
+      <AuthField label="نام کلاس" htmlFor="name" required error={nameError}>
         <Controller
           control={control}
           name="name"
           render={({ field }) => (
-            <Input
+            <AuthInput
               id="name"
               name={field.name}
               maxLength={80}
@@ -39,7 +43,6 @@ export function SessionInfoFields({ control, clubLocked, initialClubId, nameErro
               onChange={(event) => field.onChange(event.target.value)}
               onBlur={field.onBlur}
               ref={field.ref}
-              className="h-12 rounded-xl px-4 text-sm"
             />
           )}
         />
@@ -52,22 +55,24 @@ export function SessionInfoFields({ control, clubLocked, initialClubId, nameErro
           render={({ field }) => (
             <AuthSelect
               id="clubId"
+              icon={Landmark}
               value={field.value || null}
               onValueChange={(value) => field.onChange(value ?? "")}
               placeholder="انتخاب باشگاه"
               options={clubOptions}
-              icon={Landmark}
               disabled={clubPinned}
             />
           )}
         />
       </AuthField>
 
-      <p className="text-start text-[12px] font-medium leading-5 text-ink-muted">
-        {clubLocked
-          ? "باشگاه کلاس پس از ساخت تغییر نمی کند؛ برای جابه جایی کلاس، یک کلاس در باشگاه دیگر بسازید"
-          : `کلاس به باشگاه ${clubOptions.find((option) => option.value === initialClubId)?.label ?? "انتخاب شده"} متصل می شود؛ افزودن هنرجو پس از ساخت کلاس انجام می شود`}
-      </p>
-    </FormSection>
+      {presetLabel || clubLocked ? (
+        <p className="rounded-xl bg-info-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
+          {clubLocked
+            ? "باشگاه کلاس پس از ساخت تغییر نمی کند؛ برای جابه جایی کلاس، یک کلاس در باشگاه دیگر بسازید"
+            : `کلاس به باشگاه ${presetLabel} متصل می شود؛ افزودن هنرجو پس از ساخت کلاس انجام می شود`}
+        </p>
+      ) : null}
+    </div>
   );
 }

@@ -62,6 +62,8 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
   const [removeTarget, setRemoveTarget] = useState<{ studentId: string; name: string } | null>(null);
   const removeStudent = useRemoveSessionStudent(session.id);
   const clubName = session.club?.name ?? "باشگاه حذف شده";
+  // An inactive class (or one in an inactive club) records nothing.
+  const sessionOperable = session.isActive && (session.club?.isActive ?? true);
   const members = (session.students ?? []).map((membership) => ({
     studentId: membership.studentId,
     name: membership.student.fullName,
@@ -138,6 +140,7 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
             className="h-11 rounded-xl text-[12px] font-semibold"
             render={<Link href={`/coach/sessions/${session.id}/attendance`} />}
             nativeButton={false}
+            disabled={!sessionOperable}
           >
             <ClipboardCheck data-icon="inline-start" aria-hidden="true" />
             ثبت حضور و غیاب
@@ -153,6 +156,12 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
           </Button>
         </div>
 
+        {!sessionOperable ? (
+          <p className="rounded-xl bg-muted/60 p-3 text-[12px] font-semibold leading-5 text-ink-subtle">
+            این کلاس غیرفعال است و امکان ثبت حضور و غیاب یا افزودن هنرجو وجود ندارد
+          </p>
+        ) : null}
+
         <section>
           <SectionHeading
             title="هنرجویان کلاس"
@@ -167,6 +176,7 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
                   variant="outline"
                   className="h-8 rounded-lg px-2.5 text-[12px] font-bold"
                   onClick={() => setAddOpen(true)}
+                  disabled={!sessionOperable}
                 >
                   <Plus data-icon="inline-start" aria-hidden="true" />
                   افزودن

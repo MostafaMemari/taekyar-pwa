@@ -55,7 +55,7 @@ export function FeePaymentForm({
 
   // A pinned student skips the member fetch entirely.
   const { data: members, isLoading: membersLoading } = useClubMembers(fixedStudent ? "" : activeClubId, term || undefined);
-  const { data: fee } = useClubFee(activeClubId);
+  const { data: fee, isLoading: feeLoading } = useClubFee(activeClubId);
   const record = useRecordFeePayment();
   const saveFee = useSaveClubFee();
   const [studentId, setStudentId] = useState<string | null>(initialStudentId ?? null);
@@ -74,13 +74,17 @@ export function FeePaymentForm({
     Array.from({ length: 12 - start.month + 1 }, (_, index) => ({ year: start.year, month: start.month + index })),
   );
 
-  const clubOptions = (clubs ?? []).map((club) => ({ value: club.id, label: club.name }));
+  const clubOptions = (clubs ?? [])
+    .filter((club) => club.isActive || club.id === activeClubId)
+    .map((club) => ({ value: club.id, label: club.name }));
+  const clubInactive = (clubs ?? []).find((club) => club.id === activeClubId)?.isActive === false;
   const clubMissing = fixedStudent && clubOptions.length === 0;
   const activeMembers = (members ?? []).filter((member) => member.isActive);
   const feeValue = feeAmount ?? "";
   const monthPaid = paidMonths.data?.includes(picked.month) ?? false;
   const canSubmit =
     activeClubId !== "" &&
+    !clubInactive &&
     studentId !== null &&
     fee !== null &&
     !membersLoading &&
@@ -89,7 +93,7 @@ export function FeePaymentForm({
     !record.isMutating;
 
   const submitFee = async () => {
-    if (activeClubId === "" || feeValue === "") return;
+    if (activeClubId === "" || feeValue === "" || clubInactive) return;
     try {
       await saveFee.trigger({ clubId: activeClubId, monthlyAmount: Number(feeValue) });
       setFeeAmount(null);
@@ -140,8 +144,13 @@ export function FeePaymentForm({
               />
             </AuthField>
           ) : null}
-
-          {fee || activeClubId === "" ? null : (
+          {clubInactive ? (
+            <p className="rounded-xl bg-muted/60 p-3 text-[12px] font-bold leading-5 text-ink-muted">
+              این باشگاه غیرفعال است و امکان ثبت شهریه وجود ندارد
+            </p>
+          ) : null}
+          {/* The first-rate setup only shows once the fee query settled, so it never flashes while loading. */}
+          {fee || feeLoading || activeClubId === "" || clubInactive ? null : (
             <div className="flex flex-col gap-2.5 rounded-xl bg-muted/60 p-3">
               <p className="text-[12px] font-bold leading-5 text-ink-muted">برای این باشگاه هنوز شهریه ای ثبت نشده است</p>
               <AuthField label="مبلغ شهریه ماهانه (تومان)" htmlFor="feeInlineAmount">
@@ -171,7 +180,6 @@ export function FeePaymentForm({
               </Button>
             </div>
           )}
-
           {fixedStudent ? null : (
             <AuthField label="هنرجو" htmlFor="feePaymentStudent" required>
               <div className="relative">
@@ -223,19 +231,20 @@ export function FeePaymentForm({
               </div>
             </AuthField>
           )}
-
           <AuthField label="ماه پرداخت" htmlFor="feePaymentMonth">
             <FeeMonthSelect value={picked} onChange={setPicked} fromMonth={start.month} disabledMonths={paidMonths.data} />
           </AuthField>
-
+          {/* The rate line holds its own spot with a same-size skeleton while the fee loads, so the note
+              and the action row never shift when it lands. */}
           {fee ? (
             <p className="text-[12px] font-semibold leading-5 text-ink-subtle">
               {rateCoversMonth(fee, picked)
                 ? `مبلغ قابل پرداخت: ${formatMoney(fee.monthlyAmount)} تومان`
                 : "مبلغ این ماه بر اساس نرخ پیشین این باشگاه محاسبه می شود"}
             </p>
+          ) : feeLoading ? (
+            <Skeleton className="h-5 w-3/4" />
           ) : null}
-
           <AuthField label="توضیح" htmlFor="feePaymentNote" optional>
             <AuthInput
               id="feePaymentNote"
