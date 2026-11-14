@@ -9,10 +9,12 @@ import { CoachBand } from "@/features/coach/components/coach-band";
 import { CoachBandBar } from "@/features/coach/components/coach-band-bar";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
 import { ErrorState } from "@/features/coach/components/error-state";
+import { PAGE_ENTER } from "@/features/coach/components/page-enter";
 import { SessionSaveSheet } from "@/features/coach/components/sessions/session-save-sheet";
 import { useClubStudentCounts, useClubs } from "@/features/coach/hooks/use-clubs";
 import { apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
+import { cn } from "@/lib/utils";
 import { ClubCard } from "./club-card";
 import { ClubSaveSheet } from "./club-save-sheet";
 import { ClubsSkeleton } from "./clubs-skeleton";
@@ -46,9 +48,9 @@ export function ClubsDirectory() {
   };
 
   return (
-    <main className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300">
-      <CoachBand>
-        <CoachBandBar title="باشگاه های من" />
+    <main>
+      <CoachBand className={PAGE_ENTER}>
+        <CoachBandBar title="باشگاه های من" icon={Landmark} />
 
         <p className="mt-2 text-[12px] font-semibold text-white/55">هر باشگاه، حضور و غیاب و کلاس بندی مستقل خودش را دارد</p>
 
@@ -61,24 +63,7 @@ export function ClubsDirectory() {
         </div>
       </CoachBand>
 
-      <CoachSheet>
-        <div className="flex items-center gap-2">
-          <h2 className="text-[17px] font-extrabold text-ink">وارد کدام باشگاه می شوید؟</h2>
-          <Button
-            type="button"
-            variant="brand"
-            size="sm"
-            className="ms-auto h-8 gap-1.5 rounded-xl px-3.5 text-[12px] font-bold"
-            onClick={() => {
-              setClubSheetId(null);
-              setClubSheetOpen(true);
-            }}
-          >
-            <Plus data-icon="inline-start" aria-hidden="true" />
-            باشگاه جدید
-          </Button>
-        </div>
-
+      <CoachSheet className={cn("pb-44", PAGE_ENTER)}>
         <div aria-busy={isLoading && !readError}>
           {isLoading && !readError ? <ClubsSkeleton /> : null}
 
@@ -121,6 +106,22 @@ export function ClubsDirectory() {
           ) : null}
         </div>
       </CoachSheet>
+
+      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-40 flex justify-center">
+        <Button
+          type="button"
+          variant="brand"
+          aria-haspopup="dialog"
+          className="pointer-events-auto h-12 gap-2 rounded-full px-5 text-[13px] font-bold active:scale-95"
+          onClick={() => {
+            setClubSheetId(null);
+            setClubSheetOpen(true);
+          }}
+        >
+          <Plus data-icon="inline-start" aria-hidden="true" />
+          باشگاه جدید
+        </Button>
+      </div>
 
       {/* Both stay mounted so Base UI runs the slide animations; the last id is kept through the close
           animation so the content does not swap while the sheet slides out. */}

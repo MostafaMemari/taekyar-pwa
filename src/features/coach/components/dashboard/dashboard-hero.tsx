@@ -58,8 +58,7 @@ export function DashboardHero() {
           <Link href="/coach/profile" aria-label="پرونده مربی" className="shrink-0">
             <CoachAvatar name={profile?.fullName} imageKey={profile?.imageKey} />
           </Link>
-          <div className="flex min-w-0 items-baseline gap-1.5">
-            <span className="shrink-0 text-[11px] font-medium text-white/55">استاد</span>
+          <div className="min-w-0">
             <h1 className="min-w-0 truncate text-[17px] font-extrabold leading-6 text-white">{profile?.fullName ?? ""}</h1>
           </div>
         </div>

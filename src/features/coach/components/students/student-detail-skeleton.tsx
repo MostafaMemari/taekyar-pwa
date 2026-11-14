@@ -15,13 +15,13 @@ export function StudentDetailSkeleton() {
             variant="ghost"
             size="icon"
             aria-label="بازگشت"
-            className="size-10 rounded-full border border-white/20 bg-white/10 text-white hover:bg-white/20"
+            className="size-11 rounded-full border border-white/20 bg-white/10 text-white hover:bg-white/20"
             render={<Link href="/coach/students" />}
             nativeButton={false}
           >
             <ChevronRight aria-hidden="true" />
           </Button>
-          <span className="size-10 rounded-full border border-white/20 bg-white/10" aria-hidden="true" />
+          <span className="size-11 rounded-full border border-white/20 bg-white/10" aria-hidden="true" />
         </div>
 
         <div className="mt-3 flex items-center gap-3.5">

@@ -95,7 +95,7 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
             variant="ghost"
             size="icon"
             aria-label="عملیات بیشتر"
-            className="size-10 rounded-full border border-white/20 bg-white/10 text-white hover:bg-white/20"
+            className="size-11 rounded-full border border-white/20 bg-white/10 text-white hover:bg-white/20"
             onClick={() => setMenuOpen(true)}
           >
             <EllipsisVertical aria-hidden="true" />

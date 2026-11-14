@@ -3,12 +3,16 @@
 import { CalendarDays, Check, ChevronLeft, ClipboardCheck, Clock, Landmark, ListFilter, Minus, Plus, Search, Users } from "lucide-react";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import { CoachBand } from "@/features/coach/components/coach-band";
+import { CoachBandBar } from "@/features/coach/components/coach-band-bar";
+import { CoachSheet } from "@/features/coach/components/coach-sheet";
 import { ErrorState } from "@/features/coach/components/error-state";
+import { PAGE_ENTER } from "@/features/coach/components/page-enter";
 import { SessionTime } from "@/features/coach/components/session-time";
 import { SessionSaveSheet } from "@/features/coach/components/sessions/session-save-sheet";
 import { SessionsFiltersSheet } from "@/features/coach/components/sessions/sessions-filters-sheet";
@@ -98,11 +102,28 @@ function SessionCard({
   );
 }
 
+const BAND_CIRCLE = "size-11 rounded-full border border-white/20 bg-white/10 text-white hover:bg-white/20";
+
+const STUCK_CIRCLE = "size-11 rounded-full border bg-background text-ink hover:bg-muted";
+
 export function SessionsDirectory() {
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useQueryStates(sessionFilterParsers);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
+  const [searchStuck, setSearchStuck] = useState(false);
+  const searchRowRef = useRef<HTMLDivElement>(null);
+
+  // The glass search row becomes a full-bleed sticky bar once it pins to the viewport top.
+  useEffect(() => {
+    const onScroll = () => {
+      const node = searchRowRef.current;
+      if (node) setSearchStuck(node.getBoundingClientRect().top <= 0.5);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const { data, error, isLoading, mutate } = useSessions();
   const { data: clubData } = useClubs();
@@ -116,7 +137,6 @@ export function SessionsDirectory() {
 
   const normalizedQuery = toLatinDigits(query).trim().toLowerCase();
   const filterCount = activeSessionFilterCount(filters);
-  const isFiltered = filterCount > 0 || normalizedQuery.length > 0;
 
   const visible = sessions.filter((session) => {
     if (filters.status !== "ALL" && (filters.status === "ACTIVE") !== session.isActive) return false;
@@ -143,52 +163,46 @@ export function SessionsDirectory() {
 
   return (
     <>
-      <header className="flex items-center gap-2">
-        <h1 className="page-title text-ink">کلاس ها</h1>
-        {data && !readError ? (
-          <StatusBadge tone="neutral" className="mt-0.5">
-            {isFiltered ? `${toPersianDigits(String(visible.length))} کلاس یافت شد` : `${toPersianDigits(String(sessions.length))} کلاس`}
-          </StatusBadge>
-        ) : null}
-        <Button
-          type="button"
-          variant="brand"
-          size="sm"
-          className="ms-auto h-8 gap-1.5 rounded-xl px-3.5 text-[12px] font-bold"
-          onClick={() => setCreateOpen(true)}
-        >
-          <Plus data-icon="inline-start" aria-hidden="true" />
-          کلاس جدید
-        </Button>
-      </header>
+      <CoachBand className={PAGE_ENTER}>
+        <CoachBandBar title="کلاس ها" icon={CalendarDays} />
 
-      <div className="sticky top-0 z-20 -mx-4 mt-4 border-b border-[var(--line-2)] bg-[var(--canvas)]/95 px-4 pb-3 pt-2 backdrop-blur">
-        <div className="flex items-center gap-2">
-          <InputGroup className="h-11 min-w-0 flex-1 rounded-xl">
+        <div className="h-16" />
+      </CoachBand>
+
+      <div ref={searchRowRef} className={cn("sticky top-0 z-30 -mt-26 px-4 pb-9", PAGE_ENTER)}>
+        <div
+          className={cn(
+            "flex items-center gap-2 rounded-full py-2 transition-[background-color,box-shadow,border-radius,margin] duration-200",
+            searchStuck &&
+              "-mx-4 rounded-b-[28px] rounded-t-none bg-[var(--canvas)]/90 px-4 shadow-[0_12px_28px_-24px_rgba(16,18,26,0.55)] backdrop-blur-md",
+          )}
+        >
+          <InputGroup className={cn("h-12 min-w-0 flex-1 rounded-full", searchStuck ? "bg-background" : "border-white/20 bg-white/10")}>
             <InputGroupInput
               type="search"
-              placeholder="جستجوی نام کلاس..."
+              placeholder="جستجوی نام کلاس یا باشگاه..."
               aria-label="جستجوی کلاس"
+              className={searchStuck ? undefined : "text-white placeholder:text-white/60"}
               value={query}
               onChange={(event) => setQuery(event.target.value)}
             />
             <InputGroupAddon align="inline-end">
-              <Search className="size-4 text-ink-subtle" aria-hidden="true" />
+              <Search className={cn("size-4", searchStuck ? "text-ink-subtle" : "text-white/70")} aria-hidden="true" />
             </InputGroupAddon>
           </InputGroup>
 
           <Button
             type="button"
-            variant="field"
+            variant="ghost"
             size="icon"
             aria-label="فیلترها"
             aria-haspopup="dialog"
-            className="relative size-11 shrink-0 rounded-xl"
+            className={cn("relative", searchStuck ? STUCK_CIRCLE : BAND_CIRCLE)}
             onClick={() => setFiltersOpen(true)}
           >
             <ListFilter aria-hidden="true" />
             {filterCount > 0 ? (
-              <span className="absolute -top-1 -end-1 grid min-w-[16px] place-items-center rounded-full bg-brand-500 px-1 text-[12px] font-semibold leading-4 text-white tabular-nums">
+              <span className="absolute -top-1 -end-1 grid min-w-[18px] place-items-center rounded-full bg-brand-500 px-1 text-[12px] font-semibold leading-[18px] text-white tabular-nums">
                 {toPersianDigits(String(filterCount))}
               </span>
             ) : null}
@@ -196,81 +210,96 @@ export function SessionsDirectory() {
         </div>
       </div>
 
-      <div aria-busy={isLoading && !readError}>
-        {isLoading && !readError ? <SessionsSkeleton /> : null}
+      <CoachSheet className={cn("flex flex-col gap-4 pb-44", PAGE_ENTER)}>
+        <div aria-busy={isLoading && !readError}>
+          {isLoading && !readError ? <SessionsSkeleton /> : null}
 
-        {readError ? (
-          <ErrorState className="mt-6" title="خواندن کلاس ها انجام نشد" message={apiErrorMessage(readError)} onRetry={retry} />
-        ) : null}
+          {readError ? (
+            <ErrorState className="mt-6" title="خواندن کلاس ها انجام نشد" message={apiErrorMessage(readError)} onRetry={retry} />
+          ) : null}
 
-        {isReady && sessions.length === 0 ? (
-          <Empty className="mt-4 border-none bg-transparent p-6">
-            <EmptyHeader>
-              <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
-                <CalendarDays aria-hidden="true" />
-              </EmptyMedia>
-              <EmptyTitle className="text-[13px] font-extrabold text-ink">هنوز کلاسی ثبت نشده</EmptyTitle>
-              <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
-                برای هر باشگاه، یک کلاس با روزها و ساعت برگزاری بسازید
-              </EmptyDescription>
-            </EmptyHeader>
-            <EmptyContent>
-              <Button variant="outline" size="sm" className="rounded-lg" type="button" onClick={() => setCreateOpen(true)}>
-                <Plus data-icon="inline-start" aria-hidden="true" />
-                کلاس جدید
-              </Button>
-            </EmptyContent>
-          </Empty>
-        ) : null}
+          {isReady && sessions.length === 0 ? (
+            <Empty className="mt-4 border-none bg-transparent p-6">
+              <EmptyHeader>
+                <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
+                  <CalendarDays aria-hidden="true" />
+                </EmptyMedia>
+                <EmptyTitle className="text-[13px] font-extrabold text-ink">هنوز کلاسی ثبت نشده</EmptyTitle>
+                <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
+                  برای هر باشگاه، یک کلاس با روزها و ساعت برگزاری بسازید
+                </EmptyDescription>
+              </EmptyHeader>
+              <EmptyContent>
+                <Button variant="outline" size="sm" className="rounded-lg" type="button" onClick={() => setCreateOpen(true)}>
+                  <Plus data-icon="inline-start" aria-hidden="true" />
+                  کلاس جدید
+                </Button>
+              </EmptyContent>
+            </Empty>
+          ) : null}
 
-        {isReady && visible.length > 0 ? (
-          <div className="mt-3 flex flex-col gap-3">
-            {visible.map((session) => (
-              <SessionCard
-                key={session.id}
-                session={session}
-                clubName={clubNames.get(session.clubId) ?? "باشگاه حذف شده"}
-                memberCount={counts?.[session.id]}
-                canAttend={session.isActive && activeIds.has(session.clubId)}
-              />
-            ))}
-          </div>
-        ) : null}
+          {isReady && visible.length > 0 ? (
+            <div className="mt-3 flex flex-col gap-3">
+              {visible.map((session) => (
+                <SessionCard
+                  key={session.id}
+                  session={session}
+                  clubName={clubNames.get(session.clubId) ?? "باشگاه حذف شده"}
+                  memberCount={counts?.[session.id]}
+                  canAttend={session.isActive && activeIds.has(session.clubId)}
+                />
+              ))}
+            </div>
+          ) : null}
 
-        {isReady && sessions.length > 0 && visible.length === 0 ? (
-          <Empty className="mt-4 border-none bg-transparent p-6">
-            <EmptyHeader>
-              <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
-                <CalendarDays aria-hidden="true" />
-              </EmptyMedia>
-              <EmptyTitle className="text-[13px] font-extrabold text-ink">کلاسی یافت نشد</EmptyTitle>
-              <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
-                وضعیت، باشگاه یا روز برگزاری دیگری را انتخاب کنید
-              </EmptyDescription>
-            </EmptyHeader>
-            <EmptyContent>
-              <Button type="button" variant="outline" size="sm" className="rounded-lg" onClick={reset}>
-                پاک کردن فیلترها
-              </Button>
-            </EmptyContent>
-          </Empty>
-        ) : null}
+          {isReady && sessions.length > 0 && visible.length === 0 ? (
+            <Empty className="mt-4 border-none bg-transparent p-6">
+              <EmptyHeader>
+                <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
+                  <CalendarDays aria-hidden="true" />
+                </EmptyMedia>
+                <EmptyTitle className="text-[13px] font-extrabold text-ink">کلاسی یافت نشد</EmptyTitle>
+                <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
+                  وضعیت، باشگاه یا روز برگزاری دیگری را انتخاب کنید
+                </EmptyDescription>
+              </EmptyHeader>
+              <EmptyContent>
+                <Button type="button" variant="outline" size="sm" className="rounded-lg" onClick={reset}>
+                  پاک کردن فیلترها
+                </Button>
+              </EmptyContent>
+            </Empty>
+          ) : null}
 
-        <SessionsFiltersSheet
-          open={filtersOpen}
-          onOpenChange={setFiltersOpen}
-          status={filters.status}
-          club={filters.club}
-          days={filters.days}
-          clubs={clubData?.clubs ?? []}
-          resultCount={isReady ? visible.length : undefined}
-          onStatusChange={(value) => void setFilters({ status: value })}
-          onClubChange={(value) => void setFilters({ club: value })}
-          onDaysChange={(value) => void setFilters({ days: value as WeekDay[] })}
-          onClear={() => void setFilters({ status: "ACTIVE", club: "", days: [] })}
-        />
+          <SessionsFiltersSheet
+            open={filtersOpen}
+            onOpenChange={setFiltersOpen}
+            status={filters.status}
+            club={filters.club}
+            days={filters.days}
+            clubs={clubData?.clubs ?? []}
+            resultCount={isReady ? visible.length : undefined}
+            onStatusChange={(value) => void setFilters({ status: value })}
+            onClubChange={(value) => void setFilters({ club: value })}
+            onDaysChange={(value) => void setFilters({ days: value as WeekDay[] })}
+            onClear={() => void setFilters({ status: "ACTIVE", club: "", days: [] })}
+          />
 
-        <SessionSaveSheet open={createOpen} onOpenChange={setCreateOpen} />
+          <SessionSaveSheet open={createOpen} onOpenChange={setCreateOpen} />
+        </div>
+      </CoachSheet>
+
+      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-40 flex justify-center">
+        <Button
+          type="button"
+          variant="brand"
+          aria-haspopup="dialog"
+          className="pointer-events-auto h-12 gap-2 rounded-full px-5 text-[13px] font-bold active:scale-95"
+          onClick={() => setCreateOpen(true)}
+        >
+          <Plus data-icon="inline-start" aria-hidden="true" />
+          کلاس جدید
+        </Button>
       </div>
     </>
   );
