@@ -1,12 +1,13 @@
 "use client";
 
-import { TrendingDown, TrendingUp } from "lucide-react";
+import { ChevronLeft, TrendingDown, TrendingUp } from "lucide-react";
+import Link from "next/link";
 import { Bar, BarChart, Cell, PolarAngleAxis, PolarRadiusAxis, RadialBar, RadialBarChart, XAxis } from "recharts";
 import { Card } from "@/components/ui/card";
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SectionHeading } from "@/features/coach/components/section-heading";
-import { useCoachWeeklyAttendance } from "@/features/coach/hooks/use-attendance";
+import { useAbsentStudents, useCoachWeeklyAttendance } from "@/features/coach/hooks/use-attendance";
 import { todayWeekDay, WEEK_DAY_META, type WeekDay } from "@/features/coach/lib/coach-data";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
@@ -21,6 +22,7 @@ function rate(present: number, total: number) {
 
 export function DashboardAttendance() {
   const { data, isLoading } = useCoachWeeklyAttendance();
+  const { data: absentees } = useAbsentStudents({ minAbsences: 2 });
   const today = todayWeekDay();
 
   const hasRecords = data !== undefined && (data.thisWeek.total > 0 || data.lastWeek.total > 0);
@@ -155,6 +157,25 @@ export function DashboardAttendance() {
                 </Bar>
               </BarChart>
             </ChartContainer>
+
+            {absentees && absentees.length > 0 ? (
+              <Link
+                href="/coach/students/absences"
+                className="-mx-4 -mb-4 mt-3 flex items-center justify-between gap-2 border-t border-[var(--line-2)] bg-muted/40 px-4 py-2.5 transition-colors active:bg-muted/60"
+              >
+                <span className="min-w-0 truncate text-[12px] font-semibold text-ink-muted">
+                  غیبت ها:{" "}
+                  {absentees
+                    .slice(0, 3)
+                    .map((student) => `${student.fullName} (${toPersianDigits(String(student.absentCount))})`)
+                    .join(" · ")}
+                </span>
+                <span className="flex shrink-0 items-center gap-0.5 text-[12px] font-bold text-accent-ink">
+                  مشاهده همه
+                  <ChevronLeft className="size-3.5" aria-hidden="true" />
+                </span>
+              </Link>
+            ) : null}
           </>
         )}
       </Card>

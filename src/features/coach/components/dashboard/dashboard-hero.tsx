@@ -7,9 +7,10 @@ import { BeltStrip } from "@/components/shared/taekyar-mark";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CoachBand } from "@/features/coach/components/coach-band";
 import { CoachBell } from "@/features/coach/components/coach-bell";
+import { useClubs } from "@/features/coach/hooks/use-clubs";
 import { useCoachProfile } from "@/features/coach/hooks/use-coach-profile";
 import { useSessions } from "@/features/coach/hooks/use-sessions";
-import { todayWeekDay, WEEK_DAY_META } from "@/features/coach/lib/coach-data";
+import { activeClubIds, todayWeekDay, WEEK_DAY_META } from "@/features/coach/lib/coach-data";
 import { minutesOfDay, pickNextSession } from "@/features/coach/lib/next-session";
 import { beltKeyOf } from "@/features/coach/lib/students-options";
 import { toPersianDigits } from "@/lib/digits";
@@ -40,8 +41,13 @@ export function DashboardHero() {
   const [now] = useState(() => new Date());
   const { data: profile } = useCoachProfile();
   const { data } = useSessions();
+  const { data: clubData } = useClubs();
 
-  const next = pickNextSession(data?.sessions ?? [], now);
+  const activeIds = activeClubIds(clubData?.clubs);
+  const next = pickNextSession(
+    (data?.sessions ?? []).filter((session) => session.isActive && (clubData === undefined || activeIds.has(session.clubId))),
+    now,
+  );
   const belt = profile?.belt ? getStudentBeltMeta(beltKeyOf(profile.belt)) : null;
   const until = next?.isUpcoming ? minutesOfDay(next.session.startTime) - (now.getHours() * 60 + now.getMinutes()) : null;
 

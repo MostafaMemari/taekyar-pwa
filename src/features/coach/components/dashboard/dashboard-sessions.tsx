@@ -10,7 +10,7 @@ import { ErrorState } from "@/features/coach/components/error-state";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { useClubs } from "@/features/coach/hooks/use-clubs";
 import { useSessionStudentCounts, useSessions } from "@/features/coach/hooks/use-sessions";
-import { sessionIsToday } from "@/features/coach/lib/coach-data";
+import { activeClubIds, sessionIsToday } from "@/features/coach/lib/coach-data";
 import { minutesOfDay } from "@/features/coach/lib/next-session";
 import { apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
@@ -20,8 +20,9 @@ export function DashboardSessions() {
   const [now] = useState(() => new Date());
   const { data, error, isLoading, mutate } = useSessions();
   const { data: clubData } = useClubs();
+  const activeIds = activeClubIds(clubData?.clubs);
   const today = (data?.sessions ?? [])
-    .filter((session) => sessionIsToday(session.weekDays))
+    .filter((session) => session.isActive && sessionIsToday(session.weekDays) && (clubData === undefined || activeIds.has(session.clubId)))
     .sort((a, b) => a.startTime.localeCompare(b.startTime));
   const { data: counts } = useSessionStudentCounts(today.map((session) => session.id));
   const clubNames = new Map((clubData?.clubs ?? []).map((club) => [club.id, club.name]));
@@ -87,12 +88,7 @@ export function DashboardSessions() {
                           <span className="size-1.5 rounded-full bg-success" aria-hidden="true" />
                           در حال برگزاری
                         </span>
-                      ) : session.isActive ? null : (
-                        <span className="flex shrink-0 items-center gap-1 text-[12px] font-medium text-ink-subtle">
-                          <span className="size-1.5 rounded-full bg-ink-faint" aria-hidden="true" />
-                          غیرفعال
-                        </span>
-                      )}
+                      ) : null}
                     </span>
                     <span className="mt-1.5 flex items-center gap-3 text-[12px] font-medium text-ink-subtle">
                       <span className="flex min-w-0 items-center gap-1">

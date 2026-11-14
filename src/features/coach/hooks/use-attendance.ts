@@ -1,6 +1,13 @@
+import { useEffect } from "react";
 import useSWR from "swr";
-import { fetchClassAttendance, fetchCoachWeeklySummary, fetchStudentAttendance } from "@/features/coach/lib/attendance-api";
-import { swrReadOptions } from "@/lib/api/swr";
+import {
+  type AbsentStudentsQuery,
+  fetchAbsentStudents,
+  fetchClassAttendance,
+  fetchCoachWeeklySummary,
+  fetchStudentAttendance,
+} from "@/features/coach/lib/attendance-api";
+import { subscribeResource, swrReadOptions } from "@/lib/api/swr";
 
 export function useClassAttendance(classSessionId: string, date: string) {
   return useSWR(
@@ -16,4 +23,17 @@ export function useStudentAttendance(studentId: string) {
 
 export function useCoachWeeklyAttendance() {
   return useSWR(["attendance", "coach", "summary"] as const, fetchCoachWeeklySummary, swrReadOptions);
+}
+
+export function useAbsentStudents(query: AbsentStudentsQuery) {
+  const swr = useSWR(
+    ["attendance", "coach", "absent-students", query.minAbsences, query.clubId ?? ""] as const,
+    () => fetchAbsentStudents(query),
+    swrReadOptions,
+  );
+
+  // The debtor badge rides the fee state, so the report refreshes with the student resource.
+  useEffect(() => subscribeResource("student", () => swr.mutate()), [swr.mutate]);
+
+  return swr;
 }

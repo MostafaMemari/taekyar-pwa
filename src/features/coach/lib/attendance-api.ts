@@ -1,5 +1,6 @@
 import { authRequest, authRequestWithMeta } from "@/features/auth/api";
 import type { AttendanceStatus } from "@/features/coach/lib/coach-data";
+import type { StudentFeeStatus } from "@/features/coach/lib/students-options";
 
 export type AttendanceRecord = {
   id: string;
@@ -51,12 +52,30 @@ export type CoachWeeklyAttendanceSummary = {
   days: Array<{ weekDay: string; present: number; total: number; previousPresent: number; previousTotal: number }>;
 };
 
+export type AbsentStudentsQuery = { minAbsences: number; clubId?: string | null };
+
+export type AbsentStudentRecord = {
+  studentId: string;
+  fullName: string;
+  absentCount: number;
+  clubName: string | null;
+  feeStatus: StudentFeeStatus | null;
+};
+
 export function fetchClassAttendance(classSessionId: string, date: string): Promise<ClassAttendanceEntry[]> {
   return authRequest<ClassAttendanceEntry[]>(`attendance/class/${classSessionId}/daily?date=${date}`);
 }
 
 export function fetchCoachWeeklySummary(): Promise<CoachWeeklyAttendanceSummary> {
   return authRequest<CoachWeeklyAttendanceSummary>("attendance/coach/summary");
+}
+
+// The backend window is fixed at the last 30 days and counts ABSENT only; the fee filter is client-side.
+export function fetchAbsentStudents({ minAbsences, clubId }: AbsentStudentsQuery): Promise<AbsentStudentRecord[]> {
+  const params = new URLSearchParams({ minAbsences: String(minAbsences) });
+  if (clubId) params.set("clubId", clubId);
+
+  return authRequest<{ students: AbsentStudentRecord[] }>(`attendance/coach/absent-students?${params}`).then((report) => report.students);
 }
 
 // shortcut: one page of 100 sessions feeds both the file panel and the report screen; add pagination when a student outgrows it.

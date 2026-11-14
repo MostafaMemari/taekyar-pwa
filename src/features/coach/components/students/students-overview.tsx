@@ -1,4 +1,5 @@
-import { Plus, ShieldCheck, ShieldOff, ShieldX, Users } from "lucide-react";
+import { Plus, ShieldCheck, ShieldOff, ShieldX, Users, UserX } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StatusBadge } from "@/features/coach/components/status-badge";
@@ -49,11 +50,16 @@ export function StudentsOverview({
         </StatusBadge>
         <Button
           type="button"
-          variant="brand"
-          size="sm"
-          className="ms-auto h-8 gap-1.5 rounded-xl px-3.5 text-[12px] font-bold"
-          onClick={onAdd}
+          variant="ghost"
+          size="icon"
+          aria-label="غیبت ها"
+          className="ms-auto size-9 rounded-xl text-ink-body"
+          render={<Link href="/coach/students/absences" />}
+          nativeButton={false}
         >
+          <UserX aria-hidden="true" />
+        </Button>
+        <Button type="button" variant="brand" size="sm" className="h-8 gap-1.5 rounded-xl px-3.5 text-[12px] font-bold" onClick={onAdd}>
           <Plus data-icon="inline-start" aria-hidden="true" />
           هنرجو جدید
         </Button>

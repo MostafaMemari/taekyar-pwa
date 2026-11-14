@@ -11,7 +11,7 @@ import { useClubs } from "@/features/coach/hooks/use-clubs";
 import { useInvitations } from "@/features/coach/hooks/use-invitations";
 import { useSessions } from "@/features/coach/hooks/use-sessions";
 import { useStudentStats } from "@/features/coach/hooks/use-student-stats";
-import { sessionIsToday } from "@/features/coach/lib/coach-data";
+import { activeClubIds, sessionIsToday } from "@/features/coach/lib/coach-data";
 import { currentFeeMonth } from "@/features/coach/lib/fee-api";
 import { pickNextSession } from "@/features/coach/lib/next-session";
 import { toPersianDigits } from "@/lib/digits";
@@ -26,9 +26,13 @@ export function DashboardOverview() {
   const { data: invitations } = useInvitations();
   const { data: clubs } = useClubs();
 
-  const next = pickNextSession(sessions?.sessions ?? [], now);
+  const activeIds = activeClubIds(clubs?.clubs);
+  const todaySessions = (sessions?.sessions ?? []).filter(
+    (session) => session.isActive && (clubs === undefined || activeIds.has(session.clubId)),
+  );
+  const next = pickNextSession(todaySessions, now);
   const attendanceHref = next ? `/coach/sessions/${next.session.id}/attendance` : "/coach/sessions";
-  const todayCount = (sessions?.sessions ?? []).filter((session) => sessionIsToday(session.weekDays)).length;
+  const todayCount = todaySessions.filter((session) => sessionIsToday(session.weekDays)).length;
   const pendingInvitations = invitations
     ? invitations.invitations.filter((invitation) => invitation.status === "PENDING").length
     : undefined;

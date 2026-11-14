@@ -33,6 +33,39 @@ export function sessionIsToday(days: WeekDay[]) {
   return days.includes(todayWeekDay());
 }
 
+// Sessions of a deactivated club never run; undefined keeps everything visible while clubs are still loading.
+export function activeClubIds(clubs: { id: string; isActive: boolean }[] | undefined) {
+  return new Set((clubs ?? []).filter((club) => club.isActive).map((club) => club.id));
+}
+
+const DAY_MS = 86_400_000;
+
+export function weekDayOfDate(isoDate: string): WeekDay {
+  return JS_DAY_TO_WEEK_DAY[new Date(`${isoDate}T00:00:00Z`).getUTCDay()];
+}
+
+// The attendance page steps between the class's real session days only, so ±1..7 days covers every rotation.
+export function previousSessionDate(isoDate: string, weekDays: WeekDay[]): string {
+  for (let step = 1; step <= 7; step += 1) {
+    const candidate = new Date(new Date(`${isoDate}T00:00:00Z`).getTime() - step * DAY_MS);
+    if (weekDays.includes(weekDayOfDate(candidate.toISOString().slice(0, 10)))) return candidate.toISOString().slice(0, 10);
+  }
+  return isoDate;
+}
+
+export function nextSessionDate(isoDate: string, weekDays: WeekDay[]): string {
+  for (let step = 1; step <= 7; step += 1) {
+    const candidate = new Date(new Date(`${isoDate}T00:00:00Z`).getTime() + step * DAY_MS);
+    if (weekDays.includes(weekDayOfDate(candidate.toISOString().slice(0, 10)))) return candidate.toISOString().slice(0, 10);
+  }
+  return isoDate;
+}
+
+// A picked date that is not a class day lands on the most recent session before it.
+export function snapToSessionDate(isoDate: string, weekDays: WeekDay[]): string {
+  return weekDays.includes(weekDayOfDate(isoDate)) ? isoDate : previousSessionDate(isoDate, weekDays);
+}
+
 export const GENDER_META: Record<Gender, { label: string; clubLabel: string }> = {
   MALE: { label: "مرد", clubLabel: "آقایان" },
   FEMALE: { label: "زن", clubLabel: "بانوان" },
