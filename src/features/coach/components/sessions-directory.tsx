@@ -1,39 +1,44 @@
 "use client";
 
-import { CalendarDays, Check, ChevronLeft, ClipboardCheck, Clock, Minus, Plus, Search, Users } from "lucide-react";
+import { CalendarDays, Check, ChevronLeft, ClipboardCheck, Clock, Landmark, ListFilter, Minus, Plus, Search, Users } from "lucide-react";
 import Link from "next/link";
+import { useQueryStates } from "nuqs";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { ErrorState } from "@/features/coach/components/error-state";
 import { SessionTime } from "@/features/coach/components/session-time";
 import { SessionSaveSheet } from "@/features/coach/components/sessions/session-save-sheet";
+import { SessionsFiltersSheet } from "@/features/coach/components/sessions/sessions-filters-sheet";
 import { StatusBadge } from "@/features/coach/components/status-badge";
 import { useClubs } from "@/features/coach/hooks/use-clubs";
 import { useSessionStudentCounts, useSessions } from "@/features/coach/hooks/use-sessions";
-import { sessionIsToday, weekDayLabels } from "@/features/coach/lib/coach-data";
+import { activeClubIds, type WeekDay, weekDayLabels } from "@/features/coach/lib/coach-data";
 import type { ClassSessionRecord } from "@/features/coach/lib/session-api";
+import { activeSessionFilterCount, sessionFilterParsers } from "@/features/coach/lib/sessions-filters";
 import { apiErrorMessage } from "@/lib/api/client";
 import { toLatinDigits, toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 import { SessionsSkeleton } from "./sessions/sessions-skeleton";
 
-type Period = "all" | "today";
-
-const PERIODS: { value: Period; label: string }[] = [
-  { value: "all", label: "همه" },
-  { value: "today", label: "امروز" },
-];
-
-function SessionCard({ session, clubName, memberCount }: { session: ClassSessionRecord; clubName: string; memberCount?: number }) {
+function SessionCard({
+  session,
+  clubName,
+  memberCount,
+  canAttend,
+}: {
+  session: ClassSessionRecord;
+  clubName: string;
+  memberCount?: number;
+  canAttend: boolean;
+}) {
   return (
     <Card className="gap-0 p-0">
       <Link
         href={`/coach/sessions/${session.id}`}
-        className="block rounded-t-xl px-4 pb-3 pt-3.5 transition duration-150 active:bg-muted/40"
+        className="block rounded-t-xl px-4 pb-3.5 pt-3.5 transition duration-150 active:bg-muted/40"
       >
         <div className="flex items-start gap-3">
           <span
@@ -52,13 +57,11 @@ function SessionCard({ session, clubName, memberCount }: { session: ClassSession
                 {session.isActive ? <Check aria-hidden="true" /> : <Minus aria-hidden="true" />}
                 {session.isActive ? "فعال" : "غیرفعال"}
               </StatusBadge>
-              <span className="ms-auto flex shrink-0 items-center gap-1 text-[12px] font-extrabold tabular-nums text-accent-ink">
-                <Users className="size-3.5" aria-hidden="true" />
-                {memberCount === undefined ? "" : toPersianDigits(String(memberCount))}
-              </span>
             </div>
-            <p className="mt-0.5 truncate text-[12px] text-ink-subtle">{clubName}</p>
-
+            <p className="mt-1 flex min-w-0 items-center gap-1 text-[12px] text-ink-subtle">
+              <Landmark className="size-3.5 shrink-0" aria-hidden="true" />
+              <span className="truncate">{clubName}</span>
+            </p>
             <div className="mt-1.5 flex items-center gap-x-2 text-[12px] font-semibold text-ink-muted">
               <span className="truncate">{weekDayLabels(session.weekDays).join(" · ")}</span>
               <span className="flex shrink-0 items-center gap-1 tabular-nums">
@@ -68,7 +71,13 @@ function SessionCard({ session, clubName, memberCount }: { session: ClassSession
             </div>
           </div>
 
-          <ChevronLeft className="mt-1 size-4 shrink-0 text-ink-subtle" aria-hidden="true" />
+          <span className="flex shrink-0 flex-col items-center gap-1">
+            <span className="flex items-center gap-1 text-[13px] font-extrabold tabular-nums text-accent-ink">
+              <Users className="size-3.5" aria-hidden="true" />
+              {memberCount === undefined ? "—" : toPersianDigits(String(memberCount))}
+            </span>
+            <ChevronLeft className="size-4 text-ink-subtle" aria-hidden="true" />
+          </span>
         </div>
       </Link>
 
@@ -79,6 +88,7 @@ function SessionCard({ session, clubName, memberCount }: { session: ClassSession
           className="h-10 gap-2 rounded-lg px-2 text-[12px] font-semibold text-accent-ink"
           render={<Link href={`/coach/sessions/${session.id}/attendance`} />}
           nativeButton={false}
+          disabled={!canAttend}
         >
           <ClipboardCheck data-icon="inline-start" aria-hidden="true" />
           حضور و غیاب
@@ -90,8 +100,9 @@ function SessionCard({ session, clubName, memberCount }: { session: ClassSession
 
 export function SessionsDirectory() {
   const [query, setQuery] = useState("");
-  const [period, setPeriod] = useState<Period>("all");
-  const [sheetOpen, setSheetOpen] = useState(false);
+  const [filters, setFilters] = useQueryStates(sessionFilterParsers);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
 
   const { data, error, isLoading, mutate } = useSessions();
   const { data: clubData } = useClubs();
@@ -101,10 +112,16 @@ export function SessionsDirectory() {
   const readError = error ?? countsError;
   const isReady = Boolean(data) && !readError;
   const clubNames = new Map((clubData?.clubs ?? []).map((club) => [club.id, club.name]));
+  const activeIds = activeClubIds(clubData?.clubs);
 
   const normalizedQuery = toLatinDigits(query).trim().toLowerCase();
+  const filterCount = activeSessionFilterCount(filters);
+  const isFiltered = filterCount > 0 || normalizedQuery.length > 0;
+
   const visible = sessions.filter((session) => {
-    if (period !== "all" && !sessionIsToday(session.weekDays)) return false;
+    if (filters.status !== "ALL" && (filters.status === "ACTIVE") !== session.isActive) return false;
+    if (filters.club && session.clubId !== filters.club) return false;
+    if (filters.days.length > 0 && !filters.days.some((day) => session.weekDays.includes(day))) return false;
     if (!normalizedQuery) return true;
 
     const haystack = toLatinDigits(
@@ -116,7 +133,7 @@ export function SessionsDirectory() {
 
   const reset = () => {
     setQuery("");
-    setPeriod("all");
+    void setFilters({ status: "ACTIVE", club: "", days: [] });
   };
 
   const retry = () => {
@@ -130,9 +147,7 @@ export function SessionsDirectory() {
         <h1 className="page-title text-ink">کلاس ها</h1>
         {data && !readError ? (
           <StatusBadge tone="neutral" className="mt-0.5">
-            {visible.length === sessions.length
-              ? `${toPersianDigits(String(sessions.length))} کلاس`
-              : `${toPersianDigits(String(visible.length))} کلاس یافت شد`}
+            {isFiltered ? `${toPersianDigits(String(visible.length))} کلاس یافت شد` : `${toPersianDigits(String(sessions.length))} کلاس`}
           </StatusBadge>
         ) : null}
         <Button
@@ -140,7 +155,7 @@ export function SessionsDirectory() {
           variant="brand"
           size="sm"
           className="ms-auto h-8 gap-1.5 rounded-xl px-3.5 text-[12px] font-bold"
-          onClick={() => setSheetOpen(true)}
+          onClick={() => setCreateOpen(true)}
         >
           <Plus data-icon="inline-start" aria-hidden="true" />
           کلاس جدید
@@ -148,36 +163,37 @@ export function SessionsDirectory() {
       </header>
 
       <div className="sticky top-0 z-20 -mx-4 mt-4 border-b border-[var(--line-2)] bg-[var(--canvas)]/95 px-4 pb-3 pt-2 backdrop-blur">
-        <InputGroup className="h-11 rounded-xl">
-          <InputGroupInput
-            type="search"
-            placeholder="جستجوی نام کلاس..."
-            aria-label="جستجوی کلاس"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-          />
-          <InputGroupAddon align="inline-end">
-            <Search className="size-4 text-ink-subtle" aria-hidden="true" />
-          </InputGroupAddon>
-        </InputGroup>
+        <div className="flex items-center gap-2">
+          <InputGroup className="h-11 min-w-0 flex-1 rounded-xl">
+            <InputGroupInput
+              type="search"
+              placeholder="جستجوی نام کلاس..."
+              aria-label="جستجوی کلاس"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+            />
+            <InputGroupAddon align="inline-end">
+              <Search className="size-4 text-ink-subtle" aria-hidden="true" />
+            </InputGroupAddon>
+          </InputGroup>
 
-        <ToggleGroup
-          aria-label="بازه زمانی کلاس ها"
-          value={[period]}
-          onValueChange={(next) => {
-            const selected = next[0] as Period | undefined;
-            if (selected) setPeriod(selected);
-          }}
-          variant="segmented"
-          spacing={1}
-          className="mt-3 w-full rounded-xl bg-muted p-1"
-        >
-          {PERIODS.map((option) => (
-            <ToggleGroupItem key={option.value} value={option.value} className="h-9 flex-1 rounded-lg text-[12px] font-bold">
-              {option.label}
-            </ToggleGroupItem>
-          ))}
-        </ToggleGroup>
+          <Button
+            type="button"
+            variant="field"
+            size="icon"
+            aria-label="فیلترها"
+            aria-haspopup="dialog"
+            className="relative size-11 shrink-0 rounded-xl"
+            onClick={() => setFiltersOpen(true)}
+          >
+            <ListFilter aria-hidden="true" />
+            {filterCount > 0 ? (
+              <span className="absolute -top-1 -end-1 grid min-w-[16px] place-items-center rounded-full bg-brand-500 px-1 text-[12px] font-semibold leading-4 text-white tabular-nums">
+                {toPersianDigits(String(filterCount))}
+              </span>
+            ) : null}
+          </Button>
+        </div>
       </div>
 
       <div aria-busy={isLoading && !readError}>
@@ -199,7 +215,7 @@ export function SessionsDirectory() {
               </EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
-              <Button variant="outline" size="sm" className="rounded-lg" type="button" onClick={() => setSheetOpen(true)}>
+              <Button variant="outline" size="sm" className="rounded-lg" type="button" onClick={() => setCreateOpen(true)}>
                 <Plus data-icon="inline-start" aria-hidden="true" />
                 کلاس جدید
               </Button>
@@ -215,6 +231,7 @@ export function SessionsDirectory() {
                 session={session}
                 clubName={clubNames.get(session.clubId) ?? "باشگاه حذف شده"}
                 memberCount={counts?.[session.id]}
+                canAttend={session.isActive && activeIds.has(session.clubId)}
               />
             ))}
           </div>
@@ -227,7 +244,9 @@ export function SessionsDirectory() {
                 <CalendarDays aria-hidden="true" />
               </EmptyMedia>
               <EmptyTitle className="text-[13px] font-extrabold text-ink">کلاسی یافت نشد</EmptyTitle>
-              <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">عبارت جستجو یا بازه زمانی را تغییر دهید</EmptyDescription>
+              <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
+                وضعیت، باشگاه یا روز برگزاری دیگری را انتخاب کنید
+              </EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
               <Button type="button" variant="outline" size="sm" className="rounded-lg" onClick={reset}>
@@ -237,7 +256,21 @@ export function SessionsDirectory() {
           </Empty>
         ) : null}
 
-        <SessionSaveSheet open={sheetOpen} onOpenChange={setSheetOpen} />
+        <SessionsFiltersSheet
+          open={filtersOpen}
+          onOpenChange={setFiltersOpen}
+          status={filters.status}
+          club={filters.club}
+          days={filters.days}
+          clubs={clubData?.clubs ?? []}
+          resultCount={isReady ? visible.length : undefined}
+          onStatusChange={(value) => void setFilters({ status: value })}
+          onClubChange={(value) => void setFilters({ club: value })}
+          onDaysChange={(value) => void setFilters({ days: value as WeekDay[] })}
+          onClear={() => void setFilters({ status: "ACTIVE", club: "", days: [] })}
+        />
+
+        <SessionSaveSheet open={createOpen} onOpenChange={setCreateOpen} />
       </div>
     </>
   );
