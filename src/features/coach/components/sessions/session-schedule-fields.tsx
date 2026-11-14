@@ -1,27 +1,51 @@
 "use client";
 
-import { Info, Timer } from "lucide-react";
+import { ChevronDown, Clock } from "lucide-react";
 import { type Control, Controller } from "react-hook-form";
 import { AuthField } from "@/components/shared/auth-field";
-import { TimePicker } from "@/components/shared/time-picker";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field";
+import { Button } from "@/components/ui/button";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { FormSection } from "@/features/coach/components/form-section";
 import type { WeekDay } from "@/features/coach/lib/coach-data";
 import type { SessionFormValues } from "@/features/coach/lib/session-form-model";
 import { SESSION_DAY_OPTIONS } from "@/features/coach/lib/session-form-options";
+import { toPersianDigits } from "@/lib/digits";
 
 type FieldsProps = {
   control: Control<SessionFormValues>;
   weekDaysError?: string;
+  // Opens the embedded time view in the parent sheet instead of stacking a second sheet.
+  onPickTime?: (field: "startTime" | "endTime") => void;
   startTimeError?: string;
   endTimeError?: string;
 };
 
-export function SessionScheduleFields({ control, weekDaysError, startTimeError, endTimeError }: FieldsProps) {
+// Same trigger shell as TimePicker; the wheels open as a view inside the parent sheet.
+function TimeTrigger({ id, ariaLabel, value, onOpen }: { id: string; ariaLabel: string; value: string; onOpen: () => void }) {
+  const display = value.match(/^(\d{1,2}):(\d{2})$/);
+
   return (
-    <FormSection icon={Timer} title="زمان بندی برگزاری" tone="sky">
+    <Button
+      id={id}
+      type="button"
+      variant="field"
+      aria-haspopup="dialog"
+      aria-label={ariaLabel}
+      className="relative h-12 w-full rounded-xl px-11 text-sm font-semibold text-ink"
+      onClick={onOpen}
+    >
+      <Clock className="pointer-events-none absolute start-3.5 text-ink-subtle" aria-hidden="true" />
+      <span className="truncate tabular-nums">
+        {display ? toPersianDigits(`${display[1].padStart(2, "0")}:${display[2]}`) : "انتخاب ساعت"}
+      </span>
+      <ChevronDown className="pointer-events-none absolute end-3.5 text-ink-subtle" aria-hidden="true" />
+    </Button>
+  );
+}
+
+export function SessionScheduleFields({ control, weekDaysError, onPickTime, startTimeError, endTimeError }: FieldsProps) {
+  return (
+    <div className="flex flex-col gap-3.5">
       <Field>
         <FieldLabel className="text-[13px] font-semibold text-ink-body">
           روزهای برگزاری<span className="text-accent-ink"> *</span>
@@ -52,9 +76,6 @@ export function SessionScheduleFields({ control, weekDaysError, startTimeError, 
           )}
         />
         {weekDaysError ? <FieldError className="text-start text-[12px] font-semibold">{weekDaysError}</FieldError> : null}
-        <FieldDescription className="text-start text-[12px] font-medium leading-5 text-ink-muted">
-          حداقل یک روز برگزاری را انتخاب کنید. ساعت پایان باید بعد از ساعت شروع باشد
-        </FieldDescription>
       </Field>
 
       <div className="grid grid-cols-2 gap-3">
@@ -63,7 +84,7 @@ export function SessionScheduleFields({ control, weekDaysError, startTimeError, 
             control={control}
             name="startTime"
             render={({ field }) => (
-              <TimePicker id="startTime" title="ساعت شروع" value={field.value} onChange={field.onChange} defaultValue="17:00" />
+              <TimeTrigger id="startTime" ariaLabel="ساعت شروع" value={field.value} onOpen={() => onPickTime?.("startTime")} />
             )}
           />
         </AuthField>
@@ -73,18 +94,11 @@ export function SessionScheduleFields({ control, weekDaysError, startTimeError, 
             control={control}
             name="endTime"
             render={({ field }) => (
-              <TimePicker id="endTime" title="ساعت پایان" value={field.value} onChange={field.onChange} defaultValue="18:30" />
+              <TimeTrigger id="endTime" ariaLabel="ساعت پایان" value={field.value} onOpen={() => onPickTime?.("endTime")} />
             )}
           />
         </AuthField>
       </div>
-
-      <Alert className="rounded-xl border-none bg-info-soft/60 p-3 text-start">
-        <Info className="text-info" aria-hidden="true" />
-        <AlertDescription className="text-[12px] leading-5 text-ink-muted">
-          بازه زمانی باید معتبر باشد (شروع قبل از پایان). برای هر کلاس سقف ظرفیت تعیین نمی شود و هنرجویان بعد از ساخت کلاس اضافه می شوند
-        </AlertDescription>
-      </Alert>
-    </FormSection>
+    </div>
   );
 }

@@ -94,19 +94,14 @@ function ClubSaveSheetForm({ open, onOpenChange, clubId }: { open: boolean; onOp
 
   return (
     <>
-      <div className="no-scrollbar mt-3 flex max-h-[68dvh] flex-col gap-4 overflow-y-auto">
+      <div className="no-scrollbar -mx-1.5 -mb-1.5 mt-3 flex max-h-[68dvh] flex-col gap-4 overflow-y-auto px-1.5 pb-1.5">
         {clubId !== undefined && isLoading && !club ? (
           <ClubFormFieldsSkeleton />
         ) : (
-          <ClubInfoFields
-            control={control}
-            gender={club?.gender ?? null}
-            nameError={errors.name?.message}
-            addressError={errors.address?.message}
-          />
+          <ClubInfoFields control={control} nameError={errors.name?.message} addressError={errors.address?.message} />
         )}
         {clubId !== undefined ? null : (
-          <AuthField label="شهریه ماهانه (تومان)" htmlFor="clubSaveFee" optional hint="نخستین نرخ از همین ماه اعمال می شود">
+          <AuthField label="شهریه ماهانه (تومان)" htmlFor="clubSaveFee" optional>
             <AuthInput
               id="clubSaveFee"
               inputMode="numeric"

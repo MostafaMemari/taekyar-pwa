@@ -2,9 +2,9 @@
 
 import { ChevronDown, Clock } from "lucide-react";
 import { useState } from "react";
+import { SheetActions } from "@/components/shared/sheet-actions";
 import { WheelColumn } from "@/components/shared/wheel-column";
 import { Button } from "@/components/ui/button";
-import { SheetActions } from "@/components/shared/sheet-actions";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
@@ -17,6 +17,10 @@ type TimePickerProps = {
   value: string;
   onChange: (value: string) => void;
   defaultValue?: string;
+  // Renders the wheels inline so a parent sheet can swap views instead of stacking a second sheet.
+  embedded?: boolean;
+  onDone?: () => void;
+  onCancel?: () => void;
 };
 
 const DEFAULT_TIME: TimeParts = { hour: 17, minute: 0 };
@@ -39,9 +43,61 @@ function twoDigits(value: number) {
   return toPersianDigits(String(value).padStart(2, "0"));
 }
 
-export function TimePicker({ id, title, value, onChange, defaultValue }: TimePickerProps) {
+function TimeWheels({
+  draft,
+  onDraftChange,
+  scrollKey,
+}: {
+  draft: TimeParts;
+  onDraftChange: (next: TimeParts) => void;
+  scrollKey: string | boolean;
+}) {
+  return (
+    <div className="rounded-2xl bg-muted/60 px-3 pt-3 pb-2">
+      <div className="grid grid-cols-2 gap-2 text-center text-[12px] font-semibold text-ink-subtle">
+        <span>دقیقه</span>
+        <span>ساعت</span>
+      </div>
+
+      <div className="relative mt-1">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-1/2 z-0 h-11 -translate-y-1/2 rounded-xl border border-primary/25 bg-background shadow-[0_2px_10px_-2px_rgba(17,24,39,0.14)]"
+        />
+
+        <div className="relative z-10 grid grid-cols-2 gap-2">
+          <WheelColumn
+            className="min-w-0"
+            ariaLabel="دقیقه"
+            min={0}
+            max={59}
+            value={draft.minute}
+            onChange={(minute) => onDraftChange({ ...draft, minute })}
+            formatValue={twoDigits}
+            scrollKey={scrollKey}
+            showBand={false}
+          />
+
+          <WheelColumn
+            className="min-w-0"
+            ariaLabel="ساعت"
+            min={0}
+            max={23}
+            value={draft.hour}
+            onChange={(hour) => onDraftChange({ ...draft, hour })}
+            formatValue={twoDigits}
+            scrollKey={scrollKey}
+            showBand={false}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function TimePicker({ id, title, value, onChange, defaultValue, embedded, onDone, onCancel }: TimePickerProps) {
   const [open, setOpen] = useState(false);
-  const [draft, setDraft] = useState<TimeParts>(DEFAULT_TIME);
+  const [draft, setDraft] = useState<TimeParts>(() => parseTime(value) ?? parseTime(defaultValue ?? "") ?? DEFAULT_TIME);
 
   const display = parseTime(value);
 
@@ -54,6 +110,35 @@ export function TimePicker({ id, title, value, onChange, defaultValue }: TimePic
     onChange(formatTime(draft));
     setOpen(false);
   };
+
+  if (embedded) {
+    return (
+      <>
+        <p className="text-[12px] font-medium leading-5 text-ink-subtle">ساعت را به صورت ۲۴ ساعته و با کشیدن ستون ها انتخاب کنید</p>
+        <div className="mt-3">
+          <TimeWheels draft={draft} onDraftChange={setDraft} scrollKey="embedded" />
+        </div>
+        <SheetActions
+          className="mt-3"
+          onSecondary={() => {
+            onCancel?.();
+          }}
+        >
+          <Button
+            type="button"
+            variant="brand"
+            className="h-11 flex-[2] rounded-xl text-[12px] font-bold"
+            onClick={() => {
+              onChange(formatTime(draft));
+              onDone?.();
+            }}
+          >
+            تایید
+          </Button>
+        </SheetActions>
+      </>
+    );
+  }
 
   return (
     <>
@@ -86,44 +171,8 @@ export function TimePicker({ id, title, value, onChange, defaultValue }: TimePic
             </SheetDescription>
           </SheetHeader>
 
-          <div className="rounded-2xl bg-muted/60 px-3 pt-3 pb-2">
-            <div className="grid grid-cols-2 gap-2 text-center text-[12px] font-semibold text-ink-subtle">
-              <span>دقیقه</span>
-              <span>ساعت</span>
-            </div>
-
-            <div className="relative mt-1">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 top-1/2 z-0 h-11 -translate-y-1/2 rounded-xl border border-primary/25 bg-background shadow-[0_2px_10px_-2px_rgba(17,24,39,0.14)]"
-              />
-
-              <div className="relative z-10 grid grid-cols-2 gap-2">
-                <WheelColumn
-                  className="min-w-0"
-                  ariaLabel="دقیقه"
-                  min={0}
-                  max={59}
-                  value={draft.minute}
-                  onChange={(minute) => setDraft((current) => ({ ...current, minute }))}
-                  formatValue={twoDigits}
-                  scrollKey={open}
-                  showBand={false}
-                />
-
-                <WheelColumn
-                  className="min-w-0"
-                  ariaLabel="ساعت"
-                  min={0}
-                  max={23}
-                  value={draft.hour}
-                  onChange={(hour) => setDraft((current) => ({ ...current, hour }))}
-                  formatValue={twoDigits}
-                  scrollKey={open}
-                  showBand={false}
-                />
-              </div>
-            </div>
+          <div className="mt-3">
+            <TimeWheels draft={draft} onDraftChange={setDraft} scrollKey={open} />
           </div>
 
           <SheetActions onSecondary={() => setOpen(false)}>
