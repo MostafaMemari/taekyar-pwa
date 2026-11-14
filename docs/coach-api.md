@@ -353,11 +353,11 @@ COLOR | POOM | DAN
 |---|---|---|---|
 | `fullName` | string | بله | 2 تا 80 |
 | `nationalCode` | string | بله | دقیقا 10 و یکتا |
-| `gender` | enum | بله | باید با جنسیت مربی یکسان باشد |
+| `gender` | enum | خیر | در نبودش از جنسیت مربی ثبت کننده گرفته می شود؛ در صورت ارسال باید با جنسیت مربی یکسان باشد |
 | `birthDate` | string | بله | میلادی و نه در آینده |
 | `belt` | enum | بله | یکی از 19 کمربند |
 | `beltDate` | string | بله | میلادی و نه در آینده |
-| `province` | enum | بله | استان |
+| `province` | enum | خیر | در نبودش از استان مربی ثبت کننده گرفته می شود |
 | `fatherName` | string | خیر | 2 تا 80 |
 | `phoneNumber` | string | خیر | موبایل ایران |
 | `landlineNumber` | string | خیر | تلفن ثابت ایران |
@@ -370,6 +370,7 @@ COLOR | POOM | DAN
 قواعد سرور:
 
 - `coachId` به صورت خودکار از مربی جاری پر می شود.
+- `gender` و `province` در نبودشان از پروفایل مربی ثبت کننده پر می شوند (همان مسیر ساخت گروهی)؛ برای نقش غیر مربی ارسالشان الزامی است.
 - `nextBeltDate` با مدت زمان کمربند و تقویم شمسی محاسبه می شود.
 - یک رکورد `BeltHistory` اولیه ساخته می شود.
 - اگر `height` یا `weight` ارسال شود، یک رکورد `StudentMetrics` ساخته می شود.
@@ -691,6 +692,7 @@ COLOR | POOM | DAN
 
 قواعد:
 
+- باشگاه غیرفعال: `400` با پیام «این باشگاه غیرفعال است و امکان این عملیات وجود ندارد».
 - هنرجو باید تحت نظر همین مربی باشد؛ در غیر این صورت `403`.
 - جنسیت هنرجو باید با جنسیت باشگاه یکسان باشد؛ در غیر این صورت `400`.
 - عضویت فعال تکراری: `409`.
@@ -713,6 +715,14 @@ COLOR | POOM | DAN
 - هنرجو باید تحت نظر مربی باشد؛ در غیر این صورت `403`.
 - پاسخ: آرایه (بدون صفحه بندی) از `ClubStudent`.
 
+### 6.10 `DELETE /club/:id`
+
+- حذف واقعی است؛ عضوها، نرخ های شهریه، دوره ها و کلاس های باشگاه آبشار پاک می شوند.
+- شرط: باشگاه هیچ پرداخت شهریه ثبت شده نداشته باشد (هر سه وضعیت `CONFIRMED`، `CANCELLED`، `REFUNDED`)؛ در غیر این صورت `400` با پیام «این باشگاه پرداخت شهریه ثبت شده دارد و قابل حذف نیست».
+- شرط: باشگاه هیچ سابقه حضور و غیابی نداشته باشد؛ در غیر این صورت `400` با پیام «این باشگاه سابقه حضور و غیاب ثبت شده دارد و قابل حذف نیست».
+- عکس باشگاه در storage هم پاک می شود.
+- پاسخ: پیام «باشگاه حذف شد».
+
 ---
 
 ## 7. کلاس ها
@@ -723,7 +733,7 @@ COLOR | POOM | DAN
 
 | فیلد | نوع | الزامی | قاعده |
 |---|---|---|---|
-| `clubId` | uuid | بله | باشگاه باید متعلق به همین مربی باشد |
+| `clubId` | uuid | بله | باشگاه باید متعلق به همین مربی باشد و فعال باشد؛ در غیر این صورت `400` با پیام «این باشگاه غیرفعال است و امکان این عملیات وجود ندارد» |
 | `name` | string | بله | 2 تا 80 کاراکتر |
 | `weekDays` | enum[] | بله | آرایه غیرخالی از `WeekDay` |
 | `startTime` | string | بله | `HH:mm` |
@@ -800,8 +810,9 @@ COLOR | POOM | DAN
 
 ### 7.6 `DELETE /class-session/:id`
 
-- حذف نرم است و فقط `isActive=false` می کند.
-- پاسخ: پیام «کلاس با موفقیت غیرفعال شد» و آبجکت کلاس.
+- حذف واقعی است؛ رسترو هنرجوهای کلاس آبشار پاک می شود.
+- اگر کلاس حتی یک رکورد حضور و غیاب داشته باشد: `400` با پیام «این کلاس سابقه حضور و غیاب ثبت شده دارد و قابل حذف نیست»؛ در این حالت فقط `PATCH /class-session/:id/status` را برای غیرفعال کردن استفاده کن.
+- پاسخ: پیام «کلاس با موفقیت حذف شد».
 
 ### 7.7 `GET /class-session/:id/students`
 
@@ -818,6 +829,7 @@ COLOR | POOM | DAN
 
 پیش شرط ها:
 
+- کلاس یا باشگاه پدرش غیرفعال باشد: `400` با پیام «این کلاس غیرفعال است و امکان این عملیات وجود ندارد».
 - همه هنرجوها باید تحت نظر همین مربی باشند؛ در غیر این صورت `403`.
 - همه هنرجوها باید عضو فعال باشگاه همین کلاس باشند؛ در غیر این صورت `403`.
 - اگر همه از قبل عضو کلاس باشند: `409`.
@@ -869,18 +881,22 @@ COLOR | POOM | DAN
 
 ### 8.3 `PUT /attendance/class/:classSessionId`
 
+- اگر کلاس یا باشگاه پدرش غیرفعال باشد: `400` با پیام «این کلاس غیرفعال است و امکان این عملیات وجود ندارد».
+
 ثبت یا به روزرسانی حضور و غیاب یک تاریخ. عملیات upsert است و رکورد تکراری نمی سازد.
 
 بدنه:
 
 | فیلد | نوع | الزامی | قاعده |
 |---|---|---|---|
-| `sessionDate` | string | بله | میلادی |
+| `sessionDate` | string | بله | میلادی؛ باید جزو `weekDays` فعلی کلاس باشد و آینده نباشد |
 | `items` | array | بله | آرایه غیرخالی |
 | `items[].studentId` | uuid | بله | باید عضو کلاس باشد |
 | `items[].status` | enum | بله | `PRESENT`، `LATE`، `ABSENT`، `EXCUSED` |
 | `items[].note` | string یا null | خیر | حداکثر 500 کاراکتر |
 
+- اگر تاریخ جزو روزهای برگزاری فعلی کلاس نباشد: `400` با پیام «این تاریخ جزو روزهای برگزاری کلاس نیست».
+- رکوردهای قبلی با اعتبارسنجی نمی سوزند؛ تغییر روزهای کلاس فقط ثبت های جدید را قید می زند و تاریخ های گذشته دست نخورده می مانند.
 - اگر یکی از هنرجوها عضو کلاس نباشد: `403`.
 - بعد از ذخیره، رکوردهای همان کلید یکتا (`classSessionId + studentId + sessionDate`) به روز می شوند.
 - اگر `note` در یک آیتم نیاید، توضیح قبلی همان رکورد دست نمی خورد؛ برای پاک کردن توضیح باید `note: null` فرستاده شود. فرانت همین کار را می کند و توضیح خالی را `null` می فرستد.
@@ -944,6 +960,30 @@ COLOR | POOM | DAN
 
 - `days` همیشه هفت عضو از شنبه تا جمعه دارد؛ روزهای بدون رکورد مقدار صفر دارند.
 - این مسیر جای `GET /attendance/student/:id/summary` را در سطح مربی می گیرد و برای نمودار و درصد حضور داشبورد استفاده می شود.
+
+### 8.7 `GET /attendance/coach/absent-students?minAbsences=2&clubId=&from=YYYY-MM-DD`
+
+هنرجویانی که در بازه مشخص بیش از حد تعیین شده غیبت غیرموجه (`ABSENT`) داشته اند. نقش `COACH` لازم است.
+
+| پارامتر | نوع | الزامی | قاعده |
+|---|---|---|---|
+| `minAbsences` | number | خیر | حداقل تعداد غیبت، پیش فرض 2، بازه 1 تا 50 |
+| `clubId` | uuid | خیر | شمارش غیبت ها فقط در همان باشگاه |
+| `from` | date | خیر | شروع بازه؛ در نبودش ۳۰ روز اخیر |
+
+```json
+{
+  "students": [
+    { "studentId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d", "fullName": "سامان رستمی", "absentCount": 4, "clubName": "باشگاه میدان گلها", "feeStatus": "OWED" },
+    { "studentId": "7c9e6679-7425-40de-944b-e07fc1f90ae7", "fullName": "رضا کاظمی", "absentCount": 2, "clubName": null, "feeStatus": null }
+  ]
+}
+```
+
+- مرتب شده بر اساس `absentCount` نزولی و بعد نام.
+- فقط رکوردهای `ABSENT` شمرده می شوند؛ `EXCUSED` (غیبت موجه) حساب نمی شود.
+- `clubName` و `feeStatus` همان معنای لیست هنرجوها را دارند (بخش 4.2): باشگاه/وضعیت شهریه ماه جاری؛ `null` یعنی باشگاه شهریه دار ندارد.
+- خروجی با دو کوئری ساخته می شود (خواندن رکوردهای غیبت + خواندن غنی هنرجوها) و برای هر هنرجو درخواست جدا نمی زند.
 
 ---
 
@@ -1028,8 +1068,9 @@ COLOR | POOM | DAN
 
 | صفحه | مسیر API | وضعیت داده فعلی |
 |---|---|---|
-| `/coach` داشبورد | `GET /class-session?page=1&take=100` (شمارش هر کلاس امروز از `GET /class-session/:id/students?take=1`)، `GET /club`، `GET /student/stats`، `GET /attendance/coach/summary`، `GET /student-coach-invitation/sent` و `GET /belt-exam` | وصل؛ کلاس های امروز، کاشی ها، درصد و نمودار حضور دو هفته، دعوت نامه های در انتظار و آزمون های نزدیک از سرور |
-| `/coach/students` | `GET /student` و `GET /student/stats` | وصل؛ فیلتر و مرتب سازی در URL و آمار کارت ها از `GET /student/stats` |
+| `/coach` داشبورد | `GET /class-session?page=1&take=100` (شمارش هر کلاس امروز از `GET /class-session/:id/students?take=1`)، `GET /club`، `GET /student/stats`، `GET /attendance/coach/summary`، `GET /attendance/coach/absent-students?minAbsences=2`، `GET /student-coach-invitation/sent` و `GET /belt-exam` | وصل؛ کلاس های امروز، کاشی ها، درصد و نمودار حضور دو هفته، خط «غیبت ها» وقتی هنرجویی ۲ غیبت یا بیشتر در ۳۰ روز اخیر دارد، دعوت نامه های در انتظار و آزمون های نزدیک از سرور |
+| `/coach/students` | `GET /student` و `GET /student/stats` | وصل؛ فیلتر و مرتب سازی در URL و آمار کارت ها از `GET /student/stats`؛ آیکون «غیبت ها» در هدر به صفحه `/coach/students/absences` می رود |
+| `/coach/students/absences` | `GET /attendance/coach/absent-students?minAbsences=&clubId=` (بخش 8.7) | وصل؛ بازه ۳۰ روز اخیر ثابت، فیلترها در URL با nuqs (سوییچ ۱+/۲+/۳+، چیپ باشگاه های فعال، چیپ وضعیت شهریه سمت کلاینت)، هر ردیف نام باشگاه و بج بدهکاری دارد و به پرونده هنرجو می رود |
 | `/coach/students/new` | `POST /student` | وصل؛ react-hook-form و zod، تبدیل تاریخ شمسی به میلادی؛ تاریخ بیمه در فرم ثبت وجود ندارد چون سرور آن را فقط از مسیر تمدید (بخش 4.10) ست می کند |
 | `/coach/students/[id]` | `GET /student/:id`، `GET /student?search=&take=1`، `GET /attendance/student/:id/summary`، `GET /attendance/student/:id?page=1&take=100`، `GET /club/by-student/:id`، `DELETE /student/:id`، `PATCH /student/:id/insurance` و `PATCH /student/:id/membership-year` (تمدید بدون بدنه) | وصل؛ کمربند، `nextBeltDate` و قد/وزن از آیتم لیست با همان کد ملی خوانده می شود (بخش 11.1)؛ تمدید بیمه در پنل بیمه و تمدید سال عضویت در پنل مشخصات با SheetFrame تایید انجام می شود و غلط ۴۰۱ به صفحه ورود می رود |
 | `/coach/students/[id]/edit` | `GET /student/:id` و `PATCH /student/:id` | وصل؛ مقادیر از پرونده واقعی پر می شود و در ویرایش فقط شماره تماس، تلفن ثابت و تاریخ انقضای عکس قابل ویرایش است چون `PATCH` بقیه فیلدها را نمی پذیرد |
@@ -1038,10 +1079,10 @@ COLOR | POOM | DAN
 | `/coach/students/invite` | `POST /student-coach-invitation` | وصل؛ ارسال با کد ملی و فهرست دعوت نامه های اخیر از `GET /student-coach-invitation/sent` |
 | `/coach/invitations` | `GET /student-coach-invitation/sent` | وصل؛ آمار و ردیف ها از سرور |
 | `/coach/clubs` | `GET /club` و `GET /club/:id/students?take=1` | وصل؛ شمارش هنرجو از `meta.pager.total`؛ ثبت و ویرایش باشگاه با شیت `club-save-sheet` روی همین صفحه و صفحه جزئیات انجام می شود و در شیت ثبت، فیلد اختیاری شهریه پس از موفق شدن `POST /club` با `PUT /club/:id/fee` ثبت می شود |
-| `/coach/clubs/[id]` | `GET /club/:id`، `GET /club/:id/students` و `GET /class-session` | وصل؛ کلاس های باشگاه از `GET /class-session` و شمارش هنرجوی هر کلاس از `GET /class-session/:id/students?take=1`؛ کنترل فعال/غیرفعال باشگاه در UI فعلا حذف شده |
-| `/coach/sessions` | `GET /class-session` | وصل؛ نام باشگاه از `GET /club` و شمارش هنرجو از `GET /class-session/:id/students?take=1`؛ ثبت و ویرایش کلاس با شیت `session-save-sheet` روی فهرست کلاس ها، داشبورد، صفحه باشگاه و جزئیات کلاس انجام می شود |
-| `/coach/sessions/[id]` | `GET /class-session/:id`، `POST /club/:id/students` و `POST /class-session/:id/students` | وصل؛ roster از `students[].student.fullName` در همان پاسخ؛ دکمه «افزودن» با شیت انتخاب هنرجو اول عضویت باشگاه و بعد عضویت کلاس را می نویسد |
-| `/coach/sessions/[id]/attendance` | `GET /attendance/class/:id/daily?date=`، `GET /class-session/:id` و `PUT /attendance/class/:id` | وصل؛ تاریخ پیش فرض امروز و وضعیت/توضیح هر هنرجو از رکورد همان تاریخ؛ ذخیره با `note: null` برای توضیح پاک شده |
+| `/coach/clubs/[id]` | `GET /club/:id`، `GET /club/:id/students`، `GET /class-session` و `DELETE /club/:id` | وصل؛ کلاس های باشگاه از `GET /class-session` و شمارش هنرجوی هر کلاس از `GET /class-session/:id/students?take=1`؛ منوی عملیات در هدر «حذف باشگاه» را با SheetFrame تایید صدا می زند و رد شدن ۴۰۰ با دلیل داخل همان شیت نشان داده می شود |
+| `/coach/sessions` | `GET /class-session` | وصل؛ نام باشگاه از `GET /club` و شمارش هنرجو از `GET /class-session/:id/students?take=1`؛ فیلترها (وضعیت با پیش فرض «فعال»، باشگاه، روز برگزاری) در URL با nuqs و از دکمه کنار جستجو؛ ثبت و ویرایش کلاس با شیت `session-save-sheet` روی فهرست کلاس ها، داشبورد، صفحه باشگاه و جزئیات کلاس انجام می شود |
+| `/coach/sessions/[id]` | `GET /class-session/:id`، `POST /club/:id/students`، `POST /class-session/:id/students` و `DELETE /class-session/:id` | وصل؛ roster از `students[].student.fullName` در همان پاسخ؛ دکمه «افزودن» با شیت انتخاب هنرجو اول عضویت باشگاه و بعد عضویت کلاس را می نویسد؛ «حذف کلاس» با SheetFrame تایید است و رد شدن ۴۰۰ (سابقه حضور و غیاب) داخل شیت می آید |
+| `/coach/sessions/[id]/attendance` | `GET /attendance/class/:id/daily?date=`، `GET /class-session/:id` و `PUT /attendance/class/:id` | وصل؛ ناوبری «جلسه قبل/جلسه بعد» فقط روی روزهای برگزاری فعلی کلاس حرکت می کند و «جلسه بعد» تا امروز قفل می شود؛ تاریخ باز یا انتخابی که روز کلاس نیست به نزدیک ترین جلسه قبل برمی گردد و وضعیت/توضیح هر هنرجو از رکورد همان تاریخ می آید؛ ذخیره با `note: null` برای توضیح پاک شده |
 | `/coach/sessions/[id]/report` | `GET /attendance/class/:id?date=` و `GET /class-session/:id` | وصل؛ تاریخ از `?date=` و آمار روی رکوردهای ذخیره شده همان تاریخ |
 | `/coach/profile` | `GET /auth/profile`، `GET /notifications/unread-count` و `POST /auth/logout` | وصل؛ اطلاعات، موبایل، کمربند و شمارنده اعلان از سرور |
 | `/coach/profile/edit` | `GET /auth/profile` و `PATCH /coach/:id` | وصل؛ react-hook-form و zod؛ تغییر جنسیت غیرفعال است چون با داشتن باشگاه یا هنرجو `400` می دهد |
