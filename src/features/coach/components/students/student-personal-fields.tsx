@@ -3,15 +3,11 @@
 import { User } from "lucide-react";
 import { type Control, Controller, type FieldErrors } from "react-hook-form";
 import { AuthField } from "@/components/shared/auth-field";
-import { AuthSelect } from "@/components/shared/auth-select";
 import { DatePicker } from "@/components/shared/date-picker";
-import { Segmented } from "@/components/shared/segmented";
 import { Input } from "@/components/ui/input";
 import { FormSection } from "@/features/coach/components/form-section";
 import type { StudentFormValues } from "@/features/coach/lib/student-form-model";
-import { GENDER_OPTIONS } from "@/features/coach/lib/student-form-options";
 import { digitsOnly, toPersianDigits } from "@/lib/digits";
-import { PROVINCES } from "@/lib/provinces";
 
 type FieldsProps = {
   control: Control<StudentFormValues>;
@@ -121,22 +117,6 @@ export function StudentPersonalFields({ control, errors, locked = false }: Field
             />
           </AuthField>
 
-          <Controller
-            control={control}
-            name="gender"
-            render={({ field }) => (
-              <Segmented
-                label="جنسیت"
-                value={field.value}
-                options={GENDER_OPTIONS}
-                onChange={field.onChange}
-                required
-                error={errors.gender?.message}
-                hint="جنسیت هنرجو باید با جنسیت شما یکسان باشد"
-              />
-            )}
-          />
-
           <div className="grid grid-cols-2 gap-3">
             <AuthField label="تاریخ تولد" htmlFor="birthDate" required error={errors.birthDate?.message}>
               <Controller
@@ -224,22 +204,6 @@ export function StudentPersonalFields({ control, errors, locked = false }: Field
               />
             </AuthField>
           </div>
-
-          <AuthField label="استان" htmlFor="province" required error={errors.province?.message}>
-            <Controller
-              control={control}
-              name="province"
-              render={({ field }) => (
-                <AuthSelect
-                  id="province"
-                  value={field.value || null}
-                  onValueChange={(value) => field.onChange(value ?? "")}
-                  placeholder="انتخاب استان"
-                  options={PROVINCES}
-                />
-              )}
-            />
-          </AuthField>
         </>
       )}
     </FormSection>

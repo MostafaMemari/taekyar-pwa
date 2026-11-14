@@ -20,12 +20,10 @@ function isPastOrToday(jalali: string) {
 export const studentFormSchema = z.object({
   fullName: z.string().trim().min(2, "نام هنرجو باید حداقل ۲ حرف باشد").max(80, "نام هنرجو بیش از حد طولانی است"),
   nationalCode: z.string().regex(/^\d{10}$/, "کد ملی باید ۱۰ رقم باشد"),
-  gender: z.enum(["MALE", "FEMALE"]),
   birthDate: z.string().regex(JALALI_PATTERN, "تاریخ تولد را انتخاب کنید").refine(isPastOrToday, "تاریخ تولد نمی تواند در آینده باشد"),
   fatherName: z.string().trim().max(80, "نام پدر بیش از حد طولانی است"),
   phone: z.string().regex(/^$|^09\d{9}$/, "شماره تماس باید ۱۱ رقم و با ۰۹ شروع شود"),
   landline: z.string().regex(/^$|^0\d{9,10}$/, "تلفن ثابت باید با پیش شماره شهر شروع شود"),
-  province: z.string().min(1, "استان را انتخاب کنید"),
   belt: z.string().min(1, "کمربند فعلی را انتخاب کنید"),
   beltDate: z
     .string()
@@ -54,12 +52,10 @@ export const studentEditFormSchema = studentFormSchema.extend({ belt: z.string()
 export const emptyStudentForm: StudentFormValues = {
   fullName: "",
   nationalCode: "",
-  gender: "MALE",
   birthDate: "",
   fatherName: "",
   phone: "",
   landline: "",
-  province: "",
   belt: "",
   beltDate: "",
   height: "",
@@ -74,12 +70,10 @@ export function studentDetailToForm(student: StudentDetailRecord): StudentFormVa
   return {
     fullName: student.fullName,
     nationalCode: student.nationalCode,
-    gender: student.gender,
     birthDate: toDateInput(student.birthDate),
     fatherName: student.fatherName ?? "",
     phone: student.phoneNumber ?? "",
     landline: student.landlineNumber ?? "",
-    province: student.province ?? "",
     belt: student.currentBelt ? beltKeyOf(student.currentBelt.belt.name) : "",
     beltDate: student.currentBelt ? toDateInput(student.currentBelt.beltDate) : "",
     height: student.height ?? "",
@@ -102,11 +96,9 @@ export function studentFormToInput(values: StudentFormValues): CreateStudentInpu
   return {
     fullName: values.fullName.trim(),
     nationalCode: values.nationalCode,
-    gender: values.gender,
     birthDate: toGregorianDate(values.birthDate) ?? "",
     belt: beltApiName(values.belt as StudentBeltKey),
     beltDate: toGregorianDate(values.beltDate) ?? "",
-    province: values.province,
     ...(values.fatherName.trim() ? { fatherName: values.fatherName.trim() } : {}),
     ...(values.phone ? { phoneNumber: values.phone } : {}),
     ...(values.landline ? { landlineNumber: values.landline } : {}),

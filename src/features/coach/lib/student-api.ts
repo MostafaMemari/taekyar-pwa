@@ -68,11 +68,12 @@ export type StudentFeedQuery = Omit<StudentQuery, "page" | "take">;
 export type CreateStudentInput = {
   fullName: string;
   nationalCode: string;
-  gender: Gender;
+  // Both default to the registering coach's profile on the server; the create form no longer asks.
+  gender?: Gender;
   birthDate: string;
   belt: string;
   beltDate: string;
-  province: string;
+  province?: string;
   fatherName?: string;
   phoneNumber?: string;
   landlineNumber?: string;
