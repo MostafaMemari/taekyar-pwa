@@ -16,9 +16,17 @@ import { useClassAttendance } from "@/features/coach/hooks/use-attendance";
 import { useSaveAttendance } from "@/features/coach/hooks/use-attendance-mutations";
 import { useSession } from "@/features/coach/hooks/use-sessions";
 import type { AttendanceItem } from "@/features/coach/lib/attendance-api";
+import {
+  nextSessionDate,
+  previousSessionDate,
+  snapToSessionDate,
+  WEEK_DAY_META,
+  type WeekDay,
+  weekDayOfDate,
+} from "@/features/coach/lib/coach-data";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
-import { shiftJalaliDate, todayJalali, toGregorianDate, toJalaliDate } from "@/lib/jalali";
+import { todayJalali, toGregorianDate, toJalaliDate } from "@/lib/jalali";
 import { AttendanceForm } from "./attendance-form";
 import { AttendanceFormSkeleton } from "./attendance-form-skeleton";
 
@@ -26,9 +34,7 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
   const router = useRouter();
   const initialJalali = toJalaliDate(initialDate);
   const [date, setDate] = useState(initialJalali);
-  const isoDate = date ? toGregorianDate(date) : null;
   const session = useSession(sessionId);
-  const roster = useClassAttendance(sessionId, isoDate ?? "");
   const save = useSaveAttendance(sessionId);
 
   // Today is resolved after mount so a prerendered page never keeps the build date.
@@ -36,12 +42,21 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
     if (!initialJalali) setDate(todayJalali());
   }, [initialJalali]);
 
+  const weekDays: WeekDay[] = session.data?.weekDays ?? [];
+  const isoDate = date ? toGregorianDate(date) : null;
+  // Attendance follows the class's real session days; a picked or opened non-class day snaps back to the latest one.
+  const sessionDate = isoDate ? snapToSessionDate(isoDate, weekDays) : null;
+  const roster = useClassAttendance(sessionId, sessionDate ?? "");
+  const previousIso = sessionDate ? previousSessionDate(sessionDate, weekDays) : null;
+  const nextIso = sessionDate ? nextSessionDate(sessionDate, weekDays) : null;
+  const todayIso = toGregorianDate(todayJalali()) ?? "";
+
   const handleSave = async (items: AttendanceItem[]) => {
-    if (!isoDate) return;
+    if (!sessionDate) return;
 
     try {
-      await save.trigger({ sessionDate: isoDate, items });
-      router.push(`/coach/sessions/${sessionId}/report?date=${isoDate}`);
+      await save.trigger({ sessionDate, items });
+      router.push(`/coach/sessions/${sessionId}/report?date=${sessionDate}`);
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) router.replace("/login");
     }
@@ -69,7 +84,11 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
 
   if (!date || !session.data || !roster.data) return <AttendanceFormSkeleton />;
 
+  const shownDate = sessionDate ?? "";
+  const hasUpcoming = nextIso !== null && nextIso <= todayIso;
   const clubName = session.data.club?.name ?? "باشگاه حذف شده";
+  // An inactive class (or one in an inactive club) records nothing.
+  const operable = session.data.isActive && (session.data.club?.isActive ?? true);
   const total = roster.data.length;
 
   return (
@@ -84,7 +103,7 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
             size="icon"
             aria-label="گزارش جلسه"
             className="size-10 rounded-xl text-ink-body"
-            render={<Link href={`/coach/sessions/${sessionId}/report?date=${isoDate ?? ""}`} />}
+            render={<Link href={`/coach/sessions/${sessionId}/report?date=${shownDate}`} />}
             nativeButton={false}
           >
             <ClipboardList aria-hidden="true" />
@@ -113,7 +132,7 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
           <div className="mb-1.5 flex items-center justify-between gap-2">
             <span className="flex items-center gap-1.5 text-[12px] font-bold text-ink-subtle">
               <CalendarDays className="size-3.5" aria-hidden="true" />
-              تاریخ جلسه
+              تاریخ جلسه · {WEEK_DAY_META[weekDayOfDate(shownDate)].label}
             </span>
             <div className="flex gap-1.5">
               <Button
@@ -130,32 +149,53 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
                 variant="outline"
                 size="sm"
                 className="h-7 rounded-lg px-2.5 text-[11px] font-bold"
-                onClick={() => setDate(shiftJalaliDate(date, -1))}
+                onClick={() => previousIso && setDate(toJalaliDate(previousIso))}
               >
-                روز قبل
+                جلسه قبل
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-7 rounded-lg px-2.5 text-[11px] font-bold"
+                disabled={!hasUpcoming}
+                onClick={() => nextIso && setDate(toJalaliDate(nextIso))}
+              >
+                جلسه بعد
               </Button>
             </div>
           </div>
-          <DatePicker title="تاریخ جلسه" value={date} onChange={setDate} to={todayJalali()} />
+          <DatePicker title="تاریخ جلسه" value={shownDate ? toJalaliDate(shownDate) : date} onChange={setDate} to={todayJalali()} />
         </div>
       </Card>
 
-      {total === 0 ? (
+      {!operable ? (
         <Alert className="mt-4 rounded-xl border-none bg-info-soft/60 p-3 text-start">
           <Info className="text-info" aria-hidden="true" />
           <AlertDescription className="text-[12px] leading-5 text-ink-muted">
-            هنوز هنرجویی در این کلاس ثبت نشده است. با «افزودن مهمان» می توانی حضور و غیاب این جلسه را ثبت کنی
+            این کلاس غیرفعال است و امکان ثبت حضور و غیاب وجود ندارد
           </AlertDescription>
         </Alert>
-      ) : null}
+      ) : (
+        <>
+          {total === 0 ? (
+            <Alert className="mt-4 rounded-xl border-none bg-info-soft/60 p-3 text-start">
+              <Info className="text-info" aria-hidden="true" />
+              <AlertDescription className="text-[12px] leading-5 text-ink-muted">
+                هنوز هنرجویی در این کلاس ثبت نشده است. با «افزودن مهمان» می توانی حضور و غیاب این جلسه را ثبت کنی
+              </AlertDescription>
+            </Alert>
+          ) : null}
 
-      <AttendanceForm
-        key={isoDate}
-        entries={roster.data}
-        pending={save.isMutating}
-        error={save.error ? apiErrorMessage(save.error) : ""}
-        onSave={(items) => void handleSave(items)}
-      />
+          <AttendanceForm
+            key={shownDate}
+            entries={roster.data}
+            pending={save.isMutating}
+            error={save.error ? apiErrorMessage(save.error) : ""}
+            onSave={(items) => void handleSave(items)}
+          />
+        </>
+      )}
     </>
   );
 }
