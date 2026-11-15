@@ -54,23 +54,18 @@ export function StudentsListItem({
         </span>
 
         <span className="min-w-0 flex-1">
-          <span className="flex min-w-0 items-center gap-1.5">
-            <b className="min-w-0 truncate text-[13px] font-extrabold text-ink">{student.fullName}</b>
-            {student.feeStatus ? (
-              <StatusBadge
-                tone={student.feeStatus === "OWED" ? "danger" : "success"}
-                className="shrink-0 px-1.5 py-[1px] text-[11px] leading-3"
-              >
-                {student.feeStatus === "OWED" ? "بدهکار" : "تسویه"}
-              </StatusBadge>
-            ) : null}
-          </span>
+          <b className="block truncate text-[13px] font-extrabold text-ink">{student.fullName}</b>
 
           <span className="mt-1.5 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
             <StatusBadge tone={insuranceMeta.tone} className="shrink-0 px-1.5 py-[3px] text-[11px]">
               <InsuranceIcon className="size-3" aria-hidden="true" />
               {insuranceLabel}
             </StatusBadge>
+            {student.feeStatus ? (
+              <StatusBadge tone={student.feeStatus === "OWED" ? "danger" : "success"} className="shrink-0 px-1.5 py-[3px] text-[11px]">
+                {student.feeStatus === "OWED" ? "بدهکار" : "تسویه"}
+              </StatusBadge>
+            ) : null}
             {ageCategory ? <span className="text-[12px] font-semibold text-ink-subtle">{AGE_CATEGORY_LABELS[ageCategory]}</span> : null}
           </span>
         </span>
