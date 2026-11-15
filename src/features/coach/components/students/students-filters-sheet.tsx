@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, Medal, ShieldCheck, Wallet } from "lucide-react";
+import { Award, CalendarRange, Landmark, Loader2, Medal, ShieldCheck, Trophy, Wallet } from "lucide-react";
 import { type ReactNode, useState } from "react";
 import { AuthSelect } from "@/components/shared/auth-select";
 import { SheetActions } from "@/components/shared/sheet-actions";
@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
 import { useBeltExams } from "@/features/coach/hooks/use-belt-exams";
+import type { ClubRecord } from "@/features/coach/lib/club-api";
 import type { AgeCategoryRecord } from "@/features/coach/lib/student-api";
 import {
   AGE_CATEGORY_LABELS,
@@ -36,7 +37,7 @@ const BELT_GROUP_HINTS: Record<string, string> = {
 // The product's six-division ladder: شکوفه→BLOSSOM, خردسالان→YOUTH, … پیشکسوت (ULTRA) stays out of the filter.
 const FILTER_AGE_NAMES: AgeCategoryName[] = ["BLOSSOM", "YOUTH", "CADET", "JUNIOR", "YOUNG", "SENIOR"];
 
-type FilterTab = "belt" | "age" | "cover";
+type FilterTab = "belt" | "age" | "cover" | "club";
 
 function SectionTitle({ icon, children }: { icon: ReactNode; children: ReactNode }) {
   return (
@@ -55,6 +56,8 @@ export function StudentsFiltersSheet({
   insurances,
   fee,
   exam,
+  clubs,
+  selectedClubs,
   ageCategories,
   resultCount,
   onBeltsChange,
@@ -62,6 +65,7 @@ export function StudentsFiltersSheet({
   onInsurancesChange,
   onFeeChange,
   onExamChange,
+  onClubsChange,
   onClear,
 }: {
   open: boolean;
@@ -71,6 +75,8 @@ export function StudentsFiltersSheet({
   insurances: StudentInsuranceStatus[];
   fee: StudentFeeStatus | null;
   exam: string;
+  clubs: ClubRecord[];
+  selectedClubs: string[];
   ageCategories?: AgeCategoryRecord[];
   resultCount?: number;
   onBeltsChange: (value: StudentBeltApiName[]) => void;
@@ -78,6 +84,7 @@ export function StudentsFiltersSheet({
   onInsurancesChange: (value: StudentInsuranceStatus[]) => void;
   onFeeChange: (value: "" | StudentFeeStatus) => void;
   onExamChange: (value: string) => void;
+  onClubsChange: (value: string[]) => void;
   onClear: () => void;
 }) {
   const [tab, setTab] = useState<FilterTab>("belt");
@@ -93,17 +100,18 @@ export function StudentsFiltersSheet({
   const tabs: { id: FilterTab; label: string; count: number }[] = [
     { id: "belt", label: "کمربند", count: belts.length + (exam ? 1 : 0) },
     { id: "age", label: "رده سنی", count: ages.length },
-    { id: "cover", label: "بیمه و شهریه", count: insurances.length + (fee ? 1 : 0) },
+    { id: "cover", label: "بیمه/شهریه", count: insurances.length + (fee ? 1 : 0) },
+    { id: "club", label: "باشگاه", count: selectedClubs.length },
   ];
 
-  const activeCount = belts.length + ages.length + insurances.length + (fee ? 1 : 0) + (exam ? 1 : 0);
+  const activeCount = belts.length + ages.length + insurances.length + selectedClubs.length + (fee ? 1 : 0) + (exam ? 1 : 0);
 
   return (
     <SheetFrame
       open={open}
       onOpenChange={onOpenChange}
       title="فیلتر هنرجویان"
-      description="کمربند، رده سنی، بیمه و شهریه را برای محدود کردن فهرست انتخاب کنید"
+      description="باشگاه، کمربند، رده سنی، بیمه و شهریه را برای محدود کردن فهرست انتخاب کنید"
     >
       <div className="mt-3 flex flex-col gap-4">
         <ToggleGroup
@@ -121,11 +129,11 @@ export function StudentsFiltersSheet({
             <ToggleGroupItem
               key={item.id}
               value={item.id}
-              className="group h-9 flex-1 gap-1.5 rounded-full text-[12px] font-bold aria-pressed:bg-brand-600 aria-pressed:text-white"
+              className="group h-9 flex-1 gap-1 rounded-full px-1.5 text-[11px] font-bold aria-pressed:bg-brand-600 aria-pressed:text-white"
             >
               {item.label}
               {item.count > 0 ? (
-                <span className="rounded-full bg-brand-50 px-1.5 text-[10px] font-bold text-accent-ink group-aria-pressed:bg-white/90 tabular-nums">
+                <span className="rounded-full bg-brand-50 px-1 text-[9px] font-bold text-accent-ink group-aria-pressed:bg-white/90 tabular-nums">
                   {toPersianDigits(String(item.count))}
                 </span>
               ) : null}
@@ -136,7 +144,7 @@ export function StudentsFiltersSheet({
         {tab === "belt" ? (
           <div className="flex flex-col gap-5">
             <section className="flex flex-col gap-3">
-              <SectionTitle icon={<span className="size-3 rounded-full bg-brand-500" aria-hidden="true" />}>کمربند</SectionTitle>
+              <SectionTitle icon={<Award className="size-3.5" aria-hidden="true" />}>کمربند</SectionTitle>
 
               {STUDENT_BELT_GROUPS.map((beltGroup) => {
                 const groupKeys = beltGroup.options.map((option) => option.value);
@@ -183,7 +191,7 @@ export function StudentsFiltersSheet({
             </section>
 
             <section className="flex flex-col gap-2">
-              <SectionTitle icon={<span className="size-3 rounded-full bg-warning" aria-hidden="true" />}>آزمون کمربند</SectionTitle>
+              <SectionTitle icon={<Trophy className="size-3.5" aria-hidden="true" />}>آزمون کمربند</SectionTitle>
 
               <AuthSelect
                 id="examFilter"
@@ -203,7 +211,7 @@ export function StudentsFiltersSheet({
           </div>
         ) : tab === "age" ? (
           <section className="flex flex-col gap-2">
-            <SectionTitle icon={<span className="size-3 rounded-full bg-info" aria-hidden="true" />}>
+            <SectionTitle icon={<CalendarRange className="size-3.5" aria-hidden="true" />}>
               رده سنی
               <span className="text-[11px] font-medium text-ink-subtle">· سال تولد</span>
             </SectionTitle>
@@ -237,7 +245,7 @@ export function StudentsFiltersSheet({
               })}
             </ToggleGroup>
           </section>
-        ) : (
+        ) : tab === "cover" ? (
           <div className="flex flex-col gap-5">
             <section className="flex flex-col gap-2">
               <SectionTitle icon={<ShieldCheck className="size-3.5" aria-hidden="true" />}>وضعیت بیمه</SectionTitle>
@@ -298,6 +306,45 @@ export function StudentsFiltersSheet({
                 )}
               </ToggleGroup>
             </section>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-3">
+            <SectionTitle icon={<Landmark className="size-3.5" aria-hidden="true" />}>
+              باشگاه
+              <span className="text-[11px] font-medium text-ink-subtle">
+                {selectedClubs.length > 0
+                  ? `· ${toPersianDigits(String(selectedClubs.length))} انتخاب شده`
+                  : "· بدون انتخاب یعنی همه باشگاه ها"}
+              </span>
+            </SectionTitle>
+
+            <ToggleGroup
+              multiple
+              value={selectedClubs}
+              onValueChange={onClubsChange}
+              variant="outline"
+              size="sm"
+              spacing={1.5}
+              className="grid w-full grid-cols-2"
+              aria-label="فیلتر باشگاه"
+            >
+              {clubs.map((item) => (
+                <ToggleGroupItem
+                  key={item.id}
+                  value={item.id}
+                  className="h-10 justify-start gap-1.5 rounded-xl px-2.5 text-[12px] font-bold aria-pressed:border-primary/35 aria-pressed:bg-brand-50 aria-pressed:text-accent-ink"
+                >
+                  <Landmark className="size-3.5 shrink-0" aria-hidden="true" />
+                  <span className="truncate">{item.name}</span>
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
+
+            {clubs.length === 0 ? (
+              <p className="text-[12px] font-medium text-ink-subtle">هنوز باشگاهی ثبت نشده است</p>
+            ) : (
+              <p className="text-[12px] font-medium text-ink-subtle">فقط هنرجوهای عضو فعال این باشگاه ها</p>
+            )}
           </div>
         )}
       </div>

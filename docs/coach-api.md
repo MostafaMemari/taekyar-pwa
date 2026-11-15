@@ -391,6 +391,7 @@ COLOR | POOM | DAN
 | `insurance` | enum[] | خیر | `valid`، `expiring`، `expired`، `none` |
 | `fee` | enum | خیر | `PAID` (دوره شهریه این ماه کاملا تسویه شده) یا `OWED` (عضو فعال باشگاه دارای حق شهریه و بدون دوره تسویه شده برای این ماه؛ پرداخت ناقص هم `OWED` می شود)؛ بر اساس `feePayments.periodStart` اولین روز ماه جلالی جاری |
 | `beltExamId` | uuid | خیر | هنرجویان واجد شرایط آزمون کمربندی انتخاب شده (جنسیت، کمربند بعدی و موعد) |
+| `clubId` | string[] | خیر | فیلتر باشگاه؛ هنرجوی عضو فعال یکی از این باشگاه ها |
 | `gender` | enum | خیر | `MALE` یا `FEMALE` |
 | `sortBy` | enum | خیر | `createdAt`، `updatedAt`، `fullName`، `belt`، `beltDate`، `insurance` |
 | `sortDirection` | enum | خیر | `asc` یا `desc` (پیش فرض `desc`) |
@@ -1084,7 +1085,7 @@ COLOR | POOM | DAN
 | صفحه | مسیر API | وضعیت داده فعلی |
 |---|---|---|
 | `/coach` داشبورد | `GET /class-session?page=1&take=100` (شمارش هر کلاس امروز از `GET /class-session/:id/students?take=1`)، `GET /club`، `GET /student/stats`، `GET /attendance/coach/summary`، `GET /attendance/coach/absent-students?minAbsences=2`، `GET /student-coach-invitation/sent` و `GET /belt-exam` | وصل؛ کلاس های امروز، کاشی ها، درصد و نمودار حضور دو هفته، خط «غیبت ها» وقتی هنرجویی ۲ غیبت یا بیشتر در ۳۰ روز اخیر دارد، دعوت نامه های در انتظار و آزمون های نزدیک از سرور |
-| `/coach/students` | `GET /student` و `GET /student/stats` | وصل؛ فیلتر و مرتب سازی در URL و آمار کارت ها از `GET /student/stats`؛ آیکون «غیبت ها» در هدر به صفحه `/coach/students/absences` می رود |
+| `/coach/students` | `GET /student` و `GET /student/stats` | وصل؛ فیلتر باشگاه، کمربند، رده سنی، بیمه و شهریه و مرتب سازی در URL و آمار کارت ها از `GET /student/stats`؛ آیکون «غیبت ها» در هدر به صفحه `/coach/students/absences` می رود |
 | `/coach/students/absences` | `GET /attendance/coach/absent-students?minAbsences=&clubId=` (بخش 8.7) | وصل؛ بازه ۳۰ روز اخیر ثابت، فیلترها در URL با nuqs (سوییچ ۱+/۲+/۳+، چیپ باشگاه های فعال، چیپ وضعیت شهریه سمت کلاینت)، هر ردیف نام باشگاه و بج بدهکاری دارد و به پرونده هنرجو می رود |
 | `/coach/students/new` | `POST /student` | وصل؛ react-hook-form و zod، تبدیل تاریخ شمسی به میلادی؛ تاریخ بیمه در فرم ثبت وجود ندارد چون سرور آن را فقط از مسیر تمدید (بخش 4.10) ست می کند |
 | `/coach/students/[id]` | `GET /student/:id`، `GET /student?search=&take=1`، `GET /attendance/student/:id/summary`، `GET /attendance/student/:id?page=1&take=100`، `GET /club/by-student/:id`، `DELETE /student/:id`، `PATCH /student/:id/insurance` و `PATCH /student/:id/membership-year` (تمدید بدون بدنه) | وصل؛ کمربند، `nextBeltDate` و قد/وزن از آیتم لیست با همان کد ملی خوانده می شود (بخش 11.1)؛ تمدید بیمه در پنل بیمه و تمدید سال عضویت در پنل مشخصات با SheetFrame تایید انجام می شود و غلط ۴۰۱ به صفحه ورود می رود |

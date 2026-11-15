@@ -17,6 +17,7 @@ export const studentFilterParsers = {
   ins: parseAsArrayOf(parseAsStringEnum([...INSURANCE_STATUSES])).withDefault([]),
   fee: parseAsStringEnum<StudentFeeStatus>([...STUDENT_FEE_STATUSES]),
   exam: parseAsString.withDefault(""),
+  club: parseAsArrayOf(parseAsString).withDefault([]),
   sort: parseAsStringEnum([...SORT_FIELDS]).withDefault("beltDate"),
   dir: parseAsStringEnum<StudentSortDirection>(["asc", "desc"]).withDefault("desc"),
 };
@@ -24,6 +25,8 @@ export const studentFilterParsers = {
 export type StudentFilters = inferParserType<typeof studentFilterParsers>;
 
 export function toStudentQuery(filters: StudentFilters, search: string): StudentFeedQuery {
+  const clubs = filters.club.filter(Boolean);
+
   return {
     search: search.trim() || undefined,
     belt: filters.belt.length > 0 ? filters.belt : undefined,
@@ -31,13 +34,16 @@ export function toStudentQuery(filters: StudentFilters, search: string): Student
     insurance: filters.ins.length > 0 ? filters.ins : undefined,
     fee: filters.fee ?? undefined,
     beltExamId: filters.exam || undefined,
+    clubId: clubs.length > 0 ? clubs : undefined,
     sortBy: filters.sort,
     sortDirection: filters.dir,
   };
 }
 
 export function activeFilterCount(filters: StudentFilters) {
-  return filters.belt.length + filters.age.length + filters.ins.length + (filters.fee ? 1 : 0) + (filters.exam ? 1 : 0);
+  return (
+    filters.belt.length + filters.age.length + filters.ins.length + filters.club.length + (filters.fee ? 1 : 0) + (filters.exam ? 1 : 0)
+  );
 }
 
 // Adds every value when none (or some) is active, removes all once the whole group is active.

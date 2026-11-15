@@ -15,6 +15,7 @@ import { LoadMoreSentinel } from "@/features/coach/components/load-more-sentinel
 import { PAGE_ENTER } from "@/features/coach/components/page-enter";
 import { useAgeCategories } from "@/features/coach/hooks/use-age-categories";
 import { useBeltExams } from "@/features/coach/hooks/use-belt-exams";
+import { useClubs } from "@/features/coach/hooks/use-clubs";
 import { useStudentStats } from "@/features/coach/hooks/use-student-stats";
 import { useStudentsFeed } from "@/features/coach/hooks/use-students";
 import { activeFilterCount, studentFilterParsers, toStudentQuery } from "@/features/coach/lib/student-filters";
@@ -75,8 +76,11 @@ export function StudentsDirectory() {
   const { data: stats } = useStudentStats();
   const { data: ageCategories } = useAgeCategories();
   const { data: exams } = useBeltExams();
+  const { data: clubsData } = useClubs();
+  const clubs = clubsData?.clubs ?? [];
   const examLabel = filters.exam ? (exams?.find((item) => item.id === filters.exam)?.name ?? "آزمون") : null;
   const examChipLabel = examLabel ? toPersianDigits(examLabel) : null;
+  const selectedClubs = filters.club.map((id) => ({ id, label: clubs.find((item) => item.id === id)?.name ?? "باشگاه" }));
 
   // One copy entry point: it always mirrors the on-screen filtered list; the header names the active contexts.
   const examRecord = filters.exam ? exams?.find((item) => item.id === filters.exam) : null;
@@ -101,7 +105,7 @@ export function StudentsDirectory() {
   const isDirty = filterCount > 0 || filters.q.trim().length > 0;
   const sortActive = filters.sort !== "beltDate" || filters.dir !== "desc";
 
-  const clearFilters = () => void setFilters({ q: "", belt: [], age: [], ins: [], fee: null, exam: "" });
+  const clearFilters = () => void setFilters({ q: "", belt: [], age: [], ins: [], fee: null, exam: "", club: [] });
 
   const onSortFieldChange = (field: StudentSortField) => void setFilters({ sort: field, dir: DEFAULT_SORT_DIRECTIONS[field] });
   const onSortDirectionChange = (direction: StudentSortDirection) => void setFilters({ dir: direction });
@@ -200,11 +204,13 @@ export function StudentsDirectory() {
           insurances={filters.ins}
           fee={filters.fee}
           exam={filters.exam ? { label: examChipLabel ?? "آزمون" } : null}
+          clubs={selectedClubs}
           onRemoveBelt={(value) => void setFilters({ belt: filters.belt.filter((item) => item !== value) })}
           onRemoveAge={(value) => void setFilters({ age: filters.age.filter((item) => item !== value) })}
           onRemoveInsurance={(value) => void setFilters({ ins: filters.ins.filter((item) => item !== value) })}
           onRemoveFee={() => void setFilters({ fee: null })}
           onRemoveExam={() => void setFilters({ exam: "" })}
+          onRemoveClub={(value) => void setFilters({ club: filters.club.filter((id) => id !== value) })}
           onClear={clearFilters}
         />
 
@@ -291,6 +297,8 @@ export function StudentsDirectory() {
           insurances={filters.ins}
           fee={filters.fee}
           exam={filters.exam}
+          clubs={clubs}
+          selectedClubs={filters.club}
           ageCategories={ageCategories}
           resultCount={total}
           onBeltsChange={(value) => void setFilters({ belt: value })}
@@ -298,6 +306,7 @@ export function StudentsDirectory() {
           onInsurancesChange={(value) => void setFilters({ ins: value })}
           onFeeChange={(value) => void setFilters({ fee: value || null })}
           onExamChange={(value) => void setFilters({ exam: value })}
+          onClubsChange={(value) => void setFilters({ club: value })}
           onClear={clearFilters}
         />
       </CoachSheet>

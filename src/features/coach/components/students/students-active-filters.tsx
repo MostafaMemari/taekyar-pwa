@@ -34,11 +34,13 @@ export function StudentsActiveFilters({
   insurances,
   fee,
   exam,
+  clubs,
   onRemoveBelt,
   onRemoveAge,
   onRemoveInsurance,
   onRemoveFee,
   onRemoveExam,
+  onRemoveClub,
   onClear,
 }: {
   belts: StudentBeltApiName[];
@@ -46,17 +48,23 @@ export function StudentsActiveFilters({
   insurances: StudentInsuranceStatus[];
   fee: StudentFeeStatus | null;
   exam: { label: string } | null;
+  clubs: { id: string; label: string }[];
   onRemoveBelt: (value: StudentBeltApiName) => void;
   onRemoveAge: (value: AgeCategoryName) => void;
   onRemoveInsurance: (value: StudentInsuranceStatus) => void;
   onRemoveFee: () => void;
   onRemoveExam: () => void;
+  onRemoveClub: (value: string) => void;
   onClear: () => void;
 }) {
-  if (belts.length + ages.length + insurances.length + (fee ? 1 : 0) + (exam ? 1 : 0) === 0) return null;
+  if (belts.length + ages.length + insurances.length + clubs.length + (fee ? 1 : 0) + (exam ? 1 : 0) === 0) return null;
 
   return (
     <div className="no-scrollbar mt-3 flex items-center gap-1.5 overflow-x-auto pb-0.5">
+      {clubs.map((club) => (
+        <FilterChip key={club.id} label={`باشگاه ${club.label}`} onRemove={() => onRemoveClub(club.id)} />
+      ))}
+
       {belts.map((belt) => (
         <FilterChip key={belt} label={`کمربند ${getStudentBeltMeta(beltKeyOf(belt)).label}`} onRemove={() => onRemoveBelt(belt)} />
       ))}
