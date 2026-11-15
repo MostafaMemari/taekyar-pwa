@@ -29,7 +29,6 @@ export function ClubDetailSkeleton() {
           <Skeleton className="size-16 shrink-0 rounded-2xl bg-white/20" />
           <div className="min-w-0 flex-1">
             <Skeleton className="h-5 w-1/2 bg-white/25" />
-            <Skeleton className="mt-1.5 h-3 w-3/4 bg-white/15" />
             <div className="mt-2 flex flex-wrap gap-1.5">
               <Skeleton className="h-6 w-16 rounded-full bg-white/15" />
               <Skeleton className="h-6 w-24 rounded-full bg-white/15" />

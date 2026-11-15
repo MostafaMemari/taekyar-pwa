@@ -1,28 +1,25 @@
 "use client";
 
-import { CalendarDays, EllipsisVertical, Pencil, Plus, Users, Wallet } from "lucide-react";
+import { EllipsisVertical, Plus, Wallet } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
 import { ErrorState } from "@/features/coach/components/error-state";
+import { PAGE_ENTER } from "@/features/coach/components/page-enter";
 import { SessionSaveSheet } from "@/features/coach/components/sessions/session-save-sheet";
 import { useClub, useClubStudentCount } from "@/features/coach/hooks/use-clubs";
 import { useSessionStudentCounts, useSessions } from "@/features/coach/hooks/use-sessions";
 import type { ClubRecord } from "@/features/coach/lib/club-api";
 import { apiErrorMessage } from "@/lib/api/client";
-import { toPersianDigits } from "@/lib/digits";
-import { toJalaliDate } from "@/lib/jalali";
 import { cn } from "@/lib/utils";
 import { ClubBand } from "./club-band";
 import { ClubClasses } from "./club-classes";
 import { ClubClassesSkeleton } from "./club-classes-skeleton";
 import { ClubDetailActions } from "./club-detail-actions";
 import { ClubDetailSkeleton } from "./club-detail-skeleton";
-import { ClubInfoCard } from "./club-info-card";
 import { ClubMembers } from "./club-members";
 import { ClubSaveSheet } from "./club-save-sheet";
 
@@ -63,22 +60,14 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
   const [menuOpen, setMenuOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [sessionOpen, setSessionOpen] = useState(false);
+  const [tab, setTab] = useState<"classes" | "members">("classes");
   // An inactive club takes no new records; editing its info and cancelling payments stay allowed.
   const clubInactive = !club.isActive;
 
-  const stats = [
-    {
-      icon: Users,
-      value: studentCount === undefined ? <Skeleton className="h-4 w-8" /> : toPersianDigits(String(studentCount)),
-      label: "هنرجو",
-      accent: true,
-    },
-    { icon: CalendarDays, value: toJalaliDate(club.createdAt), label: "تاریخ ثبت" },
-  ];
-
   return (
-    <main className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300">
+    <main>
       <ClubBand
+        className={PAGE_ENTER}
         club={club}
         studentCount={studentCount}
         backHref="/coach/clubs"
@@ -95,87 +84,79 @@ function ClubDetailScreen({ club, studentCount }: { club: ClubRecord; studentCou
         }
       />
 
-      <CoachSheet className="flex flex-col gap-4">
-        <ClubInfoCard club={club} />
-
-        <Button
-          type="button"
-          variant="brand"
-          className="h-12 w-full rounded-xl text-[12px] font-semibold"
-          onClick={() => setSessionOpen(true)}
-          disabled={clubInactive}
-        >
-          <Plus data-icon="inline-start" aria-hidden="true" />
-          کلاس جدید
-        </Button>
-
+      <CoachSheet className={cn("flex flex-col gap-4 pb-44", PAGE_ENTER)}>
         {clubInactive ? (
           <p className="rounded-xl bg-muted/60 p-3 text-[12px] font-semibold leading-5 text-ink-subtle">
             این باشگاه غیرفعال است و امکان ثبت کلاس، هنرجو یا شهریه وجود ندارد
           </p>
         ) : null}
 
-        <div className="grid grid-cols-2 gap-3">
-          {stats.map((stat) => (
-            <Card
-              key={stat.label}
-              className={cn("items-center gap-1.5 p-3 text-center", stat.accent && "bg-accent ring-1 ring-[var(--ak-tint-line)]")}
-            >
-              <span
-                className={cn(
-                  "grid size-8 place-items-center rounded-lg",
-                  stat.accent ? "bg-brand-50 text-accent-ink" : "bg-muted text-ink-muted",
-                )}
-              >
-                <stat.icon className="size-4" aria-hidden="true" />
-              </span>
-              <b className="text-[17px] font-extrabold leading-none tabular-nums text-ink">{stat.value}</b>
-              <span className="text-[12px] font-bold text-ink-subtle">{stat.label}</span>
-            </Card>
-          ))}
-        </div>
-
-        <Button
-          variant="outline"
-          className="h-12 w-full rounded-xl text-[12px] font-semibold"
-          render={<Link href={`/coach/clubs/${club.id}/fee`} />}
-          nativeButton={false}
+        <ToggleGroup
+          aria-label="بخش های باشگاه"
+          value={[tab]}
+          onValueChange={(next) => {
+            const selected = next[0];
+            if (selected) setTab(selected as "classes" | "members");
+          }}
+          variant="segmented"
+          spacing={1}
+          className="w-full rounded-full bg-muted p-1"
         >
-          <Wallet data-icon="inline-start" aria-hidden="true" />
-          شهریه باشگاه
-        </Button>
-
-        {sessionError ? (
-          <ErrorState title="خواندن کلاس ها انجام نشد" message={apiErrorMessage(sessionError)} onRetry={() => void mutateSessions()} />
-        ) : sessionsLoading ? (
-          <ClubClassesSkeleton />
-        ) : (
-          <ClubClasses clubId={club.id} sessions={sessions} memberCounts={memberCounts} />
-        )}
-
-        <ClubMembers clubId={club.id} />
-
-        <div className="grid grid-cols-2 gap-3">
-          <Button type="button" variant="outline" className="h-12 rounded-xl text-[12px] font-semibold" onClick={() => setEditOpen(true)}>
-            <Pencil data-icon="inline-start" aria-hidden="true" />
-            ویرایش باشگاه
-          </Button>
-          <Button
-            variant="brand"
-            className="h-12 rounded-xl text-[12px] font-semibold"
-            render={<Link href="/coach/sessions" />}
-            nativeButton={false}
+          <ToggleGroupItem
+            value="classes"
+            className="h-9 flex-1 rounded-full text-[12px] font-bold aria-pressed:bg-brand-600 aria-pressed:text-white"
           >
-            <CalendarDays data-icon="inline-start" aria-hidden="true" />
-            همه کلاس ها
-          </Button>
-        </div>
+            کلاس های باشگاه
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="members"
+            className="h-9 flex-1 rounded-full text-[12px] font-bold aria-pressed:bg-brand-600 aria-pressed:text-white"
+          >
+            هنرجویان باشگاه
+          </ToggleGroupItem>
+        </ToggleGroup>
+
+        {tab === "classes" ? (
+          sessionError ? (
+            <ErrorState title="خواندن کلاس ها انجام نشد" message={apiErrorMessage(sessionError)} onRetry={() => void mutateSessions()} />
+          ) : sessionsLoading ? (
+            <ClubClassesSkeleton />
+          ) : (
+            <ClubClasses clubId={club.id} clubName={club.name} sessions={sessions} memberCounts={memberCounts} clubActive={club.isActive} />
+          )
+        ) : (
+          <ClubMembers clubId={club.id} />
+        )}
       </CoachSheet>
 
       <ClubSaveSheet open={editOpen} onOpenChange={setEditOpen} clubId={club.id} />
       <SessionSaveSheet open={sessionOpen} onOpenChange={setSessionOpen} clubId={club.id} />
 
-      <ClubDetailActions club={club} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
+      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-40 flex justify-center">
+        <div className="pointer-events-auto grid w-full max-w-md grid-cols-2 gap-3 px-4">
+          <Button
+            type="button"
+            variant="brand"
+            className="h-12 rounded-full text-[12px] font-semibold"
+            onClick={() => setSessionOpen(true)}
+            disabled={clubInactive}
+          >
+            <Plus data-icon="inline-start" aria-hidden="true" />
+            کلاس جدید
+          </Button>
+          <Button
+            variant="outline"
+            className="h-12 rounded-full text-[12px] font-semibold"
+            render={<Link href={`/coach/clubs/${club.id}/fee`} />}
+            nativeButton={false}
+          >
+            <Wallet data-icon="inline-start" aria-hidden="true" />
+            شهریه باشگاه
+          </Button>
+        </div>
+      </div>
+
+      <ClubDetailActions club={club} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} onEdit={() => setEditOpen(true)} />
     </main>
   );
 }

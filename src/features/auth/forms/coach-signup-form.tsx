@@ -22,7 +22,6 @@ import { type CoachSignupValues, coachSignupSchema, type StepOneForm } from "@/f
 const STEPS = [{ label: "مشخصات پایه" }, { label: "حرفه ای · اختیاری" }];
 
 const COACH_BELTS: readonly BeltOption[] = [
-  { value: "DAN_3", label: "دان ۳", color: "#1F2937", knotColor: "#111827", stripes: 3 },
   { value: "DAN_4", label: "دان ۴", color: "#1F2937", knotColor: "#111827", stripes: 4 },
   { value: "DAN_5", label: "دان ۵", color: "#1F2937", knotColor: "#111827", stripes: 5 },
   { value: "DAN_6", label: "دان ۶", color: "#1F2937", knotColor: "#111827", stripes: 6 },
@@ -121,7 +120,7 @@ export function CoachSignupForm() {
                     value={field.value || null}
                     options={COACH_BELTS}
                     onChange={(value) => field.onChange(value ?? "")}
-                    hint="محدوده مجاز کمربند مربی از دان ۳ تا دان ۱۰ است؛ اگر در این محدوده نیستید، این بخش را خالی بگذارید"
+                    hint="محدوده مجاز کمربند مربی از دان ۴ تا دان ۱۰ است؛ اگر در این محدوده نیستید، این بخش را خالی بگذارید"
                   />
                 )}
               />

@@ -32,6 +32,11 @@ export function StudentsListItem({
   const beltName = student.currentBelt?.belt.name;
   const belt = beltName ? getStudentBeltMeta(beltKeyOf(beltName)) : null;
 
+  // The avatar wears the student's belt: a two-tone ring for poom ranks, solid for the rest.
+  const beltRing = belt
+    ? { background: `linear-gradient(to bottom, ${belt.color} 50%, ${belt.bottomColor ?? belt.color} 50%)` }
+    : undefined;
+
   return (
     <button
       type="button"
@@ -39,10 +44,10 @@ export function StudentsListItem({
       className="block w-full text-start transition duration-150 active:scale-[0.995]"
     >
       <Card className="flex-row items-center gap-3 rounded-2xl px-3 py-3">
-        <span className="relative shrink-0">
-          <PersonAvatar name={student.fullName} />
+        <span className="relative shrink-0 rounded-full p-[2.5px]" style={beltRing}>
+          <PersonAvatar name={student.fullName} className="ring-2 ring-card" />
           {student.userId ? (
-            <span className="absolute -bottom-1 -end-1 grid size-[18px] place-items-center rounded-full bg-card">
+            <span className="absolute -bottom-0.5 -end-0.5 grid size-[18px] place-items-center rounded-full bg-card">
               <BadgeCheck className="size-4 fill-sky-600 text-white" aria-hidden="true" />
             </span>
           ) : null}
@@ -52,19 +57,21 @@ export function StudentsListItem({
           <span className="flex min-w-0 items-center gap-1.5">
             <b className="min-w-0 truncate text-[13px] font-extrabold text-ink">{student.fullName}</b>
             {student.feeStatus ? (
-              <StatusBadge tone={student.feeStatus === "OWED" ? "danger" : "success"} className="shrink-0 px-1.5 py-[3px] text-[12px]">
+              <StatusBadge
+                tone={student.feeStatus === "OWED" ? "danger" : "success"}
+                className="shrink-0 px-1.5 py-[1px] text-[11px] leading-3"
+              >
                 {student.feeStatus === "OWED" ? "بدهکار" : "تسویه"}
               </StatusBadge>
             ) : null}
           </span>
-          <span className="mt-1.5 flex items-center gap-1.5">
-            <StatusBadge tone={insuranceMeta.tone} className="shrink-0 px-1.5 py-[3px] text-[12px]">
-              <InsuranceIcon aria-hidden="true" />
+
+          <span className="mt-1.5 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+            <StatusBadge tone={insuranceMeta.tone} className="shrink-0 px-1.5 py-[3px] text-[11px]">
+              <InsuranceIcon className="size-3" aria-hidden="true" />
               {insuranceLabel}
             </StatusBadge>
-            {ageCategory ? (
-              <span className="truncate text-[12px] font-bold text-ink-subtle">{AGE_CATEGORY_LABELS[ageCategory]}</span>
-            ) : null}
+            {ageCategory ? <span className="text-[12px] font-semibold text-ink-subtle">{AGE_CATEGORY_LABELS[ageCategory]}</span> : null}
           </span>
         </span>
 

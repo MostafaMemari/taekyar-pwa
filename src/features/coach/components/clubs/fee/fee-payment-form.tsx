@@ -12,11 +12,12 @@ import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useClubMembers } from "@/features/coach/hooks/use-clubs";
-import { useClubFee, useFeePaidMonths } from "@/features/coach/hooks/use-fee";
+import { useClubFee, useClubFeeRates, useFeeMonthStates } from "@/features/coach/hooks/use-fee";
 import { useRecordFeePayment, useSaveClubFee } from "@/features/coach/hooks/use-fee-mutations";
 import type { ClubRecord } from "@/features/coach/lib/club-api";
-import { currentFeeMonth, type FeeMonth, rateCoversMonth } from "@/features/coach/lib/fee-api";
+import { currentFeeMonth, type FeeMonth, rateAmountForMonth } from "@/features/coach/lib/fee-api";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { digitsOnly, formatMoney } from "@/lib/digits";
 import { cn } from "@/lib/utils";
@@ -56,6 +57,7 @@ export function FeePaymentForm({
   // A pinned student skips the member fetch entirely.
   const { data: members, isLoading: membersLoading } = useClubMembers(fixedStudent ? "" : activeClubId, term || undefined);
   const { data: fee, isLoading: feeLoading } = useClubFee(activeClubId);
+  const { data: rates, isLoading: ratesLoading } = useClubFeeRates(activeClubId);
   const record = useRecordFeePayment();
   const saveFee = useSaveClubFee();
   const [studentId, setStudentId] = useState<string | null>(initialStudentId ?? null);
@@ -64,11 +66,14 @@ export function FeePaymentForm({
   const now = currentFeeMonth();
   const start = month.year < now.year || (month.year === now.year && month.month < now.month) ? month : now;
   const [picked, setPicked] = useState<FeeMonth>(start);
-  // The inline first-rate input keeps its own draft; the payment amount is not editable at all.
+  // The inline first-rate input keeps its own draft.
   const [feeAmount, setFeeAmount] = useState<string | null>(null);
+  // The amount draft stays null until the coach types, so the month's remaining balance is the live default.
+  const [amount, setAmount] = useState<string | null>(null);
+  const [settleMode, setSettleMode] = useState<"settled" | "partial">("settled");
   const [note, setNote] = useState("");
 
-  const paidMonths = useFeePaidMonths(
+  const monthStates = useFeeMonthStates(
     studentId !== null ? activeClubId : null,
     studentId,
     Array.from({ length: 12 - start.month + 1 }, (_, index) => ({ year: start.year, month: start.month + index })),
@@ -81,15 +86,22 @@ export function FeePaymentForm({
   const clubMissing = fixedStudent && clubOptions.length === 0;
   const activeMembers = (members ?? []).filter((member) => member.isActive);
   const feeValue = feeAmount ?? "";
-  const monthPaid = paidMonths.data?.includes(picked.month) ?? false;
+  const pickedState = monthStates.data?.find((state) => state.year === picked.year && state.month === picked.month);
+  const monthSettled = pickedState?.settled ?? false;
+  // The rate that covers the picked month — a scheduled rate must not prefill earlier months.
+  const monthRate = rates ? rateAmountForMonth(rates, picked) : null;
+  const remaining = Math.max((monthRate ?? Number(fee?.monthlyAmount ?? 0)) - (pickedState?.paidAmount ?? 0), 0);
+  const amountValue = amount ?? (remaining > 0 ? String(remaining) : "");
   const canSubmit =
     activeClubId !== "" &&
     !clubInactive &&
     studentId !== null &&
     fee !== null &&
     !membersLoading &&
-    paidMonths.data !== undefined &&
-    !monthPaid &&
+    monthStates.data !== undefined &&
+    !monthSettled &&
+    amountValue !== "" &&
+    Number(amountValue) > 0 &&
     !record.isMutating;
 
   const submitFee = async () => {
@@ -103,6 +115,19 @@ export function FeePaymentForm({
     }
   };
 
+  // Every month or student switch resets the draft, so the stale figure never leaks across.
+  const resetDraft = () => {
+    setAmount(null);
+    setSettleMode("settled");
+  };
+
+  const changeAmount = (raw: string) => {
+    const value = digitsOnly(raw, 12);
+    setAmount(value);
+    // Typing below the remaining balance is an installment; reaching it settles the month.
+    if (value !== "") setSettleMode(Number(value) < remaining ? "partial" : "settled");
+  };
+
   const submit = async () => {
     if (!studentId || activeClubId === "") return;
     try {
@@ -111,6 +136,7 @@ export function FeePaymentForm({
         studentId,
         year: picked.year,
         month: picked.month,
+        amount: Number(amountValue),
         ...(note.trim() && { note: note.trim() }),
       });
       toast.success("پرداخت ثبت شد");
@@ -138,6 +164,7 @@ export function FeePaymentForm({
                 onValueChange={(value) => {
                   setPickedClubId(value);
                   setStudentId(null);
+                  resetDraft();
                 }}
                 options={clubOptions}
                 disabled={fixedStudent && clubOptions.length === 1}
@@ -215,7 +242,10 @@ export function FeePaymentForm({
                         key={member.studentId}
                         type="button"
                         aria-pressed={isSelected}
-                        onClick={() => setStudentId(member.studentId)}
+                        onClick={() => {
+                          setStudentId(member.studentId);
+                          resetDraft();
+                        }}
                         className={cn(
                           "flex w-full cursor-pointer items-center gap-2.5 px-3 py-2.5 text-start transition-colors hover:bg-muted/50",
                           isSelected && "bg-brand-50 text-accent-ink",
@@ -232,19 +262,66 @@ export function FeePaymentForm({
             </AuthField>
           )}
           <AuthField label="ماه پرداخت" htmlFor="feePaymentMonth">
-            <FeeMonthSelect value={picked} onChange={setPicked} fromMonth={start.month} disabledMonths={paidMonths.data} />
+            <FeeMonthSelect
+              value={picked}
+              onChange={(month) => {
+                setPicked(month);
+                resetDraft();
+              }}
+              fromMonth={start.month}
+              disabledMonths={monthStates.data?.filter((state) => state.settled).map((state) => state.month)}
+            />
           </AuthField>
-          {/* The rate line holds its own spot with a same-size skeleton while the fee loads, so the note
+          {/* The rate line holds its own spot with a same-size skeleton while the rates load, so the amount
               and the action row never shift when it lands. */}
-          {fee ? (
+          {rates ? (
             <p className="text-[12px] font-semibold leading-5 text-ink-subtle">
-              {rateCoversMonth(fee, picked)
-                ? `مبلغ قابل پرداخت: ${formatMoney(fee.monthlyAmount)} تومان`
+              {monthRate !== null
+                ? `شهریه ماهانه: ${formatMoney(monthRate)} تومان`
                 : "مبلغ این ماه بر اساس نرخ پیشین این باشگاه محاسبه می شود"}
             </p>
-          ) : feeLoading ? (
+          ) : ratesLoading ? (
             <Skeleton className="h-5 w-3/4" />
           ) : null}
+          <AuthField label="مبلغ پرداخت (تومان)" htmlFor="feePaymentAmount" required>
+            <AuthInput
+              id="feePaymentAmount"
+              inputMode="numeric"
+              dir="ltr"
+              maxLength={15}
+              value={amountValue === "" ? "" : formatMoney(amountValue)}
+              onChange={(event) => changeAmount(event.target.value)}
+            />
+          </AuthField>
+          <ToggleGroup
+            aria-label="نوع پرداخت"
+            value={[settleMode]}
+            onValueChange={(next) => {
+              const selected = next[0];
+              if (!selected) return;
+              setSettleMode(selected as "settled" | "partial");
+              // Settling pins the amount to the remaining balance; a partial intent with the full
+              // amount left in would settle on the backend anyway, so the field asks for a figure.
+              if (selected === "settled" && remaining > 0) setAmount(String(remaining));
+              if (selected === "partial" && Number(amountValue) >= remaining) setAmount("");
+            }}
+            variant="segmented"
+            spacing={1}
+            className="w-full rounded-full bg-muted p-1"
+          >
+            {[
+              { value: "settled", label: "تسویه شده" },
+              { value: "partial", label: "پرداخت ناقص" },
+            ].map((option) => (
+              <ToggleGroupItem
+                key={option.value}
+                value={option.value}
+                className="h-9 flex-1 rounded-full text-[12px] font-bold aria-pressed:bg-background aria-pressed:text-accent-ink"
+              >
+                {option.label}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
           <AuthField label="توضیح" htmlFor="feePaymentNote" optional>
             <AuthInput
               id="feePaymentNote"
@@ -268,7 +345,7 @@ export function FeePaymentForm({
           onClick={() => void submit()}
         >
           {record.isMutating ? <Loader2 data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : null}
-          {monthPaid ? "این ماه پرداخت شده است" : "ثبت پرداخت"}
+          {monthSettled ? "این ماه تسویه شده است" : "ثبت پرداخت"}
         </Button>
       </SheetActions>
     </div>

@@ -19,7 +19,7 @@ export function FeeMonthSelect({
   onChange: (month: FeeMonth) => void;
   // Payment picker: restricts the months to fromMonth..12 of value.year and hides the year select.
   fromMonth?: number;
-  // Months the student already paid; rendered as unselectable with a label.
+  // Months the student has fully settled; rendered as unselectable with a label.
   disabledMonths?: number[];
 }) {
   const lastYear = currentFeeMonth().year + 1;
@@ -28,7 +28,7 @@ export function FeeMonthSelect({
   const months = JALALI_MONTHS.map((label, index) => {
     const month = index + 1;
     if (fromMonth !== undefined && month < fromMonth) return null;
-    if (disabledMonths?.includes(month)) return { value: String(month), label: `${label} (پرداخت شده)`, disabled: true };
+    if (disabledMonths?.includes(month)) return { value: String(month), label: `${label} (تسویه شده)`, disabled: true };
     return { value: String(month), label, disabled: false };
   }).filter((option) => option !== null);
 

@@ -36,7 +36,7 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
   const meta = INSURANCE_META[status];
   const Icon = meta.icon;
   const daysLeft = expiryDate ? daysFromToday(expiryDate) : null;
-  const remaining = daysLeft === null ? 0 : Math.max(0, Math.min(VALIDITY_DAYS, daysLeft));
+  const elapsed = daysLeft === null ? 0 : Math.max(0, Math.min(1, 1 - daysLeft / VALIDITY_DAYS));
 
   const confirmRemove = async () => {
     try {
@@ -66,10 +66,10 @@ export function StudentInsurancePanel({ expiryDate, studentId }: { expiryDate: s
           <div className="mt-3">
             <div className="h-2 overflow-hidden rounded-full bg-surface-sunken" role="presentation">
               <span
-                className="block h-full w-full origin-left rounded-full transition-transform duration-500"
+                className="bar-fill block h-full w-full rounded-full transition-[clip-path] duration-500 motion-safe:animate-[bar-reveal_900ms_cubic-bezier(0.22,1,0.36,1)]"
                 style={{
-                  transform: `scaleX(${(VALIDITY_DAYS - remaining) / VALIDITY_DAYS})`,
-                  background: remaining <= 30 ? "var(--st-red)" : remaining <= 180 ? "var(--st-amber)" : "var(--st-green)",
+                  clipPath: `inset(0 ${100 - Math.max(1, Math.round(elapsed * 100))}% 0 0)`,
+                  backgroundColor: elapsed >= 0.8 ? "var(--st-red)" : elapsed >= 0.5 ? "var(--st-orange)" : "var(--st-green)",
                 }}
               />
             </div>

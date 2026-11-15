@@ -7,14 +7,20 @@ import {
   type FeeMonth,
   type FeePaymentRecord,
   fetchClubFee,
+  fetchClubFeeRates,
   fetchFeeDebtors,
-  fetchFeeMonthConfirmedStudents,
+  fetchFeeMonthStudentStates,
   fetchFeePayments,
 } from "@/features/coach/lib/fee-api";
 import { subscribeResource, swrReadOptions } from "@/lib/api/swr";
 
 export function useClubFee(clubId: string) {
   return useSWR(["fee", "club", clubId] as const, ([, , id]) => fetchClubFee(id), swrReadOptions);
+}
+
+// The club's rate history; the payment form picks the rate that covers each month.
+export function useClubFeeRates(clubId: string) {
+  return useSWR(["fee", "rates", clubId] as const, ([, , id]) => fetchClubFeeRates(id), swrReadOptions);
 }
 
 type FeePaymentsPage = { data: FeePaymentRecord[]; pager?: { page: number; totalPages: number } };
@@ -100,14 +106,19 @@ export function useFeeDebtors(clubId: string | null, filters: FeeDebtorFilters) 
   };
 }
 
-// Months (of one year) the student already has a confirmed payment for; the payment picker disables them.
-export function useFeePaidMonths(clubId: string | null, studentId: string | null, months: FeeMonth[]) {
+// Per-month payment state of one student (settled + money already paid); the payment picker
+// disables settled months and prefills the amount from what is still owed.
+export function useFeeMonthStates(clubId: string | null, studentId: string | null, months: FeeMonth[]) {
   const monthsKey = months.map((month) => `${month.year}-${month.month}`).join(",");
   return useSWR(
-    clubId && studentId && months.length > 0 ? (["fee", "paid-months", clubId, studentId, monthsKey] as const) : null,
+    clubId && studentId && months.length > 0 ? (["fee", "month-states", clubId, studentId, monthsKey] as const) : null,
     async ([, , id, sid]) => {
-      const confirmed = await Promise.all(months.map((month) => fetchFeeMonthConfirmedStudents(id, month.year, month.month)));
-      return months.filter((_month, index) => confirmed[index].has(sid)).map((month) => month.month);
+      const states = await Promise.all(months.map((month) => fetchFeeMonthStudentStates(id, month.year, month.month)));
+      return months.map((month, index) => ({
+        ...month,
+        settled: states[index].get(sid)?.settled ?? false,
+        paidAmount: states[index].get(sid)?.paidAmount ?? 0,
+      }));
     },
     swrReadOptions,
   );

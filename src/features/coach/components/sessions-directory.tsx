@@ -1,11 +1,9 @@
 "use client";
 
-import { CalendarDays, Check, ChevronLeft, ClipboardCheck, Clock, Landmark, ListFilter, Minus, Plus, Search, Users } from "lucide-react";
-import Link from "next/link";
+import { CalendarDays, ListFilter, Plus, Search } from "lucide-react";
 import { useQueryStates } from "nuqs";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { CoachBand } from "@/features/coach/components/coach-band";
@@ -13,94 +11,17 @@ import { CoachBandBar } from "@/features/coach/components/coach-band-bar";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
 import { ErrorState } from "@/features/coach/components/error-state";
 import { PAGE_ENTER } from "@/features/coach/components/page-enter";
-import { SessionTime } from "@/features/coach/components/session-time";
+import { SessionCard } from "@/features/coach/components/sessions/session-card";
 import { SessionSaveSheet } from "@/features/coach/components/sessions/session-save-sheet";
 import { SessionsFiltersSheet } from "@/features/coach/components/sessions/sessions-filters-sheet";
-import { StatusBadge } from "@/features/coach/components/status-badge";
 import { useClubs } from "@/features/coach/hooks/use-clubs";
 import { useSessionStudentCounts, useSessions } from "@/features/coach/hooks/use-sessions";
 import { activeClubIds, type WeekDay, weekDayLabels } from "@/features/coach/lib/coach-data";
-import type { ClassSessionRecord } from "@/features/coach/lib/session-api";
 import { activeSessionFilterCount, sessionFilterParsers } from "@/features/coach/lib/sessions-filters";
 import { apiErrorMessage } from "@/lib/api/client";
 import { toLatinDigits, toPersianDigits } from "@/lib/digits";
 import { cn } from "@/lib/utils";
 import { SessionsSkeleton } from "./sessions/sessions-skeleton";
-
-function SessionCard({
-  session,
-  clubName,
-  memberCount,
-  canAttend,
-}: {
-  session: ClassSessionRecord;
-  clubName: string;
-  memberCount?: number;
-  canAttend: boolean;
-}) {
-  return (
-    <Card className="gap-0 p-0">
-      <Link
-        href={`/coach/sessions/${session.id}`}
-        className="block rounded-t-xl px-4 pb-3.5 pt-3.5 transition duration-150 active:bg-muted/40"
-      >
-        <div className="flex items-start gap-3">
-          <span
-            className={cn(
-              "grid size-10 shrink-0 place-items-center rounded-xl",
-              session.isActive ? "bg-brand-50 text-accent-ink" : "bg-muted text-ink-subtle",
-            )}
-          >
-            <CalendarDays className="size-5" aria-hidden="true" />
-          </span>
-
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              <b className="truncate text-[13px] font-extrabold text-ink">{session.name}</b>
-              <StatusBadge tone={session.isActive ? "success" : "neutral"} className="shrink-0">
-                {session.isActive ? <Check aria-hidden="true" /> : <Minus aria-hidden="true" />}
-                {session.isActive ? "فعال" : "غیرفعال"}
-              </StatusBadge>
-            </div>
-            <p className="mt-1 flex min-w-0 items-center gap-1 text-[12px] text-ink-subtle">
-              <Landmark className="size-3.5 shrink-0" aria-hidden="true" />
-              <span className="truncate">{clubName}</span>
-            </p>
-            <div className="mt-1.5 flex items-center gap-x-2 text-[12px] font-semibold text-ink-muted">
-              <span className="truncate">{weekDayLabels(session.weekDays).join(" · ")}</span>
-              <span className="flex shrink-0 items-center gap-1 tabular-nums">
-                <Clock className="size-3.5 shrink-0 text-ink-subtle" aria-hidden="true" />
-                <SessionTime start={session.startTime} end={session.endTime} />
-              </span>
-            </div>
-          </div>
-
-          <span className="flex shrink-0 flex-col items-center gap-1">
-            <span className="flex items-center gap-1 text-[13px] font-extrabold tabular-nums text-accent-ink">
-              <Users className="size-3.5" aria-hidden="true" />
-              {memberCount === undefined ? "—" : toPersianDigits(String(memberCount))}
-            </span>
-            <ChevronLeft className="size-4 text-ink-subtle" aria-hidden="true" />
-          </span>
-        </div>
-      </Link>
-
-      <div className="border-t border-[var(--line-2)] px-2 py-1.5">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-10 gap-2 rounded-lg px-2 text-[12px] font-semibold text-accent-ink"
-          render={<Link href={`/coach/sessions/${session.id}/attendance`} />}
-          nativeButton={false}
-          disabled={!canAttend}
-        >
-          <ClipboardCheck data-icon="inline-start" aria-hidden="true" />
-          حضور و غیاب
-        </Button>
-      </div>
-    </Card>
-  );
-}
 
 const BAND_CIRCLE = "size-11 rounded-full border border-white/20 bg-white/10 text-white hover:bg-white/20";
 

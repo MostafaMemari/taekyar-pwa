@@ -23,6 +23,8 @@ type DatePickerProps = {
   defaultValue?: string;
   fromYear?: number;
   toYear?: number;
+  /** Latin or Persian YYYY/MM/DD — the earliest selectable date, e.g. today for insurance. */
+  from?: string;
   /** Latin or Persian YYYY/MM/DD — the latest selectable date, e.g. today for attendance. */
   to?: string;
 };
@@ -63,42 +65,43 @@ function todayJalali(): DateParts {
   return { year: 1400, month: 1, day: 1 };
 }
 
-function clampDate(parts: DateParts, fromYear: number, toYear: number): DateParts {
-  const year = Math.min(toYear, Math.max(fromYear, parts.year));
-  const month = Math.min(12, Math.max(1, parts.month));
-  return { year, month, day: Math.min(jalaaliMonthLength(year, month), Math.max(1, parts.day)) };
-}
-
-export function DatePicker({ id, title, value, onChange, defaultValue, fromYear = 1350, toYear = 1406, to }: DatePickerProps) {
+export function DatePicker({ id, title, value, onChange, defaultValue, fromYear = 1350, toYear = 1406, from, to }: DatePickerProps) {
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<DateParts>({ year: fromYear, month: 1, day: 1 });
 
   const display = parseJalali(value);
+  const floor = parseJalali(from ?? "");
   const limit = parseJalali(to ?? "");
+  const yearMin = floor ? Math.max(fromYear, floor.year) : fromYear;
   const yearMax = limit ? Math.min(toYear, limit.year) : toYear;
   const days = jalaaliMonthLength(draft.year, draft.month);
+  const monthMin = floor && draft.year === floor.year ? floor.month : 1;
   const monthMax = limit && draft.year === limit.year ? limit.month : 12;
+  const dayMin = floor && draft.year === floor.year && draft.month === floor.month ? floor.day : 1;
   const dayMax = limit && draft.year === limit.year && draft.month === limit.month ? Math.min(days, limit.day) : days;
 
   const capDay = (year: number, month: number, day: number) => {
-    const capped = Math.min(day, jalaaliMonthLength(year, month));
-    return limit && year === limit.year && month === limit.month ? Math.min(capped, limit.day) : capped;
+    let capped = Math.min(day, jalaaliMonthLength(year, month));
+    if (limit && year === limit.year && month === limit.month) capped = Math.min(capped, limit.day);
+    if (floor && year === floor.year && month === floor.month) capped = Math.max(capped, floor.day);
+    return capped;
   };
 
   const handleOpen = () => {
     const initial = parseJalali(value) ?? parseJalali(defaultValue ?? "") ?? todayJalali();
-    const clamped = clampDate(initial, fromYear, yearMax);
-    setDraft({
-      year: clamped.year,
-      month: limit && clamped.year === limit.year ? Math.min(clamped.month, limit.month) : clamped.month,
-      day: capDay(clamped.year, clamped.month, clamped.day),
-    });
+    const year = Math.min(yearMax, Math.max(yearMin, initial.year));
+    let month = Math.min(12, Math.max(1, initial.month));
+    if (limit && year === limit.year) month = Math.min(month, limit.month);
+    if (floor && year === floor.year) month = Math.max(month, floor.month);
+    setDraft({ year, month, day: capDay(year, month, initial.day) });
     setOpen(true);
   };
 
   const setYear = (year: number) => {
     setDraft((current) => {
-      const month = limit && year === limit.year ? Math.min(current.month, limit.month) : current.month;
+      let month = current.month;
+      if (limit && year === limit.year) month = Math.min(month, limit.month);
+      if (floor && year === floor.year) month = Math.max(month, floor.month);
       return { year, month, day: capDay(year, month, current.day) };
     });
   };
@@ -169,30 +172,30 @@ export function DatePicker({ id, title, value, onChange, defaultValue, fromYear 
                 <WheelColumn
                   className="min-w-0"
                   ariaLabel="روز"
-                  min={1}
+                  min={dayMin}
                   max={dayMax}
                   value={draft.day}
                   onChange={setDay}
-                  scrollKey={`${open}-${dayMax}`}
+                  scrollKey={`${open}-${dayMin}-${dayMax}`}
                   showBand={false}
                 />
 
                 <WheelColumn
                   className="min-w-0"
                   ariaLabel="ماه"
-                  min={1}
+                  min={monthMin}
                   max={monthMax}
                   value={draft.month}
                   onChange={setMonth}
                   formatValue={(month) => MONTHS[month - 1]}
-                  scrollKey={`${open}-${monthMax}`}
+                  scrollKey={`${open}-${monthMin}-${monthMax}`}
                   showBand={false}
                 />
 
                 <WheelColumn
                   className="min-w-0"
                   ariaLabel="سال"
-                  min={fromYear}
+                  min={yearMin}
                   max={yearMax}
                   value={draft.year}
                   onChange={setYear}

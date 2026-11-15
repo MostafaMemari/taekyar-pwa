@@ -37,7 +37,7 @@ export function StudentAttendanceTrend({ records }: { records: StudentAttendance
       <SectionHeading title="روند حضور و غیاب" action={<span className="text-[12px] font-bold text-ink-subtle">۶ ماه اخیر</span>} />
       <Card className="gap-0 p-4">
         <ChartContainer config={chartConfig} className="mx-auto h-44 w-full">
-          <BarChart data={data} margin={{ top: 4, right: 4, left: 4, bottom: 0 }}>
+          <BarChart data={data} accessibilityLayer={false} margin={{ top: 4, right: 4, left: 4, bottom: 0 }}>
             <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-border" />
             <XAxis
               dataKey="month"
@@ -59,6 +59,7 @@ export function StudentAttendanceTrend({ records }: { records: StudentAttendance
               className="fill-muted-foreground"
             />
             <ChartTooltip
+              cursor={false}
               content={
                 <ChartTooltipContent
                   formatter={(value, name, item) => (

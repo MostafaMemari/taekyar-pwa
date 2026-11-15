@@ -170,7 +170,7 @@ COLOR | POOM | DAN
 | `coachData.province` | enum | بله | یکی از استان ها |
 | `coachData.birthDate` | string | خیر | تاریخ میلادی |
 | `coachData.image` | string | خیر | کلید تصویر در فضای ذخیره سازی |
-| `coachData.belt` | enum | خیر | فقط `DAN_3` تا `DAN_10` |
+| `coachData.belt` | enum | خیر | فقط `DAN_4` تا `DAN_10` |
 
 پاسخ موفق: `200` با `{ "message": "کد تایید با موفقیت ارسال شد" }` و `data: {}`.
 
@@ -298,7 +298,7 @@ COLOR | POOM | DAN
 | `province` | enum | بله | استان |
 | `birthDate` | string | خیر | میلادی |
 | `imageKey` | string | خیر | کلید تصویر |
-| `belt` | enum | خیر | `DAN_3` تا `DAN_10` |
+| `belt` | enum | خیر | `DAN_4` تا `DAN_10` |
 
 - اگر مربی باشگاه یا هنرجو داشته باشد، تغییر جنسیت `400` می دهد: «برای تغییر جنسیت، ابتدا باید باشگاه ها و هنرجوهای شما حذف شوند».
 - پاسخ: پیام «پروفایل مربی با موفقیت تکمیل شد» و `profile` شامل نام، کد ملی، جنسیت، استان و کمربند.
@@ -321,7 +321,7 @@ COLOR | POOM | DAN
 |---|---|---|---|
 | `birthDate` | string | خیر | میلادی یا `null` |
 | `imageKey` | string | خیر | کلید تصویر |
-| `belt` | enum | خیر | `DAN_3` تا `DAN_10` |
+| `belt` | enum | خیر | `DAN_4` تا `DAN_10` |
 
 - پاسخ: آبجکت `Coach` به روزشده.
 
@@ -356,7 +356,7 @@ COLOR | POOM | DAN
 | `phoneNumber` | string | خیر | موبایل ایران |
 | `landlineNumber` | string | خیر | تلفن ثابت ایران |
 | `membershipYear` | number | خیر | عدد بین 1380 و 1406 |
-| `sportsInsuranceDate` | string | خیر | میلادی؛ باید دقیقاً یک سال جلالی بعد از امروز باشد، در غیر این صورت `400` با پیام «تاریخ بیمه باید دقیقاً یک سال بعد از امروز باشد» |
+| `sportsInsuranceDate` | string | خیر | میلادی؛ باید بین امروز و یک سال جلالی بعد از امروز باشد، در غیر این صورت `400` با پیام «تاریخ بیمه باید از امروز تا یک سال بعد از امروز باشد» |
 | `imageKey` | string | خیر | کلید تصویر |
 | `height` | number | خیر | بین 50 تا 260 سانتی متر |
 | `weight` | number | خیر | بین 10 تا 300 کیلوگرم |
@@ -389,7 +389,7 @@ COLOR | POOM | DAN
 | `belt` | enum[] | خیر | یک یا چند `BeltName` |
 | `ageCategory` | enum[] | خیر | یک یا چند رده سنی: `BLOSSOM`، `YOUTH`، `CADET`، `JUNIOR`، `YOUNG`، `SENIOR`، `ULTRA` |
 | `insurance` | enum[] | خیر | `valid`، `expiring`، `expired`، `none` |
-| `fee` | enum | خیر | `PAID` (شهریه این ماه پرداخت شده) یا `OWED` (عضو فعال باشگاه دارای حق شهریه و بدون پرداخت این ماه)؛ بر اساس `feePayments.periodStart` اولین روز ماه جلالی جاری |
+| `fee` | enum | خیر | `PAID` (دوره شهریه این ماه کاملا تسویه شده) یا `OWED` (عضو فعال باشگاه دارای حق شهریه و بدون دوره تسویه شده برای این ماه؛ پرداخت ناقص هم `OWED` می شود)؛ بر اساس `feePayments.periodStart` اولین روز ماه جلالی جاری |
 | `beltExamId` | uuid | خیر | هنرجویان واجد شرایط آزمون کمربندی انتخاب شده (جنسیت، کمربند بعدی و موعد) |
 | `gender` | enum | خیر | `MALE` یا `FEMALE` |
 | `sortBy` | enum | خیر | `createdAt`، `updatedAt`، `fullName`، `belt`، `beltDate`، `insurance` |
@@ -408,7 +408,7 @@ COLOR | POOM | DAN
 
 - `currentBelt` با `belt` کامل (`name`، `label`، `level`، رنگ ها)
 - `metrics` با آخرین رکورد (`take: 1`، مرتب بر `recordedAt` نزولی)
-- `feeStatus`: وضعیت شهریه ماه جاری هر ردیف — `PAID` (یک پرداخت `CONFIRMED` برای این ماه)، `OWED` (عضو فعال باشگاه دارای نرخ و بدون پرداخت این ماه) یا `null` (بدون باشگاه فعال یا باشگاه بدون نرخ). همان قواعد فیلتر `fee` و شمارش های `feePaid`/`feeOwed` آمار است.
+- `feeStatus`: وضعیت شهریه ماه جاری هر ردیف — `PAID` (دوره شهریه این ماه کاملا تسویه شده، یعنی جمع پرداخت های `CONFIRMED` به مبلغ ماه رسیده)، `OWED` (عضو فعال باشگاه دارای نرخ و بدون دوره تسویه شده برای این ماه؛ پرداخت ناقص هم `OWED` است) یا `null` (بدون باشگاه فعال یا باشگاه بدون نرخ). همان قواعد فیلتر `fee` و شمارش های `feePaid`/`feeOwed` آمار است.
 
 مرتب سازی `belt` روی `currentBelt.belt.level` و `insurance` روی `sportsInsuranceDate` با `nulls: last` انجام می شود؛ در `sortDirection=desc` هنرجویان بدون کمربند اول می آیند (محدودیت ترتیب NULL در Postgres برای رابطه).
 
@@ -518,7 +518,7 @@ COLOR | POOM | DAN
 
 ### 4.10 `PATCH /student/:id/insurance`
 
-ثبت/تمدید بیمه ورزشی با بدنه: `sportsInsuranceDate` (میلادی) که باید **دقیقاً یک سال جلالی بعد از امروز** باشد و در غیر این صورت `400` با پیام «تاریخ بیمه باید دقیقاً یک سال بعد از امروز باشد» می دهد.
+ثبت/تمدید بیمه ورزشی با بدنه: `sportsInsuranceDate` (میلادی) که باید **بین امروز و یک سال جلالی بعد از امروز** باشد و در غیر این صورت `400` با پیام «تاریخ بیمه باید از امروز تا یک سال بعد از امروز باشد» می دهد.
 
 - نقش `COACH` یا `ADMIN`؛ هنرجو باید متعلق به مربی جاری باشد.
 - فرانت تاریخ پیش فرض شیت را همین امروز + ۱ سال می گذارد.
@@ -690,7 +690,8 @@ COLOR | POOM | DAN
 - هنرجو باید تحت نظر همین مربی باشد؛ در غیر این صورت `403`.
 - جنسیت هنرجو باید با جنسیت باشگاه یکسان باشد؛ در غیر این صورت `400`.
 - عضویت فعال تکراری: `409`.
-- اگر عضویت قبلی غیرفعال بوده باشد، دوباره فعال می شود و `joinedAt` به روز می شود و `removedAt` پاک می شود.
+- اگر عضویت قبلی غیرفعال بوده باشد، روی همان رکورد دوباره فعال می شود؛ `joinedAt` اصلی حفظ می شود و `removedAt` پاک می شود.
+- هر خروج و بازگشت در جدول `club_student_events` (نوع `LEFT`/`RETURNED`) ثبت می شود.
 - پاسخ: آبجکت `ClubStudent`.
 
 ### 6.8 `PATCH /club/:id/students/:studentId/status`
@@ -699,9 +700,19 @@ COLOR | POOM | DAN
 |---|---|---|
 | `isActive` | boolean | بله |
 
-- غیرفعال کردن: `isActive=false` و `removedAt=زمان فعلی` (حذف نرم).
-- فعال کردن: `isActive=true`، `joinedAt` جدید و `removedAt=null`.
+- غیرفعال کردن: `isActive=false` و `removedAt=زمان فعلی` (حذف نرم) + رکورد `LEFT` در `club_student_events`. ثبت نام های کلاس ها دست نمی خورند.
+- فعال کردن: `isActive=true` و `removedAt=null` روی همان رکورد؛ `joinedAt` اصلی حفظ می شود + رکورد `RETURNED`.
 - پاسخ: آبجکت `ClubStudent`.
+
+### 6.8.1 `DELETE /club/:id/students/:studentId`
+
+حذف فیزیکی عضویت؛ فقط برای عضویت های بدون سابقه:
+
+- شرط: هیچ `FeePeriod` (و در نتیجه هیچ پرداختی) برای این عضویت وجود نداشته باشد؛ در غیر این صورت `400` با پیام «این هنرجو سابقه دوره یا پرداخت شهریه در این باشگاه دارد و قابل حذف نیست».
+- شرط: هنرجو هیچ سابقه حضور و غیابی در کلاس های این باشگاه نداشته باشد؛ در غیر این صورت `400` با پیام «این هنرجو سابقه حضور و غیاب در کلاس های این باشگاه دارد و قابل حذف نیست».
+- با حذف، ثبت نام های هنرجو در کلاس های همین باشگاه (`ClassSessionStudent`) هم پاک می شود؛ سابقه حضور و غیاب به علت FK مستقل دست نمی خورد.
+- عضویت دارای سابقه فقط از `PATCH status` غیرفعال می شود.
+- پاسخ: پیام «هنرجو از باشگاه حذف شد».
 
 ### 6.9 `GET /club/by-student/:studentId`
 
@@ -716,6 +727,16 @@ COLOR | POOM | DAN
 - شرط: باشگاه هیچ سابقه حضور و غیابی نداشته باشد؛ در غیر این صورت `400` با پیام «این باشگاه سابقه حضور و غیاب ثبت شده دارد و قابل حذف نیست».
 - عکس باشگاه در storage هم پاک می شود.
 - پاسخ: پیام «باشگاه حذف شد».
+
+### 6.11 شهریه باشگاه (`/club/:id/fee*`)
+
+- `PUT /club/:id/fee` با `monthlyAmount` نرخ را ثبت می کند؛ اولین ثبت از ماه جاری اعمال می شود و ویرایش از ماه بعد، و دوره های `UNPAID` باز همان باشگاه به روز می شوند. `GET /club/:id/fee` آخرین نرخ و `GET /club/:id/fee/rates` تاریخچه کامل نرخ ها را می دهد تا کلاینت برای هر ماه نرخ پوشش دهنده همان ماه را انتخاب کند (فرم پرداخت با همین منطق مبلغ پیش فرض را می سازد).
+- `POST /club/:id/fee/payments` ثبت پرداخت است؛ بدنه: `studentId`، `year`، `month` (ماه جلالی، از ماه جاری تا اسفند)، `amount` (مبلغ به تومان) و `note`/`paidAt` اختیاری.
+  - پرداخت قسطی است: هر ماهِ هر عضویت یک `FeePeriod` دارد که چند پرداخت `CONFIRMED` می تواند بگیرد؛ `paidAmount` دوره جمع پرداخت هاست و وضعیت آن خودکار درمی آید — `PARTIAL` وقتی پرداختی بین صفر و مبلغ ماه است و `PAID` وقتی کامل شد.
+  - اگر باقی مانده دوره (`expectedAmount - paidAmount`) صفر یا کمتر باشد `400` با پیام «این ماه قبلا تسویه شده است» می دهد؛ اگر `amount` بیشتر از باقی مانده باشد `400` با پیام «مبلغ پرداخت بیشتر از بدهی باقی مانده این ماه است».
+- `GET /club/:id/fee/payments?year=&month=` فهرست صفحه بندی شده پرداخت های آن ماه است؛ هر ردیف `period: { periodStart, status }` دارد تا کلاینت ماهِ تسویه شده را از ماهِ قسطی تشخیص دهد.
+- `DELETE /club/:id/fee/payments/:paymentId?reason=` لغو پرداخت و `POST /club/:id/fee/payments/:paymentId/refund` برگشت وجه است؛ هر دو وضعیت دوره را دوباره محاسبه می کنند، پس با لغو یک قسط ماه دوباره `PARTIAL` می شود.
+- `GET /club/:id/fee/debtors?year=&month=` گزارش بدهکاران است؛ فیلترها: `status` (پیش فرض `UNPAID` و `PARTIAL` با هم)، `minMonthsOwed`، `search`، `membershipStatus` (`active`/`inactive`؛ بدون پارامتر همه اعضا) و `sessionId`. هر سطر `monthsOwed`، `firstUnpaidMonth`، `totalDebt` (جمع `expected - paid` ماه های بدهکار)، `hasPartial` (حداقل یکی از ماه های بدهکار قسطی است) و `sessionNames` (کلاس های همان باشگاه) را می دهد.
 
 ---
 
@@ -1074,6 +1095,7 @@ COLOR | POOM | DAN
 | `/coach/invitations` | `GET /student-coach-invitation/sent` | وصل؛ آمار و ردیف ها از سرور |
 | `/coach/clubs` | `GET /club` و `GET /club/:id/students?take=1` | وصل؛ شمارش هنرجو از `meta.pager.total`؛ ثبت و ویرایش باشگاه با شیت `club-save-sheet` روی همین صفحه و صفحه جزئیات انجام می شود و در شیت ثبت، فیلد اختیاری شهریه پس از موفق شدن `POST /club` با `PUT /club/:id/fee` ثبت می شود |
 | `/coach/clubs/[id]` | `GET /club/:id`، `GET /club/:id/students`، `GET /class-session` و `DELETE /club/:id` | وصل؛ کلاس های باشگاه از `GET /class-session` و شمارش هنرجوی هر کلاس از `GET /class-session/:id/students?take=1`؛ منوی عملیات در هدر «حذف باشگاه» را با SheetFrame تایید صدا می زند و رد شدن ۴۰۰ با دلیل داخل همان شیت نشان داده می شود |
+| `/coach/clubs/[id]/fee` | `PUT /club/:id/fee`، `GET /club/:id/fee`، `GET /club/:id/fee/rates`، `POST /club/:id/fee/payments`، `GET /club/:id/fee/payments` و `GET /club/:id/fee/debtors` (بخش 6.11) | وصل؛ پرداخت قسطی است — فرم مبلغ را با باقی مانده ماه بر اساس نرخ پوشش دهنده همان ماه پیش فرض می گذارد و سوییچ «تسویه شده / پرداخت ناقص» دارد؛ ماه های تسویه شده در انتخابگر ماه غیرفعال اند؛ بج هر ردیف فهرست پرداخت ها وضعیت دوره همان ماه را می گوید («تسویه شده» یا «پرداخت ناقص») و ردیف های بدهکار با قسط معوق بج «پرداخت ناقص» می گیرند |
 | `/coach/sessions` | `GET /class-session` | وصل؛ نام باشگاه از `GET /club` و شمارش هنرجو از `GET /class-session/:id/students?take=1`؛ فیلترها (وضعیت با پیش فرض «فعال»، باشگاه، روز برگزاری) در URL با nuqs و از دکمه کنار جستجو؛ ثبت و ویرایش کلاس با شیت `session-save-sheet` روی فهرست کلاس ها، داشبورد، صفحه باشگاه و جزئیات کلاس انجام می شود |
 | `/coach/sessions/[id]` | `GET /class-session/:id`، `POST /club/:id/students`، `POST /class-session/:id/students` و `DELETE /class-session/:id` | وصل؛ roster از `students[].student.fullName` در همان پاسخ؛ دکمه «افزودن» با شیت انتخاب هنرجو اول عضویت باشگاه و بعد عضویت کلاس را می نویسد؛ «حذف کلاس» با SheetFrame تایید است و رد شدن ۴۰۰ (سابقه حضور و غیاب) داخل شیت می آید |
 | `/coach/sessions/[id]/attendance` | `GET /attendance/class/:id/daily?date=`، `GET /class-session/:id` و `PUT /attendance/class/:id` | وصل؛ ناوبری «جلسه قبل/جلسه بعد» فقط روی روزهای برگزاری فعلی کلاس حرکت می کند و «جلسه بعد» تا امروز قفل می شود؛ تاریخ باز یا انتخابی که روز کلاس نیست به نزدیک ترین جلسه قبل برمی گردد و وضعیت/توضیح هر هنرجو از رکورد همان تاریخ می آید؛ ذخیره با `note: null` برای توضیح پاک شده |

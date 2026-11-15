@@ -107,10 +107,10 @@ export function StudentBeltPanel({
 
             <div className="mt-2.5 h-2 overflow-hidden rounded-full bg-[var(--line-2)]">
               <div
-                className="h-full w-full origin-left rounded-full transition-transform duration-500"
+                className="bar-fill block h-full w-full rounded-full transition-[clip-path] duration-500 motion-safe:animate-[bar-reveal_900ms_cubic-bezier(0.22,1,0.36,1)]"
                 style={{
-                  transform: `scaleX(${percent / 100})`,
-                  background: isDue || percent >= 80 ? "var(--st-green)" : percent >= 50 ? "var(--st-amber)" : "var(--st-red)",
+                  clipPath: `inset(0 ${100 - Math.max(1, percent)}% 0 0)`,
+                  backgroundColor: isDue || percent >= 80 ? "var(--st-green)" : percent >= 50 ? "var(--st-orange)" : "var(--st-red)",
                 }}
               />
             </div>

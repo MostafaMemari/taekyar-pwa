@@ -12,6 +12,7 @@ import {
   updateSession,
 } from "@/features/coach/lib/session-api";
 import { ApiError } from "@/lib/api/client";
+import { revalidateResource } from "@/lib/api/swr";
 
 // Any class write can change the list, a detail record and the member counts, so the whole session branch is revalidated.
 const revalidateSessions = () => mutate((key) => Array.isArray(key) && key[0] === "session");
@@ -53,7 +54,7 @@ export function useAddStudentsToSession() {
       }
 
       await addStudentsToSession(arg.sessionId, arg.studentIds);
-      await revalidateSessions();
+      await revalidateResource("session");
       await mutate((key) => Array.isArray(key) && key[0] === "attendance");
       await mutate((key) => Array.isArray(key) && key[0] === "club");
     },
@@ -63,7 +64,7 @@ export function useAddStudentsToSession() {
 export function useRemoveSessionStudent(sessionId: string) {
   return useSWRMutation(["session", "students", "remove", sessionId] as const, async (_key: unknown, { arg }: { arg: string }) => {
     await removeStudentFromSession(sessionId, arg);
-    await revalidateSessions();
+    await revalidateResource("session");
   });
 }
 

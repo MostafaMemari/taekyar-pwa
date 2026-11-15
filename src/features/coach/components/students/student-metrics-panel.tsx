@@ -3,7 +3,7 @@
 import { Ruler, Scale } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, XAxis, YAxis } from "recharts";
 import { AuthField } from "@/components/shared/auth-field";
 import { AuthFormError } from "@/components/shared/auth-form-error";
 import { AuthInput } from "@/components/shared/auth-input";
@@ -21,17 +21,21 @@ import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { digitsOnly, toPersianDigits } from "@/lib/digits";
 
 const chartConfig = {
-  height: { label: "قد", color: "var(--chart-1)" },
-  weight: { label: "وزن", color: "var(--chart-3)" },
+  height: { label: "قد", color: "var(--ak-600)" },
+  weight: { label: "وزن", color: "var(--ak-400)" },
 } satisfies ChartConfig;
 
-const tickFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { day: "numeric", month: "numeric" });
+const tickFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { day: "2-digit", month: "2-digit" });
+const timeFormatter = new Intl.DateTimeFormat("fa-IR", { hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23" });
 
 type MetricPoint = { label: string; height: number; weight: number };
 
 function chartDataOf(metrics: StudentMetricRecord[]): MetricPoint[] {
-  return metrics.map((metric) => ({
-    label: tickFormatter.format(new Date(metric.recordedAt)),
+  // Recharts axis tooltips look up the record by its label, so records sharing a date need unique labels.
+  const dates = metrics.map((metric) => tickFormatter.format(new Date(metric.recordedAt)));
+  const shared = new Set(dates.filter((date, index) => dates.indexOf(date) !== index));
+  return metrics.map((metric, index) => ({
+    label: shared.has(dates[index]) ? `${dates[index]} · ${timeFormatter.format(new Date(metric.recordedAt))}` : dates[index],
     height: Number(metric.height),
     weight: Number(metric.weight),
   }));
@@ -84,26 +88,31 @@ export function StudentMetricsPanel({ studentId }: { studentId: string }) {
       <SectionHeading title="قد و وزن" />
 
       <Card className="gap-0 p-4">
-        {latest ? (
-          <div className="grid grid-cols-2 gap-2">
-            <div className="flex items-center gap-2.5 rounded-xl bg-muted/60 px-3 py-2.5">
-              <span className="size-2.5 shrink-0 rounded-full" style={{ background: "var(--color-height)" }} aria-hidden="true" />
-              <div className="min-w-0">
-                <span className="block text-[11px] font-medium text-ink-subtle">قد</span>
-                <b className="block truncate text-[13px] font-extrabold text-ink">
-                  {toPersianDigits(String(Number(latest.height)))} سانتی متر
-                </b>
-              </div>
-            </div>
-            <div className="flex items-center gap-2.5 rounded-xl bg-muted/60 px-3 py-2.5">
-              <span className="size-2.5 shrink-0 rounded-full" style={{ background: "var(--color-weight)" }} aria-hidden="true" />
-              <div className="min-w-0">
-                <span className="block text-[11px] font-medium text-ink-subtle">وزن</span>
-                <b className="block truncate text-[13px] font-extrabold text-ink">
-                  {toPersianDigits(String(Number(latest.weight)))} کیلوگرم
-                </b>
-              </div>
-            </div>
+        {latest && records ? (
+          <div className="flex flex-wrap items-center gap-1.5">
+            {(
+              [
+                { label: "قد", color: "var(--color-height)", unit: "سانتی متر", from: records[0].height, to: latest.height },
+                { label: "وزن", color: "var(--color-weight)", unit: "کیلوگرم", from: records[0].weight, to: latest.weight },
+              ] as const
+            ).map((series) => (
+              <span
+                key={series.label}
+                className="inline-flex items-center gap-1.5 rounded-full bg-muted/60 px-2.5 py-1 text-[11px] font-bold text-ink"
+              >
+                <span className="size-2 rounded-full" style={{ background: series.color }} aria-hidden="true" />
+                {series.label}
+                <span className="tabular-nums">
+                  {records.length > 1 ? (
+                    <>
+                      {toPersianDigits(String(Number(series.from)))} <span className="text-ink-subtle">←</span>{" "}
+                    </>
+                  ) : null}
+                  {toPersianDigits(String(Number(series.to)))}
+                </span>
+                <span className="font-medium text-ink-subtle">{series.unit}</span>
+              </span>
+            ))}
           </div>
         ) : null}
 
@@ -120,7 +129,7 @@ export function StudentMetricsPanel({ studentId }: { studentId: string }) {
           </output>
         ) : trend ? (
           <ChartContainer config={chartConfig} className="mx-auto mt-3 h-44 w-full">
-            <AreaChart data={trend} margin={{ top: 12, right: 16, left: 16, bottom: 4 }}>
+            <AreaChart data={trend} accessibilityLayer={false} margin={{ top: 12, right: 16, left: 16, bottom: 4 }}>
               <defs>
                 <linearGradient id="metricsHeightFill" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="var(--color-height)" stopOpacity={0.3} />
@@ -131,10 +140,9 @@ export function StudentMetricsPanel({ studentId }: { studentId: string }) {
                   <stop offset="95%" stopColor="var(--color-weight)" stopOpacity={0.02} />
                 </linearGradient>
               </defs>
-              <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-border" />
               <XAxis
                 dataKey="label"
-                reversed
+                tickFormatter={(label) => label.split(" · ")[0]}
                 padding={{ left: 24, right: 24 }}
                 tickLine={false}
                 axisLine={false}
@@ -167,7 +175,6 @@ export function StudentMetricsPanel({ studentId }: { studentId: string }) {
                 className="fill-muted-foreground"
               />
               <ChartTooltip
-                cursor={{ strokeDasharray: "3 3" }}
                 content={
                   <ChartTooltipContent
                     formatter={(value, name) => (
@@ -190,6 +197,7 @@ export function StudentMetricsPanel({ studentId }: { studentId: string }) {
                   />
                 }
               />
+              {/* Area svg props (stroke, strokeWidth, fillOpacity) leak into dot objects — set them explicitly so dots stay small and solid. */}
               <Area
                 yAxisId="height"
                 dataKey="height"
@@ -197,8 +205,8 @@ export function StudentMetricsPanel({ studentId }: { studentId: string }) {
                 stroke="var(--color-height)"
                 strokeWidth={2.5}
                 fill="url(#metricsHeightFill)"
-                dot={{ r: 3, strokeWidth: 2, stroke: "var(--card)" }}
-                activeDot={{ r: 4.5, strokeWidth: 2, stroke: "var(--card)" }}
+                dot={{ r: 4, fill: "var(--color-height)", fillOpacity: 1, stroke: "none" }}
+                activeDot={{ r: 5.5, fill: "var(--color-height)", fillOpacity: 1, stroke: "none" }}
               />
               <Area
                 yAxisId="weight"
@@ -207,8 +215,8 @@ export function StudentMetricsPanel({ studentId }: { studentId: string }) {
                 stroke="var(--color-weight)"
                 strokeWidth={2.5}
                 fill="url(#metricsWeightFill)"
-                dot={{ r: 3, strokeWidth: 2, stroke: "var(--card)" }}
-                activeDot={{ r: 4.5, strokeWidth: 2, stroke: "var(--card)" }}
+                dot={{ r: 4, fill: "var(--color-weight)", fillOpacity: 1, stroke: "none" }}
+                activeDot={{ r: 5.5, fill: "var(--color-weight)", fillOpacity: 1, stroke: "none" }}
               />
             </AreaChart>
           </ChartContainer>

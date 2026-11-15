@@ -115,17 +115,6 @@ export function CoachProfile() {
               <span className="meta-glass">{province}</span>
             </div>
           </div>
-
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 shrink-0 gap-1.5 rounded-xl bg-white px-3 text-[12px] font-semibold text-accent-ink hover:bg-white/90"
-            render={<Link href="/coach/profile/edit" />}
-            nativeButton={false}
-          >
-            <Pencil data-icon="inline-start" aria-hidden="true" />
-            ویرایش
-          </Button>
         </div>
       </CoachBand>
 
@@ -157,18 +146,6 @@ export function CoachProfile() {
                 </div>
               ))}
             </dl>
-
-            <div className="border-t border-[var(--line-2)] px-4 py-2">
-              <Button
-                variant="ghost"
-                className="w-full gap-1.5 rounded-xl text-[12px] font-semibold text-accent-ink hover:bg-brand-50"
-                render={<Link href="/coach/profile/edit" />}
-                nativeButton={false}
-              >
-                <Pencil data-icon="inline-start" aria-hidden="true" />
-                ویرایش پروفایل
-              </Button>
-            </div>
           </Card>
         </section>
 

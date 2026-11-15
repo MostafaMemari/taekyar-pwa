@@ -3,11 +3,13 @@
 import { CalendarDays, Check, ClipboardCheck, ClipboardList, EllipsisVertical, Loader2, Minus, Plus, Users } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { toast } from "@/components/ding-toaster";
 import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
 import { SheetFrame } from "@/features/coach/components/coach-sheet-frame";
@@ -17,11 +19,12 @@ import { SessionTime } from "@/features/coach/components/session-time";
 import { SessionSaveSheet } from "@/features/coach/components/sessions/session-save-sheet";
 import { StatusBadge } from "@/features/coach/components/status-badge";
 import { useRemoveSessionStudent } from "@/features/coach/hooks/use-session-mutations";
-import { useSession } from "@/features/coach/hooks/use-sessions";
+import { useSession, useSessionStudentsFeed } from "@/features/coach/hooks/use-sessions";
 import { weekDayLabels } from "@/features/coach/lib/coach-data";
 import type { ClassSessionRecord } from "@/features/coach/lib/session-api";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { toPersianDigits } from "@/lib/digits";
+import { toJalaliDate } from "@/lib/jalali";
 import { AddClassStudentsSheet } from "./add-class-students-sheet";
 import { SessionBand } from "./session-band";
 import { SessionDetailActions } from "./session-detail-actions";
@@ -67,7 +70,21 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
   const members = (session.students ?? []).map((membership) => ({
     studentId: membership.studentId,
     name: membership.student.fullName,
+    clubActive: membership.student.clubMemberships?.[0]?.isActive ?? true,
   }));
+  const studentsFeed = useSessionStudentsFeed(session.id);
+  const [rosterFilter, setRosterFilter] = useState<"active" | "inactive" | "all">("active");
+  const activeCount = members.filter((member) => member.clubActive).length;
+  const inactiveCount = members.length - activeCount;
+  const rosterTotal = rosterFilter === "all" ? members.length : rosterFilter === "active" ? activeCount : inactiveCount;
+  const visibleStudents = studentsFeed.members.filter((member) =>
+    rosterFilter === "all" ? true : rosterFilter === "active" ? member.clubActive : !member.clubActive,
+  );
+
+  // Filtered views must not hide rows that sit on unloaded pages, so the feed drains to the end.
+  useEffect(() => {
+    if (rosterFilter !== "all" && studentsFeed.hasMore && !studentsFeed.isValidating) void studentsFeed.setSize(studentsFeed.size + 1);
+  }, [rosterFilter, studentsFeed.hasMore, studentsFeed.isValidating, studentsFeed.size]);
 
   const applyRemove = async () => {
     if (!removeTarget) return;
@@ -169,7 +186,7 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
               <div className="flex items-center gap-2">
                 <StatusBadge>
                   <Users aria-hidden="true" />
-                  {toPersianDigits(String(members.length))} نفر
+                  {toPersianDigits(String(rosterTotal))} نفر
                 </StatusBadge>
                 <Button
                   type="button"
@@ -185,19 +202,77 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
             }
           />
 
-          {members.length > 0 ? (
-            <SessionRoster
-              entries={members}
-              linkStudents
-              onRemove={(entry) => {
-                removeStudent.reset();
-                setRemoveTarget(entry);
-              }}
-            />
-          ) : (
+          {members.length === 0 ? (
             <p className="rounded-xl bg-muted/60 p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
               هنوز هنرجویی در این کلاس ثبت نشده است
             </p>
+          ) : (
+            <>
+              <ToggleGroup
+                aria-label="فیلتر هنرجویان کلاس"
+                value={[rosterFilter]}
+                onValueChange={(next) => {
+                  const selected = next[0];
+                  if (selected) setRosterFilter(selected as "active" | "inactive" | "all");
+                }}
+                variant="segmented"
+                spacing={1}
+                className="w-full rounded-full bg-muted p-1"
+              >
+                {[
+                  { value: "active", label: "فعال" },
+                  { value: "inactive", label: "غیرفعال" },
+                  { value: "all", label: "همه" },
+                ].map((option) => (
+                  <ToggleGroupItem
+                    key={option.value}
+                    value={option.value}
+                    className="h-9 flex-1 rounded-full text-[12px] font-bold aria-pressed:bg-brand-600 aria-pressed:text-white"
+                  >
+                    {option.label}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
+
+              {studentsFeed.isLoading && studentsFeed.members.length === 0 ? (
+                <Card className="mt-3 gap-0 px-4 py-1">
+                  {[0, 1, 2].map((index) => (
+                    <Skeleton key={index} className="h-14 my-1 rounded-xl" />
+                  ))}
+                </Card>
+              ) : visibleStudents.length === 0 ? (
+                <p className="mt-3 rounded-xl bg-muted/60 p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
+                  {rosterFilter === "inactive" ? "هیچ هنرجویی با عضویت غیرفعال در این کلاس نیست" : "هنرجوی فعالی در این کلاس وجود ندارد"}
+                </p>
+              ) : (
+                <>
+                  <SessionRoster
+                    className="mt-3"
+                    entries={visibleStudents.map((member) => ({
+                      studentId: member.studentId,
+                      name: member.name,
+                      subline: member.clubActive ? `عضویت از ${toJalaliDate(member.joinedAt)}` : "عضویت باشگاه غیرفعال است",
+                    }))}
+                    linkStudents
+                    onRemove={(entry) => {
+                      removeStudent.reset();
+                      setRemoveTarget(entry);
+                    }}
+                  />
+                  {studentsFeed.hasMore ? (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="mt-3 h-11 w-full rounded-xl text-[12px] font-bold"
+                      disabled={studentsFeed.isValidating}
+                      onClick={() => void studentsFeed.setSize(studentsFeed.size + 1)}
+                    >
+                      {studentsFeed.isValidating ? "در حال بارگذاری..." : "نمایش بیشتر"}
+                    </Button>
+                  ) : null}
+                </>
+              )}
+            </>
           )}
         </section>
       </CoachSheet>
@@ -221,10 +296,10 @@ function SessionDetailScreen({ session }: { session: ClassSessionRecord }) {
           if (!open) setRemoveTarget(null);
         }}
         title="حذف از کلاس"
-        description="تایید حذف هنرجو از کلاس"
+        description={removeTarget?.name ?? ""}
       >
         <p className="rounded-xl bg-danger-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
-          {removeTarget ? removeTarget.name : ""} از فهرست هنرجویان این کلاس حذف می شود. عضویت باشگاه او باقی می ماند
+          این هنرجو از این کلاس حذف می شود و سابقه حضور و غیاب او در کلاس حفظ می شود. بعداً می توانید دوباره به همین کلاس اضافه اش کنید
         </p>
 
         {removeStudent.error ? (

@@ -24,7 +24,7 @@ import { formatMoney, toPersianDigits } from "@/lib/digits";
 import { toJalaliDateTime } from "@/lib/jalali";
 import { cn } from "@/lib/utils";
 
-const SETTLED_META: Record<
+const VOIDED_META: Record<
   "CANCELLED" | "REFUNDED",
   { label: string; tone: "danger" | "warning"; reasonKey: "cancelReason" | "refundNote" }
 > = {
@@ -85,17 +85,25 @@ export function FeePaymentsCard({ clubId, month }: { clubId: string; month: FeeM
       ) : (
         <Card className="gap-0 px-4 py-1">
           {payments.map((payment, index) => {
-            const settled = payment.status === "CONFIRMED" ? null : SETTLED_META[payment.status];
-            const reason = settled ? payment[settled.reasonKey] : null;
+            const voided = payment.status === "CONFIRMED" ? null : VOIDED_META[payment.status];
+            const reason = voided ? payment[voided.reasonKey] : null;
 
             return (
               <Fragment key={payment.id}>
                 {index > 0 ? <Separator /> : null}
-                <div className={cn("flex items-center gap-3 py-2.5", settled && "opacity-55")}>
+                <div className={cn("flex items-center gap-3 py-2.5", voided && "opacity-55")}>
                   <span className="min-w-0 flex-1">
                     <b className="flex items-center gap-1.5 truncate text-[12px] font-semibold text-ink-body">
                       <span className="truncate">{payment.student.fullName}</span>
-                      {settled ? <StatusBadge tone={settled.tone}>{settled.label}</StatusBadge> : null}
+                      {voided ? (
+                        <StatusBadge tone={voided.tone}>{voided.label}</StatusBadge>
+                      ) : // The badge reads the month's settlement state, not the transaction: an installment row
+                      // stays «پرداخت ناقص» until the period behind it is fully PAID.
+                      payment.period.status === "PAID" ? (
+                        <StatusBadge tone="success">تسویه شده</StatusBadge>
+                      ) : (
+                        <StatusBadge tone="warning">پرداخت ناقص</StatusBadge>
+                      )}
                     </b>
                     <span className="mt-0.5 block truncate text-[12px] font-medium tabular-nums text-ink-subtle">
                       {toJalaliDateTime(payment.paidAt)}
@@ -104,7 +112,7 @@ export function FeePaymentsCard({ clubId, month }: { clubId: string; month: FeeM
                     </span>
                   </span>
                   <b className="shrink-0 text-[12px] font-extrabold tabular-nums text-ink-body">{formatMoney(payment.amount)}</b>
-                  {settled ? null : (
+                  {voided ? null : (
                     <>
                       <Button
                         type="button"

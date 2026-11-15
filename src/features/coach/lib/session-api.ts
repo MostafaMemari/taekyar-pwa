@@ -6,7 +6,8 @@ export type ClassSessionMember = {
   id: string;
   classSessionId: string;
   studentId: string;
-  student: { id: string; fullName: string };
+  student: { id: string; fullName: string; clubMemberships?: { isActive: boolean }[] };
+  createdAt: string;
 };
 
 export type ClassSessionRecord = {
@@ -42,6 +43,24 @@ export function fetchStudentSessions(studentId: string): Promise<ClassSessionRec
   return authRequest<ClassSessionMembershipRecord[]>(`class-session/by-student/${studentId}`).then((rows) =>
     rows.map((row) => row.classSession),
   );
+}
+
+export type SessionStudentRow = { studentId: string; name: string; joinedAt: string; clubActive: boolean };
+export type SessionStudentsPage = { members: SessionStudentRow[]; total: number };
+
+// Paged class roster for the session screen.
+export function fetchSessionStudentsPage(id: string, page: number): Promise<SessionStudentsPage> {
+  const query = new URLSearchParams({ page: String(page), take: "10" });
+
+  return authRequestWithMeta<ClassSessionMember[]>(`class-session/${id}/students?${query.toString()}`).then(({ data, pager }) => ({
+    members: data.map((row) => ({
+      studentId: row.studentId,
+      name: row.student.fullName,
+      joinedAt: row.createdAt,
+      clubActive: row.student.clubMemberships?.[0]?.isActive ?? true,
+    })),
+    total: pager?.total ?? data.length,
+  }));
 }
 
 export function fetchSessions(): Promise<{ sessions: ClassSessionRecord[]; total: number }> {

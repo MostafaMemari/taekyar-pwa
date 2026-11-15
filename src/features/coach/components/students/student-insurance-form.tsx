@@ -23,7 +23,7 @@ export function StudentInsuranceForm({
   onDone: () => void;
 }) {
   const router = useRouter();
-  // Fresh mount on every open, so the initializer alone starts from the exact one-year-ahead date the backend expects.
+  // Fresh mount on every open, so the initializer alone starts from the full-year date the backend accepts.
   const defaultDate = addJalaliYears(todayJalali(), 1);
   const [date, setDate] = useState(defaultDate);
   const [dateError, setDateError] = useState("");
@@ -49,7 +49,7 @@ export function StudentInsuranceForm({
 
   return (
     <>
-      <AuthField label="تاریخ اعتبار بیمه" htmlFor="insuranceDate" required hint="باید دقیقاً یک سال بعد از امروز باشد">
+      <AuthField label="تاریخ اعتبار بیمه" htmlFor="insuranceDate" required hint="از امروز تا یک سال بعد از امروز">
         <DatePicker
           id="insuranceDate"
           title="تاریخ اعتبار بیمه"
@@ -59,6 +59,8 @@ export function StudentInsuranceForm({
             setDateError("");
           }}
           defaultValue={defaultDate}
+          from={todayJalali()}
+          to={defaultDate}
           fromYear={year - 1}
           toYear={year}
         />

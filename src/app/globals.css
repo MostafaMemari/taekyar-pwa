@@ -164,6 +164,7 @@
   --ink-8: #e5e7eb;
   --st-green: #059669;
   --st-amber: #b45309;
+  --st-orange: #f97316;
   --st-red: #dc2626;
   --st-sky: #0284c7;
   --st-green-soft: color-mix(in srgb, var(--st-green) 11%, var(--surface));
@@ -378,6 +379,14 @@ html[data-font="iranyekan"] {
   :where(a, button, input, select, textarea, label, [tabindex]):focus-visible {
     outline: 2px solid color-mix(in srgb, var(--ak-600) 65%, transparent);
     outline-offset: 2px;
+  }
+
+  /* Recharts marks internal layers with tabindex="-1" (zIndex <g> layers, tooltip wrapper), so the
+     global [tabindex] focus rule would paint an accent ring around the whole plot on click. The
+     chart is tap-tooltip only, so none of its nodes may show a focus ring. */
+  :where([class*="recharts"]):focus,
+  :where([class*="recharts"]):focus-visible {
+    outline: none;
   }
 
   html::-webkit-scrollbar,
@@ -796,4 +805,40 @@ html[data-font="iranyekan"] {
 
 .dark .tst-viewport {
   color-scheme: dark;
+}
+
+/* Progress bars reveal their staged gradient from the left on mount (belt, insurance). */
+@keyframes bar-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+/* Filled progress bars carry a sweeping sheen over their solid stage color (belt, insurance). */
+.bar-fill {
+  position: relative;
+  overflow: hidden;
+}
+
+.bar-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 25%, rgba(255, 255, 255, 0.5) 50%, transparent 75%);
+  transform: translateX(-100%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .bar-fill::after {
+    animation: bar-shimmer 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes bar-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
 }

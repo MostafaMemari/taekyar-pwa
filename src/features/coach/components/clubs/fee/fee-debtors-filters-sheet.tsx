@@ -1,5 +1,7 @@
 "use client";
 
+import { CalendarDays } from "lucide-react";
+import { AuthSelect } from "@/components/shared/auth-select";
 import { SheetActions } from "@/components/shared/sheet-actions";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -12,9 +14,12 @@ export function FeeDebtorsFiltersSheet({
   status,
   membership,
   minMonths,
+  sessionId,
+  sessions,
   onStatusChange,
   onMembershipChange,
   onMinMonthsChange,
+  onSessionChange,
   onClear,
 }: {
   open: boolean;
@@ -22,12 +27,16 @@ export function FeeDebtorsFiltersSheet({
   status: string;
   membership: string;
   minMonths: string;
+  sessionId: string | null;
+  sessions: { id: string; name: string }[];
   onStatusChange: (value: string) => void;
   onMembershipChange: (value: string) => void;
   onMinMonthsChange: (value: string) => void;
+  onSessionChange: (value: string | null) => void;
   onClear: () => void;
 }) {
-  const activeCount = (status !== "ALL" ? 1 : 0) + (membership !== "ALL" ? 1 : 0) + (minMonths !== "1" ? 1 : 0);
+  const activeCount =
+    (status !== "ALL" ? 1 : 0) + (membership !== "active" ? 1 : 0) + (minMonths !== "1" ? 1 : 0) + (sessionId !== null ? 1 : 0);
 
   return (
     <SheetFrame
@@ -89,6 +98,18 @@ export function FeeDebtorsFiltersSheet({
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
+        </section>
+
+        <section className="flex flex-col gap-2">
+          <h3 className="text-[12px] font-semibold text-ink-muted">سانس</h3>
+          <AuthSelect
+            id="debtorSession"
+            icon={CalendarDays}
+            placeholder="انتخاب سانس"
+            value={sessionId ?? "ALL"}
+            onValueChange={(value) => onSessionChange(value === "ALL" ? null : value)}
+            options={[{ value: "ALL", label: "همه سانس ها" }, ...sessions.map((session) => ({ value: session.id, label: session.name }))]}
+          />
         </section>
 
         <section className="flex flex-col gap-2">

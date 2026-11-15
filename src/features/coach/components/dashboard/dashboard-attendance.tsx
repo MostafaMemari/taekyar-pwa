@@ -2,7 +2,7 @@
 
 import { ChevronLeft, TrendingDown, TrendingUp } from "lucide-react";
 import Link from "next/link";
-import { Bar, BarChart, Cell, PolarAngleAxis, PolarRadiusAxis, RadialBar, RadialBarChart, XAxis } from "recharts";
+import { Bar, BarChart, Cell, XAxis, YAxis } from "recharts";
 import { Card } from "@/components/ui/card";
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -35,7 +35,6 @@ export function DashboardAttendance() {
   const days =
     data?.days.map((day) => ({
       key: day.weekDay,
-      day: WEEK_DAY_META[day.weekDay as WeekDay].label.slice(0, 1),
       label: WEEK_DAY_META[day.weekDay as WeekDay].label,
       percent: rate(day.present, day.total),
       present: day.present,
@@ -48,60 +47,33 @@ export function DashboardAttendance() {
       <SectionHeading title="حضور این هفته" action={<span className="text-[12px] font-medium text-ink-subtle">۷ روز اخیر</span>} />
       <Card className="gap-0 p-4">
         {isLoading && !data ? (
-          <Skeleton className="h-44 w-full" />
+          <Skeleton className="h-52 w-full" />
         ) : !hasRecords ? (
           <p className="py-4 text-center text-[12px] font-medium text-ink-subtle">در دو هفته اخیر حضور و غیابی ثبت نشده است</p>
         ) : (
           <>
-            <div className="flex items-center gap-4">
-              <div className="relative size-[84px] shrink-0" aria-hidden="true">
-                <ChartContainer config={chartConfig} className="aspect-auto size-full">
-                  <RadialBarChart
-                    data={[{ percent: average }]}
-                    innerRadius="76%"
-                    outerRadius="100%"
-                    startAngle={90}
-                    endAngle={-270}
-                    barSize={8}
-                  >
-                    <PolarAngleAxis type="number" domain={[0, 100]} tick={false} axisLine={false} />
-                    <PolarRadiusAxis tick={false} axisLine={false} />
-                    <RadialBar
-                      dataKey="percent"
-                      cornerRadius={8}
-                      background={{ fill: "var(--line-2)" }}
-                      isAnimationActive={false}
-                      fill="var(--color-percent)"
-                    />
-                  </RadialBarChart>
-                </ChartContainer>
-                <span className="absolute inset-0 grid place-items-center text-[17px] font-extrabold tabular-nums text-ink">
-                  {toPersianDigits(String(average))}٪
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <b className="text-[26px] font-extrabold leading-8 tabular-nums text-ink">{toPersianDigits(String(average))}٪</b>
+                <span className="min-w-0">
+                  <span className="block text-[12px] font-semibold text-ink">میانگین حضور این هفته</span>
+                  {comparable ? (
+                    <span
+                      className={cn(
+                        "mt-0.5 flex items-center gap-1 text-[11px] font-semibold tabular-nums",
+                        isUp ? "text-success" : "text-danger",
+                      )}
+                    >
+                      {isUp ? <TrendingUp className="size-3" aria-hidden="true" /> : <TrendingDown className="size-3" aria-hidden="true" />}
+                      {isUp ? "+" : "−"}
+                      {toPersianDigits(String(Math.abs(delta)))}٪ نسبت به هفته قبل
+                    </span>
+                  ) : null}
                 </span>
               </div>
-
-              <div className="min-w-0 flex-1">
-                <p className="text-[13px] font-semibold text-ink">میانگین حضور این هفته</p>
-                <p className="mt-1 text-[12px] font-medium tabular-nums text-ink-muted">
-                  {toPersianDigits(String(data.thisWeek.present))} حضور از {toPersianDigits(String(data.thisWeek.total))} ثبت
-                </p>
-                {comparable ? (
-                  <p
-                    className={cn(
-                      "mt-1.5 flex items-center gap-1 text-[12px] font-semibold tabular-nums",
-                      isUp ? "text-success" : "text-danger",
-                    )}
-                  >
-                    {isUp ? (
-                      <TrendingUp className="size-3.5" aria-hidden="true" />
-                    ) : (
-                      <TrendingDown className="size-3.5" aria-hidden="true" />
-                    )}
-                    {isUp ? "+" : "−"}
-                    {toPersianDigits(String(Math.abs(delta)))}٪ نسبت به هفته قبل
-                  </p>
-                ) : null}
-              </div>
+              <span className="shrink-0 rounded-full bg-muted px-2.5 py-1 text-[11px] font-bold tabular-nums text-ink-muted">
+                {toPersianDigits(String(data.thisWeek.present))} از {toPersianDigits(String(data.thisWeek.total))} ثبت
+              </span>
             </div>
 
             <p className="sr-only">
@@ -110,15 +82,27 @@ export function DashboardAttendance() {
                 .join("، ")}
             </p>
 
-            <ChartContainer config={chartConfig} className="mt-3 h-[72px] w-full" aria-hidden="true">
-              <BarChart data={days} margin={{ top: 4, right: 0, left: 0, bottom: 0 }} barCategoryGap="26%">
+            <ChartContainer config={chartConfig} className="mt-4 aspect-auto h-36 w-full" aria-hidden="true">
+              <BarChart data={days} accessibilityLayer={false} margin={{ top: 12, right: 0, left: 0, bottom: 0 }} barCategoryGap="28%">
+                <defs>
+                  <linearGradient id="attendanceBarToday" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="var(--color-percent)" stopOpacity={0.95} />
+                    <stop offset="100%" stopColor="var(--color-percent)" stopOpacity={0.5} />
+                  </linearGradient>
+                  <linearGradient id="attendanceBarRest" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="var(--color-percent)" stopOpacity={0.4} />
+                    <stop offset="100%" stopColor="var(--color-percent)" stopOpacity={0.16} />
+                  </linearGradient>
+                </defs>
+                <YAxis hide domain={[0, 100]} />
                 <XAxis
-                  dataKey="day"
+                  dataKey="label"
                   reversed
+                  interval={0}
                   tickLine={false}
                   axisLine={false}
-                  tickMargin={6}
-                  tick={{ fontSize: 12, fontWeight: 500 }}
+                  tickMargin={8}
+                  tick={{ fontSize: 10, fontWeight: 600 }}
                   className="fill-ink-subtle"
                 />
                 <ChartTooltip
@@ -141,17 +125,11 @@ export function DashboardAttendance() {
                     />
                   }
                 />
-                <Bar dataKey="percent" radius={[3, 3, 0, 0]} maxBarSize={16} fill="var(--color-percent)" isAnimationActive={false}>
+                <Bar dataKey="percent" radius={[8, 8, 0, 0]} maxBarSize={20} isAnimationActive={false}>
                   {days.map((day) => (
                     <Cell
                       key={day.key}
-                      fill={
-                        day.total === 0
-                          ? "transparent"
-                          : day.isToday
-                            ? "var(--color-percent)"
-                            : "color-mix(in srgb, var(--ak-600) 22%, transparent)"
-                      }
+                      fill={day.total === 0 ? "transparent" : day.isToday ? "url(#attendanceBarToday)" : "url(#attendanceBarRest)"}
                     />
                   ))}
                 </Bar>
@@ -161,7 +139,7 @@ export function DashboardAttendance() {
             {absentees && absentees.length > 0 ? (
               <Link
                 href="/coach/students/absences"
-                className="-mx-4 -mb-4 mt-3 flex items-center justify-between gap-2 border-t border-[var(--line-2)] bg-muted/40 px-4 py-2.5 transition-colors active:bg-muted/60"
+                className="-mx-4 -mb-4 mt-4 flex items-center justify-between gap-2 border-t border-[var(--line-2)] bg-muted/40 px-4 py-2.5 transition-colors active:bg-muted/60"
               >
                 <span className="min-w-0 truncate text-[12px] font-semibold text-ink-muted">
                   غیبت ها:{" "}

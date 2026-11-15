@@ -1,6 +1,7 @@
 "use client";
 
 import { EllipsisVertical } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { NotFoundScreen } from "@/components/shared/not-found-screen";
 import { Button } from "@/components/ui/button";
@@ -14,10 +15,10 @@ import { useStudent } from "@/features/coach/hooks/use-student";
 import { beltKeyOf } from "@/features/coach/lib/students-options";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { StudentBand } from "./student-band";
-import { StudentClubsPanel } from "./student-clubs-panel";
 import { StudentDetailActions } from "./student-detail-actions";
 import { StudentDetailSkeleton } from "./student-detail-skeleton";
 import { StudentInfoPanel } from "./student-info-panel";
+import { StudentMembershipsPanel } from "./student-memberships-panel";
 import { StudentSpecsPanel } from "./student-specs-panel";
 
 export function StudentDetail({ studentId }: { studentId: string }) {
@@ -25,6 +26,9 @@ export function StudentDetail({ studentId }: { studentId: string }) {
   const student = useStudent(studentId);
   const attendance = useStudentAttendance(studentId);
   const clubs = useStudentClubs(studentId);
+  // Opened from a club or class page: back returns there instead of the students list.
+  const from = useSearchParams().get("from");
+  const backHref = from?.startsWith("/coach/") ? from : "/coach/students";
 
   if (student.error) {
     const missing = student.error instanceof ApiError && student.error.status === 404;
@@ -64,7 +68,7 @@ export function StudentDetail({ studentId }: { studentId: string }) {
         fullName={profile.fullName}
         belt={belt}
         clubName={clubName}
-        backHref="/coach/students"
+        backHref={backHref}
         meta={<span className="meta-glass">{profile.userId ? "دارای حساب کاربری" : "بدون حساب کاربری"}</span>}
         action={
           <Button
@@ -89,7 +93,7 @@ export function StudentDetail({ studentId }: { studentId: string }) {
               مشخصات
             </TabsTrigger>
             <TabsTrigger value="clubs" className="px-1 text-[11px]">
-              باشگاه ها
+              عضویت ها
             </TabsTrigger>
           </TabsList>
 
@@ -107,9 +111,9 @@ export function StudentDetail({ studentId }: { studentId: string }) {
           </TabsContent>
           <TabsContent value="clubs">
             {clubs.error ? (
-              <ErrorState title="خواندن باشگاه ها انجام نشد" message={apiErrorMessage(clubs.error)} onRetry={() => void clubs.mutate()} />
+              <ErrorState title="خواندن عضویت ها انجام نشد" message={apiErrorMessage(clubs.error)} onRetry={() => void clubs.mutate()} />
             ) : (
-              <StudentClubsPanel memberships={clubs.data ?? []} isLoading={!clubs.data} />
+              <StudentMembershipsPanel studentId={studentId} memberships={clubs.data ?? []} isLoading={!clubs.data} />
             )}
           </TabsContent>
         </Tabs>

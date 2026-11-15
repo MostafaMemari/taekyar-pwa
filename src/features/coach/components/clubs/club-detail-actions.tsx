@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, Trash2 } from "lucide-react";
+import { Loader2, Pencil, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "@/components/ding-toaster";
@@ -16,10 +16,13 @@ export function ClubDetailActions({
   club,
   menuOpen,
   onMenuOpenChange,
+  onEdit,
 }: {
   club: ClubRecord;
   menuOpen: boolean;
   onMenuOpenChange: (open: boolean) => void;
+  // Opens the edit sheet hosted by the detail screen.
+  onEdit: () => void;
 }) {
   const router = useRouter();
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -49,7 +52,19 @@ export function ClubDetailActions({
   return (
     <>
       <SheetFrame open={menuOpen} onOpenChange={onMenuOpenChange} title="عملیات باشگاه" description={`عملیات قابل انجام برای ${club.name}`}>
-        <CoachActionMenu items={[{ icon: Trash2, label: "حذف باشگاه", tone: "danger", onSelect: openDelete }]} />
+        <CoachActionMenu
+          items={[
+            {
+              icon: Pencil,
+              label: "ویرایش باشگاه",
+              onSelect: () => {
+                onMenuOpenChange(false);
+                onEdit();
+              },
+            },
+            { icon: Trash2, label: "حذف باشگاه", tone: "danger", onSelect: openDelete },
+          ]}
+        />
       </SheetFrame>
 
       <SheetFrame open={deleteOpen} onOpenChange={setDeleteOpen} title="حذف باشگاه" description="تایید حذف باشگاه">

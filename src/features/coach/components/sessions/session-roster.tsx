@@ -1,4 +1,4 @@
-import { ChevronLeft, UserMinus } from "lucide-react";
+import { ChevronLeft, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Fragment } from "react";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { PersonAvatar } from "@/features/coach/components/person-avatar";
 import type { AttendanceStatus } from "@/features/coach/lib/coach-data";
 import { cn } from "@/lib/utils";
 
-type RosterEntry = { studentId: string; name: string; status?: AttendanceStatus; note?: string };
+type RosterEntry = { studentId: string; name: string; status?: AttendanceStatus; note?: string; subline?: string };
 
 export function SessionRoster({
   entries,
@@ -29,7 +29,11 @@ export function SessionRoster({
   return (
     <Card className={cn("gap-0 px-4 py-1", className)}>
       {entries.map((entry, index) => {
-        const subline = showNotes ? (entry.note ?? "بدون توضیح") : lastSessionDate ? `آخرین وضعیت: ${lastSessionDate}` : null;
+        const subline = showNotes
+          ? (entry.note ?? "بدون توضیح")
+          : lastSessionDate
+            ? `آخرین وضعیت: ${lastSessionDate}`
+            : (entry.subline ?? null);
         const row = (
           <div className="flex min-w-0 flex-1 items-center gap-3 py-2.5">
             <PersonAvatar name={entry.name} className="size-9" fallbackClassName="text-[12px]" />
@@ -65,7 +69,7 @@ export function SessionRoster({
                   aria-label={`حذف ${entry.name} از کلاس`}
                   onClick={() => onRemove(entry)}
                 >
-                  <UserMinus className="size-4" aria-hidden="true" />
+                  <Trash2 className="size-4" aria-hidden="true" />
                 </Button>
               ) : null}
             </div>

@@ -86,8 +86,25 @@ export function fetchClubMembers(id: string, search?: string): Promise<ClubMembe
   return authRequestWithMeta<ClubMemberRecord[]>(`club/${id}/students?${query.toString()}`).then(({ data }) => data);
 }
 
+export type ClubMembersPage = { members: ClubMemberRecord[]; total: number };
+
+// Paged member feed for the club screen; the backend filters by isActive natively.
+export function fetchClubMembersPage(id: string, page: number, isActive: boolean | undefined): Promise<ClubMembersPage> {
+  const query = new URLSearchParams({ page: String(page), take: "10" });
+  if (isActive !== undefined) query.set("isActive", String(isActive));
+
+  return authRequestWithMeta<ClubMemberRecord[]>(`club/${id}/students?${query.toString()}`).then(({ data, pager }) => ({
+    members: data,
+    total: pager?.total ?? data.length,
+  }));
+}
+
 export function changeClubMemberStatus(id: string, studentId: string, isActive: boolean): Promise<void> {
   return authRequest<unknown>(`club/${id}/students/${studentId}/status`, { method: "patch", json: { isActive } }).then(() => undefined);
+}
+
+export function removeStudentFromClub(clubId: string, studentId: string): Promise<void> {
+  return authRequest<unknown>(`club/${clubId}/students/${studentId}`, { method: "delete" }).then(() => undefined);
 }
 
 export function deleteClub(id: string): Promise<void> {

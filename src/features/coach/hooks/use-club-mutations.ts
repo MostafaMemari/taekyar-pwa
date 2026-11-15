@@ -1,10 +1,52 @@
 import { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
-import { type ClubInput, type ClubRecord, changeClubMemberStatus, createClub, deleteClub, updateClub } from "@/features/coach/lib/club-api";
+import {
+  addStudentToClub,
+  type ClubInput,
+  type ClubRecord,
+  changeClubMemberStatus,
+  createClub,
+  deleteClub,
+  removeStudentFromClub,
+  updateClub,
+} from "@/features/coach/lib/club-api";
 import { revalidateResource } from "@/lib/api/swr";
 
 // Any club write can change the list, a detail record and the member counts, so the whole club branch is revalidated.
 const revalidateClubs = () => mutate((key) => Array.isArray(key) && key[0] === "club");
+
+export function useAddClubStudent() {
+  return useSWRMutation(
+    ["club", "members", "add"] as const,
+    async (_key: unknown, { arg }: { arg: { clubId: string; studentId: string } }) => {
+      await addStudentToClub(arg.clubId, arg.studentId);
+      await revalidateResource("club");
+    },
+  );
+}
+
+// Arg-carried club id, so one hook instance serves every membership row of a screen.
+export function useSetClubMemberStatus() {
+  return useSWRMutation(
+    ["club", "members", "status-set"] as const,
+    async (_key: unknown, { arg }: { arg: { clubId: string; studentId: string; isActive: boolean } }) => {
+      await changeClubMemberStatus(arg.clubId, arg.studentId, arg.isActive);
+      await revalidateResource("club");
+    },
+  );
+}
+
+export function useRemoveClubStudent() {
+  return useSWRMutation(
+    ["club", "members", "remove"] as const,
+    async (_key: unknown, { arg }: { arg: { clubId: string; studentId: string } }) => {
+      await removeStudentFromClub(arg.clubId, arg.studentId);
+      await revalidateResource("club");
+      // The membership cleanup also removes the student from this club's classes.
+      await revalidateResource("session");
+    },
+  );
+}
 
 export function useSaveClub(clubId?: string) {
   return useSWRMutation(
@@ -22,7 +64,7 @@ export function useChangeClubMemberStatus(clubId: string) {
     ["club", "members", "status", clubId] as const,
     async (_key: unknown, { arg }: { arg: { studentId: string; isActive: boolean } }) => {
       await changeClubMemberStatus(clubId, arg.studentId, arg.isActive);
-      await revalidateClubs();
+      await revalidateResource("club");
     },
   );
 }

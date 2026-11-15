@@ -13,6 +13,7 @@ import { SectionHeading } from "@/features/coach/components/section-heading";
 import { StatusBadge } from "@/features/coach/components/status-badge";
 import { useClub } from "@/features/coach/hooks/use-clubs";
 import { useClubFee, useFeeDebtors } from "@/features/coach/hooks/use-fee";
+import { useSessions } from "@/features/coach/hooks/use-sessions";
 import {
   currentFeeMonth,
   type FeeDebtorFilters,
@@ -49,14 +50,19 @@ export function FeeDebtorsCard({ clubId, month }: { clubId: string; month: FeeMo
   const { data: fee, error: feeError, isLoading: feeLoading, mutate: mutateFee } = useClubFee(clubId);
   const { data: club } = useClub(clubId);
 
+  const { data: sessionData } = useSessions();
   const [status, setStatus] = useState("ALL");
-  const [membership, setMembership] = useState("ALL");
+  // The everyday view is active members only; the filters sheet widens it when needed.
+  const [membership, setMembership] = useState("active");
   const [minMonths, setMinMonths] = useState("1");
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [payTarget, setPayTarget] = useState<DebtorRow | null>(null);
   const [payOpen, setPayOpen] = useState(false);
+
+  const clubSessions = (sessionData?.sessions ?? []).filter((session) => session.clubId === clubId && session.isActive);
 
   // The URL keeps every keystroke; the request waits for a pause so the list does not refetch per character.
   useEffect(() => {
@@ -70,13 +76,16 @@ export function FeeDebtorsCard({ clubId, month }: { clubId: string; month: FeeMo
     ...(status !== "ALL" && { status: status as FeeDebtorStatusFilter }),
     ...(minMonths !== "1" && { minMonthsOwed: Number(minMonths) }),
     ...(searchTerm && { search: searchTerm }),
+    // The backend shows every membership when the param is absent, so the default must be sent explicitly.
     ...(membership !== "ALL" && { membershipStatus: membership as FeeDebtorFilters["membershipStatus"] }),
+    ...(sessionId && { sessionId }),
   };
 
   // The backend refuses debtors while no fee is set, so the request waits for the fee to exist.
   const { summary, debtors, hasMore, error, isLoading, isValidating, mutate, setSize } = useFeeDebtors(fee ? clubId : null, filters);
 
-  const filterCount = (status !== "ALL" ? 1 : 0) + (membership !== "ALL" ? 1 : 0) + (minMonths !== "1" ? 1 : 0);
+  const filterCount =
+    (status !== "ALL" ? 1 : 0) + (membership !== "active" ? 1 : 0) + (minMonths !== "1" ? 1 : 0) + (sessionId !== null ? 1 : 0);
   const hasFilters = filterCount > 0 || searchTerm !== "";
 
   return (
@@ -154,6 +163,7 @@ export function FeeDebtorsCard({ clubId, month }: { clubId: string; month: FeeMo
                     <div className="py-2.5">
                       <div className="flex items-center gap-2">
                         <b className="min-w-0 flex-1 truncate text-[12px] font-semibold text-ink-body">{debtor.fullName}</b>
+                        {debtor.hasPartial ? <StatusBadge tone="warning">پرداخت ناقص</StatusBadge> : null}
                         {debtor.membershipActive ? <StatusBadge tone="success">فعال</StatusBadge> : <StatusBadge>غیرفعال</StatusBadge>}
                         <b className="shrink-0 text-[12px] font-extrabold tabular-nums text-ink-body">{formatMoney(debtor.totalDebt)}</b>
                       </div>
@@ -161,20 +171,29 @@ export function FeeDebtorsCard({ clubId, month }: { clubId: string; month: FeeMo
                         <span className="min-w-0 flex-1 truncate text-[12px] font-medium tabular-nums text-ink-subtle">
                           اولین ماه بدهی {toPersianDigits(debtor.firstUnpaidMonth)} · {toPersianDigits(String(debtor.monthsOwed))} ماه
                         </span>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          className="h-7 shrink-0 gap-1 rounded-lg px-2.5 text-[11px] font-bold"
-                          onClick={() => {
-                            setPayTarget(debtor);
-                            setPayOpen(true);
-                          }}
-                        >
-                          <Banknote data-icon="inline-start" aria-hidden="true" />
-                          ثبت پرداخت
-                        </Button>
+                        {debtor.membershipActive ? (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="h-7 shrink-0 gap-1 rounded-lg px-2.5 text-[11px] font-bold"
+                            onClick={() => {
+                              setPayTarget(debtor);
+                              setPayOpen(true);
+                            }}
+                          >
+                            <Banknote data-icon="inline-start" aria-hidden="true" />
+                            ثبت پرداخت
+                          </Button>
+                        ) : (
+                          <span className="flex h-7 shrink-0 items-center text-[11px] font-semibold text-ink-subtle">
+                            نیازمند فعال سازی
+                          </span>
+                        )}
                       </div>
+                      <span className="mt-1 block truncate text-[11px] font-medium text-ink-subtle">
+                        سانس: {debtor.sessionNames.length > 0 ? debtor.sessionNames.join(" · ") : "بدون سانس"}
+                      </span>
                     </div>
                   </Fragment>
                 ))}
@@ -200,13 +219,17 @@ export function FeeDebtorsCard({ clubId, month }: { clubId: string; month: FeeMo
         status={status}
         membership={membership}
         minMonths={minMonths}
+        sessionId={sessionId}
+        sessions={clubSessions.map((session) => ({ id: session.id, name: session.name }))}
         onStatusChange={setStatus}
         onMembershipChange={setMembership}
         onMinMonthsChange={setMinMonths}
+        onSessionChange={setSessionId}
         onClear={() => {
           setStatus("ALL");
-          setMembership("ALL");
+          setMembership("active");
           setMinMonths("1");
+          setSessionId(null);
         }}
       />
 
