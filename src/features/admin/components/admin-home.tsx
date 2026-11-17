@@ -1,15 +1,35 @@
 "use client";
 
-import { LogOut, ShieldCheck } from "lucide-react";
+import { Award, CalendarRange, ChevronLeft, LogOut, ShieldCheck, Trophy } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { AdminBand } from "@/features/admin/components/admin-band";
 import { logoutSession } from "@/features/auth/api";
 import { CoachBand } from "@/features/coach/components/coach-band";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
 import { PAGE_ENTER } from "@/features/coach/components/page-enter";
 import { cn } from "@/lib/utils";
+
+const sections = [
+  { href: "/admin/belts", title: "کمربندها", description: "رتبه ها، سطح و بازه اعطا", icon: Award, tile: "bg-brand-50 text-accent-ink" },
+  {
+    href: "/admin/age-categories",
+    title: "رده های سنی",
+    description: "بازه تاریخ تولد هر رده",
+    icon: CalendarRange,
+    tile: "bg-muted text-ink-muted",
+  },
+  {
+    href: "/admin/belt-exams",
+    title: "آزمون های کمربند",
+    description: "دوره ها، جنسیت و بازه کمربند",
+    icon: Trophy,
+    tile: "bg-warning-soft text-warning",
+  },
+];
 
 export function AdminHome() {
   const router = useRouter();
@@ -24,44 +44,52 @@ export function AdminHome() {
   return (
     <main>
       <CoachBand className={PAGE_ENTER}>
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex min-w-0 items-center gap-2.5">
-            <span className="grid size-11 shrink-0 place-items-center rounded-full border border-white/20 bg-white/10" aria-hidden="true">
-              <ShieldCheck className="size-5 text-white" />
+        <AdminBand
+          title="پنل مدیریت"
+          subtitle="مدیریت داده های پایه و منابع سامانه"
+          icon={ShieldCheck}
+          chip={
+            <span className="shrink-0 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[11px] font-bold text-white">
+              ادمین
             </span>
-            <span className="min-w-0">
-              <span className="flex min-w-0 items-center gap-2">
-                <h1 className="page-title min-w-0 truncate">پنل مدیریت</h1>
-                <span className="shrink-0 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[11px] font-bold text-white">
-                  ادمین
-                </span>
-              </span>
-              <p className="truncate text-[12px] font-medium leading-5 text-white/70">مدیریت داده های پایه و منابع سامانه</p>
-            </span>
-          </div>
-
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            aria-label="خروج از حساب"
-            disabled={pending}
-            onClick={signOut}
-            className="size-11 shrink-0 rounded-full border border-white/20 bg-white/10 text-white hover:bg-white/20"
-          >
-            <LogOut aria-hidden="true" />
-          </Button>
-        </div>
+          }
+          action={
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              aria-label="خروج از حساب"
+              disabled={pending}
+              onClick={signOut}
+              className="size-11 shrink-0 rounded-full border border-white/20 bg-white/10 text-white hover:bg-white/20"
+            >
+              <LogOut aria-hidden="true" />
+            </Button>
+          }
+        />
       </CoachBand>
 
-      <CoachSheet className={cn("flex flex-col gap-3", PAGE_ENTER)}>
-        <Card className="items-center gap-2 rounded-2xl px-4 py-8 text-center">
-          <span className="grid size-12 place-items-center rounded-2xl bg-brand-50 text-accent-ink" aria-hidden="true">
-            <ShieldCheck className="size-6" />
-          </span>
-          <b className="text-[13px] font-extrabold text-ink">این بخش در حال آماده سازی است</b>
-          <p className="text-[12px] font-medium text-ink-subtle">همه بخش های مدیریت از همین صفحه اضافه می شوند</p>
-        </Card>
+      <CoachSheet className={cn("flex flex-col gap-2.5", PAGE_ENTER)}>
+        {sections.map((section) => {
+          const Icon = section.icon;
+
+          return (
+            <Link key={section.href} href={section.href} className="block transition duration-150 active:scale-[0.995]">
+              <Card className="flex-row items-center gap-3 rounded-2xl px-3 py-3">
+                <span className={cn("grid size-10 shrink-0 place-items-center rounded-xl", section.tile)} aria-hidden="true">
+                  <Icon className="size-5" />
+                </span>
+
+                <span className="min-w-0 flex-1">
+                  <b className="block truncate text-[13px] font-extrabold text-ink">{section.title}</b>
+                  <span className="mt-0.5 block truncate text-[12px] font-semibold text-ink-subtle">{section.description}</span>
+                </span>
+
+                <ChevronLeft className="size-4 shrink-0 text-ink-subtle" aria-hidden="true" />
+              </Card>
+            </Link>
+          );
+        })}
       </CoachSheet>
     </main>
   );
