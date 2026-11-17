@@ -4,7 +4,14 @@ import { Card } from "@/components/ui/card";
 import { PersonAvatar } from "@/features/coach/components/person-avatar";
 import { StatusBadge } from "@/features/coach/components/status-badge";
 import type { AgeCategoryRecord, StudentRecord } from "@/features/coach/lib/student-api";
-import { AGE_CATEGORY_LABELS, ageCategoryOf, beltKeyOf, INSURANCE_META, insuranceStatusOf } from "@/features/coach/lib/students-options";
+import {
+  AGE_CATEGORY_LABELS,
+  ageCategoryOf,
+  beltKeyOf,
+  FEE_META,
+  INSURANCE_META,
+  insuranceStatusOf,
+} from "@/features/coach/lib/students-options";
 import { toPersianDigits } from "@/lib/digits";
 import { toJalaliDate } from "@/lib/jalali";
 import { getStudentBeltMeta } from "@/lib/student-belts";
@@ -25,8 +32,13 @@ export function StudentsListItem({
   const InsuranceIcon = insuranceMeta.icon;
   const insuranceLabel =
     insurance === "none"
-      ? insuranceMeta.shortLabel
-      : `${insurance === "expired" ? "منقضی" : "تا"} ${toPersianDigits(toJalaliDate(student.sportsInsuranceDate ?? ""))}`;
+      ? "بدون بیمه"
+      : insurance === "expired"
+        ? "بیمه منقضی"
+        : `بیمه تا ${toPersianDigits(toJalaliDate(student.sportsInsuranceDate ?? ""))}`;
+
+  const feeMeta = student.feeStatus ? FEE_META[student.feeStatus] : null;
+  const FeeIcon = feeMeta?.icon;
 
   const ageCategory = ageCategoryOf(student.birthDate, ageCategories);
   const beltName = student.currentBelt?.belt.name;
@@ -54,19 +66,24 @@ export function StudentsListItem({
         </span>
 
         <span className="min-w-0 flex-1">
-          <b className="block truncate text-[13px] font-extrabold text-ink">{student.fullName}</b>
+          <span className="flex min-w-0 items-baseline gap-1.5">
+            <b className="min-w-0 truncate text-[13px] font-extrabold text-ink">{student.fullName}</b>
+            {ageCategory ? (
+              <span className="shrink-0 text-[11px] font-semibold text-ink-subtle">{AGE_CATEGORY_LABELS[ageCategory]}</span>
+            ) : null}
+          </span>
 
-          <span className="mt-1.5 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+          <span className="mt-1.5 flex min-w-0 flex-wrap items-center gap-1.5">
             <StatusBadge tone={insuranceMeta.tone} className="shrink-0 px-1.5 py-[3px] text-[11px]">
               <InsuranceIcon className="size-3" aria-hidden="true" />
               {insuranceLabel}
             </StatusBadge>
-            {student.feeStatus ? (
-              <StatusBadge tone={student.feeStatus === "OWED" ? "danger" : "success"} className="shrink-0 px-1.5 py-[3px] text-[11px]">
+            {feeMeta && FeeIcon ? (
+              <StatusBadge tone={feeMeta.tone} className="shrink-0 px-1.5 py-[3px] text-[11px]">
+                <FeeIcon className="size-3" aria-hidden="true" />
                 {student.feeStatus === "OWED" ? "بدهکار" : "تسویه"}
               </StatusBadge>
             ) : null}
-            {ageCategory ? <span className="text-[12px] font-semibold text-ink-subtle">{AGE_CATEGORY_LABELS[ageCategory]}</span> : null}
           </span>
         </span>
 
