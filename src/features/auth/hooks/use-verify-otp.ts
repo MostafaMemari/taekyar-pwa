@@ -37,6 +37,8 @@ export function useVerifyOtp(mobile: string) {
 
       if (result.type === "COACH") {
         router.replace("/coach");
+      } else if (result.type === "ADMIN") {
+        router.replace("/admin");
       } else {
         router.replace(result.student?.id ? "/student" : "/complete-profile");
       }

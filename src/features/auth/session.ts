@@ -1,6 +1,6 @@
-export type SessionRole = "COACH" | "STUDENT";
+export type SessionRole = "COACH" | "STUDENT" | "ADMIN";
 
-export const HOME_BY_ROLE: Record<SessionRole, string> = { COACH: "/coach", STUDENT: "/student" };
+export const HOME_BY_ROLE: Record<SessionRole, string> = { COACH: "/coach", STUDENT: "/student", ADMIN: "/admin" };
 
 export type StoredSession = {
   accessToken: string;
