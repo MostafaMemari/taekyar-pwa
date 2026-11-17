@@ -253,7 +253,7 @@ export function StudentMembershipsPanel({
   );
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-4">
       {memberships.length === 0 ? (
         <p className="rounded-xl bg-muted/60 p-3 text-center text-[12px] font-semibold leading-5 text-ink-subtle">
           این هنرجو هنوز در باشگاهی ثبت نشده است

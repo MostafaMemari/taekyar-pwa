@@ -10,7 +10,7 @@ export type BeltExamRecord = {
   registerDate: string;
   genders: Gender[];
   eventPlaces: string[];
-  belts?: { name: string; level: number }[];
+  belts?: { id: string; name: string; level: number }[];
 };
 
 export const BELT_EXAMS_PAGE_SIZE = 20;

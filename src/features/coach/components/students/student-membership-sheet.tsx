@@ -14,7 +14,7 @@ export function StudentMembershipSheet({
   studentId: string;
 }) {
   return (
-    <SheetFrame open={open} onOpenChange={onOpenChange} title="تمدید سال عضویت" description="تایید تمدید سال عضویت هنرجو">
+    <SheetFrame open={open} onOpenChange={onOpenChange} title="تمدید شارژ" description="تایید تمدید سال شارژ هنرجو">
       <div className="animate-in fade-in slide-in-from-bottom-2 duration-200 ease-out">
         <StudentMembershipForm studentId={studentId} onDone={() => onOpenChange(false)} />
       </div>

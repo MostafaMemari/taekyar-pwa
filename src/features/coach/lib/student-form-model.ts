@@ -39,9 +39,12 @@ export const studentFormSchema = z.object({
     .refine((value) => !value || (Number(value) >= 10 && Number(value) <= 300), "وزن باید بین ۱۰ تا ۳۰۰ کیلوگرم باشد"),
   membershipYear: z
     .string()
-    .regex(/^$|^\d{4}$/, "سال عضویت باید ۴ رقم باشد")
-    .refine((value) => !value || (Number(value) >= 1380 && Number(value) <= 1406), "سال عضویت باید بین ۱۳۸۰ و ۱۴۰۶ باشد"),
+    .regex(/^$|^\d{4}$/, "سال شارژ باید ۴ رقم باشد")
+    .refine((value) => !value || (Number(value) >= 1380 && Number(value) <= 1406), "سال شارژ باید بین ۱۳۸۰ و ۱۴۰۶ باشد"),
   expireImageDate: z.string(),
+  // Optional first club/class; not part of POST /student — the form enrolls the created id after it succeeds.
+  clubId: z.string(),
+  sessionId: z.string(),
 });
 
 export type StudentFormValues = z.infer<typeof studentFormSchema>;
@@ -62,6 +65,8 @@ export const emptyStudentForm: StudentFormValues = {
   weight: "",
   membershipYear: "",
   expireImageDate: "",
+  clubId: "",
+  sessionId: "",
 };
 
 export function studentDetailToForm(student: StudentDetailRecord): StudentFormValues {
@@ -80,6 +85,9 @@ export function studentDetailToForm(student: StudentDetailRecord): StudentFormVa
     weight: student.weight ?? "",
     membershipYear: student.membershipYear ? String(student.membershipYear) : "",
     expireImageDate: toDateInput(student.expireImageDate),
+    // Edit never renders the club/class section; these stay empty and unused.
+    clubId: "",
+    sessionId: "",
   };
 }
 

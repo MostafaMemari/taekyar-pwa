@@ -11,6 +11,7 @@ import {
   fetchFeeDebtors,
   fetchFeeMonthStudentStates,
   fetchFeePayments,
+  fetchStudentFee,
 } from "@/features/coach/lib/fee-api";
 import { subscribeResource, swrReadOptions } from "@/lib/api/swr";
 
@@ -21,6 +22,11 @@ export function useClubFee(clubId: string) {
 // The club's rate history; the payment form picks the rate that covers each month.
 export function useClubFeeRates(clubId: string) {
   return useSWR(["fee", "rates", clubId] as const, ([, , id]) => fetchClubFeeRates(id), swrReadOptions);
+}
+
+// The student profile's fee view: month periods plus their payment history, one club at a time.
+export function useStudentFee(clubId: string, studentId: string) {
+  return useSWR(["fee", "student", clubId, studentId] as const, ([, , id, sid]) => fetchStudentFee(id, sid), swrReadOptions);
 }
 
 type FeePaymentsPage = { data: FeePaymentRecord[]; pager?: { page: number; totalPages: number } };

@@ -20,8 +20,9 @@ const revalidateStudents = () => revalidateResource("student");
 
 export function useCreateStudent() {
   return useSWRMutation(["student", "create"] as const, async (_key: unknown, { arg }: { arg: CreateStudentInput }) => {
-    await createStudent(arg);
+    const studentId = await createStudent(arg);
     await revalidateStudents();
+    return studentId;
   });
 }
 

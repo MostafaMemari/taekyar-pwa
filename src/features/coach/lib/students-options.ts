@@ -47,6 +47,26 @@ export const FEE_META: Record<StudentFeeStatus, { label: string; shortLabel: str
   OWED: { label: "بدهکار شهریه این ماه", shortLabel: "بدهکار", tone: "danger", icon: CircleAlert },
 };
 
+// Payment rows that no longer count: cancelled and refunded keep their reason key for the secondary line.
+export const FEE_PAYMENT_VOID_META: Record<
+  "CANCELLED" | "REFUNDED",
+  { label: string; tone: "danger" | "warning"; reasonKey: "cancelReason" | "refundNote" }
+> = {
+  CANCELLED: { label: "لغو شده", tone: "danger", reasonKey: "cancelReason" },
+  REFUNDED: { label: "برگشت داده شد", tone: "warning", reasonKey: "refundNote" },
+};
+
+// Month period badges on fee lists; UNPRICED months predate the club's first rate.
+export const FEE_PERIOD_META: Record<
+  "UNPAID" | "PARTIAL" | "PAID" | "UNPRICED",
+  { label: string; tone: "success" | "warning" | "danger" | "neutral" }
+> = {
+  PAID: { label: "تسویه شده", tone: "success" },
+  PARTIAL: { label: "پرداخت ناقص", tone: "warning" },
+  UNPAID: { label: "بدهکار", tone: "danger" },
+  UNPRICED: { label: "بدون نرخ", tone: "neutral" },
+};
+
 const DAY_MS = 86_400_000;
 
 export function insuranceStatusOf(expiryDate: string | null, expiringDays: number): StudentInsuranceStatus {

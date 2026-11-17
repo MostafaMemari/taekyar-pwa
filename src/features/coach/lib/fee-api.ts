@@ -84,6 +84,12 @@ export function feeMonthLabel(month: FeeMonth): string {
   return `${JALALI_MONTHS[month.month - 1]} ${toPersianDigits(String(month.year))}`;
 }
 
+// A period's stored date reads back as its covering Jalali month.
+export function feeMonthOfDate(iso: string): FeeMonth {
+  const [year, month] = toLatinDigits(toJalaliDate(iso)).split("/").map(Number);
+  return { year, month };
+}
+
 // "current" is editable in place, "scheduled" starts in a future month, "stale" moves a save to next month.
 export type FeeRateState = "current" | "scheduled" | "stale";
 
@@ -149,6 +155,30 @@ export function fetchFeeDebtors(clubId: string, filters: FeeDebtorFilters): Prom
   params.set("page", String(filters.page ?? 1));
   params.set("take", String(filters.take ?? 20));
   return authRequest<FeeDebtors>(`club/${clubId}/fee/debtors?${params.toString()}`);
+}
+
+export type StudentFeePeriod = {
+  periodStart: string;
+  expectedAmount: string | null;
+  paidAmount: string;
+  status: FeePeriodStatus;
+};
+
+export type StudentFeePayment = {
+  id: string;
+  amount: string;
+  paidAt: string;
+  note: string | null;
+  status: FeePaymentStatus;
+  cancelReason: string | null;
+  refundNote: string | null;
+  period: { periodStart: string };
+};
+
+export type StudentFeeView = { periods: StudentFeePeriod[]; payments: StudentFeePayment[] };
+
+export function fetchStudentFee(clubId: string, studentId: string): Promise<StudentFeeView> {
+  return authRequest<StudentFeeView>(`club/${clubId}/fee/students/${studentId}`);
 }
 
 // shortcut: assumes at most 100 payments in one club-month (the API take cap); a payment beyond page 1 would be missed.

@@ -124,8 +124,11 @@ export function fetchStudents(query: StudentQuery): Promise<{ students: StudentR
   return authRequestWithMeta<StudentRecord[]>(`student?${toQueryString(query)}`).then(({ data, pager }) => ({ students: data, pager }));
 }
 
-export function createStudent(input: CreateStudentInput): Promise<void> {
-  return authRequest<unknown>("student", { method: "post", json: input }).then(() => undefined);
+// The created id lets the create form enroll the student into a club/class right after the POST.
+export function createStudent(input: CreateStudentInput): Promise<string> {
+  return authRequest<{ message: string; student: StudentRecord }>("student", { method: "post", json: input }).then(
+    (result) => result.student.id,
+  );
 }
 
 export function updateStudent(id: string, input: UpdateStudentInput): Promise<void> {
@@ -169,7 +172,7 @@ export function assignStudentBelt(id: string, input: AssignBeltInput): Promise<v
   return authRequest<unknown>(`student/${id}/belt`, { method: "patch", json: input }).then(() => undefined);
 }
 
-export type BeltRecord = { id: string; name: string; level: number };
+export type BeltRecord = { id: string; name: string; level: number; durationMonth?: number };
 
 export function fetchBelts(): Promise<BeltRecord[]> {
   return authRequestWithMeta<BeltRecord[]>("belt?page=1&take=100&sortBy=level&sortDirection=asc").then(({ data }) => data);

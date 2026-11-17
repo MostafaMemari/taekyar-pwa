@@ -1,13 +1,14 @@
 "use client";
 
 import { CalendarCheck2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
 import { ErrorState } from "@/features/coach/components/error-state";
-import { useStudentAttendance } from "@/features/coach/hooks/use-attendance";
+import { useStudentAttendanceFeed, useStudentAttendanceSummary } from "@/features/coach/hooks/use-attendance";
 import { useStudentClubs } from "@/features/coach/hooks/use-clubs";
 import { useStudent } from "@/features/coach/hooks/use-student";
 import type { StudentAttendanceEntry } from "@/features/coach/lib/attendance-api";
@@ -47,10 +48,16 @@ function groupByMonth(records: StudentAttendanceEntry[]) {
 export function StudentAttendanceReport({ studentId }: { studentId: string }) {
   const [filter, setFilter] = useState<AttendanceFilter>("ALL");
   const student = useStudent(studentId);
-  const attendance = useStudentAttendance(studentId);
+  const summary = useStudentAttendanceSummary(studentId);
+  const feed = useStudentAttendanceFeed(studentId);
   const clubs = useStudentClubs(studentId);
 
-  const error = student.error ?? attendance.error;
+  // A filtered view must not hide rows sitting on unloaded pages, so the feed drains to the end.
+  useEffect(() => {
+    if (filter !== "ALL" && feed.hasMore && !feed.isValidating) void feed.setSize(feed.size + 1);
+  }, [filter, feed.hasMore, feed.isValidating, feed.setSize, feed.size]);
+
+  const error = student.error ?? summary.error ?? feed.error;
 
   if (error) {
     return (
@@ -60,14 +67,15 @@ export function StudentAttendanceReport({ studentId }: { studentId: string }) {
           message={apiErrorMessage(error)}
           onRetry={() => {
             void student.mutate();
-            void attendance.mutate();
+            void summary.mutate();
+            void feed.mutate();
           }}
         />
       </CoachSheet>
     );
   }
 
-  if (!student.data || !attendance.data) {
+  if (!student.data || !summary.data) {
     return (
       <CoachSheet className="flex flex-col gap-3">
         <Skeleton className="h-28 w-full rounded-2xl" />
@@ -79,7 +87,8 @@ export function StudentAttendanceReport({ studentId }: { studentId: string }) {
   }
 
   const profile = student.data;
-  const { counts, records } = attendance.data;
+  const counts = summary.data;
+  const records = (feed.data ?? []).flatMap((page) => page.data);
   const belt = profile.currentBelt ? beltKeyOf(profile.currentBelt.belt.name) : null;
   const visible = filter === "ALL" ? records : records.filter((record) => record.status === filter);
   const groups = groupByMonth(visible);
@@ -152,6 +161,18 @@ export function StudentAttendanceReport({ studentId }: { studentId: string }) {
                 </div>
               </section>
             ))}
+
+            {feed.hasMore ? (
+              <Button
+                type="button"
+                variant="outline"
+                className="mt-3 h-11 w-full rounded-xl text-[12px] font-bold"
+                disabled={feed.isValidating}
+                onClick={() => void feed.setSize(feed.size + 1)}
+              >
+                {feed.isValidating ? "در حال بارگذاری..." : "نمایش بیشتر"}
+              </Button>
+            ) : null}
           </div>
         ) : (
           <Empty className="mt-2 border-none bg-transparent p-6">

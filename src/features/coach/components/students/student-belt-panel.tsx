@@ -57,11 +57,14 @@ export function StudentBeltPanel({
   // Poom and dan belts are granted through federation exams; the exam periods in the backend announce them.
   const nextIsFederation = nextKey !== null && (nextKey.startsWith("poom") || nextKey.startsWith("dan"));
   const examsLoading = exams.isLoading && !exams.data;
+  // Only exams the student can actually sit: the event must be today or later AND on/after the
+  // eligibility date — an exam announced before nextBeltDate is out of reach and must not show.
   const federationExam = nextIsFederation
     ? ([...(exams.data ?? [])]
         .filter(
           (exam) =>
             new Date(exam.eventDate).getTime() >= today.getTime() - DAY_MS &&
+            (nextDate === null || exam.eventDate.slice(0, 10) >= nextDate.slice(0, 10)) &&
             (exam.belts ?? []).some((belt) => belt.name.toUpperCase() === beltApiName(nextKey)),
         )
         .sort((a, b) => a.eventDate.localeCompare(b.eventDate))[0] ?? null)
@@ -141,7 +144,7 @@ export function StudentBeltPanel({
                     </b>
                   </div>
                 ) : (
-                  <p className="mt-1.5 text-[12px] font-medium text-ink-subtle">هنوز دوره ای برای این کمربند اعلام نشده است</p>
+                  <p className="mt-1.5 text-[12px] font-medium text-ink-subtle">دوره ای بعد از موعد ارتقا برای این کمربند اعلام نشده است</p>
                 )}
               </div>
             ) : null}

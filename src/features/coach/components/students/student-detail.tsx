@@ -2,6 +2,7 @@
 
 import { EllipsisVertical } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { parseAsStringEnum, useQueryState } from "nuqs";
 import { useState } from "react";
 import { NotFoundScreen } from "@/components/shared/not-found-screen";
 import { Button } from "@/components/ui/button";
@@ -17,12 +18,17 @@ import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { StudentBand } from "./student-band";
 import { StudentDetailActions } from "./student-detail-actions";
 import { StudentDetailSkeleton } from "./student-detail-skeleton";
+import { StudentFeePanel } from "./student-fee-panel";
 import { StudentInfoPanel } from "./student-info-panel";
 import { StudentMembershipsPanel } from "./student-memberships-panel";
 import { StudentSpecsPanel } from "./student-specs-panel";
 
+const STUDENT_DETAIL_TABS = ["info", "clubs", "fee", "specs"];
+
 export function StudentDetail({ studentId }: { studentId: string }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  // The active tab lives in the URL, so a refresh or shared link lands on the same tab.
+  const [tab, setTab] = useQueryState("tab", parseAsStringEnum(STUDENT_DETAIL_TABS).withDefault("info"));
   const student = useStudent(studentId);
   const attendance = useStudentAttendance(studentId);
   const clubs = useStudentClubs(studentId);
@@ -84,20 +90,23 @@ export function StudentDetail({ studentId }: { studentId: string }) {
       />
 
       <CoachSheet className="flex flex-col gap-4">
-        <Tabs defaultValue="info" className="gap-3">
-          <TabsList className="grid h-10 w-full grid-cols-3">
+        <Tabs value={tab} onValueChange={(value) => setTab(value)} className="gap-3">
+          <TabsList className="grid h-10 w-full grid-cols-4">
             <TabsTrigger value="info" className="px-1 text-[11px]">
               اطلاعات
-            </TabsTrigger>
-            <TabsTrigger value="specs" className="px-1 text-[11px]">
-              مشخصات
             </TabsTrigger>
             <TabsTrigger value="clubs" className="px-1 text-[11px]">
               عضویت ها
             </TabsTrigger>
+            <TabsTrigger value="fee" className="px-1 text-[11px]">
+              شهریه
+            </TabsTrigger>
+            <TabsTrigger value="specs" className="px-1 text-[11px]">
+              مشخصات
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="info">
+          <TabsContent value="info" className="flex flex-col gap-4">
             <StudentInfoPanel
               student={profile}
               attendance={attendance.data}
@@ -105,16 +114,23 @@ export function StudentDetail({ studentId }: { studentId: string }) {
               onAttendanceRetry={() => void attendance.mutate()}
             />
           </TabsContent>
-          <TabsContent value="specs" className="flex flex-col gap-4">
-            <StudentSpecsPanel student={profile} />
-            <StudentDetailActions studentId={studentId} fullName={profile.fullName} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
-          </TabsContent>
-          <TabsContent value="clubs">
+          <TabsContent value="clubs" className="flex flex-col gap-4">
             {clubs.error ? (
               <ErrorState title="خواندن عضویت ها انجام نشد" message={apiErrorMessage(clubs.error)} onRetry={() => void clubs.mutate()} />
             ) : (
               <StudentMembershipsPanel studentId={studentId} memberships={clubs.data ?? []} isLoading={!clubs.data} />
             )}
+          </TabsContent>
+          <TabsContent value="fee" className="flex flex-col gap-4">
+            {clubs.error ? (
+              <ErrorState title="خواندن شهریه انجام نشد" message={apiErrorMessage(clubs.error)} onRetry={() => void clubs.mutate()} />
+            ) : (
+              <StudentFeePanel studentId={studentId} memberships={clubs.data ?? []} isLoading={!clubs.data} />
+            )}
+          </TabsContent>
+          <TabsContent value="specs" className="flex flex-col gap-4">
+            <StudentSpecsPanel student={profile} />
+            <StudentDetailActions studentId={studentId} fullName={profile.fullName} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
           </TabsContent>
         </Tabs>
       </CoachSheet>

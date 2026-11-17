@@ -1,6 +1,6 @@
 "use client";
 
-import { ShieldCheck } from "lucide-react";
+import { BadgeCheck } from "lucide-react";
 import { type Control, Controller, type FieldErrors } from "react-hook-form";
 import { AuthField } from "@/components/shared/auth-field";
 import { Input } from "@/components/ui/input";
@@ -17,8 +17,8 @@ export function StudentMembershipField({
   errors: FieldErrors<StudentFormValues>;
 }) {
   return (
-    <FormSection icon={ShieldCheck} title="عضویت">
-      <AuthField label="سال عضویت" htmlFor="membershipYear" optional error={errors.membershipYear?.message}>
+    <FormSection icon={BadgeCheck} title="شارژ بانک اطلاعاتی">
+      <AuthField label="سال شارژ" htmlFor="membershipYear" optional error={errors.membershipYear?.message}>
         <Controller
           control={control}
           name="membershipYear"

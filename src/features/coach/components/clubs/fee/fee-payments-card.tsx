@@ -19,18 +19,11 @@ import { useFeePayments } from "@/features/coach/hooks/use-fee";
 import { useCancelFeePayment, useRefundFeePayment } from "@/features/coach/hooks/use-fee-mutations";
 import type { FeeMonth, FeePaymentRecord } from "@/features/coach/lib/fee-api";
 import { feeMonthLabel } from "@/features/coach/lib/fee-api";
+import { FEE_PAYMENT_VOID_META } from "@/features/coach/lib/students-options";
 import { apiErrorMessage } from "@/lib/api/client";
 import { formatMoney, toPersianDigits } from "@/lib/digits";
 import { toJalaliDateTime } from "@/lib/jalali";
 import { cn } from "@/lib/utils";
-
-const VOIDED_META: Record<
-  "CANCELLED" | "REFUNDED",
-  { label: string; tone: "danger" | "warning"; reasonKey: "cancelReason" | "refundNote" }
-> = {
-  CANCELLED: { label: "لغو شده", tone: "danger", reasonKey: "cancelReason" },
-  REFUNDED: { label: "برگشت داده شد", tone: "warning", reasonKey: "refundNote" },
-};
 
 export function FeePaymentsCard({ clubId, month }: { clubId: string; month: FeeMonth }) {
   const { payments, total, hasMore, error, isLoading, isValidating, mutate, setSize } = useFeePayments(clubId, month.year, month.month);
@@ -85,7 +78,7 @@ export function FeePaymentsCard({ clubId, month }: { clubId: string; month: FeeM
       ) : (
         <Card className="gap-0 px-4 py-1">
           {payments.map((payment, index) => {
-            const voided = payment.status === "CONFIRMED" ? null : VOIDED_META[payment.status];
+            const voided = payment.status === "CONFIRMED" ? null : FEE_PAYMENT_VOID_META[payment.status];
             const reason = voided ? payment[voided.reasonKey] : null;
 
             return (

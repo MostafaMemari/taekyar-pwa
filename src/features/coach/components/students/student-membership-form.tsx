@@ -19,7 +19,7 @@ export function StudentMembershipForm({ studentId, onDone }: { studentId: string
   const submit = async () => {
     try {
       await renew.trigger(studentId);
-      toast.success("سال عضویت تمدید شد");
+      toast.success("سال شارژ تمدید شد");
       onDone();
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) router.replace("/login");
@@ -29,7 +29,7 @@ export function StudentMembershipForm({ studentId, onDone }: { studentId: string
   return (
     <>
       <p className="mt-3 rounded-xl bg-info-soft/60 p-3 text-[12px] leading-5 text-ink-muted">
-        سال عضویت به سال جاری ({currentYear}) به روز می شود
+        سال شارژ به سال جاری ({currentYear}) به روز می شود
       </p>
       <AuthFormError message={renew.error ? apiErrorMessage(renew.error) : ""} />
       <SheetActions onSecondary={onDone}>
@@ -39,7 +39,7 @@ export function StudentMembershipForm({ studentId, onDone }: { studentId: string
           disabled={renew.isMutating}
           onClick={() => void submit()}
         >
-          {renew.isMutating ? "در حال تمدید..." : "تمدید عضویت"}
+          {renew.isMutating ? "در حال تمدید..." : "تمدید شارژ"}
         </Button>
       </SheetActions>
     </>

@@ -1,6 +1,7 @@
 import { authRequest, authRequestWithMeta } from "@/features/auth/api";
 import type { AttendanceStatus } from "@/features/coach/lib/coach-data";
 import type { StudentFeeStatus } from "@/features/coach/lib/students-options";
+import type { PagerMeta } from "@/lib/api/client";
 
 export type AttendanceRecord = {
   id: string;
@@ -78,12 +79,24 @@ export function fetchAbsentStudents({ minAbsences, clubId }: AbsentStudentsQuery
   return authRequest<{ students: AbsentStudentRecord[] }>(`attendance/coach/absent-students?${params}`).then((report) => report.students);
 }
 
-// shortcut: one page of 100 sessions feeds both the file panel and the report screen; add pagination when a student outgrows it.
+// shortcut: one page of 100 sessions feeds the profile panel's trend chart.
 export function fetchStudentAttendance(studentId: string): Promise<StudentAttendance> {
   return Promise.all([
     authRequest<StudentAttendanceSummaryRecord>(`attendance/student/${studentId}/summary`),
     authRequestWithMeta<StudentAttendanceEntry[]>(`attendance/student/${studentId}?page=1&take=100`),
   ]).then(([counts, page]) => ({ counts, records: page.data }));
+}
+
+export function fetchStudentAttendanceSummary(studentId: string): Promise<StudentAttendanceSummaryRecord> {
+  return authRequest<StudentAttendanceSummaryRecord>(`attendance/student/${studentId}/summary`);
+}
+
+// The report screen pages through the whole history one 100-row window at a time.
+export function fetchStudentAttendancePage(
+  studentId: string,
+  page: number,
+): Promise<{ data: StudentAttendanceEntry[]; pager?: PagerMeta }> {
+  return authRequestWithMeta<StudentAttendanceEntry[]>(`attendance/student/${studentId}?page=${page}&take=100`);
 }
 
 export function saveClassAttendance(classSessionId: string, input: SaveAttendanceInput): Promise<SaveAttendanceResponse> {

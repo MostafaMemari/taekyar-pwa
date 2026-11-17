@@ -35,7 +35,7 @@ type QuickView = "info" | "insurance" | "membership" | "fee" | "enroll";
 // Actions swap this sheet's content instead of stacking a second sheet on top.
 const VIEW_META: Record<Exclude<QuickView, "info">, { title: string; description: string }> = {
   insurance: { title: "ثبت بیمه ورزشی", description: "تاریخ اعتبار بیمه سالانه هنرجو را تایید کنید" },
-  membership: { title: "تمدید سال عضویت", description: "تایید تمدید سال عضویت هنرجو" },
+  membership: { title: "تمدید شارژ", description: "تایید تمدید سال شارژ هنرجو" },
   fee: { title: "ثبت پرداخت شهریه", description: "پرداخت هنرجو برای ماه انتخاب شده ثبت می شود" },
   enroll: { title: "افزودن به کلاس", description: "هنرجو به کلاس انتخاب شده اضافه می شود" },
 };

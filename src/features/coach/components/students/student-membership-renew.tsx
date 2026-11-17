@@ -18,11 +18,11 @@ export function StudentMembershipRenew({ studentId, membershipYear }: { studentI
 
   return (
     <section>
-      <SectionHeading title="تمدید عضویت" />
+      <SectionHeading title="تمدید شارژ" />
 
       <Card className="gap-0 p-4">
         <div className="flex min-h-6 items-center justify-between gap-3">
-          <span className="shrink-0 text-[12px] font-medium text-ink-muted">سال عضویت</span>
+          <span className="shrink-0 text-[12px] font-medium text-ink-muted">سال شارژ</span>
           <span className="text-[13px] font-bold text-ink">{membershipYear ? toPersianDigits(String(membershipYear)) : NOT_SET}</span>
         </div>
         <div className="mt-3 flex min-h-6 items-center justify-between gap-3">
@@ -36,7 +36,7 @@ export function StudentMembershipRenew({ studentId, membershipYear }: { studentI
           )}
         </div>
 
-        {renewed ? <p className="mt-2 text-[12px] font-bold text-success">سال عضویت به سال جاری به روز شد</p> : null}
+        {renewed ? <p className="mt-2 text-[12px] font-bold text-success">سال شارژ به سال جاری به روز شد</p> : null}
 
         {charge === null || charge.due > 0 ? (
           <Button
@@ -48,7 +48,7 @@ export function StudentMembershipRenew({ studentId, membershipYear }: { studentI
               setRenewed(false);
             }}
           >
-            ثبت تمدید عضویت
+            ثبت تمدید شارژ
           </Button>
         ) : null}
 
