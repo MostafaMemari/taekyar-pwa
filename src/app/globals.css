@@ -440,12 +440,11 @@ html[data-font="iranyekan"] {
   width: 74px;
   height: 74px;
   place-items: center;
+  overflow: hidden;
   border-radius: 26px;
-  color: #ffffff;
-  background: linear-gradient(135deg, var(--ak-500), var(--ak-600));
-  box-shadow:
-    inset 0 2px 0 rgba(255, 255, 255, 0.25),
-    0 20px 44px -16px color-mix(in srgb, var(--ak-600) 68%, transparent);
+  border: 1px solid var(--line-3);
+  background: var(--surface);
+  box-shadow: var(--card-shadow);
 }
 
 @utility belt-motif {
@@ -805,6 +804,14 @@ html[data-font="iranyekan"] {
 
 .dark .tst-viewport {
   color-scheme: dark;
+}
+
+/* Welcome illustration settles into place once on load. */
+@keyframes hero-art-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
 }
 
 /* Progress bars reveal their staged gradient from the left on mount (belt, insurance). */

@@ -2,7 +2,7 @@ import { ChevronLeft, GraduationCap, LogIn, User } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { BeltGlyph, BeltWatermark, LogoMark } from "@/components/shared/taekyar-mark";
+import { BeltWatermark, LogoMark } from "@/components/shared/taekyar-mark";
 import { ThemeSwitch } from "@/components/shared/theme-switch";
 import { GuestOnly } from "@/features/auth/components/guest-only";
 
@@ -29,26 +29,18 @@ export default function WelcomePage() {
 
           <div className="relative mt-4 flex items-center justify-center gap-3">
             <LogoMark className="size-12 rounded-2xl" />
-            <h1 className="text-[34px] font-extrabold leading-none tracking-tight text-ink">تک یار</h1>
+            <h1 className="text-[36px] font-extrabold leading-none tracking-tight text-ink">تک یار</h1>
           </div>
 
-          <figure className="relative mx-auto mt-3 flex min-h-[120px] max-h-[340px] w-full max-w-[360px] flex-1 overflow-hidden rounded-[26px] border border-[var(--card-line)] shadow-[0_26px_50px_-24px_rgba(16,18,26,0.3)]">
+          <figure className="relative mx-auto mt-4 min-h-[220px] w-full max-w-[400px] flex-1 bg-[radial-gradient(closest-side_at_50%_58%,var(--ak-soft-2),transparent_72%)]">
             <Image
-              src="/images/hero-welcome.jpg"
-              alt="هنرجوی تکواندو در حال اجرای ضربهٔ پا"
+              src="/images/hero-welcome.webp"
+              alt="دو تکواندوکار کمربند مشکی با گوشی همراه در میان نشان های برنامه"
               fill
               priority
-              sizes="(max-width: 520px) 90vw, 360px"
-              className="object-cover object-[50%_24%]"
+              sizes="(max-width: 520px) 92vw, 400px"
+              className="object-contain pb-2 motion-safe:animate-[hero-art-in_520ms_cubic-bezier(0.22,1,0.36,1)_both]"
             />
-            <span
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/20 to-transparent"
-              aria-hidden="true"
-            />
-            <figcaption className="meta-glass absolute start-3 top-3 py-1.5">
-              <BeltGlyph />
-              از کمربند سفید تا دان ۴
-            </figcaption>
           </figure>
         </section>
 

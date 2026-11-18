@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   },
   description: "همراهِ مربیان و هنرجویان تکواندو، از ثبت نام و حضور و غیاب تا پایش کمربندها و آموزش پومسه",
   applicationName: "تک یار",
+  icons: {
+    icon: [{ url: "/icons/app-icon.png", type: "image/png", sizes: "512x512" }],
+  },
 };
 
 export const viewport: Viewport = {

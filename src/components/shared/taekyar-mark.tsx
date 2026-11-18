@@ -1,16 +1,13 @@
+import Image from "next/image";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 export function TaekyarMark({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={cn("size-7", className)} fill="currentColor" aria-hidden="true">
-      <path d="M12 2a3.2 3.2 0 1 1 0 6.4A3.2 3.2 0 0 1 12 2Zm-4.2 7.6c.4-.5 1-.6 1.6-.4l2.6 1 2.6-1c.6-.2 1.2 0 1.6.4l3.4 4a1 1 0 0 1-1.5 1.4l-2.6-2.9-.7 2.9 2.3 6.2a1 1 0 0 1-1.9.7l-2.2-6h-2l-2.2 6a1 1 0 0 1-1.9-.7l2.3-6.2-.7-2.9-2.6 2.9a1 1 0 0 1-1.5-1.4l3.4-4Z" />
-    </svg>
-  );
+  return <Image src="/icons/app-icon.png" width={512} height={512} alt="" className={cn("size-7 object-contain", className)} />;
 }
 
 export function LogoMark({ className, children }: { className?: string; children?: ReactNode }) {
-  return <span className={cn("logo-mark", className)}>{children ?? <TaekyarMark />}</span>;
+  return <span className={cn("logo-mark", className)}>{children ?? <TaekyarMark className="size-[76%]" />}</span>;
 }
 
 export function BeltMotif({ className }: { className?: string }) {
