@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CoachBand } from "@/features/coach/components/coach-band";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
+import { SectionHeading } from "@/features/coach/components/section-heading";
 
 export function SessionDetailSkeleton() {
   return (
@@ -56,10 +57,13 @@ export function SessionDetailSkeleton() {
             </div>
           </Card>
 
-          <Skeleton className="h-16 w-full rounded-xl" />
+          <div className="grid grid-cols-2 gap-3">
+            <Skeleton className="h-11 rounded-xl" />
+            <Skeleton className="h-11 rounded-xl" />
+          </div>
 
-          <div className="flex flex-col gap-2.5">
-            <Skeleton className="h-5 w-28" />
+          <section className="flex flex-col gap-2.5">
+            <SectionHeading title="هنرجویان کلاس" action={<Skeleton className="h-5 w-14 rounded-full" />} />
             {[0, 1, 2].map((index) => (
               <Card key={index} className="flex-row items-center gap-3 px-4 py-3">
                 <Skeleton className="size-9 shrink-0 rounded-full" />
@@ -70,7 +74,7 @@ export function SessionDetailSkeleton() {
                 <Skeleton className="h-5 w-16 rounded-full" />
               </Card>
             ))}
-          </div>
+          </section>
         </output>
       </CoachSheet>
     </main>

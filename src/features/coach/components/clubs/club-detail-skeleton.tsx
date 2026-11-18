@@ -1,7 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CoachBand } from "@/features/coach/components/coach-band";
 import { CoachSheet } from "@/features/coach/components/coach-sheet";
@@ -39,39 +38,21 @@ export function ClubDetailSkeleton() {
 
       <CoachSheet>
         <output className="flex flex-col gap-4" aria-label="در حال بارگذاری مشخصات باشگاه">
-          <Card className="gap-0 overflow-hidden p-0">
-            <Skeleton className="h-24 w-full rounded-none" />
-            <div className="flex flex-col gap-3 p-4">
-              <div className="flex flex-wrap items-center gap-2">
-                <Skeleton className="h-4 w-2/5" />
-                <Skeleton className="h-5 w-16 rounded-full" />
-                <Skeleton className="h-5 w-14 rounded-full" />
-              </div>
-              <Skeleton className="h-3 w-full" />
-              <Skeleton className="h-3 w-1/2" />
-            </div>
-          </Card>
-
-          <Skeleton className="h-12 w-full rounded-xl" />
-
-          <div className="grid grid-cols-2 gap-3">
-            {[0, 1].map((index) => (
-              <Card key={index} className="items-center gap-1.5 p-3 text-center">
-                <Skeleton className="size-8 rounded-lg" />
-                <Skeleton className="h-4 w-10" />
-                <Skeleton className="h-2 w-12" />
-              </Card>
-            ))}
+          <div className="grid h-11 w-full grid-cols-2 gap-1 rounded-full bg-muted p-1">
+            <Skeleton className="rounded-full" />
+            <Skeleton className="rounded-full" />
           </div>
 
           <ClubClassesSkeleton />
-
-          <div className="grid grid-cols-2 gap-3">
-            <Skeleton className="h-12 rounded-xl" />
-            <Skeleton className="h-12 rounded-xl" />
-          </div>
         </output>
       </CoachSheet>
+
+      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-40 flex justify-center">
+        <div className="pointer-events-auto grid w-full max-w-md grid-cols-2 gap-3 px-4">
+          <Skeleton className="h-12 rounded-full" />
+          <Skeleton className="h-12 rounded-full" />
+        </div>
+      </div>
     </main>
   );
 }

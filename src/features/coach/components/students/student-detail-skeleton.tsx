@@ -38,7 +38,11 @@ export function StudentDetailSkeleton() {
 
       <CoachSheet>
         <output className="flex flex-col gap-4" aria-label="در حال بارگذاری پرونده هنرجو">
-          <Skeleton className="h-10 w-full rounded-xl" />
+          <div className="grid h-10 w-full grid-cols-4 gap-1 rounded-xl bg-muted p-1">
+            {[0, 1, 2, 3].map((index) => (
+              <Skeleton key={index} className="rounded-lg" />
+            ))}
+          </div>
 
           <Card className="gap-0 p-4">
             <Skeleton className="h-4 w-1/3" />

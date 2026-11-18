@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 export function TaekyarMark({ className }: { className?: string }) {
-  return <Image src="/icons/app-icon.png" width={512} height={512} alt="" className={cn("size-7 object-contain", className)} />;
+  return <Image src="/icons/app-icon.png" width={512} height={512} alt="" priority className={cn("size-7 object-contain", className)} />;
 }
 
 export function LogoMark({ className, children }: { className?: string; children?: ReactNode }) {
