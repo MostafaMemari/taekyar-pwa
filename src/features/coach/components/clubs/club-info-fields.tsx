@@ -25,7 +25,7 @@ export function ClubInfoFields({ control, nameError, addressError }: FieldsProps
               id="name"
               name={field.name}
               maxLength={80}
-              placeholder="مثلاً باشگاه بلوار مارلیک"
+              placeholder="مثلا باشگاه بلوار مارلیک"
               value={field.value}
               onChange={(event) => field.onChange(event.target.value)}
               onBlur={field.onBlur}

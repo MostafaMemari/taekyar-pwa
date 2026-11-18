@@ -77,7 +77,7 @@ export function StudentPersonalFields({ control, errors, locked = false }: Field
                   id="fullName"
                   name={field.name}
                   autoComplete="name"
-                  placeholder="مثلاً سامان رستمی"
+                  placeholder="مثلا سامان رستمی"
                   value={field.value}
                   onChange={(event) => field.onChange(event.target.value)}
                   onBlur={field.onBlur}
@@ -145,7 +145,7 @@ export function StudentPersonalFields({ control, errors, locked = false }: Field
                     id="fatherName"
                     name={field.name}
                     autoComplete="off"
-                    placeholder="مثلاً علی"
+                    placeholder="مثلا علی"
                     value={field.value}
                     onChange={(event) => field.onChange(event.target.value)}
                     onBlur={field.onBlur}

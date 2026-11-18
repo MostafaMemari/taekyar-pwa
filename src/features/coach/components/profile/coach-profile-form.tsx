@@ -118,7 +118,7 @@ export function CoachProfileForm() {
                         name={field.name}
                         autoComplete="name"
                         icon={User}
-                        placeholder="مثلاً محمدرضا یاری"
+                        placeholder="مثلا علی احمدی"
                         value={field.value}
                         onChange={(event) => field.onChange(event.target.value)}
                         onBlur={field.onBlur}

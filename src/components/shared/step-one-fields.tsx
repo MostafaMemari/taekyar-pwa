@@ -41,7 +41,7 @@ export function StepOneFields({ control, errors, withBirthDate, birthDateHint, g
               autoComplete="name"
               autoFocus
               icon={UserRound}
-              placeholder={`مثلاً ${sampleName}`}
+              placeholder={`مثلا ${sampleName}`}
               value={field.value}
               onChange={(event) => field.onChange(event.target.value)}
               onBlur={field.onBlur}

@@ -38,7 +38,7 @@ export function SessionInfoFields({ control, clubLocked, initialClubId, nameErro
               id="name"
               name={field.name}
               maxLength={80}
-              placeholder="مثلاً کیوروگی آقایان"
+              placeholder="مثلا کیوروگی آقایان"
               value={field.value}
               onChange={(event) => field.onChange(event.target.value)}
               onBlur={field.onBlur}
