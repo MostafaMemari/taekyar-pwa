@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
+import { LogoMark } from "@/components/shared/taekyar-mark";
 import { ensureAccessToken } from "@/features/auth/api";
 import { getSession, HOME_BY_ROLE, type SessionRole } from "@/features/auth/session";
 
@@ -33,6 +34,12 @@ export function RequireSession({ forRole, children }: { forRole?: SessionRole; c
     };
   }, [router, forRole]);
 
-  if (!allowed) return null;
+  if (!allowed) {
+    return (
+      <div className="grid min-h-dvh place-items-center">
+        <LogoMark className="size-14 rounded-2xl motion-safe:animate-pulse" />
+      </div>
+    );
+  }
   return children;
 }
