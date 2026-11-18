@@ -76,7 +76,7 @@ export function AttendanceGuestSheet({
           </div>
         ) : null}
 
-        <div className="max-h-[45vh] overflow-y-auto no-scrollbar">
+        <div className="h-[45vh] overflow-y-auto no-scrollbar">
           {isLoading ? (
             <div className="flex flex-col gap-2">
               {[0, 1, 2].map((row) => (
