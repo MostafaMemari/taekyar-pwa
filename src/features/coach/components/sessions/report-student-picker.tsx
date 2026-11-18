@@ -26,7 +26,7 @@ export function ReportStudentPicker({ entries }: { entries: ClassAttendanceEntry
       </button>
 
       <SheetFrame open={open} onOpenChange={setOpen} title="گزارش تک هنرجو" description="هنرجو را برای دیدن گزارش حضور و غیاب انتخاب کن">
-        <div className="mt-3 h-[45vh] overflow-y-auto no-scrollbar">
+        <div className="mt-3 h-[50vh] overflow-y-auto no-scrollbar">
           <div className="flex flex-col gap-2">
             {entries.map((entry) => (
               <Link
