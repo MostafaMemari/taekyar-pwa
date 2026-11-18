@@ -11,7 +11,6 @@ import { AuthPageLead } from "@/components/shared/auth-page-lead";
 import { AuthPageTitle } from "@/components/shared/auth-page-title";
 import { type BeltOption, BeltPicker } from "@/components/shared/belt-picker";
 import { DatePicker } from "@/components/shared/date-picker";
-import { PhotoPicker } from "@/components/shared/photo-picker";
 import { StepOneFields } from "@/components/shared/step-one-fields";
 import { Stepper } from "@/components/shared/stepper";
 import { Button } from "@/components/ui/button";
@@ -89,8 +88,6 @@ export function CoachSignupForm() {
 
           <form className="mt-4 flex flex-1 flex-col" onSubmit={submit} noValidate>
             <div className="flex flex-col gap-4">
-              <PhotoPicker label="تصویر پروفایل" hint="JPG یا PNG، حداکثر ۵ مگابایت" optional />
-
               <AuthField label="تاریخ تولد" htmlFor="birthDate" optional>
                 <Controller
                   control={form.control}
@@ -126,14 +123,16 @@ export function CoachSignupForm() {
               />
             </div>
 
-            <div className="cta-dock cta-row mt-6 gap-3">
-              <Button type="button" variant="outline" size="cta" onClick={() => goTo(0)}>
-                بازگشت
-              </Button>
-              <Button type="submit" variant="brand" size="cta">
-                <span>ثبت و دریافت کد تایید</span>
-                <ChevronLeft data-icon="inline-end" aria-hidden="true" />
-              </Button>
+            <div className="cta-dock mt-6">
+              <div className="flex items-center gap-2">
+                <Button type="button" variant="outline" className="h-11 flex-1 rounded-xl" onClick={() => goTo(0)}>
+                  بازگشت
+                </Button>
+                <Button type="submit" variant="brand" className="h-11 flex-[2] rounded-xl text-[12px] font-bold">
+                  <span>ثبت و دریافت کد تایید</span>
+                  <ChevronLeft data-icon="inline-end" aria-hidden="true" />
+                </Button>
+              </div>
             </div>
 
             <Link
@@ -177,14 +176,16 @@ export function CoachSignupForm() {
             genderHint="نمایش باشگاه ها و هنرجویان به این بستگی دارد"
           />
 
-          <div className="cta-dock cta-row mt-6 gap-3">
-            <Button variant="outline" size="cta" render={<Link href="/" />} nativeButton={false}>
-              بازگشت
-            </Button>
-            <Button type="submit" variant="brand" size="cta">
-              <span>مرحله بعد</span>
-              <ChevronLeft data-icon="inline-end" aria-hidden="true" />
-            </Button>
+          <div className="cta-dock mt-6">
+            <div className="flex items-center gap-2">
+              <Button variant="outline" className="h-11 flex-1 rounded-xl" render={<Link href="/" />} nativeButton={false}>
+                بازگشت
+              </Button>
+              <Button type="submit" variant="brand" className="h-11 flex-[2] rounded-xl text-[12px] font-bold">
+                <span>مرحله بعد</span>
+                <ChevronLeft data-icon="inline-end" aria-hidden="true" />
+              </Button>
+            </div>
           </div>
         </form>
       </div>

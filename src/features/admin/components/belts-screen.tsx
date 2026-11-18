@@ -40,7 +40,6 @@ export function BeltsScreen() {
       <CoachBand className={PAGE_ENTER}>
         <AdminBand
           title="کمربندها"
-          subtitle="رتبه ها، سطح و بازه اعطای هر کمربند"
           icon={Award}
           backHref="/admin"
           chip={

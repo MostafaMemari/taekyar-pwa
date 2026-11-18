@@ -6,7 +6,6 @@ import type { BaseSyntheticEvent } from "react";
 import { Controller } from "react-hook-form";
 import { AuthField } from "@/components/shared/auth-field";
 import { AuthInput } from "@/components/shared/auth-input";
-import { PhotoPicker } from "@/components/shared/photo-picker";
 import { Button } from "@/components/ui/button";
 import { type StudentSignupFormHandle, StudentSignupStep } from "@/features/auth/components/student-signup-step";
 import { digitsOnly, toPersianDigits } from "@/lib/digits";
@@ -27,14 +26,12 @@ export function StudentSignupStepDocuments({ form, onBack, onSubmit, onSkip }: S
       title="مدارک و مشخصات"
       lead={
         <>
-          عکس و مشخصات جسمی؛ <b className="font-extrabold text-ink-body">همه اختیاری</b>.
+          مشخصات جسمی؛ <b className="font-extrabold text-ink-body">همه اختیاری</b>.
         </>
       }
     >
       <form className="mt-4 flex flex-1 flex-col" onSubmit={onSubmit} noValidate>
-        <PhotoPicker label="عکس پروفایل" hint="JPG یا PNG، حداکثر ۵ مگابایت" optional />
-
-        <div className="mt-4 grid gap-4">
+        <div className="grid gap-4">
           <div className="grid grid-cols-2 gap-3">
             <AuthField label="وزن (کیلوگرم)" htmlFor="weight" optional hint="تعیین رده وزنی" error={errors.weight?.message}>
               <Controller
@@ -82,14 +79,16 @@ export function StudentSignupStepDocuments({ form, onBack, onSubmit, onSkip }: S
           </div>
         </div>
 
-        <div className="cta-dock cta-row mt-6 gap-3">
-          <Button type="button" variant="outline" size="cta" onClick={onBack}>
-            بازگشت
-          </Button>
-          <Button type="submit" variant="brand" size="cta">
-            <span>ثبت و دریافت کد تایید</span>
-            <ChevronLeft data-icon="inline-end" aria-hidden="true" />
-          </Button>
+        <div className="cta-dock mt-6">
+          <div className="flex items-center gap-2">
+            <Button type="button" variant="outline" className="h-11 flex-1 rounded-xl" onClick={onBack}>
+              بازگشت
+            </Button>
+            <Button type="submit" variant="brand" className="h-11 flex-[2] rounded-xl text-[12px] font-bold">
+              <span>ثبت و دریافت کد تایید</span>
+              <ChevronLeft data-icon="inline-end" aria-hidden="true" />
+            </Button>
+          </div>
         </div>
 
         <Link href="/signup/mobile?role=student" onClick={onSkip} className="mt-3 block text-center text-[12px] font-bold text-ink-subtle">

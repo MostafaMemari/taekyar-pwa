@@ -3,13 +3,21 @@ export type SessionRole = "COACH" | "STUDENT" | "ADMIN";
 export const HOME_BY_ROLE: Record<SessionRole, string> = { COACH: "/coach", STUDENT: "/student", ADMIN: "/admin" };
 
 export type StoredSession = {
-  accessToken: string;
-  refreshToken: string;
   userId: string;
   role: SessionRole;
 };
 
 const STORAGE_KEY = "taekyar.auth.session";
+
+let accessToken: string | null = null;
+
+export function getAccessToken(): string | null {
+  return accessToken;
+}
+
+export function setAccessToken(token: string | null) {
+  accessToken = token;
+}
 
 export function getSession(): StoredSession | null {
   if (typeof window === "undefined") return null;
@@ -19,7 +27,7 @@ export function getSession(): StoredSession | null {
     if (!raw) return null;
 
     const parsed = JSON.parse(raw) as Partial<StoredSession>;
-    if (parsed.accessToken && parsed.refreshToken && parsed.userId && parsed.role) return parsed as StoredSession;
+    if (parsed.userId && parsed.role) return parsed as StoredSession;
     return null;
   } catch {
     return null;
@@ -27,7 +35,7 @@ export function getSession(): StoredSession | null {
 }
 
 export function getSessionId(): string | null {
-  const token = getSession()?.accessToken.split(".")[1];
+  const token = accessToken?.split(".")[1];
   if (!token) return null;
 
   try {
@@ -44,5 +52,6 @@ export function saveSession(session: StoredSession) {
 }
 
 export function clearSession() {
+  accessToken = null;
   window.localStorage.removeItem(STORAGE_KEY);
 }

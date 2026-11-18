@@ -150,12 +150,6 @@ export function SessionsDirectory() {
                   برای هر باشگاه، یک کلاس با روزها و ساعت برگزاری بسازید
                 </EmptyDescription>
               </EmptyHeader>
-              <EmptyContent>
-                <Button variant="outline" size="sm" className="rounded-lg" type="button" onClick={() => setCreateOpen(true)}>
-                  <Plus data-icon="inline-start" aria-hidden="true" />
-                  کلاس جدید
-                </Button>
-              </EmptyContent>
             </Empty>
           ) : null}
 

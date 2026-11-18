@@ -57,6 +57,7 @@ export async function apiRequestWithMeta<T>(path: string, options: Options = {})
     const response = await ky(path, {
       ...options,
       baseUrl,
+      credentials: "include",
       headers: { Accept: "application/json", ...options.headers },
     });
     const body = (await response.json()) as ApiEnvelope<T>;

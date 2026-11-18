@@ -225,8 +225,8 @@ export function BeltExamSaveSheet({
                   render={({ field }) => (
                     <AuthInput
                       id="beltExamAdminName"
-                      value={field.value}
-                      onChange={field.onChange}
+                      value={toPersianDigits(field.value)}
+                      onChange={(event) => field.onChange(toLatinDigits(event.target.value))}
                       onBlur={field.onBlur}
                       ref={field.ref}
                       maxLength={120}

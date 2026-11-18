@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
+import { ensureAccessToken } from "@/features/auth/api";
 import { getSession, HOME_BY_ROLE, type SessionRole } from "@/features/auth/session";
 
 export function RequireSession({ forRole, children }: { forRole?: SessionRole; children: ReactNode }) {
@@ -9,18 +10,27 @@ export function RequireSession({ forRole, children }: { forRole?: SessionRole; c
   const [allowed, setAllowed] = useState(false);
 
   useEffect(() => {
-    const session = getSession();
-    if (!session) {
-      router.replace("/login");
-      return;
-    }
+    let active = true;
 
-    if (forRole && session.role !== forRole) {
-      router.replace(HOME_BY_ROLE[session.role]);
-      return;
-    }
+    ensureAccessToken()
+      .then(() => {
+        if (!active) return;
 
-    setAllowed(true);
+        const role = getSession()?.role;
+        if (forRole && role !== forRole) {
+          router.replace(role ? HOME_BY_ROLE[role] : "/login");
+          return;
+        }
+
+        setAllowed(true);
+      })
+      .catch(() => {
+        if (active) router.replace("/login");
+      });
+
+    return () => {
+      active = false;
+    };
   }, [router, forRole]);
 
   if (!allowed) return null;

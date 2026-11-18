@@ -20,8 +20,9 @@ Authorization: Bearer <accessToken>
 ```
 
 - توکن از `POST /auth/verify-otp` گرفته می شود.
-- عمر پیش فرض `accessToken` برابر 7 روز و `refreshToken` برابر 30 روز است.
-- پس از انقضا: `POST /auth/refresh` با `refreshToken` و سپس تکرار درخواست.
+- عمر `accessToken` برابر 15 دقیقه است و فقط در حافظه نگه داشته می شود؛ `refreshToken` به صورت کوکی HttpOnly با نام `ty_refresh`، مسیر `/api/v1/auth` و عمر 30 روز در مرورگر ذخیره می شود و جاوااسکریپت به آن دسترسی ندارد.
+- پس از انقضای access token: `POST /auth/refresh` بدون بدنه (کوکی خودکار ارسال می شود) و سپس تکرار درخواست. همه درخواست ها باید با `credentials: "include"` ارسال شوند.
+- `POST /auth/refresh` توکن و کوکی را می چرخاند و دو پاسخ همزمان (دو تب با یک کوکی) تا 60 ثانیه توکن قبلی را هم قبول می کند.
 - نقش ها: `ADMIN`، `COACH`، `STUDENT`. تمام مسیرهای این سند حداقل نقش `COACH` می خواهند، جز مواردی که در همان بخش ذکر شده است.
 - اگر کاربر توکن نداشته باشد یا نشست باطل شده باشد: خطای `401`.
 
@@ -211,12 +212,11 @@ COLOR | POOM | DAN
 | `deviceInfo.platform` | string | خیر | حداکثر 50، مثال `android` |
 | `deviceInfo.appVersion` | string | خیر | حداکثر 20 |
 
-پاسخ موفق (داخل `data`):
+پاسخ موفق (داخل `data`) و یک کوکی:
 
 ```json
 {
   "accessToken": "eyJ...",
-  "refreshToken": "eyJ...",
   "userId": "uuid",
   "type": "COACH",
   "coach": {
@@ -235,28 +235,29 @@ COLOR | POOM | DAN
 }
 ```
 
+- هدر پاسخ `Set-Cookie` کوکی `ty_refresh` را با `HttpOnly`، `Path=/api/v1/auth` و `SameSite=Lax` (قابل تغییر با `COOKIE_SAMESITE`/`COOKIE_SECURE`) تنظیم می کند؛ `refreshToken` دیگر در بدنه برنمی گردد.
 - برای هنرجو، `type` برابر `STUDENT` و فیلد `student` برگردانده می شود.
 - اگر کاربر پروفایل نداشته باشد، `coach` یا `student` می تواند `{}` باشد. این حالت برای کاربر OTP تایید شده ولی بدون پروفایل رخ می دهد.
 - خطا: `400` کد نامعتبر یا منقضی، `429` تعداد تلاش زیاد.
 
 ### 2.4 `POST /auth/refresh`
 
-بدنه:
+بدنه اختیاری است؛ توکن از کوکی `ty_refresh` خوانده می شود:
 
 | فیلد | نوع | الزامی |
 |---|---|---|
-| `refreshToken` | string | بله |
+| `refreshToken` | string | خیر؛ فقط برای کلاینت های قدیمی |
 | `deviceInfo` | object | خیر |
 
-پاسخ: `accessToken` و `refreshToken` جدید. اگر توکن باطل یا نشست منقضی باشد: `401` یا `409`.
+پاسخ (داخل `data`): `accessToken`، `userId` و `type` جدید، همراه با کوکی چرخانده شده. اگر کوکی نباشد یا توکن باطل یا نشست منقضی باشد: `401` (یا `409`).
 
 ### 2.5 `POST /auth/logout`
 
-بدنه:
+بدنه اختیاری است؛ توکن از کوکی خوانده می شود و در هر حال کوکی پاک می شود:
 
 | فیلد | نوع | الزامی |
 |---|---|---|
-| `refreshToken` | string | بله |
+| `refreshToken` | string | خیر؛ فقط برای کلاینت های قدیمی |
 
 نشست باطل می شود. پاسخ: `200` با `data: {}`.
 
@@ -1076,8 +1077,26 @@ COLOR | POOM | DAN
 | `POST` | `/belt-exam` | ADMIN |
 | `PATCH` | `/belt-exam/:id` | ADMIN |
 | `DELETE` | `/belt-exam/:id` | ADMIN |
+| `POST` | `/weight-class` | ADMIN |
+| `PATCH` | `/weight-class/:id` | ADMIN |
+| `DELETE` | `/weight-class/:id` | ADMIN |
 
 مربی از این مسیرها استفاده نمی کند.
+
+### 9.6 رده های وزنی (`/weight-class`)
+
+- `GET /weight-class` لیست صفحه بندی شده است؛ پارامترها: `page`، `take`، `ageCategoryId`، `gender`، `minOrder`، `maxOrder`، `sortBy` (`order`، `createdAt`، `updatedAt`) و `sortDirection`. هر کاربر وارد شده می تواند بخواند. `minWeightKg`/`maxWeightKg` به صورت رشته اعشاری می آیند و رده بدون سقف، `maxWeightKg: null` دارد.
+- `POST /weight-class/calculate` با `ageCategoryId`، `gender`، `weightKg` و `allowanceKg` اختیاری، رده وزنی متناسب را برمی گرداند (پایه محاسبه خودکار وزن).
+- بدنه ثبت/ویرایش: `ageCategoryId`، `gender`، `label`، `minWeightKg`، `maxWeightKg` (اختیاری)، `order` و `excludeMin`/`excludeMax` اختیاری؛ وزن پایان باید بیشتر از وزن شروع باشد. قرارداد سامانه: مرز شروع شامل و مرز پایان بدون (پیش فرض بک اند `excludeMax=true`).
+- هر رده وزنی به یک رده سنی وصل است؛ حذف رده سنی، رده های وزنی آن را هم آبشاری پاک می کند.
+- **وضعیت فرانت:** صفحه `/admin/weight-classes` لیست را با `sortBy=order&take=100` می خواند، بر اساس رده سنی و جنسیت مرتب نشان می دهد و ثبت/ویرایش/حذف از همین مسیرهای ادمین انجام می شود.
+
+### 9.7 فدراسیون (`/federation`، فقط ادمین)
+
+- `POST /federation/coach-students/import` با بدنه `coachId`، `coachSessionId` (مقدار کوکی `ASP.NET_SessionId` از ورود اساتید سایت فدراسیون؛ فقط خوانده می شود و ذخیره یا لاگ نمی شود)، `coachingDegree` (متن یکی از ۷ گزینه فرم فدراسیون: `درجه 1`، `درجه 2`، `درجه 3`، `ممتاز-ملی`، `بین المللی درجه 3`، `بین المللی درجه 2`، `بین المللی درجه 1`) و `province` اختیاری (کد استان فدراسیون `23..54` یا نام آن؛ پیش فرض: استان مربی در تایک یار). کدملی جستجوی فدراسیون از خود رکورد مربی (`coachId`) خوانده می شود و در بدنه نمی آید. پاسخ: `fetched`، `accepted`، `skipped`، `skippedReasons`، `pagination` (`totalRecords`/`totalPages`) و `import` (نتیجه ثبت گروهی: `created`، `updated`، `duplicates`). خطاها: «هیچ ردیف قابل ثبتی از فدراسیون دریافت نشد»، خطاهای اسکرپر (تنظیم نشده / پاسخگو نبود / درخواست نپذیرفته / درجه یا استان نامعتبر) و اعتبارسنجی بدنه.
+- `POST /federation/coach-students/sync` با بدنه `{ coachId }`: همه هنرجویان آن مربی یکی یکی با فدراسیون چک می شوند (۵ ثانیه فاصله بین هنرجوها و تلاش دوم با ۱۵ ثانیه تاخیر) و کمربند، تاریخ کمربند، سال شارژ، نام و عکس به روز می شود. پاسخ: `summary` (`total`/`synced`/`unchanged`/`failed`) و ردیف وضعیت هر هنرجو.
+- هر دو فقط `Role.ADMIN` اند و به طول طبیعی چند دقیقه طول می کشند؛ فرانت این دو درخواست را با `timeout: false` می فرستد تا تایم اوت پیش فرض ky آن ها را قطع نکند.
+- **وضعیت فرانت:** صفحه `/admin/federation` دو کارت دارد: «ورود هنرجویان مربی» شیت فرم import با انتخاب مربی از `GET /coach?page=1&take=100&sortBy=fullName&sortDirection=asc` و «همگام سازی هنرجویان» شیت انتخاب مربی برای sync. درجه مربیگری و استان همان دراپ داون های خود سایت فدراسیون اند و استان با کد `23..54` ارسال می شود؛ خالی ماندن استان یعنی پیش فرض بک اند (استان مربی). نتیجه هر دو با toast جمع بندی می شود و کش `student` بعد از موفقیت revalidate می شود.
 
 ---
 
@@ -1341,7 +1360,7 @@ Content-Type: application/json
 ## 13. چک لیست مرحله اتصال
 
 - [ ] تبدیل تاریخ شمسی به میلادی قبل از هر ارسال
-- [ ] نگه داشتن `accessToken` و `refreshToken` و پیاده سازی صف refresh
+- [ ] نگه داشتن `accessToken` در حافظه و ارسال کوکی `ty_refresh` با `credentials: "include"` و پیاده سازی صف refresh
 - [ ] ساخت لایه سرویس برای هر ماژول: `auth`، `coach`، `student`، `club`، `class-session`، `attendance`، `invitation`، `belt`
 - [ ] استفاده از `meta.pager` برای صفحه بندی و نام گذاری `perPage`
 - [ ] گرفتن `beltId` از `GET /belt` برای فرم تخصیص کمربند

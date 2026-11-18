@@ -111,14 +111,16 @@ export function SignupMobileForm() {
 
         <AuthFormError message={message} />
 
-        <div className="cta-dock cta-row mt-6 gap-3">
-          <Button variant="outline" size="cta" render={<Link href={backHref} />} nativeButton={false}>
-            بازگشت
-          </Button>
-          <Button type="submit" variant="brand" size="cta" disabled={isSubmitting}>
-            <span>{isSubmitting ? "در حال ارسال..." : "دریافت کد تایید"}</span>
-            <ChevronLeft data-icon="inline-end" aria-hidden="true" />
-          </Button>
+        <div className="cta-dock mt-6">
+          <div className="flex items-center gap-2">
+            <Button variant="outline" className="h-11 flex-1 rounded-xl" render={<Link href={backHref} />} nativeButton={false}>
+              بازگشت
+            </Button>
+            <Button type="submit" variant="brand" className="h-11 flex-[2] rounded-xl text-[12px] font-bold" disabled={isSubmitting}>
+              <span>{isSubmitting ? "در حال ارسال..." : "دریافت کد تایید"}</span>
+              <ChevronLeft data-icon="inline-end" aria-hidden="true" />
+            </Button>
+          </div>
         </div>
 
         <Link href="/" onClick={clearPendingSignup} className="mt-3 block text-center text-[12px] font-bold text-ink-subtle">

@@ -39,7 +39,6 @@ export function AgeCategoriesScreen() {
       <CoachBand className={PAGE_ENTER}>
         <AdminBand
           title="رده های سنی"
-          subtitle="بازه تاریخ تولد هر رده برای محاسبه خودکار"
           icon={CalendarRange}
           backHref="/admin"
           chip={

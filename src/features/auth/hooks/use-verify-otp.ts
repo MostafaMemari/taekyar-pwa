@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { verifyOtp } from "@/features/auth/api";
 import { clearPendingSignup } from "@/features/auth/pending-signup";
-import { saveSession } from "@/features/auth/session";
+import { saveSession, setAccessToken } from "@/features/auth/session";
 import { clearDataCache } from "@/lib/api/cache";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 
@@ -26,12 +26,8 @@ export function useVerifyOtp(mobile: string) {
 
     try {
       const result = await verifyOtp(mobile, code);
-      saveSession({
-        accessToken: result.accessToken,
-        refreshToken: result.refreshToken,
-        userId: result.userId,
-        role: result.type,
-      });
+      setAccessToken(result.accessToken);
+      saveSession({ userId: result.userId, role: result.type });
       clearPendingSignup();
       void clearDataCache();
 

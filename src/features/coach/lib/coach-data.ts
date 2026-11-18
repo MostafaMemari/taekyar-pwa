@@ -67,8 +67,8 @@ export function snapToSessionDate(isoDate: string, weekDays: WeekDay[]): string 
 }
 
 export const GENDER_META: Record<Gender, { label: string; clubLabel: string }> = {
-  MALE: { label: "مرد", clubLabel: "آقایان" },
-  FEMALE: { label: "زن", clubLabel: "بانوان" },
+  MALE: { label: "آقا", clubLabel: "آقایان" },
+  FEMALE: { label: "خانم", clubLabel: "بانوان" },
 };
 
 export const ATTENDANCE_META: Record<AttendanceStatus, { label: string; tone: "success" | "warning" | "danger" | "info"; color: string }> =

@@ -13,8 +13,8 @@ import { digitsOnly, toPersianDigits } from "@/lib/digits";
 import { PROVINCES } from "@/lib/provinces";
 
 const GENDER_OPTIONS = [
-  { value: "MALE", label: "مرد", icon: Mars },
-  { value: "FEMALE", label: "زن", icon: Venus },
+  { value: "MALE", label: "آقا", icon: Mars },
+  { value: "FEMALE", label: "خانم", icon: Venus },
 ] as const;
 
 type StepOneFieldsProps = {

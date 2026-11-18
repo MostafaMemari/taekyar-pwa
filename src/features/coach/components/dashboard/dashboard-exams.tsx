@@ -5,23 +5,17 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SectionHeading } from "@/features/coach/components/section-heading";
+import { StatusBadge } from "@/features/coach/components/status-badge";
 import { useBeltExams } from "@/features/coach/hooks/use-belt-exams";
+import { examFillPercent } from "@/features/coach/lib/exam-api";
 import { toPersianDigits } from "@/lib/digits";
-import { toJalaliDate, toJalaliDayMonth } from "@/lib/jalali";
+import { durationLabel, toJalaliDate, toJalaliDayMonth } from "@/lib/jalali";
 import { cn } from "@/lib/utils";
 
 const DAY_MS = 86_400_000;
 
-type CountdownTone = "danger" | "warning" | "calm";
-
-const TONE_CLASS: Record<CountdownTone, string> = {
-  danger: "bg-danger-soft text-danger",
-  warning: "bg-warning-soft text-warning",
-  calm: "bg-muted text-ink-muted",
-};
-
-function countdownTone(days: number): CountdownTone {
-  return days <= 7 ? "danger" : days <= 30 ? "warning" : "calm";
+function countdownTone(days: number): "danger" | "warning" | "neutral" {
+  return days <= 7 ? "danger" : days <= 30 ? "warning" : "neutral";
 }
 
 export function DashboardExams() {
@@ -50,7 +44,8 @@ export function DashboardExams() {
           <ul>
             {exams.map((exam, index) => {
               const [day, ...month] = toJalaliDayMonth(exam.eventDate).split(" ");
-              const open = new Date(exam.registerDate) <= now;
+              // registerDate is the registration deadline; a past deadline on an upcoming exam closes it.
+              const registerOpen = new Date(exam.registerDate) >= today;
               const eventDay = new Date(exam.eventDate);
               eventDay.setHours(0, 0, 0, 0);
               const daysLeft = Math.max(0, Math.round((eventDay.getTime() - today.getTime()) / DAY_MS));
@@ -58,35 +53,47 @@ export function DashboardExams() {
 
               return (
                 <li key={exam.id} className={cn("flex items-center gap-3 px-4 py-3", index > 0 && "border-t border-[var(--line-2)]")}>
-                  <span className="flex w-11 shrink-0 flex-col items-center rounded-[10px] bg-muted py-1">
+                  {/* A fixed 1:1 square tile, centred vertically in the row. */}
+                  <span className="flex size-14 shrink-0 flex-col items-center justify-center rounded-[10px] bg-muted">
                     <b className="text-[15px] leading-5 font-extrabold tabular-nums text-ink">{day}</b>
                     <span className="text-[12px] leading-4 font-medium text-ink-muted">{month.join(" ")}</span>
                   </span>
 
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-[13px] font-bold text-ink">{toPersianDigits(exam.name)}</p>
-                    <p className="mt-0.5 flex items-center gap-2.5 text-[12px] font-medium text-ink-subtle">
-                      <span className="flex shrink-0 items-center gap-1">
-                        <CalendarDays className="size-3.5" aria-hidden="true" />
-                        {open ? "ثبت نام باز" : `ثبت نام از ${toJalaliDate(exam.registerDate)}`}
-                      </span>
-                      {places ? (
-                        <span className="flex min-w-0 items-center gap-1 truncate">
-                          <MapPin className="size-3.5 shrink-0" aria-hidden="true" />
-                          <span className="truncate">{places}</span>
-                        </span>
-                      ) : null}
-                    </p>
-                  </div>
+                  <div className="flex min-w-0 flex-1 flex-col justify-center gap-2">
+                    <div className="flex items-center gap-3">
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-[13px] font-bold text-ink">{toPersianDigits(exam.name)}</p>
+                        <p className="mt-0.5 flex items-center gap-2.5 text-[12px] font-medium text-ink-subtle">
+                          <span className="flex shrink-0 items-center gap-1">
+                            <CalendarDays className="size-3.5" aria-hidden="true" />
+                            {registerOpen ? `ثبت نام تا ${toJalaliDate(exam.registerDate)}` : "پایان ثبت نام"}
+                          </span>
+                          {places ? (
+                            <span className="flex min-w-0 items-center gap-1 truncate">
+                              <MapPin className="size-3.5 shrink-0" aria-hidden="true" />
+                              <span className="truncate">{places}</span>
+                            </span>
+                          ) : null}
+                        </p>
+                      </div>
 
-                  <span
-                    className={cn(
-                      "shrink-0 rounded-full px-2 py-0.5 text-[12px] font-bold tabular-nums",
-                      TONE_CLASS[countdownTone(daysLeft)],
-                    )}
-                  >
-                    {daysLeft === 0 ? "امروز" : `${toPersianDigits(String(daysLeft))} روز`}
-                  </span>
+                      {/* Natural width; its left edge sits flush over the bar's left edge below. */}
+                      <StatusBadge tone={countdownTone(daysLeft)} className="shrink-0 tabular-nums">
+                        {daysLeft === 0 ? "امروز" : durationLabel(today, eventDay)}
+                      </StatusBadge>
+                    </div>
+
+                    {/* Spans the whole column, so its left edge lines up flush with the chip's left edge. */}
+                    <div className="h-2 overflow-hidden rounded-full bg-[var(--line-2)]">
+                      <div
+                        className="bar-fill block h-full w-full rounded-full transition-[clip-path] duration-500 motion-safe:animate-[bar-reveal_900ms_cubic-bezier(0.22,1,0.36,1)]"
+                        style={{
+                          clipPath: `inset(0 ${100 - Math.max(1, examFillPercent(exam))}% 0 0)`,
+                          backgroundColor: daysLeft <= 7 ? "var(--st-red)" : daysLeft <= 30 ? "var(--st-orange)" : "var(--st-green)",
+                        }}
+                      />
+                    </div>
+                  </div>
                 </li>
               );
             })}

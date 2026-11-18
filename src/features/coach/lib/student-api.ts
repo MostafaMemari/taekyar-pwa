@@ -207,5 +207,8 @@ export function fetchStudentStats(): Promise<StudentStats> {
 }
 
 export function fetchAgeCategories(): Promise<AgeCategoryRecord[]> {
-  return authRequestWithMeta<AgeCategoryRecord[]>("age-category?page=1&take=100").then(({ data }) => data);
+  // Newest birth-year range first, so the screen reads youngest category to oldest.
+  return authRequestWithMeta<AgeCategoryRecord[]>("age-category?page=1&take=100&sortBy=startDate&sortDirection=desc").then(
+    ({ data }) => data,
+  );
 }

@@ -41,14 +41,16 @@ export function StudentSignupStepOne({ form, onNext }: StudentSignupStepOneProps
           genderLabel="جنسیت"
         />
 
-        <div className="cta-dock cta-row mt-6 gap-3">
-          <Button variant="outline" size="cta" render={<Link href="/" />} nativeButton={false}>
-            بازگشت
-          </Button>
-          <Button type="submit" variant="brand" size="cta">
-            <span>مرحله بعد</span>
-            <ChevronLeft data-icon="inline-end" aria-hidden="true" />
-          </Button>
+        <div className="cta-dock mt-6">
+          <div className="flex items-center gap-2">
+            <Button variant="outline" className="h-11 flex-1 rounded-xl" render={<Link href="/" />} nativeButton={false}>
+              بازگشت
+            </Button>
+            <Button type="submit" variant="brand" className="h-11 flex-[2] rounded-xl text-[12px] font-bold">
+              <span>مرحله بعد</span>
+              <ChevronLeft data-icon="inline-end" aria-hidden="true" />
+            </Button>
+          </div>
         </div>
       </form>
     </StudentSignupStep>

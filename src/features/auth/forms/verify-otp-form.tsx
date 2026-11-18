@@ -77,32 +77,33 @@ export function VerifyOtpForm() {
 
         <AuthFormError message={message} />
 
-        <div className="cta-dock cta-row mt-6 gap-3">
-          <Button variant="outline" size="cta" render={<Link href={backHref} />} nativeButton={false}>
-            بازگشت
-          </Button>
-          <Button type="submit" variant="brand" size="cta" disabled={isSubmitting}>
-            <span>{isSubmitting ? "در حال بررسی..." : "تایید و ادامه"}</span>
-            <ChevronLeft data-icon="inline-end" aria-hidden="true" />
-          </Button>
-        </div>
+        <div className="cta-dock mt-6">
+          <div className="flex items-center gap-2">
+            <Button variant="outline" className="h-11 flex-1 rounded-xl" render={<Link href={backHref} />} nativeButton={false}>
+              بازگشت
+            </Button>
+            <Button type="submit" variant="brand" className="h-11 flex-[2] rounded-xl text-[12px] font-bold" disabled={isSubmitting}>
+              <span>{isSubmitting ? "در حال بررسی..." : "تایید و ادامه"}</span>
+              <ChevronLeft data-icon="inline-end" aria-hidden="true" />
+            </Button>
+          </div>
 
-        {fromSignup ? (
-          <Link href="/" onClick={clearPendingSignup} className="mt-3 block text-center text-[12px] font-bold text-ink-subtle">
-            انصراف از ثبت نام
-          </Link>
-        ) : (
-          <Button
-            variant="outline"
-            size="cta"
-            className="mt-2.5 w-full rounded-xl py-3 text-[12px]"
-            render={<Link href="/login/clubs" />}
-            nativeButton={false}
-          >
-            <ClipboardCheck data-icon="inline-start" aria-hidden="true" />
-            <span>ورود به عنوان مربی: انتخاب باشگاه</span>
-          </Button>
-        )}
+          {fromSignup ? (
+            <Link href="/" onClick={clearPendingSignup} className="mt-3 block text-center text-[12px] font-bold text-ink-subtle">
+              انصراف از ثبت نام
+            </Link>
+          ) : (
+            <Button
+              variant="outline"
+              className="mt-2.5 h-11 w-full rounded-xl text-[12px] font-bold"
+              render={<Link href="/login/clubs" />}
+              nativeButton={false}
+            >
+              <ClipboardCheck data-icon="inline-start" aria-hidden="true" />
+              <span>ورود به عنوان مربی: انتخاب باشگاه</span>
+            </Button>
+          )}
+        </div>
       </form>
 
       <ResendControl mobile={mobile} fromSignup={fromSignup} onError={setError} />

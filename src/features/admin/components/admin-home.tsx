@@ -1,6 +1,6 @@
 "use client";
 
-import { Award, CalendarRange, ChevronLeft, LogOut, ShieldCheck, Trophy } from "lucide-react";
+import { Award, CalendarRange, ChevronLeft, Globe, LogOut, Scale, ShieldCheck, Trophy } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -29,6 +29,20 @@ const sections = [
     icon: Trophy,
     tile: "bg-warning-soft text-warning",
   },
+  {
+    href: "/admin/weight-classes",
+    title: "رده های وزنی",
+    description: "بازه وزن هر رده سنی",
+    icon: Scale,
+    tile: "bg-info-soft text-info",
+  },
+  {
+    href: "/admin/federation",
+    title: "فدراسیون",
+    description: "ورود و همگام سازی هنرجویان مربی",
+    icon: Globe,
+    tile: "bg-success-soft text-success",
+  },
 ];
 
 export function AdminHome() {
@@ -46,7 +60,6 @@ export function AdminHome() {
       <CoachBand className={PAGE_ENTER}>
         <AdminBand
           title="پنل مدیریت"
-          subtitle="مدیریت داده های پایه و منابع سامانه"
           icon={ShieldCheck}
           chip={
             <span className="shrink-0 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[11px] font-bold text-white">

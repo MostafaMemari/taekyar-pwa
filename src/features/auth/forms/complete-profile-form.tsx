@@ -16,14 +16,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { FieldGroup } from "@/components/ui/field";
 import { type CompleteStudentProfileData, completeStudentProfile } from "@/features/auth/api";
 import { type CompleteProfileValues, completeProfileSchema } from "@/features/auth/schemas";
-import { clearSession, getSession } from "@/features/auth/session";
+import { clearSession, getAccessToken } from "@/features/auth/session";
 import { ApiError, apiErrorMessage } from "@/lib/api/client";
 import { digitsOnly, toPersianDigits } from "@/lib/digits";
 import { toGregorianDate } from "@/lib/jalali";
 
 const GENDER_OPTIONS = [
-  { value: "MALE", label: "مرد", icon: Mars },
-  { value: "FEMALE", label: "زن", icon: Venus },
+  { value: "MALE", label: "آقا", icon: Mars },
+  { value: "FEMALE", label: "خانم", icon: Venus },
 ] as const;
 
 const defaultValues: CompleteProfileValues = {
@@ -48,7 +48,7 @@ export function CompleteProfileForm() {
   });
 
   const submit = handleSubmit(async (values) => {
-    if (!getSession()) {
+    if (!getAccessToken()) {
       router.replace("/login");
       return;
     }
@@ -224,10 +224,10 @@ export function CompleteProfileForm() {
 
         <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 px-5 pt-3 pb-[max(12px,env(safe-area-inset-bottom))] backdrop-blur">
           <div className="mx-auto flex w-full max-w-md items-center gap-3">
-            <Button variant="outline" size="cta" className="flex-1" render={<Link href="/student" />} nativeButton={false}>
+            <Button variant="outline" className="h-11 flex-1 rounded-xl" render={<Link href="/student" />} nativeButton={false}>
               انصراف
             </Button>
-            <Button type="submit" variant="brand" size="cta" className="flex-[2]" disabled={isSubmitting}>
+            <Button type="submit" variant="brand" className="h-11 flex-[2] rounded-xl text-[12px] font-bold" disabled={isSubmitting}>
               <span>{isSubmitting ? "در حال ذخیره..." : "ذخیره اطلاعات"}</span>
               <Check data-icon="inline-end" aria-hidden="true" />
             </Button>

@@ -27,6 +27,6 @@ export function beltAssignDescription(belt: StudentBeltKey) {
 }
 
 export const GENDER_OPTIONS = [
-  { value: "MALE", label: "مرد" },
-  { value: "FEMALE", label: "زن" },
+  { value: "MALE", label: "آقا" },
+  { value: "FEMALE", label: "خانم" },
 ] as const;

@@ -1,6 +1,6 @@
 import type { Options } from "ky";
 import type { CoachSignupValues, StudentSignupForm } from "@/features/auth/schemas";
-import { clearSession, getSession, type SessionRole, saveSession } from "@/features/auth/session";
+import { clearSession, getAccessToken, type SessionRole, saveSession, setAccessToken } from "@/features/auth/session";
 import { clearDataCache } from "@/lib/api/cache";
 import { ApiError, apiRequest, apiRequestWithMeta, type PagerMeta } from "@/lib/api/client";
 import { toGregorianDate } from "@/lib/jalali";
@@ -35,7 +35,8 @@ export type CompleteStudentProfileData = {
   phoneNumber?: string;
 };
 
-type TokenResponse = { accessToken: string; refreshToken: string };
+type TokenResponse = { accessToken: string };
+type RefreshResult = TokenResponse & { userId: string; type: SessionRole };
 
 export type VerifyOtpResult = TokenResponse & {
   userId: string;
@@ -95,17 +96,12 @@ export function refreshSession(): Promise<string> {
   if (refreshPromise) return refreshPromise;
 
   refreshPromise = (async () => {
-    const session = getSession();
-    if (!session) throw new ApiError("نشست شما پیدا نشد. دوباره وارد شوید", 401);
-
     try {
-      const tokens = await apiRequest<TokenResponse>("auth/refresh", {
-        method: "post",
-        json: { refreshToken: session.refreshToken },
-      });
+      const result = await apiRequest<RefreshResult>("auth/refresh", { method: "post" });
 
-      saveSession({ ...session, ...tokens });
-      return tokens.accessToken;
+      setAccessToken(result.accessToken);
+      saveSession({ userId: result.userId, role: result.type });
+      return result.accessToken;
     } catch (error) {
       clearSession();
       throw error;
@@ -117,17 +113,20 @@ export function refreshSession(): Promise<string> {
   return refreshPromise;
 }
 
+export function ensureAccessToken(): Promise<string> {
+  const accessToken = getAccessToken();
+  return accessToken ? Promise.resolve(accessToken) : refreshSession();
+}
+
 async function withAccessToken<T>(run: (accessToken: string) => Promise<T>): Promise<T> {
-  const session = getSession();
-  if (!session) throw new ApiError("برای ادامه ابتدا وارد حساب کاربری شوید", 401);
+  const accessToken = await ensureAccessToken();
 
   try {
-    return await run(session.accessToken);
+    return await run(accessToken);
   } catch (error) {
     if (!(error instanceof ApiError) || error.status !== 401) throw error;
 
-    const accessToken = await refreshSession();
-    return run(accessToken);
+    return run(await refreshSession());
   }
 }
 
@@ -150,11 +149,8 @@ export function completeStudentProfile(data: CompleteStudentProfileData) {
 }
 
 export async function logoutSession() {
-  const session = getSession();
-  if (!session) return;
-
   try {
-    await apiRequest<unknown>("auth/logout", { method: "post", json: { refreshToken: session.refreshToken } });
+    await apiRequest<unknown>("auth/logout", { method: "post" });
   } catch {
     // A failed revoke must not keep the user signed in locally.
   } finally {
