@@ -1,14 +1,22 @@
 import { ChevronLeft, GraduationCap, LogIn, User } from "lucide-react";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { BeltWatermark, LogoMark } from "@/components/shared/taekyar-mark";
 import { ThemeSwitch } from "@/components/shared/theme-switch";
 import { GuestOnly } from "@/features/auth/components/guest-only";
+import { HOME_BY_ROLE, type SessionRole } from "@/features/auth/session";
 
 export const metadata: Metadata = { title: "خوش آمدید" };
 
-export default function WelcomePage() {
+const ROLES: readonly SessionRole[] = ["COACH", "STUDENT", "ADMIN"];
+
+export default async function WelcomePage() {
+  const role = (await cookies()).get("ty_role")?.value as SessionRole | undefined;
+  if (role && ROLES.includes(role)) redirect(HOME_BY_ROLE[role]);
+
   return (
     <GuestOnly>
       <main className="app-frame mx-auto flex h-dvh w-full flex-col overflow-y-auto overflow-x-clip">

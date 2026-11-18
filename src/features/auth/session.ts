@@ -47,11 +47,24 @@ export function getSessionId(): string | null {
   }
 }
 
+const ROLE_COOKIE = "ty_role";
+const ROLE_COOKIE_MAX_AGE_MS = 60 * 60 * 24 * 30 * 1000;
+
 export function saveSession(session: StoredSession) {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+  if ("cookieStore" in window) {
+    void window.cookieStore.set({
+      name: ROLE_COOKIE,
+      value: session.role,
+      path: "/",
+      expires: Date.now() + ROLE_COOKIE_MAX_AGE_MS,
+      sameSite: "lax",
+    });
+  }
 }
 
 export function clearSession() {
   accessToken = null;
   window.localStorage.removeItem(STORAGE_KEY);
+  if ("cookieStore" in window) void window.cookieStore.delete(ROLE_COOKIE);
 }

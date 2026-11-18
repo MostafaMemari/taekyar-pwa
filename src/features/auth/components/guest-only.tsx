@@ -3,31 +3,20 @@
 import { useRouter } from "next/navigation";
 import { type ReactNode, useEffect } from "react";
 import { ensureAccessToken } from "@/features/auth/api";
-import { getSession, HOME_BY_ROLE } from "@/features/auth/session";
+import { clearSession, getSession, HOME_BY_ROLE, type SessionRole } from "@/features/auth/session";
+
+const ROLES: readonly SessionRole[] = ["COACH", "STUDENT", "ADMIN"];
 
 export function GuestOnly({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    // A visitor with no stored hint has never signed in: don't probe the refresh endpoint on every public screen.
-    if (!getSession()) return;
+    const session = getSession();
+    if (!session || !ROLES.includes(session.role)) return;
 
-    let active = true;
+    ensureAccessToken().catch(() => clearSession());
 
-    ensureAccessToken()
-      .then(() => {
-        if (!active) return;
-
-        const role = getSession()?.role;
-        if (role) router.replace(HOME_BY_ROLE[role]);
-      })
-      .catch(() => {
-        // No cookie means a real guest: keep rendering the public screen.
-      });
-
-    return () => {
-      active = false;
-    };
+    router.replace(HOME_BY_ROLE[session.role]);
   }, [router]);
 
   return children;
