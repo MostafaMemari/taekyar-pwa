@@ -3,8 +3,8 @@
 import { CalendarDays, ClipboardList, Info, Users, Zap } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { parseAsString, useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
-import { DatePicker } from "@/components/shared/date-picker";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -12,7 +12,7 @@ import { CoachPageHeader } from "@/features/coach/components/coach-page-header";
 import { ErrorState } from "@/features/coach/components/error-state";
 import { SessionTime } from "@/features/coach/components/session-time";
 import { StatusBadge } from "@/features/coach/components/status-badge";
-import { useClassAttendance } from "@/features/coach/hooks/use-attendance";
+import { useClassAttendance, useClassAttendanceDates } from "@/features/coach/hooks/use-attendance";
 import { useSaveAttendance } from "@/features/coach/hooks/use-attendance-mutations";
 import { useSession } from "@/features/coach/hooks/use-sessions";
 import type { AttendanceItem } from "@/features/coach/lib/attendance-api";
@@ -29,6 +29,7 @@ import { toPersianDigits } from "@/lib/digits";
 import { todayJalali, toGregorianDate, toJalaliDate } from "@/lib/jalali";
 import { AttendanceForm } from "./attendance-form";
 import { AttendanceFormSkeleton } from "./attendance-form-skeleton";
+import { SessionMonthCalendar } from "./session-month-calendar";
 
 export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: string; initialDate?: string }) {
   const router = useRouter();
@@ -36,6 +37,7 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
   const [date, setDate] = useState(initialJalali);
   const session = useSession(sessionId);
   const save = useSaveAttendance(sessionId);
+  const { data: recordedDates } = useClassAttendanceDates(sessionId);
 
   // Today is resolved after mount so a prerendered page never keeps the build date.
   useEffect(() => {
@@ -50,6 +52,11 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
   const previousIso = sessionDate ? previousSessionDate(sessionDate, weekDays) : null;
   const nextIso = sessionDate ? nextSessionDate(sessionDate, weekDays) : null;
   const todayIso = toGregorianDate(todayJalali()) ?? "";
+  // The selected session date rides the ?date= query, so a refresh lands on the same session.
+  const [queryDate, setQueryDate] = useQueryState("date", parseAsString);
+  useEffect(() => {
+    if (sessionDate && sessionDate !== queryDate) void setQueryDate(sessionDate);
+  }, [sessionDate, queryDate, setQueryDate]);
 
   const handleSave = async (items: AttendanceItem[]) => {
     if (!sessionDate) return;
@@ -132,7 +139,7 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
           <div className="mb-1.5 flex items-center justify-between gap-2">
             <span className="flex items-center gap-1.5 text-[12px] font-bold text-ink-subtle">
               <CalendarDays className="size-3.5" aria-hidden="true" />
-              تاریخ جلسه · {WEEK_DAY_META[weekDayOfDate(shownDate)].label}
+              {WEEK_DAY_META[weekDayOfDate(shownDate)].label} · {toJalaliDate(shownDate)}
             </span>
             <div className="flex gap-1.5">
               <Button
@@ -165,7 +172,13 @@ export function AttendanceMarker({ sessionId, initialDate = "" }: { sessionId: s
               </Button>
             </div>
           </div>
-          <DatePicker title="تاریخ جلسه" value={shownDate ? toJalaliDate(shownDate) : date} onChange={setDate} to={todayJalali()} />
+          <SessionMonthCalendar
+            weekDays={weekDays}
+            value={shownDate}
+            capIso={todayIso}
+            onChange={(iso) => setDate(toJalaliDate(iso))}
+            recorded={recordedDates}
+          />
         </div>
       </Card>
 

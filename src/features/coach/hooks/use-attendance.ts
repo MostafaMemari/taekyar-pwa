@@ -5,6 +5,7 @@ import {
   type AbsentStudentsQuery,
   fetchAbsentStudents,
   fetchClassAttendance,
+  fetchClassAttendanceDates,
   fetchCoachWeeklySummary,
   fetchStudentAttendance,
   fetchStudentAttendancePage,
@@ -19,6 +20,10 @@ export function useClassAttendance(classSessionId: string, date: string) {
     ([, , id, day]) => fetchClassAttendance(id, day),
     swrReadOptions,
   );
+}
+
+export function useClassAttendanceDates(classSessionId: string) {
+  return useSWR(["attendance", "class-dates", classSessionId] as const, ([, , id]) => fetchClassAttendanceDates(id), swrReadOptions);
 }
 
 export function useStudentAttendance(studentId: string) {

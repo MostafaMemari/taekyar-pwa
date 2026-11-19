@@ -67,6 +67,10 @@ export function fetchClassAttendance(classSessionId: string, date: string): Prom
   return authRequest<ClassAttendanceEntry[]>(`attendance/class/${classSessionId}/daily?date=${date}`);
 }
 
+export function fetchClassAttendanceDates(classSessionId: string): Promise<string[]> {
+  return authRequest<string[]>(`attendance/class/${classSessionId}/dates`);
+}
+
 export function fetchCoachWeeklySummary(): Promise<CoachWeeklyAttendanceSummary> {
   return authRequest<CoachWeeklyAttendanceSummary>("attendance/coach/summary");
 }

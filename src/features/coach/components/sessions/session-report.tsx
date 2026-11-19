@@ -1,6 +1,5 @@
 import { CalendarDays, ChevronRight, ClipboardCheck, Info, Users } from "lucide-react";
 import Link from "next/link";
-import { DatePicker } from "@/components/shared/date-picker";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -10,14 +9,16 @@ import { CoachSheet } from "@/features/coach/components/coach-sheet";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { SessionTime } from "@/features/coach/components/session-time";
 import { StatusBadge } from "@/features/coach/components/status-badge";
+import { useClassAttendanceDates } from "@/features/coach/hooks/use-attendance";
 import type { ClassAttendanceEntry } from "@/features/coach/lib/attendance-api";
 import { type AttendanceCounts, attendanceRate, attendanceTotal } from "@/features/coach/lib/attendance-summary";
 import { weekDayLabels } from "@/features/coach/lib/coach-data";
 import type { ClassSessionRecord } from "@/features/coach/lib/session-api";
 import { toPersianDigits } from "@/lib/digits";
-import { toGregorianDate, toJalaliDate } from "@/lib/jalali";
+import { todayJalali, toGregorianDate, toJalaliDate } from "@/lib/jalali";
 import { ReportStudentPicker } from "./report-student-picker";
 import { SessionBand } from "./session-band";
+import { SessionMonthCalendar } from "./session-month-calendar";
 import { SessionRoster } from "./session-roster";
 
 export function SessionReport({
@@ -31,6 +32,7 @@ export function SessionReport({
   entries: ClassAttendanceEntry[];
   onDateChange: (date: string) => void;
 }) {
+  const { data: recordedDates } = useClassAttendanceDates(session.id);
   const counts: AttendanceCounts = { present: 0, late: 0, absent: 0, excused: 0, total: 0 };
   for (const entry of entries) {
     const status = entry.attendance?.status;
@@ -82,13 +84,12 @@ export function SessionReport({
             <CalendarDays className="size-3.5" aria-hidden="true" />
             تاریخ جلسه
           </span>
-          <DatePicker
-            title="تاریخ جلسه"
-            value={toJalaliDate(date)}
-            onChange={(jalali) => {
-              const iso = toGregorianDate(jalali);
-              if (iso) onDateChange(iso);
-            }}
+          <SessionMonthCalendar
+            weekDays={session.weekDays}
+            value={date}
+            capIso={toGregorianDate(todayJalali()) ?? ""}
+            onChange={onDateChange}
+            recorded={recordedDates}
           />
 
           <div className="mt-4 flex items-center gap-4 border-t border-[var(--line-2)] pt-4">
