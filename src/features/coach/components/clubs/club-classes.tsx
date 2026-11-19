@@ -1,7 +1,6 @@
-import { CalendarDays, Plus, Users } from "lucide-react";
+import { CalendarDays, Users } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { SessionCard } from "@/features/coach/components/sessions/session-card";
@@ -86,22 +85,16 @@ export function ClubClasses({
           </div>
         </>
       ) : (
-        <Empty className="border-none bg-transparent p-4">
+        <Empty className="min-h-[45dvh] border-none bg-transparent p-4">
           <EmptyHeader>
-            <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
+            <EmptyMedia variant="icon" className="size-14 rounded-2xl bg-brand-50 text-accent-ink">
               <CalendarDays aria-hidden="true" />
             </EmptyMedia>
-            <EmptyTitle className="text-[13px] font-extrabold text-ink">هنوز کلاسی ثبت نشده</EmptyTitle>
+            <EmptyTitle className="text-[14px] font-extrabold text-ink">هنوز کلاسی ثبت نشده</EmptyTitle>
             <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
               اولین کلاس این باشگاه را بسازید تا حضور و غیاب شروع شود
             </EmptyDescription>
           </EmptyHeader>
-          <EmptyContent>
-            <Button variant="outline" size="sm" className="rounded-lg" type="button" onClick={() => setSheetOpen(true)}>
-              <Plus data-icon="inline-start" aria-hidden="true" />
-              کلاس جدید
-            </Button>
-          </EmptyContent>
         </Empty>
       )}
 

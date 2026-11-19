@@ -175,12 +175,12 @@ export function StudentAttendanceReport({ studentId }: { studentId: string }) {
             ) : null}
           </div>
         ) : (
-          <Empty className="mt-2 border-none bg-transparent p-6">
+          <Empty className="mt-2 min-h-[45dvh] border-none bg-transparent p-6">
             <EmptyHeader>
-              <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
+              <EmptyMedia variant="icon" className="size-14 rounded-2xl bg-brand-50 text-accent-ink">
                 <CalendarCheck2 aria-hidden="true" />
               </EmptyMedia>
-              <EmptyTitle className="text-[13px] font-extrabold text-ink">رکوردی با این وضعیت یافت نشد</EmptyTitle>
+              <EmptyTitle className="text-[14px] font-extrabold text-ink">رکوردی با این وضعیت یافت نشد</EmptyTitle>
               <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">وضعیت دیگری را انتخاب کنید</EmptyDescription>
             </EmptyHeader>
           </Empty>

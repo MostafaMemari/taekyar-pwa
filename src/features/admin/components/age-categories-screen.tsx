@@ -4,6 +4,7 @@ import { CalendarRange, ChevronLeft, Plus } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AdminBand } from "@/features/admin/components/admin-band";
 import { AgeCategorySaveSheet } from "@/features/admin/components/age-category-save-sheet";
@@ -61,7 +62,17 @@ export function AgeCategoriesScreen() {
         ) : error ? (
           <ErrorState title="خواندن رده های سنی انجام نشد" message={apiErrorMessage(error)} onRetry={() => void mutate()} />
         ) : categories && categories.length === 0 ? (
-          <p className="py-10 text-center text-[12px] font-medium text-ink-subtle">هنوز رده سنی ثبت نشده است</p>
+          <Empty className="min-h-[45dvh] border-none bg-transparent p-4">
+            <EmptyHeader>
+              <EmptyMedia variant="icon" className="size-14 rounded-2xl bg-brand-50 text-accent-ink">
+                <CalendarRange aria-hidden="true" />
+              </EmptyMedia>
+              <EmptyTitle className="text-[14px] font-extrabold text-ink">هنوز رده سنی ثبت نشده است</EmptyTitle>
+              <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
+                اولین رده سنی را با بازه تاریخ تولد ثبت کنید
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         ) : (
           categories?.map((category) => <AgeCategoryRow key={category.id} category={category} onSelect={openEdit} />)
         )}

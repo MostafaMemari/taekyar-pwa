@@ -140,12 +140,12 @@ export function SessionsDirectory() {
           ) : null}
 
           {isReady && sessions.length === 0 ? (
-            <Empty className="mt-4 border-none bg-transparent p-6">
+            <Empty className="mt-4 min-h-[45dvh] border-none bg-transparent p-6">
               <EmptyHeader>
-                <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
+                <EmptyMedia variant="icon" className="size-14 rounded-2xl bg-brand-50 text-accent-ink">
                   <CalendarDays aria-hidden="true" />
                 </EmptyMedia>
-                <EmptyTitle className="text-[13px] font-extrabold text-ink">هنوز کلاسی ثبت نشده</EmptyTitle>
+                <EmptyTitle className="text-[14px] font-extrabold text-ink">هنوز کلاسی ثبت نشده</EmptyTitle>
                 <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
                   برای هر باشگاه، یک کلاس با روزها و ساعت برگزاری بسازید
                 </EmptyDescription>
@@ -168,12 +168,12 @@ export function SessionsDirectory() {
           ) : null}
 
           {isReady && sessions.length > 0 && visible.length === 0 ? (
-            <Empty className="mt-4 border-none bg-transparent p-6">
+            <Empty className="mt-4 min-h-[45dvh] border-none bg-transparent p-6">
               <EmptyHeader>
-                <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
+                <EmptyMedia variant="icon" className="size-14 rounded-2xl bg-brand-50 text-accent-ink">
                   <CalendarDays aria-hidden="true" />
                 </EmptyMedia>
-                <EmptyTitle className="text-[13px] font-extrabold text-ink">کلاسی یافت نشد</EmptyTitle>
+                <EmptyTitle className="text-[14px] font-extrabold text-ink">کلاسی یافت نشد</EmptyTitle>
                 <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
                   وضعیت، باشگاه یا روز برگزاری دیگری را انتخاب کنید
                 </EmptyDescription>

@@ -4,6 +4,7 @@ import { ChevronLeft, Plus, Trophy } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { AdminBand } from "@/features/admin/components/admin-band";
@@ -127,9 +128,21 @@ export function BeltExamsScreen() {
         ) : error ? (
           <ErrorState title="خواندن آزمون ها انجام نشد" message={apiErrorMessage(error)} onRetry={() => void mutate()} />
         ) : list.length === 0 ? (
-          <p className="py-10 text-center text-[12px] font-medium text-ink-subtle">
-            {view === "held" ? "هنوز آزمونی برگزار نشده است" : "دوره جدیدی اعلام نشده است"}
-          </p>
+          <Empty className="min-h-[45dvh] border-none bg-transparent p-4">
+            <EmptyHeader>
+              <EmptyMedia variant="icon" className="size-14 rounded-2xl bg-brand-50 text-accent-ink">
+                <Trophy aria-hidden="true" />
+              </EmptyMedia>
+              <EmptyTitle className="text-[14px] font-extrabold text-ink">
+                {view === "held" ? "هنوز آزمونی برگزار نشده است" : "دوره جدیدی اعلام نشده است"}
+              </EmptyTitle>
+              <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
+                {view === "held"
+                  ? "آزمون هایی که برگزار شوند اینجا بایگانی می شوند"
+                  : "اولین آزمون کمربند را ثبت کنید تا اینجا نمایش داده شود"}
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         ) : (
           list.map((exam) => <BeltExamRow key={exam.id} exam={exam} todayIso={todayIso} onSelect={openEdit} />)
         )}

@@ -3,6 +3,7 @@
 import { CalendarDays, MapPin } from "lucide-react";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SectionHeading } from "@/features/coach/components/section-heading";
 import { StatusBadge } from "@/features/coach/components/status-badge";
@@ -18,6 +19,22 @@ function countdownTone(days: number): "danger" | "warning" | "neutral" {
   return days <= 7 ? "danger" : days <= 30 ? "warning" : "neutral";
 }
 
+function ExamRowSkeleton() {
+  return (
+    <div className="flex items-start gap-3">
+      <Skeleton className="size-14 shrink-0 rounded-[10px]" />
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center justify-between gap-1.5">
+          <Skeleton className="h-4 w-2/3" />
+          <Skeleton className="h-5 w-16 shrink-0 rounded-full" />
+        </div>
+        <Skeleton className="mt-2 h-3 w-3/5" />
+        <Skeleton className="mt-2.5 h-2 w-full rounded-full" />
+      </div>
+    </div>
+  );
+}
+
 export function DashboardExams() {
   const [now] = useState(() => new Date());
   const { data, isLoading } = useBeltExams();
@@ -31,15 +48,28 @@ export function DashboardExams() {
 
   return (
     <section>
-      <SectionHeading title="آزمون های پیش رو" />
+      <SectionHeading
+        title="آزمون های پیش رو"
+        action={exams.length > 0 ? <StatusBadge tone="brand">{toPersianDigits(String(exams.length))} آزمون</StatusBadge> : null}
+      />
       <Card className="gap-0 p-0">
         {isLoading && !data ? (
-          <div className="flex flex-col gap-2 p-4">
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
+          <div className="flex flex-col gap-3 p-4">
+            <ExamRowSkeleton />
+            <ExamRowSkeleton />
           </div>
         ) : exams.length === 0 ? (
-          <p className="px-4 py-6 text-center text-[12px] font-medium text-ink-subtle">آزمون کمربندی پیش رو ثبت نشده است</p>
+          <Empty className="min-h-[35dvh] border-none bg-transparent p-4">
+            <EmptyHeader>
+              <EmptyMedia variant="icon" className="size-14 rounded-2xl bg-brand-50 text-accent-ink">
+                <CalendarDays aria-hidden="true" />
+              </EmptyMedia>
+              <EmptyTitle className="text-[14px] font-extrabold text-ink">آزمون کمربندی پیش رو ثبت نشده است</EmptyTitle>
+              <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
+                آزمون هایی که اعلام شوند با شمارش معکوس اینجا می آیند
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         ) : (
           <ul>
             {exams.map((exam, index) => {
@@ -60,27 +90,33 @@ export function DashboardExams() {
                   </span>
 
                   <div className="flex min-w-0 flex-1 flex-col justify-center gap-2">
-                    <div className="flex items-center gap-3">
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-[13px] font-bold text-ink">{toPersianDigits(exam.name)}</p>
-                        <p className="mt-0.5 flex items-center gap-2.5 text-[12px] font-medium text-ink-subtle">
-                          <span className="flex shrink-0 items-center gap-1">
-                            <CalendarDays className="size-3.5" aria-hidden="true" />
-                            {registerOpen ? `ثبت نام تا ${toJalaliDate(exam.registerDate)}` : "پایان ثبت نام"}
+                    <div>
+                      <div className="flex items-center justify-between gap-1.5">
+                        <div className="flex min-w-0 items-center gap-1.5">
+                          <p className="min-w-0 truncate text-[13px] font-bold text-ink">{toPersianDigits(exam.name)}</p>
+                          <span className="shrink-0 text-[11px] font-semibold text-ink-subtle tabular-nums">
+                            دوره {toPersianDigits(String(exam.examNumber))}
                           </span>
-                          {places ? (
-                            <span className="flex min-w-0 items-center gap-1 truncate">
-                              <MapPin className="size-3.5 shrink-0" aria-hidden="true" />
-                              <span className="truncate">{places}</span>
-                            </span>
-                          ) : null}
-                        </p>
+                        </div>
+
+                        {/* Natural width; its left edge sits flush over the bar's left edge below. */}
+                        <StatusBadge tone={countdownTone(daysLeft)} className="shrink-0 px-1.5 py-[3px] text-[11px] tabular-nums">
+                          {daysLeft === 0 ? "امروز" : durationLabel(today, eventDay)}
+                        </StatusBadge>
                       </div>
 
-                      {/* Natural width; its left edge sits flush over the bar's left edge below. */}
-                      <StatusBadge tone={countdownTone(daysLeft)} className="shrink-0 tabular-nums">
-                        {daysLeft === 0 ? "امروز" : durationLabel(today, eventDay)}
-                      </StatusBadge>
+                      <p className="mt-1.5 flex items-center gap-2.5 text-[12px] font-medium text-ink-subtle">
+                        <span className="flex shrink-0 items-center gap-1">
+                          <CalendarDays className="size-3.5" aria-hidden="true" />
+                          {registerOpen ? `ثبت نام تا ${toJalaliDate(exam.registerDate)}` : "پایان ثبت نام"}
+                        </span>
+                        {places ? (
+                          <span className="ms-auto flex min-w-0 items-center gap-1 truncate">
+                            <MapPin className="size-3.5 shrink-0" aria-hidden="true" />
+                            <span className="truncate">{places}</span>
+                          </span>
+                        ) : null}
+                      </p>
                     </div>
 
                     {/* Spans the whole column, so its left edge lines up flush with the chip's left edge. */}

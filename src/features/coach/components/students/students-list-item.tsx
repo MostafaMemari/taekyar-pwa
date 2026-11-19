@@ -66,21 +66,21 @@ export function StudentsListItem({
         </span>
 
         <span className="min-w-0 flex-1">
-          <span className="flex min-w-0 items-baseline gap-1.5">
-            <b className="min-w-0 truncate text-[13px] font-extrabold text-ink">{student.fullName}</b>
-            {ageCategory ? (
-              <span className="shrink-0 text-[11px] font-semibold text-ink-subtle">{AGE_CATEGORY_LABELS[ageCategory]}</span>
-            ) : null}
-          </span>
+          <b className="block truncate text-[13px] font-extrabold text-ink">{student.fullName}</b>
 
           <span className="mt-1.5 flex min-w-0 flex-wrap items-center gap-1.5">
-            <StatusBadge tone={insuranceMeta.tone} className="shrink-0 px-1.5 py-[3px] text-[11px]">
-              <InsuranceIcon className="size-3" aria-hidden="true" />
+            {ageCategory ? (
+              <StatusBadge tone="neutral" className="shrink-0 gap-0.5 px-1.5 py-[2px] text-[10px] [&>svg]:size-2.5!">
+                {AGE_CATEGORY_LABELS[ageCategory]}
+              </StatusBadge>
+            ) : null}
+            <StatusBadge tone={insuranceMeta.tone} className="shrink-0 gap-0.5 px-1.5 py-[2px] text-[10px] [&>svg]:size-2.5!">
+              <InsuranceIcon className="size-2.5" aria-hidden="true" />
               {insuranceLabel}
             </StatusBadge>
             {feeMeta && FeeIcon ? (
-              <StatusBadge tone={feeMeta.tone} className="shrink-0 px-1.5 py-[3px] text-[11px]">
-                <FeeIcon className="size-3" aria-hidden="true" />
+              <StatusBadge tone={feeMeta.tone} className="shrink-0 gap-0.5 px-1.5 py-[2px] text-[10px] [&>svg]:size-2.5!">
+                <FeeIcon className="size-2.5" aria-hidden="true" />
                 {student.feeStatus === "OWED" ? "بدهکار" : "تسویه"}
               </StatusBadge>
             ) : null}

@@ -106,24 +106,24 @@ export function AbsentStudentsList() {
             <ErrorState title="خواندن غیبت ها انجام نشد" message={apiErrorMessage(error)} onRetry={() => void mutate()} />
           ) : visible.length === 0 ? (
             students.length === 0 ? (
-              <Empty className="mt-2 border-none bg-transparent p-6">
+              <Empty className="mt-2 min-h-[45dvh] border-none bg-transparent p-6">
                 <EmptyHeader>
-                  <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
+                  <EmptyMedia variant="icon" className="size-14 rounded-2xl bg-brand-50 text-accent-ink">
                     <CalendarX2 aria-hidden="true" />
                   </EmptyMedia>
-                  <EmptyTitle className="text-[13px] font-extrabold text-ink">در ۳۰ روز اخیر غیبتی با این شرط ثبت نشده</EmptyTitle>
+                  <EmptyTitle className="text-[14px] font-extrabold text-ink">در ۳۰ روز اخیر غیبتی با این شرط ثبت نشده</EmptyTitle>
                   <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">
                     شرط کمتری را انتخاب کنید یا حضور و غیاب جلسه های اخیر را ثبت کنید
                   </EmptyDescription>
                 </EmptyHeader>
               </Empty>
             ) : (
-              <Empty className="mt-2 border-none bg-transparent p-6">
+              <Empty className="mt-2 min-h-[45dvh] border-none bg-transparent p-6">
                 <EmptyHeader>
-                  <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
+                  <EmptyMedia variant="icon" className="size-14 rounded-2xl bg-brand-50 text-accent-ink">
                     <CalendarX2 aria-hidden="true" />
                   </EmptyMedia>
-                  <EmptyTitle className="text-[13px] font-extrabold text-ink">با این فیلترها هنرجویی یافت نشد</EmptyTitle>
+                  <EmptyTitle className="text-[14px] font-extrabold text-ink">با این فیلترها هنرجویی یافت نشد</EmptyTitle>
                   <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">فیلتر باشگاه یا شهریه را بردارید</EmptyDescription>
                 </EmptyHeader>
                 <EmptyContent>
@@ -156,14 +156,6 @@ export function AbsentStudentsList() {
                           <Landmark className="size-3.5 shrink-0" aria-hidden="true" />
                           <span className="truncate">{student.clubName}</span>
                         </span>
-                      ) : null}
-                      {student.feeStatus ? (
-                        <StatusBadge
-                          tone={student.feeStatus === "OWED" ? "danger" : "success"}
-                          className="shrink-0 px-1.5 py-[3px] text-[12px]"
-                        >
-                          {student.feeStatus === "OWED" ? "بدهکار" : "تسویه"}
-                        </StatusBadge>
                       ) : null}
                     </span>
                   </span>

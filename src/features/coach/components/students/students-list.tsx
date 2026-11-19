@@ -32,12 +32,12 @@ export function StudentsList({
 
   if (students.length === 0) {
     return (
-      <Empty role="status" className="mt-4 border-none bg-transparent p-6">
+      <Empty role="status" className="mt-4 min-h-[45dvh] border-none bg-transparent p-6">
         <EmptyHeader>
-          <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
+          <EmptyMedia variant="icon" className="size-14 rounded-2xl bg-brand-50 text-accent-ink">
             {hasFilters ? <SearchX aria-hidden="true" /> : <Users aria-hidden="true" />}
           </EmptyMedia>
-          <EmptyTitle className="text-[13px] font-extrabold text-ink">
+          <EmptyTitle className="text-[14px] font-extrabold text-ink">
             {hasFilters ? "هنرجویی با این فیلترها پیدا نشد" : "هنوز هنرجویی ثبت نشده"}
           </EmptyTitle>
           <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">

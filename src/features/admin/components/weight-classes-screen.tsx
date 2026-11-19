@@ -4,6 +4,7 @@ import { CalendarRange, ChevronDown, ChevronLeft, Plus, Scale } from "lucide-rea
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { AdminBand } from "@/features/admin/components/admin-band";
@@ -140,7 +141,15 @@ export function WeightClassesScreen() {
         ) : error ? (
           <ErrorState title="خواندن رده های وزنی انجام نشد" message={apiErrorMessage(error)} onRetry={() => void mutate()} />
         ) : weightClasses.length === 0 ? (
-          <p className="py-10 text-center text-[12px] font-medium text-ink-subtle">برای این جنسیت رده وزنی ثبت نشده است</p>
+          <Empty className="min-h-[45dvh] border-none bg-transparent p-4">
+            <EmptyHeader>
+              <EmptyMedia variant="icon" className="size-14 rounded-2xl bg-brand-50 text-accent-ink">
+                <Scale aria-hidden="true" />
+              </EmptyMedia>
+              <EmptyTitle className="text-[14px] font-extrabold text-ink">برای این جنسیت رده وزنی ثبت نشده است</EmptyTitle>
+              <EmptyDescription className="text-[12px] leading-5 text-ink-subtle">رده وزنی جدیدی برای آن ثبت کنید</EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         ) : (
           groups.map((group) => {
             const expanded = expandedCategoryId === group.categoryId;

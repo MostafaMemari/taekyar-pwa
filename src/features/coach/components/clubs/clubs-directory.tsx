@@ -72,12 +72,12 @@ export function ClubsDirectory() {
           ) : null}
 
           {isReady && clubs.length === 0 ? (
-            <Empty className="mt-4 border-none bg-transparent p-4">
+            <Empty className="mt-4 min-h-[45dvh] border-none bg-transparent p-4">
               <EmptyHeader>
-                <EmptyMedia variant="icon" className="size-11 rounded-2xl bg-brand-50 text-accent-ink">
+                <EmptyMedia variant="icon" className="size-14 rounded-2xl bg-brand-50 text-accent-ink">
                   <Landmark aria-hidden="true" />
                 </EmptyMedia>
-                <EmptyTitle className="text-[13px] font-extrabold text-ink">هنوز باشگاهی ثبت نشده</EmptyTitle>
+                <EmptyTitle className="text-[14px] font-extrabold text-ink">هنوز باشگاهی ثبت نشده</EmptyTitle>
                 <EmptyDescription className="text-[11px] leading-5 text-ink-subtle">
                   اولین باشگاه خود را بسازید تا کلاس بندی و حضور و غیاب شروع شود
                 </EmptyDescription>

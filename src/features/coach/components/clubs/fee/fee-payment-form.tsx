@@ -222,7 +222,7 @@ export function FeePaymentForm({
                   className="h-11 rounded-xl ps-10"
                 />
               </div>
-              <div className="mt-2 max-h-44 overflow-y-auto no-scrollbar rounded-xl border border-[var(--line-2)]">
+              <div className="mt-2 h-44 overflow-y-auto no-scrollbar rounded-xl border border-[var(--line-2)]">
                 {membersLoading && activeMembers.length === 0 ? (
                   <div className="flex flex-col gap-2 p-2.5">
                     {[0, 1, 2].map((row) => (
